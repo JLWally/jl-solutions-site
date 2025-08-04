@@ -1,1 +1,141 @@
-body { font-family: 'Open Sans', sans-serif; }
+/* JL Solutions Global Styles - Dark Theme */
+
+:root {
+  --primary: #0078D4;
+  --primary-dark: #005a9e;
+  --accent: #00C853;
+  --light: #f4f4f4;
+  --dark: #121212;
+  --bg: #1a1a1a;
+  --font-main: 'Open Sans', sans-serif;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #121212;
+  color: #f4f4f4;
+  line-height: 1.6;
+}
+
+h1, h2, h5, p, a, small {
+  color: #f4f4f4;
+}
+
+section {
+  border-bottom: 1px solid #333;
+}
+
+.bg-primary {
+  background-color: #0078D4 !important;
+}
+
+.bg-dark {
+  background-color: #1a1a1a !important;
+}
+
+.bg-light {
+  background-color: #1f1f1f !important;
+}
+
+.btn-light {
+  background-color: #ffffff;
+  color: #121212;
+}
+
+.btn-light:hover {
+  background-color: #dddddd;
+}
+
+.btn-primary {
+  background-color: #0078D4;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #005a9e;
+}
+
+.btn-success {
+  background-color: #00C853;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #00b14f;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #f4f4f4;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #bbbbbb;
+}
+
+footer small {
+  color: #aaaaaa;
+}
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1, h2, h3, h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+ul {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+blockquote {
+  border-left: 4px solid #0078D4;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #ccc;
+  margin: 1rem 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  margin: 0.5rem 0.5rem 0 0;
+  font-size: 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #0078D4;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #005a9e;
+}
+
+.btn-outline {
+  background: none;
+  border: 2px solid #0078D4;
+  color: #0078D4;
+}
+
+.btn-outline:hover {
+  background-color: #0078D4;
+  color: white;
+}
