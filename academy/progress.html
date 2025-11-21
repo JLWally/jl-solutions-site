@@ -65,7 +65,7 @@
       <h2 class="mb-4">Skills Checklist</h2>
       
       <!-- HTML Skills -->
-      <div class="progress-section mb-4">
+      <div class="progress-section mb-4" data-category="html">
         <h3 class="mb-3">📄 HTML</h3>
         <div class="skill-item">
           <div class="skill-header">
@@ -101,7 +101,7 @@
       </div>
 
       <!-- CSS Skills -->
-      <div class="progress-section mb-4">
+      <div class="progress-section mb-4" data-category="css">
         <h3 class="mb-3">🎨 CSS</h3>
         <div class="skill-item">
           <div class="skill-header">
@@ -141,7 +141,7 @@
       </div>
 
       <!-- JavaScript Skills -->
-      <div class="progress-section mb-4">
+      <div class="progress-section mb-4" data-category="javascript">
         <h3 class="mb-3">⚡ JavaScript</h3>
         <div class="skill-item">
           <div class="skill-header">
@@ -189,7 +189,7 @@
       </div>
 
       <!-- API Skills -->
-      <div class="progress-section mb-4">
+      <div class="progress-section mb-4" data-category="apis">
         <h3 class="mb-3">🌐 APIs & Async JavaScript</h3>
         <div class="skill-item">
           <div class="skill-header">
@@ -229,7 +229,7 @@
       </div>
 
       <!-- React Skills -->
-      <div class="progress-section">
+      <div class="progress-section" data-category="react">
         <h3 class="mb-3">⚛️ React</h3>
         <div class="skill-item">
           <div class="skill-header">
@@ -284,7 +284,7 @@
       <h2 class="mb-4">Project Completion</h2>
       
       <!-- Beginner Projects -->
-      <div class="progress-section mb-4">
+      <div class="progress-section mb-4" data-category="projects-beginner">
         <h3 class="mb-3">🌱 Beginner Projects (0/6)</h3>
         <ul class="checklist">
           <li class="checklist-item">
@@ -315,7 +315,7 @@
       </div>
 
       <!-- Intermediate Projects -->
-      <div class="progress-section mb-4">
+      <div class="progress-section mb-4" data-category="projects-intermediate">
         <h3 class="mb-3">🚀 Intermediate Projects (0/6)</h3>
         <ul class="checklist">
           <li class="checklist-item">
@@ -346,7 +346,7 @@
       </div>
 
       <!-- Advanced Projects -->
-      <div class="progress-section">
+      <div class="progress-section" data-category="projects-advanced">
         <h3 class="mb-3">⚡ Advanced Projects (0/4)</h3>
         <ul class="checklist">
           <li class="checklist-item">
@@ -374,7 +374,7 @@
   <section class="py-5 bg-light">
     <div class="container">
       <h2 class="mb-4">Developer Tools</h2>
-      <div class="progress-section">
+      <div class="progress-section" data-category="tools">
         <h3 class="mb-3">🛠️ Essential Tools (0/6)</h3>
         <ul class="checklist">
           <li class="checklist-item">
@@ -515,17 +515,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // This is a simple demo of how Sierra will learn to make pages interactive!
-    // In the future, she can add JavaScript to save progress to local storage
-    
-    // Example: Click checklist items to mark them complete
-    document.querySelectorAll('.checklist-item').forEach(item => {
-      item.addEventListener('click', function() {
-        this.classList.toggle('completed');
-      });
-    });
-  </script>
+  <script src="/js/academy-progress.js"></script>
 </body>
 </html>
 
