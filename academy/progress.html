@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progress Tracker - JL Solutions Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/academy.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">Your Progress</h1>
+      <p class="lead">Track your journey from beginner to developer</p>
+    </div>
+  </header>
+
+  <!-- Overall Progress -->
+  <section class="py-5">
+    <div class="container">
+      <div class="progress-section">
+        <div class="progress-header">
+          <div>
+            <h2>Overall Completion</h2>
+            <p class="mb-0">Keep going, Sierra! Every small step counts.</p>
+          </div>
+          <div class="progress-percentage">0%</div>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+        <p class="mt-3 text-center" style="color: #bbbbbb;">
+          <small>This percentage will grow as you complete modules and projects. You've got this!</small>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Progress -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="mb-4">Skills Checklist</h2>
+      
+      <!-- HTML Skills -->
+      <div class="progress-section mb-4">
+        <h3 class="mb-3">📄 HTML</h3>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">HTML Fundamentals</span>
+            <span class="skill-status">Not Started</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+        <ul class="checklist mt-3">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Understand HTML document structure</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Use semantic HTML tags correctly</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Create forms with various input types</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Work with images and multimedia</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Understand accessibility basics</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- CSS Skills -->
+      <div class="progress-section mb-4">
+        <h3 class="mb-3">🎨 CSS</h3>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">CSS & Layout</span>
+            <span class="skill-status">Not Started</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+        <ul class="checklist mt-3">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Master CSS selectors and specificity</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Understand the box model</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Build layouts with Flexbox</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Build layouts with CSS Grid</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Create responsive designs with media queries</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Use CSS transitions and animations</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- JavaScript Skills -->
+      <div class="progress-section mb-4">
+        <h3 class="mb-3">⚡ JavaScript</h3>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">JavaScript Fundamentals</span>
+            <span class="skill-status">Not Started</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+        <ul class="checklist mt-3">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Understand variables (let, const) and data types</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Write functions and arrow functions</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Use conditionals and loops</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Work with arrays and array methods</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Work with objects and methods</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Manipulate the DOM</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Handle events and user interactions</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Use local storage</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- API Skills -->
+      <div class="progress-section mb-4">
+        <h3 class="mb-3">🌐 APIs & Async JavaScript</h3>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">Working with APIs</span>
+            <span class="skill-status">Not Started</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+        <ul class="checklist mt-3">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Understand what APIs are and how they work</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Make HTTP requests with Fetch API</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Work with JSON data</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Use async/await for asynchronous code</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Handle errors and loading states</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Work with API authentication</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- React Skills -->
+      <div class="progress-section">
+        <h3 class="mb-3">⚛️ React</h3>
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name">React Development</span>
+            <span class="skill-status">Not Started</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+        <ul class="checklist mt-3">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Understand JSX syntax</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Create functional components</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Use props to pass data</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Manage state with useState</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Handle side effects with useEffect</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Handle forms in React</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Implement routing with React Router</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Make API calls in React</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Tracker -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="mb-4">Project Completion</h2>
+      
+      <!-- Beginner Projects -->
+      <div class="progress-section mb-4">
+        <h3 class="mb-3">🌱 Beginner Projects (0/6)</h3>
+        <ul class="checklist">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Personal Portfolio Website</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Simple Calculator</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Todo List App</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Random Quote Generator</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Color Theme Switcher</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Simple Photo Gallery</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Intermediate Projects -->
+      <div class="progress-section mb-4">
+        <h3 class="mb-3">🚀 Intermediate Projects (0/6)</h3>
+        <ul class="checklist">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Weather Dashboard</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Movie Search App</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Currency Converter</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Recipe Search & Save</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Expense Tracker</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Utility Bill Helper</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Advanced Projects -->
+      <div class="progress-section">
+        <h3 class="mb-3">⚡ Advanced Projects (0/4)</h3>
+        <ul class="checklist">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>React Weather App</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>React Task Manager</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>React Dashboard</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>"Capture Lite" - Mini Capture411</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools Checklist -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="mb-4">Developer Tools</h2>
+      <div class="progress-section">
+        <h3 class="mb-3">🛠️ Essential Tools (0/6)</h3>
+        <ul class="checklist">
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Install and configure VS Code</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Learn Git basics (clone, commit, push)</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Create a GitHub account and first repository</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Use Chrome DevTools for debugging</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Deploy a project to Netlify/Vercel</span>
+          </li>
+          <li class="checklist-item">
+            <div class="checklist-checkbox"></div>
+            <span>Create a professional portfolio site</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Milestones -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="mb-4">🏆 Milestones</h2>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="project-card">
+            <h4 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯</h4>
+            <h5>First Week</h5>
+            <p>Complete your first HTML page</p>
+            <div class="mt-2">
+              <span class="tech-tag" style="background: #2a2a2a;">Locked</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="project-card">
+            <h4 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎨</h4>
+            <h5>Styled</h5>
+            <p>Build a beautiful CSS layout</p>
+            <div class="mt-2">
+              <span class="tech-tag" style="background: #2a2a2a;">Locked</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="project-card">
+            <h4 style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚡</h4>
+            <h5>Interactive</h5>
+            <p>Complete your first JavaScript project</p>
+            <div class="mt-2">
+              <span class="tech-tag" style="background: #2a2a2a;">Locked</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="project-card">
+            <h4 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌐</h4>
+            <h5>Connected</h5>
+            <p>Build your first API-powered app</p>
+            <div class="mt-2">
+              <span class="tech-tag" style="background: #2a2a2a;">Locked</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="project-card">
+            <h4 style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚛️</h4>
+            <h5>Modern Dev</h5>
+            <p>Complete your first React app</p>
+            <div class="mt-2">
+              <span class="tech-tag" style="background: #2a2a2a;">Locked</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="project-card">
+            <h4 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🚀</h4>
+            <h5>Deployed</h5>
+            <p>Deploy your first live project</p>
+            <div class="mt-2">
+              <span class="tech-tag" style="background: #2a2a2a;">Locked</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="project-card">
+            <h4 style="font-size: 2.5rem; margin-bottom: 0.5rem;">💼</h4>
+            <h5>Portfolio Ready</h5>
+            <p>Complete 6+ projects</p>
+            <div class="mt-2">
+              <span class="tech-tag" style="background: #2a2a2a;">Locked</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="project-card">
+            <h4 style="font-size: 2.5rem; margin-bottom: 0.5rem;">👩‍💻</h4>
+            <h5>Junior Dev</h5>
+            <p>Complete all phases!</p>
+            <div class="mt-2">
+              <span class="tech-tag" style="background: #2a2a2a;">Locked</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Motivation Section -->
+  <section class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h2>Remember, Sierra...</h2>
+      <blockquote style="border-left-color: white; color: white; font-size: 1.2rem; margin: 2rem auto; max-width: 700px;">
+        "The expert in anything was once a beginner. Every developer you admire started exactly where you are right now. Keep going. I'm proud of you."
+      </blockquote>
+      <p style="font-style: italic;">— Titi</p>
+      <a href="/academy/modules.html" class="btn btn-light btn-lg mt-3">Continue Learning</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions Academy. Built with love for Sierra.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // This is a simple demo of how Sierra will learn to make pages interactive!
+    // In the future, she can add JavaScript to save progress to local storage
+    
+    // Example: Click checklist items to mark them complete
+    document.querySelectorAll('.checklist-item').forEach(item => {
+      item.addEventListener('click', function() {
+        this.classList.toggle('completed');
+      });
+    });
+  </script>
+</body>
+</html>
+
