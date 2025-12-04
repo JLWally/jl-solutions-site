@@ -3,53 +3,252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JL Solutions</title>
+  <title>JL Solutions - AI Solutions for AI Problems</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-    <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="assets/icons/favicon.ico" type="image/x-icon">
   <style>
+    :root {
+      --black: #000000;
+      --blue: #0078d4;
+      --white: #ffffff;
+      --dark-blue: #004298;
+      --yellow: #ffbd59;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: 'Open Sans', sans-serif;
-      background-color: #121212;
-      color: #f4f4f4;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-    h1, h2, h5, p, a, small {
-      color: #f4f4f4;
+    
+    /* Navigation */
+    .navbar {
+      background-color: var(--black) !important;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    section {
-      border-bottom: 1px solid #333;
+    
+    .navbar-brand {
+      color: var(--white) !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -0.5px;
     }
-    .bg-primary {
-      background-color: #0078D4 !important;
+    
+    .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      font-weight: 500;
+      margin: 0 0.5rem;
+      transition: color 0.3s;
     }
-    .bg-dark {
-      background-color: #1a1a1a !important;
+    
+    .nav-link:hover {
+      color: var(--yellow) !important;
     }
-    .bg-light {
-      background-color: #1f1f1f !important;
+    
+    /* Hero Banner Section */
+    .hero-banner {
+      width: 100%;
+      background: var(--black);
+      display: block;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
     }
-    .btn-light {
-      background-color: #ffffff;
-      color: #121212;
+    
+    .hero-banner-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
     }
-    .btn-light:hover {
-      background-color: #dddddd;
+    
+    /* Services Section */
+    .services-section {
+      background: linear-gradient(180deg, var(--black) 0%, #0a0a0a 100%);
+      padding: 6rem 0;
     }
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+      margin-bottom: 4rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .service-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2.5rem;
+      height: 100%;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .service-card:hover {
+      background: rgba(0, 120, 212, 0.1);
+      border-color: var(--blue);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0, 120, 212, 0.2);
+    }
+    
+    .service-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .service-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    
+    .service-card p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    
+    /* About Section */
+    .about-section {
+      background: var(--black);
+      padding: 6rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .about-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .about-content h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    
+    .about-content p {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+      padding: 6rem 0;
+      text-align: center;
+    }
+    
+    .cta-section h2 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    
+    .cta-section p {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    /* Buttons */
     .btn-primary {
-      background-color: #0078D4;
+      background-color: var(--yellow);
+      color: var(--black);
       border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+    
     .btn-primary:hover {
-      background-color: #005a9e;
+      background-color: #ffa726;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 189, 89, 0.4);
+      color: var(--black);
     }
-    .btn-success {
-      background-color: #00C853;
-      border: none;
+    
+    .btn-outline {
+      background-color: transparent;
+      color: var(--white);
+      border: 2px solid var(--white);
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .btn-success:hover {
-      background-color: #00b14f;
+    
+    .btn-outline:hover {
+      background-color: var(--white);
+      color: var(--black);
+      transform: translateY(-2px);
+    }
+    
+    /* Footer */
+    footer {
+      background-color: var(--black);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3rem 0;
+      text-align: center;
+    }
+    
+    footer small {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .cta-section h2 {
+        font-size: 2rem;
+      }
+      
+      .service-card {
+        margin-bottom: 2rem;
+      }
     }
   </style>
 </head>
@@ -57,7 +256,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="#">JL Solutions</a>
+      <a class="navbar-brand" href="index.html">JL Solutions</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -66,6 +265,8 @@
           <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
           <li class="nav-item"><a class="nav-link" href="services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="case-studies/index.html">Case Studies</a></li>
+          <li class="nav-item"><a class="nav-link" href="resources/index.html">Resources</a></li>
           <li class="nav-item"><a class="nav-link" href="academy/index.html">Academy</a></li>
           <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
@@ -73,51 +274,62 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="bg-primary text-white text-center py-5">
-    <div class="container">
-      <h1 class="display-4">Modern Solutions for Modern Problems</h1>
-      <p class="lead">Empowering organizations with Microsoft and AWS technologies</p>
-      <a href="contact.html" class="btn btn-light btn-lg mt-3">Let's Talk</a>
-    </div>
-  </header>
+  <!-- Hero Banner Section -->
+  <section class="hero-banner">
+    <img src="assets/images/jl-solutions-banner.png" alt="JL Solutions - AI Solutions for AI Problems" class="hero-banner-image">
+  </section>
 
-  <!-- Services Preview -->
-  <section class="py-5 text-center">
+  <!-- Services Section -->
+  <section class="services-section">
     <div class="container">
-      <h2 class="mb-4">What We Do</h2>
-      <div class="row">
+      <h2 class="section-title">What We Do</h2>
+      <p class="section-subtitle">Operations optimization and automation services. From complexity to clarity.</p>
+      
+      <div class="row g-4">
         <div class="col-md-4">
-          <h5>Power Platform Consulting</h5>
-          <p>Build fast, scale smart with Power Apps, Automate, and BI.</p>
+          <div class="service-card">
+            <div class="service-icon">🤖</div>
+            <h3>Operations Optimization</h3>
+            <p>Transform complex processes into streamlined automation solutions. We analyze your workflows and implement intelligent systems that reduce manual work and increase efficiency.</p>
+          </div>
         </div>
         <div class="col-md-4">
-          <h5>Cloud & Automation</h5>
-          <p>Secure migrations, workflow automation, and AI integrations.</p>
+          <div class="service-card">
+            <div class="service-icon">⚡</div>
+            <h3>AI Solutions</h3>
+            <p>Intelligent automation and AI-powered services for modern problems. Leverage cutting-edge technology to solve business challenges and drive innovation.</p>
+          </div>
         </div>
         <div class="col-md-4">
-          <h5>Small Biz Support</h5>
-          <p>Simple, scalable systems for nonprofits and small teams.</p>
+          <div class="service-card">
+            <div class="service-icon">📄</div>
+            <h3>Document Intelligence</h3>
+            <p>AI-powered document extraction and processing. Extract key information from documents automatically - perfect for government contracting and compliance.</p>
+            <a href="/services/document-extraction-demo.html" style="color: var(--yellow); font-weight: 600;">Try Free Demo →</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- About Summary -->
-  <section class="bg-light py-5">
-    <div class="container text-center">
-      <h2 class="mb-4">About JL Solutions</h2>
-      <p class="mx-auto" style="max-width: 700px;">Founded by a veteran developer with a passion for impact-driven tech, JL Solutions helps government, nonprofit, and enterprise clients harness the cloud, automate processes, and serve their communities better.</p>
-      <a href="about.html" class="btn btn-primary mt-3">Learn More</a>
+  <!-- About Section -->
+  <section class="about-section">
+    <div class="container">
+      <div class="about-content">
+        <h2>About JL Solutions</h2>
+        <p>Operations optimization and automation services. From complexity to clarity.</p>
+        <p>We help organizations transform their operations with AI-powered solutions and intelligent automation. Our approach combines technical expertise with business acumen to deliver solutions that drive real results.</p>
+        <a href="about.html" class="btn btn-outline">Learn More</a>
+      </div>
     </div>
   </section>
 
-  <!-- Contact CTA -->
-  <section class="py-5 text-center">
+  <!-- CTA Section -->
+  <section class="cta-section">
     <div class="container">
-      <h2>Let’s Build Something Together</h2>
-      <p class="mb-4">Schedule a call and let’s turn your vision into reality.</p>
-      <a href="contact.html" class="btn btn-success">Contact Us</a>
+      <h2>Let's Build Something Together</h2>
+      <p>Schedule a call and let's turn your vision into reality. From initial consultation to full implementation, we're here to help.</p>
+      <a href="contact.html" class="btn btn-primary">Contact Us</a>
     </div>
   </section>
 

@@ -1,0 +1,43 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="200" fill="#000000"/>
+  
+  <!-- Lightbulb Base (Grey Rectangle) -->
+  <rect x="170" y="140" width="60" height="20" fill="#808080" rx="2"/>
+  
+  <!-- Lightbulb Bulb (Yellow with Blue Outline) -->
+  <path d="M 200 140 L 190 100 Q 190 80 200 80 Q 210 80 210 100 L 200 140" 
+        fill="#FFD700" 
+        stroke="#1A8CFF" 
+        stroke-width="3"/>
+  
+  <!-- JL Monogram inside lightbulb -->
+  <text x="200" y="110" 
+        font-family="Arial, sans-serif" 
+        font-size="24" 
+        font-weight="bold" 
+        fill="#1A8CFF" 
+        text-anchor="middle">JL</text>
+  
+  <!-- Radiating Lines (Dashed Blue) -->
+  <line x1="160" y1="90" x2="150" y2="80" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
+  <line x1="240" y1="90" x2="250" y2="80" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
+  <line x1="200" y1="70" x2="200" y2="60" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
+  <line x1="175" y1="95" x2="165" y2="85" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
+  <line x1="225" y1="95" x2="235" y2="85" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
+  
+  <!-- Top Text: JL SOLUTIONS (Curved Up) -->
+  <path id="topCurve" d="M 50 50 Q 200 20 350 50" fill="none"/>
+  <text fill="#1A8CFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    <textPath href="#topCurve" startOffset="5%">JL</textPath>
+    <textPath href="#topCurve" startOffset="60%">SOLUTIONS</textPath>
+  </text>
+  
+  <!-- Bottom Text: AI SOLUTIONS FOR AI PROBLEMS (Curved Down) -->
+  <path id="bottomCurve" d="M 30 160 Q 200 180 370 160" fill="none"/>
+  <text fill="#1A8CFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    <textPath href="#bottomCurve" startOffset="5%">AI SOLUTIONS</textPath>
+    <textPath href="#bottomCurve" startOffset="60%">FOR AI PROBLEMS</textPath>
+  </text>
+</svg>
+

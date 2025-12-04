@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document Extraction Demo - Try It Free</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --black: #000000;
+      --blue: #0078d4;
+      --white: #ffffff;
+      --dark-blue: #004298;
+      --yellow: #ffbd59;
+      --success: #00C853;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+    }
+    
+    .demo-hero {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+      padding: 4rem 0;
+      text-align: center;
+      color: white;
+    }
+    
+    .demo-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    
+    .demo-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .upload-area {
+      border: 3px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 3rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .upload-area:hover {
+      border-color: var(--blue);
+      background: rgba(0, 120, 212, 0.1);
+    }
+    
+    .upload-area.dragover {
+      border-color: var(--yellow);
+      background: rgba(255, 189, 89, 0.1);
+    }
+    
+    .file-list {
+      margin-top: 1.5rem;
+    }
+    
+    .file-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .btn-demo {
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      padding: 1rem 2rem;
+      font-weight: 700;
+      border-radius: 8px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .btn-demo:hover {
+      background: #ffa726;
+      transform: translateY(-2px);
+    }
+    
+    .btn-demo:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .processing-status {
+      background: rgba(0, 200, 83, 0.1);
+      border-left: 4px solid var(--success);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    
+    .result-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .result-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .result-section h5 {
+      color: var(--yellow);
+      margin-bottom: 0.5rem;
+    }
+    
+    .result-content {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .trial-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--black);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .feature-item {
+      background: rgba(0, 120, 212, 0.1);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid var(--blue);
+    }
+    
+    .feature-item h6 {
+      color: var(--yellow);
+      margin-bottom: 0.5rem;
+    }
+    
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid var(--yellow);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .limit-badge {
+      display: inline-block;
+      background: rgba(255, 165, 0, 0.2);
+      color: var(--yellow);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      margin-left: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="demo-hero">
+    <div class="container">
+      <span class="trial-badge">FREE TRIAL - NO SIGNUP REQUIRED</span>
+      <h1 class="display-4 mb-3">Document Intelligence Extraction</h1>
+      <p class="lead">Try our AI-powered document extraction. Upload documents and see instant results.</p>
+    </div>
+  </div>
+
+  <div class="demo-container">
+    <!-- Features Overview -->
+    <div class="demo-card">
+      <h3 class="mb-4">What This Demo Shows</h3>
+      <div class="feature-grid">
+        <div class="feature-item">
+          <h6>📤 Mass Upload</h6>
+          <p class="small mb-0">Upload multiple documents at once. Supports PDF, DOCX, and more.</p>
+        </div>
+        <div class="feature-item">
+          <h6>🤖 AI Extraction</h6>
+          <p class="small mb-0">Automatically extract key information from documents using AI.</p>
+        </div>
+        <div class="feature-item">
+          <h6>📋 Section L & M</h6>
+          <p class="small mb-0">Extract Instructions and Evaluation Factors from solicitation documents.</p>
+        </div>
+        <div class="feature-item">
+          <h6>⚡ Instant Results</h6>
+          <p class="small mb-0">See extracted data in seconds, not hours.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo Interface -->
+    <div class="demo-card">
+      <h3 class="mb-4">Try It Now</h3>
+      
+      <!-- Upload Section -->
+      <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.doc" style="display: none;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📁</div>
+        <h4>Drag & Drop Files Here</h4>
+        <p class="text-muted">or click to browse</p>
+        <p class="small text-muted">Supports PDF, DOCX files<span class="limit-badge">Max 5 files in demo</span></p>
+      </div>
+      
+      <div class="file-list" id="fileList"></div>
+      
+      <!-- Action Buttons -->
+      <div class="d-flex gap-3 mt-4">
+        <button class="btn-demo" id="extractBtn" onclick="startExtraction()" disabled>
+          Extract Document Data
+        </button>
+        <button class="btn btn-secondary" onclick="clearFiles()">
+          Clear Files
+        </button>
+      </div>
+    </div>
+
+    <!-- Processing Status -->
+    <div id="processingStatus" style="display: none;">
+      <div class="processing-status">
+        <div class="spinner mb-3"></div>
+        <h5>Processing Documents...</h5>
+        <p class="mb-0">Our AI is analyzing your documents and extracting key information. This may take a moment.</p>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" style="display: none;">
+      <div class="demo-card">
+        <h3 class="mb-4">Extracted Results</h3>
+        
+        <div class="result-card">
+          <div class="result-section">
+            <h5>📄 Document Information</h5>
+            <div class="result-content" id="docInfo">
+              Loading...
+            </div>
+          </div>
+          
+          <div class="result-section">
+            <h5>📋 Section L - Instructions to Offerors</h5>
+            <div class="result-content" id="sectionL">
+              No Section L found in this document.
+            </div>
+          </div>
+          
+          <div class="result-section">
+            <h5>📊 Section M - Evaluation Factors</h5>
+            <div class="result-content" id="sectionM">
+              No Section M found in this document.
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-4">
+          <button class="btn-demo" onclick="downloadResults()">Download Results (JSON)</button>
+          <button class="btn btn-outline-light ms-3" onclick="tryAnother()">Try Another Document</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trial Limits Notice -->
+    <div class="demo-card" style="background: rgba(255, 165, 0, 0.1); border-color: var(--yellow);">
+      <h5>🎯 Trial Limitations</h5>
+      <p class="mb-2">This is a <strong>free demo version</strong> with limited functionality:</p>
+      <ul class="mb-0">
+        <li>Maximum 5 files per session</li>
+        <li>File size limit: 10MB per file</li>
+        <li>Results are not saved</li>
+        <li>Simplified extraction (full version includes advanced AI analysis)</li>
+      </ul>
+      <p class="mt-3 mb-0">
+        <strong>Want the full version?</strong> 
+        <a href="/book-consultation.html" style="color: var(--yellow);">Contact us</a> for a custom solution tailored to your needs.
+      </p>
+    </div>
+
+    <!-- Use Cases -->
+    <div class="demo-card">
+      <h3 class="mb-4">Perfect For</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <h5>🏛️ Government Contracting</h5>
+          <p>Extract key sections from RFP documents quickly and accurately. Save hours of manual review.</p>
+        </div>
+        <div class="col-md-6">
+          <h5>📑 Document Processing</h5>
+          <p>Automate information extraction from large volumes of documents. Reduce manual data entry.</p>
+        </div>
+        <div class="col-md-6">
+          <h5>📊 Compliance & Analysis</h5>
+          <p>Quickly identify compliance requirements and evaluation criteria from solicitation documents.</p>
+        </div>
+        <div class="col-md-6">
+          <h5>⚡ Process Automation</h5>
+          <p>Integrate document extraction into your workflow for automated document processing.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="text-center my-5 py-5">
+      <h2>Ready for Full-Featured Document Intelligence?</h2>
+      <p class="lead mb-4">This demo shows just a fraction of what's possible. Let's discuss your needs.</p>
+      <a href="/book-consultation.html" class="btn-demo btn-lg me-3">Schedule Consultation</a>
+      <a href="/services/index.html" class="btn btn-outline-light btn-lg">View All Services</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let uploadedFiles = [];
+    const MAX_FILES = 5;
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+    // File upload handling
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+      const validFiles = Array.from(files).filter(file => {
+        const validType = file.type === 'application/pdf' || 
+                         file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+                         file.type === 'application/msword';
+        const validSize = file.size <= MAX_FILE_SIZE;
+        return validType && validSize;
+      });
+
+      if (uploadedFiles.length + validFiles.length > MAX_FILES) {
+        alert(`Demo limit: Maximum ${MAX_FILES} files allowed. You can upload ${MAX_FILES - uploadedFiles.length} more.`);
+        validFiles.splice(MAX_FILES - uploadedFiles.length);
+      }
+
+      uploadedFiles = [...uploadedFiles, ...validFiles];
+      updateFileList();
+      updateExtractButton();
+    }
+
+    function updateFileList() {
+      fileList.innerHTML = uploadedFiles.map((file, index) => `
+        <div class="file-item">
+          <div>
+            <strong>${file.name}</strong>
+            <small class="text-muted d-block">${(file.size / 1024).toFixed(2)} KB</small>
+          </div>
+          <button class="btn btn-sm btn-danger" onclick="removeFile(${index})">Remove</button>
+        </div>
+      `).join('');
+    }
+
+    function removeFile(index) {
+      uploadedFiles.splice(index, 1);
+      updateFileList();
+      updateExtractButton();
+    }
+
+    function clearFiles() {
+      uploadedFiles = [];
+      updateFileList();
+      updateExtractButton();
+      document.getElementById('resultsSection').style.display = 'none';
+      document.getElementById('processingStatus').style.display = 'none';
+    }
+
+    function updateExtractButton() {
+      document.getElementById('extractBtn').disabled = uploadedFiles.length === 0;
+    }
+
+    function startExtraction() {
+      if (uploadedFiles.length === 0) return;
+
+      document.getElementById('processingStatus').style.display = 'block';
+      document.getElementById('resultsSection').style.display = 'none';
+
+      // Simulate processing (in real demo, this would call an API)
+      setTimeout(() => {
+        document.getElementById('processingStatus').style.display = 'none';
+        document.getElementById('resultsSection').style.display = 'block';
+        displayResults();
+      }, 3000);
+    }
+
+    function displayResults() {
+      // Demo results - in real version, this would come from API
+      const docInfo = {
+        totalFiles: uploadedFiles.length,
+        filesProcessed: uploadedFiles.length,
+        processingTime: '3.2 seconds',
+        extractionMethod: 'AI-Powered Analysis'
+      };
+
+      document.getElementById('docInfo').textContent = JSON.stringify(docInfo, null, 2);
+
+      // Demo Section L content
+      document.getElementById('sectionL').textContent = `Section L - Instructions to Offerors
+
+This is a demonstration of extracted content. In the full version, our AI would extract:
+- Submission requirements
+- Formatting instructions  
+- Required documents
+- Deadline information
+- Contact information
+
+[Demo Mode: This is sample extracted text. Full version provides complete, accurate extraction.]`;
+
+      // Demo Section M content
+      document.getElementById('sectionM').textContent = `Section M - Evaluation Factors for Award
+
+This is a demonstration of extracted content. In the full version, our AI would extract:
+- Evaluation criteria and weights
+- Scoring methodology
+- Technical evaluation factors
+- Past performance requirements
+- Price evaluation factors
+
+[Demo Mode: This is sample extracted text. Full version provides complete, accurate extraction.]`;
+
+      // Scroll to results
+      document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function downloadResults() {
+      const results = {
+        documentInfo: JSON.parse(document.getElementById('docInfo').textContent),
+        sectionL: document.getElementById('sectionL').textContent,
+        sectionM: document.getElementById('sectionM').textContent,
+        extractedAt: new Date().toISOString(),
+        demo: true
+      };
+
+      const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `extraction-results-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function tryAnother() {
+      clearFiles();
+      document.getElementById('resultsSection').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
+

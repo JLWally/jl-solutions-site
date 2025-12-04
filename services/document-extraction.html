@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document Intelligence & Extraction - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --black: #000000;
+      --blue: #0078d4;
+      --white: #ffffff;
+      --dark-blue: #004298;
+      --yellow: #ffbd59;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+    }
+    
+    .service-hero {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+      padding: 4rem 0;
+      text-align: center;
+      color: white;
+    }
+    
+    .service-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s;
+    }
+    
+    .feature-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-5px);
+    }
+    
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .benefit-item {
+      background: rgba(0, 120, 212, 0.1);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border-left: 4px solid var(--blue);
+    }
+    
+    .benefit-item h5 {
+      color: var(--yellow);
+      margin-bottom: 0.5rem;
+    }
+    
+    .use-case {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--yellow);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="service-hero">
+    <div class="container">
+      <h1 class="display-4 mb-3">Document Intelligence & Extraction</h1>
+      <p class="lead">AI-powered document processing that transforms hours of manual work into seconds</p>
+      <a href="/services/document-extraction-demo.html" class="btn btn-light btn-lg mt-3" style="background: var(--yellow); color: var(--black); border: none; padding: 1rem 2rem; font-weight: 700;">Try Free Demo</a>
+    </div>
+  </div>
+
+  <div class="service-container">
+    <!-- Overview -->
+    <div class="feature-card">
+      <h2 class="mb-4">What Is Document Intelligence?</h2>
+      <p class="lead">Our AI-powered document extraction system automatically processes large volumes of documents, extracting key information like Section L (Instructions to Offerors) and Section M (Evaluation Factors) from solicitation documents, contracts, and other structured documents.</p>
+      <p>Perfect for government contractors, legal teams, compliance departments, and any organization that processes large volumes of documents manually.</p>
+    </div>
+
+    <!-- Key Features -->
+    <div class="feature-card">
+      <h2 class="mb-4">Key Features</h2>
+      <div class="benefit-grid">
+        <div class="benefit-item">
+          <h5>📤 Mass Upload</h5>
+          <p class="small mb-0">Upload thousands of documents at once. Supports PDF, DOCX, and more formats.</p>
+        </div>
+        <div class="benefit-item">
+          <h5>🤖 AI-Powered Extraction</h5>
+          <p class="small mb-0">Advanced AI identifies and extracts specific sections automatically with high accuracy.</p>
+        </div>
+        <div class="benefit-item">
+          <h5>⚡ Fast Processing</h5>
+          <p class="small mb-0">Process documents in seconds, not hours. Handle large batches efficiently.</p>
+        </div>
+        <div class="benefit-item">
+          <h5>📋 Section L & M Focus</h5>
+          <p class="small mb-0">Specialized extraction for solicitation documents - Instructions and Evaluation Factors.</p>
+        </div>
+        <div class="benefit-item">
+          <h5>🔍 Custom Extraction</h5>
+          <p class="small mb-0">Extract any specific sections, fields, or data points from your documents.</p>
+        </div>
+        <div class="benefit-item">
+          <h5>💾 Export & Integration</h5>
+          <p class="small mb-0">Export results as JSON, CSV, or integrate directly into your systems via API.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Use Cases -->
+    <div class="feature-card">
+      <h2 class="mb-4">Perfect For</h2>
+      
+      <div class="use-case">
+        <h5>🏛️ Government Contracting</h5>
+        <p class="mb-0">Extract Section L and Section M from RFP documents quickly. Identify submission requirements and evaluation criteria automatically. Save hours of manual document review.</p>
+      </div>
+      
+      <div class="use-case">
+        <h5>📑 Legal Document Processing</h5>
+        <p class="mb-0">Extract key clauses, terms, and conditions from contracts and legal documents. Process discovery documents efficiently.</p>
+      </div>
+      
+      <div class="use-case">
+        <h5>📊 Compliance & Audit</h5>
+        <p class="mb-0">Automate compliance document review. Extract required information for audits and regulatory filings.</p>
+      </div>
+      
+      <div class="use-case">
+        <h5>⚡ Document Automation</h5>
+        <p class="mb-0">Integrate document extraction into your workflow. Automate data entry and document processing pipelines.</p>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="feature-card">
+      <h2 class="mb-4">How It Works</h2>
+      <div class="row">
+        <div class="col-md-4 text-center mb-4">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">1️⃣</div>
+          <h5>Upload Documents</h5>
+          <p class="small">Upload files individually or in bulk. Our system handles multiple formats and file sizes.</p>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">2️⃣</div>
+          <h5>AI Processing</h5>
+          <p class="small">Our AI analyzes documents, identifies target sections, and extracts key information accurately.</p>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">3️⃣</div>
+          <h5>Get Results</h5>
+          <p class="small">Review extracted data, export results, or integrate directly into your systems.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Benefits -->
+    <div class="feature-card">
+      <h2 class="mb-4">Benefits</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <ul>
+            <li><strong>Time Savings:</strong> Reduce manual document review from hours to minutes</li>
+            <li><strong>Accuracy:</strong> AI-powered extraction reduces human error</li>
+            <li><strong>Scalability:</strong> Process thousands of documents efficiently</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul>
+            <li><strong>Cost Reduction:</strong> Lower processing costs through automation</li>
+            <li><strong>Consistency:</strong> Standardized extraction across all documents</li>
+            <li><strong>Integration:</strong> Seamlessly integrate with existing systems</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center my-5 py-5">
+      <h2>Ready to Transform Your Document Processing?</h2>
+      <p class="lead mb-4">Try our free demo or schedule a consultation to see how we can help</p>
+      <a href="/services/document-extraction-demo.html" class="btn btn-primary btn-lg me-3" style="background: var(--yellow); color: var(--black); border: none; padding: 1rem 2.5rem; font-weight: 700;">Try Free Demo</a>
+      <a href="/book-consultation.html" class="btn btn-outline-light btn-lg">Schedule Consultation</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
