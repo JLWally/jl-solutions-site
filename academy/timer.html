@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Timer - JL Solutions Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/academy.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    .timer-display {
+      font-size: 5rem;
+      font-weight: bold;
+      color: #00C853;
+      text-align: center;
+      margin: 2rem 0;
+      font-family: 'Courier New', monospace;
+    }
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .timer-button {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .timer-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .timer-button.start {
+      background: linear-gradient(135deg, #00C853, #00a043);
+      color: white;
+    }
+    .timer-button.pause {
+      background: linear-gradient(135deg, #FFA500, #ff8c00);
+      color: white;
+    }
+    .timer-button.reset {
+      background: #2a2a2a;
+      color: white;
+    }
+    .timer-presets {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    .preset-button {
+      padding: 0.75rem 1.5rem;
+      background: #1f1f1f;
+      border: 2px solid #333;
+      color: #f4f4f4;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .preset-button:hover {
+      border-color: #0078D4;
+      transform: translateY(-2px);
+    }
+    .stats-card {
+      background: #1f1f1f;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .stats-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #00C853;
+    }
+    .timer-status {
+      text-align: center;
+      font-size: 1.2rem;
+      margin: 1rem 0;
+      color: #bbbbbb;
+    }
+    .break-mode {
+      color: #FFA500;
+    }
+    .study-mode {
+      color: #00C853;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h1 class="display-4">⏱️ Study Timer</h1>
+      <p class="lead">Pomodoro Technique - Focus for 25 minutes, then take a break!</p>
+    </div>
+  </header>
+
+  <!-- Timer Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="welcome-card">
+        <h2 class="text-center mb-4">Pomodoro Technique</h2>
+        <p class="text-center mb-4">The Pomodoro Technique helps you stay focused by breaking work into 25-minute intervals with short breaks. It's proven to improve productivity!</p>
+        
+        <!-- Timer Display -->
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        
+        <!-- Timer Status -->
+        <div class="timer-status" id="timerStatus">
+          <span class="study-mode">📚 Study Time</span>
+        </div>
+
+        <!-- Timer Controls -->
+        <div class="timer-controls">
+          <button class="timer-button start" id="startButton" onclick="startTimer()">▶ Start</button>
+          <button class="timer-button pause" id="pauseButton" onclick="pauseTimer()" style="display: none;">⏸ Pause</button>
+          <button class="timer-button reset" onclick="resetTimer()">🔄 Reset</button>
+        </div>
+
+        <!-- Preset Times -->
+        <div class="timer-presets">
+          <button class="preset-button" onclick="setTimer(25)">🍅 25 min (Pomodoro)</button>
+          <button class="preset-button" onclick="setTimer(15)">📚 15 min (Quick Study)</button>
+          <button class="preset-button" onclick="setTimer(45)">📖 45 min (Deep Focus)</button>
+          <button class="preset-button" onclick="setTimer(5)">☕ 5 min (Short Break)</button>
+          <button class="preset-button" onclick="setTimer(10)">🚶 10 min (Break)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-4">📊 Your Study Stats</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="stats-card">
+            <div class="stats-number" id="todayMinutes">0</div>
+            <p class="mb-0">Minutes Today</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stats-card">
+            <div class="stats-number" id="todaySessions">0</div>
+            <p class="mb-0">Sessions Today</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stats-card">
+            <div class="stats-number" id="totalMinutes">0</div>
+            <p class="mb-0">Total Minutes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tips Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="mb-4">💡 Tips for Effective Study Sessions</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="welcome-card">
+            <h5>🎯 Set Clear Goals</h5>
+            <p>Before starting a timer, decide what you want to accomplish. "Learn about functions" is better than "study JavaScript."</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="welcome-card">
+            <h5>📱 Eliminate Distractions</h5>
+            <p>Put your phone away, close unnecessary tabs, and focus only on coding during the timer.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="welcome-card">
+            <h5>☕ Take Real Breaks</h5>
+            <p>During breaks, step away from the computer. Stretch, get water, or take a short walk. Your brain needs rest!</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="welcome-card">
+            <h5>📝 Track Your Progress</h5>
+            <p>Use the stats above to see how much you've studied. Consistency beats intensity - 25 minutes daily is better than 5 hours once a week!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h2>Ready to Focus?</h2>
+      <p class="lead mb-4">Start a timer and dive into your learning. You've got this!</p>
+      <a href="/academy/modules.html" class="btn btn-light btn-lg me-2">Continue Learning</a>
+      <a href="/academy/beginner-course.html" class="btn btn-success btn-lg">Start Beginner Course</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions Academy. Built with love for Sierra.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.js"></script>
+  <script>
+    let timerInterval = null;
+    let timeLeft = 25 * 60; // 25 minutes in seconds
+    let isRunning = false;
+    let isBreak = false;
+    let totalSecondsStudied = 0;
+    let sessionsToday = 0;
+
+    // Load stats from localStorage
+    function loadStats() {
+      const today = new Date().toDateString();
+      const saved = localStorage.getItem('studyStats');
+      if (saved) {
+        const stats = JSON.parse(saved);
+        if (stats.date === today) {
+          totalSecondsStudied = stats.totalSeconds || 0;
+          sessionsToday = stats.sessions || 0;
+        } else {
+          // New day, reset daily stats
+          totalSecondsStudied = stats.totalSeconds || 0;
+          sessionsToday = 0;
+        }
+      }
+      updateStats();
+    }
+
+    // Save stats to localStorage
+    function saveStats() {
+      const today = new Date().toDateString();
+      const stats = {
+        date: today,
+        totalSeconds: totalSecondsStudied,
+        sessions: sessionsToday
+      };
+      localStorage.setItem('studyStats', JSON.stringify(stats));
+    }
+
+    // Update stats display
+    function updateStats() {
+      const today = new Date().toDateString();
+      const saved = localStorage.getItem('studyStats');
+      let todayMinutes = 0;
+      
+      if (saved) {
+        const stats = JSON.parse(saved);
+        if (stats.date === today) {
+          todayMinutes = Math.floor((stats.totalSeconds || 0) / 60);
+        }
+      }
+      
+      document.getElementById('todayMinutes').textContent = todayMinutes;
+      document.getElementById('todaySessions').textContent = sessionsToday;
+      document.getElementById('totalMinutes').textContent = Math.floor(totalSecondsStudied / 60);
+    }
+
+    // Format time display
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Update timer display
+    function updateDisplay() {
+      document.getElementById('timerDisplay').textContent = formatTime(timeLeft);
+      
+      if (timeLeft === 0) {
+        handleTimerComplete();
+      }
+    }
+
+    // Set timer to specific minutes
+    function setTimer(minutes) {
+      if (isRunning) {
+        if (!confirm('Timer is running. Reset to ' + minutes + ' minutes?')) {
+          return;
+        }
+      }
+      resetTimer();
+      timeLeft = minutes * 60;
+      isBreak = minutes < 15; // Breaks are usually shorter
+      updateDisplay();
+      updateStatus();
+    }
+
+    // Start timer
+    function startTimer() {
+      if (timeLeft === 0) {
+        // If timer completed, start a break or new session
+        if (!isBreak) {
+          // Just finished study, start break
+          setTimer(5);
+        } else {
+          // Just finished break, start new study session
+          setTimer(25);
+        }
+      }
+      
+      isRunning = true;
+      document.getElementById('startButton').style.display = 'none';
+      document.getElementById('pauseButton').style.display = 'inline-block';
+      
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        if (!isBreak) {
+          totalSecondsStudied++;
+          saveStats();
+        }
+        updateDisplay();
+        
+        if (timeLeft === 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          isRunning = false;
+        }
+      }, 1000);
+    }
+
+    // Pause timer
+    function pauseTimer() {
+      isRunning = false;
+      clearInterval(timerInterval);
+      timerInterval = null;
+      document.getElementById('startButton').style.display = 'inline-block';
+      document.getElementById('pauseButton').style.display = 'none';
+    }
+
+    // Reset timer
+    function resetTimer() {
+      pauseTimer();
+      timeLeft = 25 * 60;
+      isBreak = false;
+      updateDisplay();
+      updateStatus();
+    }
+
+    // Handle timer completion
+    function handleTimerComplete() {
+      pauseTimer();
+      
+      if (!isBreak) {
+        // Study session completed
+        sessionsToday++;
+        saveStats();
+        updateStats();
+        
+        const playBreak = confirm('🎉 Great job! Study session complete. Take a 5-minute break?');
+        if (playBreak) {
+          setTimer(5);
+          setTimeout(() => startTimer(), 1000);
+        }
+        
+        // Play notification sound (if allowed)
+        playNotification();
+      } else {
+        // Break completed
+        const continueStudy = confirm('☕ Break time over! Ready to get back to studying?');
+        if (continueStudy) {
+          setTimer(25);
+          setTimeout(() => startTimer(), 1000);
+        }
+        playNotification();
+      }
+    }
+
+    // Play notification
+    function playNotification() {
+      // Create a simple beep sound
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    }
+
+    // Update status display
+    function updateStatus() {
+      const statusEl = document.getElementById('timerStatus');
+      if (isBreak) {
+        statusEl.innerHTML = '<span class="break-mode">☕ Break Time</span>';
+      } else {
+        statusEl.innerHTML = '<span class="study-mode">📚 Study Time</span>';
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      loadStats();
+      updateDisplay();
+      updateStatus();
+    });
+
+    // Save stats when page is about to close
+    window.addEventListener('beforeunload', () => {
+      saveStats();
+    });
+  </script>
+</body>
+</html>
+
