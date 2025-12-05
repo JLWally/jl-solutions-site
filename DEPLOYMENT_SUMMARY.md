@@ -29,7 +29,7 @@ All Phase 1 features have been implemented and are ready for deployment to the J
    - Free trial (no signup)
    - Drag & drop file upload
    - AI extraction simulation
-   - Section L & M extraction demo
+   - Generic document extraction demo (key information and summaries)
    - Download results
 
 5. **Document Extraction Service** (`/services/document-extraction.html`)

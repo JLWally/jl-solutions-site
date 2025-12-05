@@ -31,7 +31,7 @@
    - Free trial (no signup required)
    - Drag & drop file upload
    - AI extraction simulation
-   - Section L & M extraction demo
+   - Generic document extraction demo (key information and summaries)
    - Download results as JSON
 
 5. **✅ Document Extraction Service Page**

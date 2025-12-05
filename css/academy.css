@@ -512,7 +512,7 @@
   margin-bottom: 0.5rem;
 }
 
-/* Responsive */
+/* Responsive - Additional Academy-specific styles */
 @media (max-width: 768px) {
   .timeline::before {
     left: 20px;
@@ -534,6 +534,34 @@
   
   .resource-grid {
     grid-template-columns: 1fr;
+  }
+
+  .academy-badge {
+    font-size: 3rem;
+  }
+
+  .nav-card {
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline::before {
+    left: 15px;
+  }
+  
+  .timeline-item {
+    padding-left: 50px;
+  }
+  
+  .timeline-marker {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+
+  .academy-badge {
+    font-size: 2.5rem;
   }
 }
 

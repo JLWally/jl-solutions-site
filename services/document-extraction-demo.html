@@ -216,8 +216,8 @@
   <div class="demo-hero">
     <div class="container">
       <span class="trial-badge">FREE TRIAL - NO SIGNUP REQUIRED</span>
-      <h1 class="display-4 mb-3">Document Intelligence Extraction</h1>
-      <p class="lead">Try our AI-powered document extraction. Upload documents and see instant results.</p>
+      <h1 class="display-4 mb-3">Business Document Intelligence</h1>
+      <p class="lead">Extract data from invoices, contracts, forms, and reports automatically. Upload your business documents and see instant results.</p>
     </div>
   </div>
 
@@ -227,7 +227,7 @@
       <h3 class="mb-4">What This Demo Shows</h3>
       <div class="feature-grid">
         <div class="feature-item">
-          <h6>📤 Mass Upload</h6>
+          <h6>📤 Bulk Document Upload</h6>
           <p class="small mb-0">Upload multiple documents at once. Supports PDF, DOCX, and more.</p>
         </div>
         <div class="feature-item">
@@ -235,8 +235,8 @@
           <p class="small mb-0">Automatically extract key information from documents using AI.</p>
         </div>
         <div class="feature-item">
-          <h6>📋 Section L & M</h6>
-          <p class="small mb-0">Extract Instructions and Evaluation Factors from solicitation documents.</p>
+          <h6>🔍 Business Data Extraction</h6>
+          <p class="small mb-0">Extract invoice numbers, dates, amounts, vendor info, contract terms, and more from business documents.</p>
         </div>
         <div class="feature-item">
           <h6>⚡ Instant Results</h6>
@@ -263,7 +263,7 @@
       <!-- Action Buttons -->
       <div class="d-flex gap-3 mt-4">
         <button class="btn-demo" id="extractBtn" onclick="startExtraction()" disabled>
-          Extract Document Data
+          Scan & Extract Business Data
         </button>
         <button class="btn btn-secondary" onclick="clearFiles()">
           Clear Files
@@ -276,7 +276,7 @@
       <div class="processing-status">
         <div class="spinner mb-3"></div>
         <h5>Processing Documents...</h5>
-        <p class="mb-0">Our AI is analyzing your documents and extracting key information. This may take a moment.</p>
+        <p class="mb-0">Our AI is scanning your business documents and extracting invoice data, contract terms, form fields, and other key information. This may take a moment.</p>
       </div>
     </div>
 
@@ -294,16 +294,16 @@
           </div>
           
           <div class="result-section">
-            <h5>📋 Section L - Instructions to Offerors</h5>
-            <div class="result-content" id="sectionL">
-              No Section L found in this document.
+            <h5>📋 Extracted Business Data</h5>
+            <div class="result-content" id="keyInformation">
+              Business data (invoices, contracts, forms) will appear here after extraction.
             </div>
           </div>
           
           <div class="result-section">
-            <h5>📊 Section M - Evaluation Factors</h5>
-            <div class="result-content" id="sectionM">
-              No Section M found in this document.
+            <h5>📊 Document Analysis Summary</h5>
+            <div class="result-content" id="documentSummary">
+              Document summary and insights will appear here after extraction.
             </div>
           </div>
         </div>
@@ -336,20 +336,20 @@
       <h3 class="mb-4">Perfect For</h3>
       <div class="row">
         <div class="col-md-6">
-          <h5>🏛️ Government Contracting</h5>
-          <p>Extract key sections from RFP documents quickly and accurately. Save hours of manual review.</p>
+          <h5>💰 Invoice Processing</h5>
+          <p>Extract invoice numbers, dates, amounts, vendor information, and line items automatically. Streamline accounts payable.</p>
         </div>
         <div class="col-md-6">
-          <h5>📑 Document Processing</h5>
-          <p>Automate information extraction from large volumes of documents. Reduce manual data entry.</p>
+          <h5>📄 Contract Analysis</h5>
+          <p>Extract parties, dates, terms, obligations, and key clauses from contracts and agreements.</p>
         </div>
         <div class="col-md-6">
-          <h5>📊 Compliance & Analysis</h5>
-          <p>Quickly identify compliance requirements and evaluation criteria from solicitation documents.</p>
+          <h5>📋 Form Processing</h5>
+          <p>Extract data from application forms, intake forms, surveys, and structured documents automatically.</p>
         </div>
         <div class="col-md-6">
-          <h5>⚡ Process Automation</h5>
-          <p>Integrate document extraction into your workflow for automated document processing.</p>
+          <h5>📊 Report Data Extraction</h5>
+          <p>Extract key metrics, statistics, and data points from business reports and financial statements.</p>
         </div>
       </div>
     </div>
@@ -474,29 +474,64 @@
 
       document.getElementById('docInfo').textContent = JSON.stringify(docInfo, null, 2);
 
-      // Demo Section L content
-      document.getElementById('sectionL').textContent = `Section L - Instructions to Offerors
+      // Demo Key Information content - Business Document Focus
+      const sampleExtractedData = {
+        documentType: 'Invoice',
+        vendor: 'ABC Supplies Inc.',
+        invoiceNumber: 'INV-2024-001234',
+        date: '2024-12-15',
+        dueDate: '2025-01-15',
+        totalAmount: '$4,567.89',
+        lineItems: [
+          { description: 'Office Supplies', quantity: 50, unitPrice: '$45.00', total: '$2,250.00' },
+          { description: 'Software Licenses', quantity: 3, unitPrice: '$599.99', total: '$1,799.97' }
+        ],
+        paymentTerms: 'Net 30',
+        billingAddress: '123 Business St, City, ST 12345'
+      };
 
-This is a demonstration of extracted content. In the full version, our AI would extract:
-- Submission requirements
-- Formatting instructions  
-- Required documents
-- Deadline information
-- Contact information
+      document.getElementById('keyInformation').textContent = `Extracted Data Fields:
 
-[Demo Mode: This is sample extracted text. Full version provides complete, accurate extraction.]`;
+Document Type: ${sampleExtractedData.documentType}
+Vendor: ${sampleExtractedData.vendor}
+Invoice Number: ${sampleExtractedData.invoiceNumber}
+Invoice Date: ${sampleExtractedData.date}
+Due Date: ${sampleExtractedData.dueDate}
+Total Amount: ${sampleExtractedData.totalAmount}
+Payment Terms: ${sampleExtractedData.paymentTerms}
 
-      // Demo Section M content
-      document.getElementById('sectionM').textContent = `Section M - Evaluation Factors for Award
+Line Items:
+${sampleExtractedData.lineItems.map(item => 
+  `  • ${item.description}: ${item.quantity} × ${item.unitPrice} = ${item.total}`
+).join('\n')}
 
-This is a demonstration of extracted content. In the full version, our AI would extract:
-- Evaluation criteria and weights
-- Scoring methodology
-- Technical evaluation factors
-- Past performance requirements
-- Price evaluation factors
+Billing Address: ${sampleExtractedData.billingAddress}
 
-[Demo Mode: This is sample extracted text. Full version provides complete, accurate extraction.]`;
+---
+[Demo Mode: This is sample extracted data. Full version automatically extracts all fields from your business documents including invoices, contracts, forms, reports, and more.]`;
+
+      // Demo Document Summary content
+      document.getElementById('documentSummary').textContent = `Document Analysis Summary:
+
+This document is an invoice from ABC Supplies Inc. dated December 15, 2024, 
+totaling $4,567.89. The invoice includes office supplies and software licenses 
+with payment terms of Net 30 days, due by January 15, 2025.
+
+Key Details:
+• Invoice Number: INV-2024-001234
+• Total Amount Due: $4,567.89
+• Payment Due: January 15, 2025 (30 days)
+• Number of Line Items: 2
+• Document Status: Pending Payment
+
+Suggested Actions:
+- Add to accounts payable system
+- Schedule payment for due date
+- Verify line items match purchase order
+
+---
+[Demo Mode: This is a sample summary. Full version provides detailed analysis 
+and insights for all your business documents.]`;
 
       // Scroll to results
       document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
@@ -505,8 +540,8 @@ This is a demonstration of extracted content. In the full version, our AI would 
     function downloadResults() {
       const results = {
         documentInfo: JSON.parse(document.getElementById('docInfo').textContent),
-        sectionL: document.getElementById('sectionL').textContent,
-        sectionM: document.getElementById('sectionM').textContent,
+        keyInformation: document.getElementById('keyInformation').textContent,
+        documentSummary: document.getElementById('documentSummary').textContent,
         extractedAt: new Date().toISOString(),
         demo: true
       };

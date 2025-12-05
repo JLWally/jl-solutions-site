@@ -48,7 +48,7 @@
         <div class="progress-header">
           <div>
             <h2>Overall Completion</h2>
-            <p class="mb-0">Keep going, Sierra! Every small step counts.</p>
+            <p class="mb-0">Keep going, <span id="progressUserName">Student</span>! Every small step counts.</p>
           </div>
           <div class="progress-percentage">0%</div>
         </div>
@@ -539,11 +539,11 @@
   <!-- Motivation Section -->
   <section class="bg-primary text-white text-center py-5">
     <div class="container">
-      <h2>Remember, Sierra...</h2>
+      <h2>Keep Going...</h2>
       <blockquote style="border-left-color: white; color: white; font-size: 1.2rem; margin: 2rem auto; max-width: 700px;">
-        "The expert in anything was once a beginner. Every developer you admire started exactly where you are right now. Keep going. I'm proud of you."
+        "The expert in anything was once a beginner. Every developer you admire started exactly where you are right now. Keep going. You've got this!"
       </blockquote>
-      <p style="font-style: italic;">— Titi</p>
+      <p style="font-style: italic;">— JL Solutions Academy Team</p>
       <a href="/academy/modules.html" class="btn btn-light btn-lg mt-3">Continue Learning</a>
     </div>
   </section>
@@ -551,12 +551,28 @@
   <!-- Footer -->
   <footer class="bg-dark text-white text-center py-3">
     <div class="container">
-      <small>&copy; 2025 JL Solutions Academy. Built with love for Sierra.</small>
+      <small>&copy; 2025 JL Solutions Academy. Built with purpose.</small>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/academy-progress.js"></script>
+  <script>
+    // Initialize user-specific progress
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get current user
+      if (typeof getCurrentUser === 'function') {
+        const user = getCurrentUser();
+        if (user) {
+          const userNameEl = document.getElementById('progressUserName');
+          if (userNameEl) {
+            userNameEl.textContent = user.name || user.email || 'Student';
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
 

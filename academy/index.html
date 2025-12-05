@@ -8,22 +8,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/academy.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
   <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 </head>
 <body style="background: #121212; color: #e0e0e0;">
+  <!-- Skip Navigation Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" aria-label="Main navigation">
     <div class="container">
-      <a class="navbar-brand" href="/index.html">JL Solutions</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
+      <a class="navbar-brand" href="/index.html" aria-label="JL Solutions Home">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation menu">
+        <span class="navbar-toggler-icon" aria-hidden="true"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
           <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
-          <li class="nav-item"><a class="nav-link active" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/academy/index.html" aria-current="page">Academy</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
         </ul>
       </div>
@@ -31,41 +35,40 @@
   </nav>
 
   <!-- Hero Section -->
-  <header class="academy-hero text-white text-center py-5">
+  <header class="academy-hero text-white text-center py-5" role="banner">
     <div class="container">
-      <div class="academy-badge mb-3">🎓</div>
+      <div class="academy-badge mb-3" aria-hidden="true">🎓</div>
       <h1 class="display-4">JL Solutions Academy</h1>
-      <p class="lead">Welcome to Your Tech Journey, Sierra</p>
-      <p class="subtitle">Let's build your future together — one line of code at a time.</p>
+      <p class="lead">Welcome to Your Tech Journey</p>
+      <p class="subtitle">From complexity to clarity — let's build your future together, one line of code at a time.</p>
     </div>
   </header>
 
-  <!-- Welcome Letter -->
-  <section class="py-5" style="background: #121212;">
+  <!-- Main Content -->
+  <main id="main-content" role="main">
+
+  <!-- Welcome Message -->
+  <section class="py-5" style="background: #121212;" aria-labelledby="welcome-heading">
     <div class="container">
       <div class="welcome-card">
-        <h2 class="mb-4" style="color: #f4f4f4;">Welcome Letter from Jess</h2>
+        <h2 class="mb-4" id="welcome-heading" style="color: #f4f4f4;">Welcome to JL Solutions Academy</h2>
         <div class="letter-content">
-          <p>Sierra,</p>
+          <p style="color: #e0e0e0;">Welcome to <strong style="color: #00C853;">JL Solutions Academy</strong> — your pathway from complexity to clarity in tech. Whether you're just starting your coding journey or looking to level up your skills, you're in the right place.</p>
           
-          <p style="color: #e0e0e0;">Welcome to <strong style="color: #00C853;">JL Solutions Academy</strong> — aka "Tech Bootcamp but with better vibes, better snacks, and your big sister as your mentor instead of a stranger on YouTube."</p>
+          <p style="color: #e0e0e0;">We believe that <strong style="color: #00C853;">learning to code should be accessible, engaging, and empowering.</strong> You've taken the first step by being here, and that's something to be proud of. Most people talk about learning to code for years — you're actually doing it.</p>
           
-          <p style="color: #e0e0e0;">First things first: <strong style="color: #00C853;">I'm proud of you</strong> for even deciding to take this step. Most people talk about changing their life for years. You said, "Bet. Let's do it." That alone tells me you're already starting strong.</p>
+          <p style="color: #e0e0e0;">Here at JL Solutions Academy, we've designed a curriculum that meets you where you are. Our interactive approach combines hands-on projects, real-world examples, and practical exercises that build both your skills and your confidence. Yes, learning to code is a journey — sometimes challenging, always rewarding — but you don't have to do it alone.</p>
           
-          <p style="color: #e0e0e0;">Now, I'm not going to sugarcoat it — learning to code is a journey… and sometimes JavaScript will try you the way life tries us both at Thanksgiving. But don't worry. <strong style="color: #00C853;">I'm right here with you.</strong> Every win, every stuck moment, every "why isn't this working?", every "ohhh it finally clicked!" — we're doing this together.</p>
+          <p style="color: #e0e0e0;"><strong style="color: #00C853;">This is your learning hub.</strong> Your map. Your starting point. Your launchpad to a career in tech.</p>
           
-          <p style="color: #e0e0e0;">You're smart, capable, creative, funny, and stubborn in all the right ways. That's literally the recipe for a good developer. The world needs more people like you in tech, and I can't wait to watch you grow into the kind of engineer who not only builds apps, but builds a life she's proud of.</p>
+          <p style="color: #e0e0e0;">Treat this space like your new playground. Experiment. Break things (that's how you learn!). Fix things. Build things. And most importantly, have fun doing it.</p>
           
-          <p style="color: #e0e0e0;">So here is your training hub. This is your map. Your starting point. Your launchpad.</p>
+          <p style="color: #e0e0e0;">When the days get challenging, remember this:</p>
+          <blockquote style="border-left: 4px solid #0078D4; padding-left: 1.5rem; margin: 1.5rem 0; color: #d0d0d0; font-style: italic;">You're building skills for your future. Every line of code, every bug you fix, every project you complete is an investment in yourself and your career.</blockquote>
           
-          <p style="color: #e0e0e0;"><strong style="color: #00C853;">Treat it like your new playground.</strong> Experiment. Break stuff. Fix stuff. Learn stuff. And have fun doing it.</p>
+          <p style="color: #e0e0e0;">Ready to get started? Choose your path below and let's begin building your future in tech, one line of code at a time.</p>
           
-          <p style="color: #e0e0e0;">And when the days get hard, remember:</p>
-          <blockquote style="border-left: 4px solid #0078D4; padding-left: 1.5rem; margin: 1.5rem 0; color: #d0d0d0; font-style: italic;">You're doing this for your future — the one where you and I get to work together, build things together, and make something amazing for our family.</blockquote>
-          
-          <p style="color: #e0e0e0;">Let's go, sis.</p>
-          
-          <p class="signature" style="color: #bbbbbb;">With love, pride, jokes, and a fire under your butt —<br><strong style="color: #00C853;">Jess / Titi</strong></p>
+          <p class="signature" style="color: #bbbbbb; margin-top: 2rem;">Welcome aboard,<br><strong style="color: #00C853;">The JL Solutions Academy Team</strong></p>
         </div>
       </div>
     </div>
@@ -84,87 +87,83 @@
   </section>
 
   <!-- Quick Navigation -->
-  <section class="py-5" style="background: #1a1a1a;">
+  <section class="py-5" style="background: #1a1a1a;" aria-labelledby="learning-path-heading">
     <div class="container">
-      <h2 class="text-center mb-5" style="color: #f4f4f4;">Your Learning Path</h2>
+      <h2 class="text-center mb-5" id="learning-path-heading" style="color: #f4f4f4;">Your Learning Path</h2>
       <div class="row g-4">
-        <div class="col-md-6 col-lg-3">
-          <a href="/academy/dashboard.html" class="nav-card nav-card-featured">
-            <div class="nav-card-icon">📊</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/dashboard.html" class="nav-card nav-card-featured" aria-label="Go to Student Portal - Dashboard, progress, timer and goals">
+            <div class="nav-card-icon" aria-hidden="true">📊</div>
             <h5>Student Portal</h5>
             <p>Dashboard, progress, timer & goals</p>
           </a>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <a href="/academy/beginner-course.html" class="nav-card nav-card-featured">
-            <div class="nav-card-icon">🎮</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/beginner-course.html" class="nav-card nav-card-featured" aria-label="Go to Beginner Course - Start from zero with games">
+            <div class="nav-card-icon" aria-hidden="true">🎮</div>
             <h5>Beginner Course</h5>
             <p>Start from zero with games</p>
           </a>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <a href="/academy/modules.html" class="nav-card">
-            <div class="nav-card-icon">📚</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/modules.html" class="nav-card" aria-label="Go to Training Modules - HTML, CSS, JavaScript, React">
+            <div class="nav-card-icon" aria-hidden="true">📚</div>
             <h5>Training Modules</h5>
             <p>HTML, CSS, JavaScript, React</p>
           </a>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <a href="/academy/projects.html" class="nav-card">
-            <div class="nav-card-icon">🛠️</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/projects.html" class="nav-card" aria-label="Go to Projects - Build your portfolio">
+            <div class="nav-card-icon" aria-hidden="true">🛠️</div>
             <h5>Projects</h5>
             <p>Build your portfolio</p>
           </a>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <a href="/academy/progress.html" class="nav-card">
-            <div class="nav-card-icon">📊</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/progress.html" class="nav-card" aria-label="Go to Progress Tracker - See how far you've come">
+            <div class="nav-card-icon" aria-hidden="true">📊</div>
             <h5>Progress Tracker</h5>
             <p>See how far you've come</p>
           </a>
         </div>
-      </div>
-      <div class="row g-4 mt-2">
-        <div class="col-md-4">
-          <a href="/academy/resources.html" class="nav-card">
-            <div class="nav-card-icon">🎯</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/resources.html" class="nav-card" aria-label="Go to Resources - Tools and tutorials">
+            <div class="nav-card-icon" aria-hidden="true">🎯</div>
             <h5>Resources</h5>
             <p>Tools & tutorials</p>
           </a>
         </div>
-        <div class="col-md-4">
-          <a href="/academy/mentorship.html" class="nav-card">
-            <div class="nav-card-icon">🚀</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/mentorship.html" class="nav-card" aria-label="Go to Mentorship Path - From Trainee to Developer">
+            <div class="nav-card-icon" aria-hidden="true">🚀</div>
             <h5>Mentorship Path</h5>
             <p>From Trainee to Developer</p>
           </a>
         </div>
-        <div class="col-md-4">
-          <a href="/academy/schedule.html" class="nav-card">
-            <div class="nav-card-icon">📅</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/schedule.html" class="nav-card" aria-label="Go to Weekly Schedule - Plan your learning">
+            <div class="nav-card-icon" aria-hidden="true">📅</div>
             <h5>Weekly Schedule</h5>
             <p>Plan your learning</p>
           </a>
         </div>
-      </div>
-      <div class="row g-4 mt-2">
-        <div class="col-md-4">
-          <a href="/academy/timer.html" class="nav-card">
-            <div class="nav-card-icon">⏱️</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/timer.html" class="nav-card" aria-label="Go to Study Timer - Pomodoro technique">
+            <div class="nav-card-icon" aria-hidden="true">⏱️</div>
             <h5>Study Timer</h5>
             <p>Pomodoro technique</p>
           </a>
         </div>
-        <div class="col-md-4">
-          <a href="/academy/snippets.html" class="nav-card">
-            <div class="nav-card-icon">💾</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/snippets.html" class="nav-card" aria-label="Go to Code Snippets - Common patterns">
+            <div class="nav-card-icon" aria-hidden="true">💾</div>
             <h5>Code Snippets</h5>
             <p>Common patterns</p>
           </a>
         </div>
-        <div class="col-md-4">
-          <a href="/academy/faq.html" class="nav-card">
-            <div class="nav-card-icon">❓</div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+          <a href="/academy/faq.html" class="nav-card" aria-label="Go to FAQ and Help - Get answers">
+            <div class="nav-card-icon" aria-hidden="true">❓</div>
             <h5>FAQ & Help</h5>
             <p>Get answers</p>
           </a>
@@ -240,8 +239,10 @@
     </div>
   </section>
 
+  </main>
+
   <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-3">
+  <footer class="bg-dark text-white text-center py-3" role="contentinfo">
     <div class="container">
       <small>&copy; 2025 JL Solutions Academy. Built with love for Sierra.</small>
     </div>

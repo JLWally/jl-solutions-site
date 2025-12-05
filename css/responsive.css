@@ -1,0 +1,357 @@
+/* Mobile Responsive Styles - JL Solutions */
+
+/* Base Mobile Styles */
+@media screen and (max-width: 768px) {
+  /* Container Adjustments */
+  .container {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  /* Typography Scaling */
+  h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+  }
+
+  .display-4 {
+    font-size: 2rem;
+  }
+
+  .lead {
+    font-size: 1.1rem;
+  }
+
+  /* Navigation */
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+
+  .navbar-nav {
+    padding: 1rem 0;
+  }
+
+  .nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+
+  /* Cards */
+  .card,
+  .demo-card,
+  .feature-card,
+  .welcome-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Grid Adjustments */
+  .row {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+  }
+
+  .row > * {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Button Adjustments */
+  .btn {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    min-height: 44px;
+  }
+
+  .btn-group .btn {
+    width: auto;
+  }
+
+  /* Hero Sections */
+  .hero-banner,
+  .demo-hero,
+  .service-hero,
+  .academy-hero {
+    padding: 3rem 1rem;
+  }
+
+  /* Feature Grids */
+  .feature-grid,
+  .benefit-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Timeline Adjustments */
+  .timeline {
+    padding: 1rem 0;
+  }
+
+  .timeline::before {
+    left: 20px;
+  }
+
+  .timeline-item {
+    padding-left: 60px;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-marker {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  /* Navigation Cards */
+  .nav-card {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav-card-icon {
+    font-size: 2.5rem;
+  }
+
+  /* Welcome Card */
+  .welcome-card {
+    padding: 1.5rem;
+  }
+
+  .letter-content {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Upload Areas */
+  .upload-area {
+    padding: 2rem 1rem;
+  }
+
+  /* File Lists */
+  .file-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  /* Result Cards */
+  .result-card {
+    padding: 1rem;
+  }
+
+  .result-content {
+    font-size: 0.85rem;
+    max-height: 200px;
+  }
+
+  /* Forms */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.875rem;
+  }
+
+  /* Tables */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+
+  footer .row > div {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Chatbot */
+  .chatbot-toggle {
+    width: 56px;
+    height: 56px;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .chatbot-window {
+    bottom: 5rem;
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+    max-width: calc(100% - 2rem);
+  }
+}
+
+/* Small Mobile Devices */
+@media screen and (max-width: 480px) {
+  /* Even Smaller Typography */
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .display-4 {
+    font-size: 1.75rem;
+  }
+
+  /* Container */
+  .container {
+    padding: 0.75rem;
+  }
+
+  /* Cards */
+  .card,
+  .demo-card,
+  .feature-card {
+    padding: 1rem;
+  }
+
+  /* Hero Sections */
+  .hero-banner,
+  .demo-hero,
+  .service-hero,
+  .academy-hero {
+    padding: 2rem 0.75rem;
+  }
+
+  /* Buttons */
+  .btn-lg {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  /* Navigation Cards */
+  .nav-card {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .nav-card-icon {
+    font-size: 2rem;
+  }
+
+  /* Timeline */
+  .timeline-item {
+    padding-left: 50px;
+  }
+
+  .timeline-marker {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+}
+
+/* Tablet Styles */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    max-width: 960px;
+    padding: 1.5rem;
+  }
+
+  .feature-grid,
+  .benefit-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large Screens */
+@media screen and (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+/* Landscape Orientation */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .hero-banner,
+  .demo-hero,
+  .service-hero,
+  .academy-hero {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .navbar,
+  .chatbot-toggle,
+  .chatbot-window,
+  .btn,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+}
+
+/* High DPI Displays */
+@media screen and (-webkit-min-device-pixel-ratio: 2),
+       screen and (min-resolution: 192dpi) {
+  /* Ensure crisp rendering on retina displays */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets for mobile */
+  button,
+  a,
+  .nav-card,
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Remove hover effects on touch devices */
+  .nav-card:hover,
+  .btn:hover {
+    transform: none;
+  }
+}
+
