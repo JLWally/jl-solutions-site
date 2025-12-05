@@ -1,42 +1,36 @@
-# Deployment Instructions
+# 🚀 Deploy New Logo - Quick Commands
 
-## To Deploy All Changes:
+## ✅ Status
+
+- Logo file: `jlsolutions-logo.png` ✅ 
+- All HTML files already reference this file ✅
+- Ready to deploy! ✅
+
+## Quick Deploy (Copy & Paste)
+
+Run these commands in your terminal:
 
 ```bash
 cd /Users/jesswally/Desktop/Portfolio/jl-site-restore
-
-# Check what's changed
-git status
-
-# Add all changes
 git add -A
-
-# Commit with descriptive message
-git commit -m "Complete user portal, dashboard, Academy portal, accessibility features, and business document extraction updates"
-
-# Push to GitHub (will trigger Netlify deployment)
+git commit -m "Update logo file with new version - jlsolutions-logo.png"
 git push origin main
 ```
 
-## Changes Being Deployed:
+That's it! Netlify will auto-deploy within 1-2 minutes.
 
-✅ User Dashboard (`/dashboard.html`)
-✅ Academy Portal (`/academy/portal.html`)
-✅ Accessibility CSS (`/css/accessibility.css`)
-✅ Responsive CSS (`/css/responsive.css`)
-✅ Updated Academy pages (removed personal references)
-✅ Updated About page
-✅ Updated document extraction demo (business focus)
-✅ Progress tracking system
-✅ JavaScript files for dashboard and portal
+## What's Happening
 
-## After Deployment:
+1. ✅ Stage all changes (including the new logo file)
+2. ✅ Commit with message
+3. ✅ Push to GitHub: https://github.com/JLWally/jl-solutions-site
+4. ✅ Netlify auto-deploys to: https://www.jlsolutions.io
 
-1. Netlify will automatically deploy
-2. Changes should be live within 1-2 minutes
-3. Verify at: https://www.jlsolutions.io
+## After Deployment
+
+Check your live site in 1-2 minutes:
+- Logo in navbar ✅
+- Logo in browser tab ✅
 
 ---
-
-**Note**: If git push requires authentication, you'll need to enter your GitHub credentials or use a personal access token.
-
+**Ready to go!** Just run the commands above. 🚀
