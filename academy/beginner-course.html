@@ -227,10 +227,7 @@
   <section class="py-5" id="lesson1">
     <div class="container">
       <div class="lesson-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>Lesson 1: What is Coding? 🤔</h2>
-          <button class="btn btn-sm btn-success" onclick="markComplete('lesson1')">Mark Complete ✓</button>
-        </div>
+        <h2>Lesson 1: What is Coding? 🤔</h2>
         
         <p class="lead">Before we write code, let's understand what coding actually is!</p>
         
@@ -253,6 +250,10 @@
 
         <h4 class="mt-4">Try It Yourself!</h4>
         <p>Change the message inside the quotes. Try: <code>"I'm going to be a developer!"</code> or <code>"Coding is fun!"</code></p>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson1')">✓ Mark Complete</button>
+        </div>
       </div>
     </div>
   </section>
@@ -261,10 +262,7 @@
   <section class="py-5 bg-light" id="lesson2">
     <div class="container">
       <div class="lesson-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>Lesson 2: Variables - The Memory Game 🧠</h2>
-          <button class="btn btn-sm btn-success" onclick="markComplete('lesson2')">Mark Complete ✓</button>
-        </div>
+        <h2>Lesson 2: Variables - The Memory Game 🧠</h2>
         
         <p class="lead">Variables are like boxes where we store information. Let's play a game to understand them!</p>
 
@@ -319,6 +317,10 @@ console.log("Final score: " + score);</div>
             <div class="output-box" id="output4">Output will appear here...</div>
           </div>
         </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson2')">✓ Mark Complete</button>
+        </div>
       </div>
     </div>
   </section>
@@ -327,10 +329,7 @@ console.log("Final score: " + score);</div>
   <section class="py-5" id="lesson3">
     <div class="container">
       <div class="lesson-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>Lesson 3: Build Your First Game! 🎲</h2>
-          <button class="btn btn-sm btn-success" onclick="markComplete('lesson3')">Mark Complete ✓</button>
-        </div>
+        <h2>Lesson 3: Build Your First Game! 🎲</h2>
         
         <p class="lead">Let's build a Number Guessing Game! This will teach you about making decisions in code.</p>
 
@@ -340,10 +339,10 @@ console.log("Final score: " + score);</div>
           <div class="interactive-exercise">
             <h5>Step 1: The Game Logic</h5>
             <p>First, let's understand how the game works. Read through this code:</p>
-            <div class="code-editor" id="code5" style="white-space: pre-wrap; background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 8px; font-family: 'Courier New', monospace;">// The secret number (between 1 and 10)
+            <div class="code-editor" contenteditable="true" id="code5" style="white-space: pre-wrap; background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 8px; font-family: 'Courier New', monospace; border: 2px solid #333;">// The secret number (between 1 and 10)
 let secretNumber = 7;
 
-// The player's guess
+// The player's guess - Try changing this number!
 let playerGuess = 5;
 
 // Check if the guess is correct
@@ -374,6 +373,10 @@ if (playerGuess === secretNumber) {
             <div class="output-box" id="output6" style="min-height: 200px;">Click the button above to start playing!</div>
           </div>
         </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson3')">✓ Mark Complete</button>
+        </div>
       </div>
     </div>
   </section>
@@ -382,10 +385,7 @@ if (playerGuess === secretNumber) {
   <section class="py-5 bg-light" id="lesson4">
     <div class="container">
       <div class="lesson-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>Lesson 4: Rock Paper Scissors Game 🪨📄✂️</h2>
-          <button class="btn btn-sm btn-success" onclick="markComplete('lesson4')">Mark Complete ✓</button>
-        </div>
+        <h2>Lesson 4: Rock Paper Scissors Game 🪨📄✂️</h2>
         
         <p class="lead">Let's build a complete game! This teaches you about arrays, random numbers, and more complex logic.</p>
 
@@ -429,6 +429,10 @@ console.log("Third choice: " + choices[2]);</div>
             </div>
           </div>
         </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson4')">✓ Mark Complete</button>
+        </div>
       </div>
     </div>
   </section>
@@ -437,10 +441,7 @@ console.log("Third choice: " + choices[2]);</div>
   <section class="py-5" id="lesson5">
     <div class="container">
       <div class="lesson-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>Lesson 5: Functions - Reusable Code 🛠️</h2>
-          <button class="btn btn-sm btn-success" onclick="markComplete('lesson5')">Mark Complete ✓</button>
-        </div>
+        <h2>Lesson 5: Functions - Reusable Code 🛠️</h2>
         
         <p class="lead">Functions let you write code once and use it many times. Think of them as recipes!</p>
 
@@ -493,6 +494,10 @@ console.log("10 + 20 = " + result2);</div>
           • We can store that value in a variable<br>
           • Functions can take multiple parameters: <code>add(a, b)</code>
         </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson5')">✓ Mark Complete</button>
+        </div>
       </div>
     </div>
   </section>
@@ -501,10 +506,7 @@ console.log("10 + 20 = " + result2);</div>
   <section class="py-5 bg-light" id="project1">
     <div class="container">
       <div class="lesson-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>🎯 Project 1: Build a Calculator!</h2>
-          <button class="btn btn-sm btn-success" onclick="markComplete('project1')">Mark Complete ✓</button>
-        </div>
+        <h2>🎯 Project 1: Build a Calculator!</h2>
         
         <p class="lead">Now let's build something real! A calculator that can add, subtract, multiply, and divide.</p>
 
@@ -564,6 +566,10 @@ console.log("10 / 5 = " + divide(10, 5));</div>
 
         <div class="hint-box mt-3">
           <strong>🎉 Congratulations!</strong> You just built a working calculator! This is real code that you could use in a real application.
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('project1')">✓ Mark Complete</button>
         </div>
       </div>
     </div>

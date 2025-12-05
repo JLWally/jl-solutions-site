@@ -1,391 +1,438 @@
-// JL Solutions Academy - Progress Tracker with Local Storage
-// Saves Sierra's progress locally in her browser
+// JL Solutions Academy - User-Specific Progress Tracking
+// Tracks progress per user with save functionality
 
-class ProgressTracker {
-  constructor() {
-    this.storageKey = 'jl-academy-progress';
-    this.progress = this.loadProgress();
-    this.init();
+/**
+ * Get current user ID
+ */
+function getUserId() {
+  const user = getCurrentUser();
+  if (!user) {
+    return null;
+  }
+  return user.id || user.email || 'anonymous';
+}
+
+/**
+ * Get user-specific localStorage key
+ */
+function getUserKey(key) {
+  const userId = getUserId();
+  if (!userId) {
+    return key; // Fallback to non-user-specific key
+  }
+  return `academy_${userId}_${key}`;
+}
+
+/**
+ * Save progress for current user
+ */
+function saveUserProgress(progressData) {
+  const userId = getUserId();
+  if (!userId) {
+    console.warn('No user ID available, progress not saved');
+    return false;
   }
 
-  // Load progress from localStorage
-  loadProgress() {
-    const saved = localStorage.getItem(this.storageKey);
-    return saved ? JSON.parse(saved) : {
-      skills: {},
-      projects: {},
-      tools: {}
-    };
-  }
+  const key = getUserKey('progress');
+  const existingProgress = loadUserProgress();
+  
+  // Merge with existing progress
+  const updatedProgress = {
+    ...existingProgress,
+    ...progressData,
+    userId: userId,
+    lastUpdated: new Date().toISOString()
+  };
 
-  // Save progress to localStorage
-  saveProgress() {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.progress));
-    this.updateUI();
-  }
-
-  // Initialize the tracker
-  init() {
-    this.attachEventListeners();
-    this.restoreCheckboxes();
-    this.updateUI();
-  }
-
-  // Attach click handlers to all checklist items
-  attachEventListeners() {
-    document.querySelectorAll('.checklist-item').forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.toggleItem(item);
-      });
-    });
-  }
-
-  // Toggle item completion
-  toggleItem(item) {
-    const itemId = this.getItemId(item);
-    const category = item.closest('.progress-section').dataset.category || 'general';
+  try {
+    localStorage.setItem(key, JSON.stringify(updatedProgress));
     
-    // Toggle completed state
-    item.classList.toggle('completed');
+    // Also save to API if available
+    saveProgressToAPI(updatedProgress);
     
-    // Update progress data
-    if (!this.progress[category]) {
-      this.progress[category] = {};
-    }
-    this.progress[category][itemId] = item.classList.contains('completed');
-    
-    // Save and update UI
-    this.saveProgress();
-    
-    // Show celebration for milestones
-    this.checkMilestones(item);
-  }
-
-  // Generate unique ID for checklist item
-  getItemId(item) {
-    const text = item.textContent.trim();
-    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  }
-
-  // Restore checkbox states from saved progress
-  restoreCheckboxes() {
-    document.querySelectorAll('.checklist-item').forEach(item => {
-      const itemId = this.getItemId(item);
-      const category = item.closest('.progress-section').dataset.category || 'general';
-      
-      if (this.progress[category] && this.progress[category][itemId]) {
-        item.classList.add('completed');
-      }
-    });
-  }
-
-  // Update all UI elements (percentages, counts, etc.)
-  updateUI() {
-    this.updateOverallProgress();
-    this.updateSkillProgress();
-    this.updateProjectCounts();
-    this.updateToolsCount();
-    this.updateMilestones();
-  }
-
-  // Calculate and update overall progress
-  updateOverallProgress() {
-    const totalItems = document.querySelectorAll('.checklist-item').length;
-    const completedItems = document.querySelectorAll('.checklist-item.completed').length;
-    const percentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
-    
-    const percentageEl = document.querySelector('.progress-percentage');
-    const progressBar = document.querySelector('.progress-bar-fill');
-    
-    if (percentageEl) {
-      percentageEl.textContent = `${percentage}%`;
-    }
-    
-    if (progressBar) {
-      progressBar.style.width = `${percentage}%`;
-    }
-  }
-
-  // Update individual skill progress bars
-  updateSkillProgress() {
-    document.querySelectorAll('.progress-section[data-category]').forEach(section => {
-      const category = section.dataset.category;
-      const items = section.querySelectorAll('.checklist-item');
-      const completed = section.querySelectorAll('.checklist-item.completed');
-      
-      const percentage = items.length > 0 ? Math.round((completed.length / items.length) * 100) : 0;
-      
-      const progressBar = section.querySelector('.progress-bar-fill');
-      const statusEl = section.querySelector('.skill-status');
-      
-      if (progressBar) {
-        progressBar.style.width = `${percentage}%`;
-      }
-      
-      if (statusEl) {
-        if (percentage === 0) {
-          statusEl.textContent = 'Not Started';
-        } else if (percentage === 100) {
-          statusEl.textContent = 'Completed! 🎉';
-          statusEl.style.color = '#00C853';
-        } else {
-          statusEl.textContent = `${percentage}% Complete`;
-          statusEl.style.color = '#0078D4';
-        }
-      }
-    });
-  }
-
-  // Update project completion counts
-  updateProjectCounts() {
-    const projectSections = [
-      { selector: '.progress-section h3', text: '🌱 Beginner Projects', total: 6 },
-      { selector: '.progress-section h3', text: '🚀 Intermediate Projects', total: 6 },
-      { selector: '.progress-section h3', text: '⚡ Advanced Projects', total: 4 }
-    ];
-
-    projectSections.forEach(section => {
-      const heading = Array.from(document.querySelectorAll(section.selector))
-        .find(h => h.textContent.includes(section.text));
-      
-      if (heading) {
-        const container = heading.closest('.progress-section');
-        const completed = container.querySelectorAll('.checklist-item.completed').length;
-        heading.textContent = heading.textContent.replace(/\(\d+\/\d+\)/, `(${completed}/${section.total})`);
-      }
-    });
-  }
-
-  // Update tools count
-  updateToolsCount() {
-    const toolsHeading = Array.from(document.querySelectorAll('.progress-section h3'))
-      .find(h => h.textContent.includes('🛠️ Essential Tools'));
-    
-    if (toolsHeading) {
-      const container = toolsHeading.closest('.progress-section');
-      const completed = container.querySelectorAll('.checklist-item.completed').length;
-      const total = container.querySelectorAll('.checklist-item').length;
-      toolsHeading.textContent = toolsHeading.textContent.replace(/\(\d+\/\d+\)/, `(${completed}/${total})`);
-    }
-  }
-
-  // Update milestone badges
-  updateMilestones() {
-    const milestones = [
-      { 
-        name: 'First Week',
-        condition: () => this.hasCompletedAny('.progress-section[data-category="html"]')
-      },
-      { 
-        name: 'Styled',
-        condition: () => this.hasCompletedAny('.progress-section[data-category="css"]')
-      },
-      { 
-        name: 'Interactive',
-        condition: () => this.hasCompletedAny('.progress-section[data-category="javascript"]')
-      },
-      { 
-        name: 'Connected',
-        condition: () => this.hasCompletedAny('.progress-section[data-category="apis"]')
-      },
-      { 
-        name: 'Modern Dev',
-        condition: () => this.hasCompletedAny('.progress-section[data-category="react"]')
-      },
-      { 
-        name: 'Deployed',
-        condition: () => this.hasCompletedItem('deploy a project to netlify/vercel')
-      },
-      { 
-        name: 'Portfolio Ready',
-        condition: () => this.countCompletedProjects() >= 6
-      },
-      { 
-        name: 'Junior Dev',
-        condition: () => this.getOverallPercentage() === 100
-      }
-    ];
-
-    milestones.forEach(milestone => {
-      const card = Array.from(document.querySelectorAll('.project-card'))
-        .find(card => card.querySelector('h5')?.textContent === milestone.name);
-      
-      if (card && milestone.condition()) {
-        const badge = card.querySelector('.tech-tag');
-        if (badge) {
-          badge.textContent = 'Unlocked! 🎉';
-          badge.style.background = 'linear-gradient(135deg, #00C853, #00a043)';
-          badge.style.color = 'white';
-          card.style.borderColor = '#00C853';
-        }
-      }
-    });
-  }
-
-  // Helper functions for milestones
-  hasCompletedAny(selector) {
-    const section = document.querySelector(selector);
-    return section && section.querySelectorAll('.checklist-item.completed').length > 0;
-  }
-
-  hasCompletedItem(text) {
-    const items = Array.from(document.querySelectorAll('.checklist-item'));
-    return items.some(item => 
-      item.textContent.toLowerCase().includes(text.toLowerCase()) && 
-      item.classList.contains('completed')
-    );
-  }
-
-  countCompletedProjects() {
-    let count = 0;
-    document.querySelectorAll('.progress-section').forEach(section => {
-      const heading = section.querySelector('h3');
-      if (heading && heading.textContent.includes('Projects')) {
-        count += section.querySelectorAll('.checklist-item.completed').length;
-      }
-    });
-    return count;
-  }
-
-  getOverallPercentage() {
-    const totalItems = document.querySelectorAll('.checklist-item').length;
-    const completedItems = document.querySelectorAll('.checklist-item.completed').length;
-    return totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
-  }
-
-  // Check if milestone reached and show celebration
-  checkMilestones(item) {
-    const section = item.closest('.progress-section');
-    if (!section) return;
-
-    const items = section.querySelectorAll('.checklist-item');
-    const completed = section.querySelectorAll('.checklist-item.completed');
-    
-    // If just completed a full section, celebrate!
-    if (items.length === completed.length && items.length > 0) {
-      this.showCelebration(section.querySelector('h3')?.textContent || 'Section');
-    }
-  }
-
-  // Show celebration message
-  showCelebration(sectionName) {
-    const message = document.createElement('div');
-    message.className = 'celebration-toast';
-    message.innerHTML = `
-      <div style="
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #00C853, #00a043);
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 200, 83, 0.4);
-        z-index: 9999;
-        animation: slideIn 0.3s ease-out;
-      ">
-        <strong>🎉 Congratulations!</strong><br>
-        You completed: ${sectionName}
-      </div>
-    `;
-    
-    document.body.appendChild(message);
-    
-    setTimeout(() => {
-      message.style.animation = 'slideOut 0.3s ease-out';
-      setTimeout(() => message.remove(), 300);
-    }, 3000);
-  }
-
-  // Reset all progress (for testing or fresh start)
-  resetProgress() {
-    if (confirm('Are you sure you want to reset ALL your progress? This cannot be undone!')) {
-      localStorage.removeItem(this.storageKey);
-      this.progress = { skills: {}, projects: {}, tools: {} };
-      document.querySelectorAll('.checklist-item.completed').forEach(item => {
-        item.classList.remove('completed');
-      });
-      this.updateUI();
-      alert('Progress reset successfully!');
-    }
-  }
-
-  // Export progress data
-  exportProgress() {
-    const data = {
-      exported: new Date().toISOString(),
-      name: 'Sierra Walcott',
-      academy: 'JL Solutions',
-      progress: this.progress,
-      stats: {
-        overall: this.getOverallPercentage(),
-        totalCompleted: document.querySelectorAll('.checklist-item.completed').length,
-        totalItems: document.querySelectorAll('.checklist-item').length
-      }
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `sierra-progress-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    return true;
+  } catch (error) {
+    console.error('Error saving progress:', error);
+    return false;
   }
 }
 
-// Add CSS animations
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes slideIn {
-    from {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+/**
+ * Load progress for current user
+ */
+function loadUserProgress() {
+  const userId = getUserId();
+  if (!userId) {
+    return {};
   }
-  
-  @keyframes slideOut {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-  }
-  
-  .checklist-item {
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .checklist-item:hover {
-    background: #2a2a2a;
-    transform: translateX(5px);
-  }
-  
-  .checklist-item.completed {
-    opacity: 0.7;
-  }
-  
-  .checklist-item.completed:hover {
-    opacity: 0.85;
-  }
-`;
-document.head.appendChild(style);
 
-// Initialize when page loads
-let tracker;
-document.addEventListener('DOMContentLoaded', () => {
-  tracker = new ProgressTracker();
+  const key = getUserKey('progress');
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      const progress = JSON.parse(stored);
+      // Verify it belongs to this user
+      if (progress.userId === userId) {
+        return progress;
+      }
+    }
+  } catch (error) {
+    console.error('Error loading progress:', error);
+  }
   
-  // Add reset button (hidden, for debugging)
-  console.log('Progress Tracker loaded! Type "tracker.resetProgress()" to reset or "tracker.exportProgress()" to export.');
-});
+  // Return default progress for new user
+  return {
+    userId: userId,
+    modulesCompleted: 0,
+    projectsCompleted: 0,
+    totalStudyTime: 0, // in seconds
+    currentStep: 1,
+    goals: [],
+    studyHistory: [],
+    createdAt: new Date().toISOString()
+  };
+}
 
+/**
+ * Save study stats for current user
+ */
+function saveUserStats(statsData) {
+  const userId = getUserId();
+  if (!userId) return false;
+
+  const key = getUserKey('stats');
+  const today = new Date().toDateString();
+  const existing = loadUserStats();
+  
+  let stats = existing || {};
+  
+  if (stats.date !== today) {
+    stats = {
+      date: today,
+      totalSeconds: 0,
+      sessions: 0
+    };
+  }
+  
+  Object.assign(stats, statsData);
+  stats.userId = userId;
+  stats.lastUpdated = new Date().toISOString();
+
+  try {
+    localStorage.setItem(key, JSON.stringify(stats));
+    return true;
+  } catch (error) {
+    console.error('Error saving stats:', error);
+    return false;
+  }
+}
+
+/**
+ * Load study stats for current user
+ */
+function loadUserStats() {
+  const userId = getUserId();
+  if (!userId) return {};
+
+  const key = getUserKey('stats');
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      const stats = JSON.parse(stored);
+      if (stats.userId === userId) {
+        return stats;
+      }
+    }
+  } catch (error) {
+    console.error('Error loading stats:', error);
+  }
+  
+  return {
+    userId: userId,
+    date: new Date().toDateString(),
+    totalSeconds: 0,
+    sessions: 0
+  };
+}
+
+/**
+ * Save goals for current user
+ */
+function saveUserGoals(goals) {
+  const userId = getUserId();
+  if (!userId) return false;
+
+  const key = getUserKey('goals');
+  const goalsWithUser = goals.map(goal => ({
+    ...goal,
+    userId: userId,
+    createdAt: goal.createdAt || new Date().toISOString()
+  }));
+
+  try {
+    localStorage.setItem(key, JSON.stringify(goalsWithUser));
+    return true;
+  } catch (error) {
+    console.error('Error saving goals:', error);
+    return false;
+  }
+}
+
+/**
+ * Load goals for current user
+ */
+function loadUserGoals() {
+  const userId = getUserId();
+  if (!userId) return [];
+
+  const key = getUserKey('goals');
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      const goals = JSON.parse(stored);
+      // Filter to only this user's goals
+      return goals.filter(g => g.userId === userId);
+    }
+  } catch (error) {
+    console.error('Error loading goals:', error);
+  }
+  
+  return [];
+}
+
+/**
+ * Save study history for current user
+ */
+function saveStudyHistory(date) {
+  const userId = getUserId();
+  if (!userId) return false;
+
+  const key = getUserKey('studyHistory');
+  let history = loadStudyHistory();
+  
+  const dateString = date instanceof Date ? date.toISOString() : date;
+  if (!history.includes(dateString)) {
+    history.push(dateString);
+    // Keep only last 90 days
+    history = history.slice(-90);
+  }
+
+  try {
+    localStorage.setItem(key, JSON.stringify(history));
+    return true;
+  } catch (error) {
+    console.error('Error saving study history:', error);
+    return false;
+  }
+}
+
+/**
+ * Load study history for current user
+ */
+function loadStudyHistory() {
+  const userId = getUserId();
+  if (!userId) return [];
+
+  const key = getUserKey('studyHistory');
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (error) {
+    console.error('Error loading study history:', error);
+  }
+  
+  return [];
+}
+
+/**
+ * Update module completion
+ */
+function completeModule(moduleId, moduleName) {
+  const progress = loadUserProgress();
+  const modulesCompleted = progress.modulesCompleted || 0;
+  
+  // Check if already completed
+  const completedModules = progress.completedModules || [];
+  if (completedModules.includes(moduleId)) {
+    return false; // Already completed
+  }
+
+  completedModules.push(moduleId);
+  
+  saveUserProgress({
+    modulesCompleted: modulesCompleted + 1,
+    completedModules: completedModules,
+    currentStep: progress.currentStep + 1
+  });
+
+  // Add to activity
+  addActivity('module_complete', moduleName);
+  
+  return true;
+}
+
+/**
+ * Update project completion
+ */
+function completeProject(projectId, projectName) {
+  const progress = loadUserProgress();
+  const projectsCompleted = progress.projectsCompleted || 0;
+  
+  const completedProjects = progress.completedProjects || [];
+  if (completedProjects.includes(projectId)) {
+    return false;
+  }
+
+  completedProjects.push(projectId);
+  
+  saveUserProgress({
+    projectsCompleted: projectsCompleted + 1,
+    completedProjects: completedProjects
+  });
+
+  addActivity('project_complete', projectName);
+  
+  return true;
+}
+
+/**
+ * Add study time
+ */
+function addStudyTime(seconds) {
+  const progress = loadUserProgress();
+  const totalStudyTime = (progress.totalStudyTime || 0) + seconds;
+  
+  saveUserProgress({
+    totalStudyTime: totalStudyTime
+  });
+
+  // Add to study history
+  saveStudyHistory(new Date());
+  
+  return totalStudyTime;
+}
+
+/**
+ * Add activity entry
+ */
+function addActivity(type, title) {
+  const userId = getUserId();
+  if (!userId) return;
+
+  const key = getUserKey('activity');
+  let activities = [];
+  
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      activities = JSON.parse(stored);
+    }
+  } catch (error) {
+    console.error('Error loading activities:', error);
+  }
+
+  activities.unshift({
+    type: type,
+    title: title,
+    userId: userId,
+    timestamp: new Date().toISOString()
+  });
+
+  // Keep only last 50 activities
+  activities = activities.slice(0, 50);
+
+  try {
+    localStorage.setItem(key, JSON.stringify(activities));
+    
+    // Save to API
+    saveActivityToAPI({
+      type: type,
+      title: title,
+      userId: userId,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error saving activity:', error);
+  }
+}
+
+/**
+ * Get recent activities
+ */
+function getRecentActivities(limit = 10) {
+  const userId = getUserId();
+  if (!userId) return [];
+
+  const key = getUserKey('activity');
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      const activities = JSON.parse(stored);
+      // Filter to only this user's activities
+      return activities.filter(a => a.userId === userId).slice(0, limit);
+    }
+  } catch (error) {
+    console.error('Error loading activities:', error);
+  }
+  
+  return [];
+}
+
+/**
+ * Save progress to API (if available)
+ */
+async function saveProgressToAPI(progress) {
+  if (typeof authenticatedFetch !== 'function') {
+    return; // API not available
+  }
+
+  try {
+    await authenticatedFetch('/api/academy/progress', {
+      method: 'POST',
+      body: JSON.stringify(progress)
+    });
+  } catch (error) {
+    console.error('Error saving progress to API:', error);
+    // Silently fail - localStorage is the primary storage
+  }
+}
+
+/**
+ * Save activity to API (if available)
+ */
+async function saveActivityToAPI(activity) {
+  if (typeof authenticatedFetch !== 'function') {
+    return;
+  }
+
+  try {
+    await authenticatedFetch('/api/academy/activity', {
+      method: 'POST',
+      body: JSON.stringify(activity)
+    });
+  } catch (error) {
+    console.error('Error saving activity to API:', error);
+  }
+}
+
+// Export functions for use in other scripts
+if (typeof window !== 'undefined') {
+  window.AcademyProgress = {
+    saveUserProgress,
+    loadUserProgress,
+    saveUserStats,
+    loadUserStats,
+    saveUserGoals,
+    loadUserGoals,
+    saveStudyHistory,
+    loadStudyHistory,
+    completeModule,
+    completeProject,
+    addStudyTime,
+    addActivity,
+    getRecentActivities,
+    getUserId
+  };
+}

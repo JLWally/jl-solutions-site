@@ -14,7 +14,7 @@
       --blue: #0078d4;
       --white: #ffffff;
       --dark-blue: #004298;
-      --yellow: #ffbd59;
+      --yellow: #E6A740;
     }
     
     body {
@@ -39,6 +39,23 @@
       transition: all 0.3s;
       cursor: pointer;
       height: 100%;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .case-study-card h3 {
+      color: #ffffff;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .case-study-card .testimonial {
+      color: rgba(255, 255, 255, 0.9);
+      border-left-color: var(--blue);
+    }
+    
+    .case-study-card .testimonial strong {
+      color: #ffffff;
+      font-weight: 600;
     }
     
     .case-study-card:hover {
@@ -82,7 +99,8 @@
     
     .metric-label {
       font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 500;
     }
     
     .testimonial {
@@ -163,7 +181,7 @@
         <div class="case-study-card" onclick="openCaseStudy(1)">
           <span class="industry-badge">Government</span>
           <h3>Federal Agency Process Automation</h3>
-          <p class="text-muted">Streamlined document processing and workflow automation for a major federal agency</p>
+          <p style="color: rgba(255, 255, 255, 0.8);">Streamlined document processing and workflow automation for a major federal agency</p>
           
           <div class="metrics-grid">
             <div class="metric-item">
@@ -185,7 +203,7 @@
             <br><strong>- Agency Director</strong>
           </div>
           
-          <a href="#" class="text-primary">Read Full Case Study →</a>
+          <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Read Full Case Study →</a>
         </div>
       </div>
 
@@ -194,7 +212,7 @@
         <div class="case-study-card" onclick="openCaseStudy(2)">
           <span class="industry-badge">Nonprofit</span>
           <h3>Nonprofit Data Management System</h3>
-          <p class="text-muted">Automated intake processes and donor management for a growing nonprofit organization</p>
+          <p style="color: rgba(255, 255, 255, 0.8);">Automated intake processes and donor management for a growing nonprofit organization</p>
           
           <div class="metrics-grid">
             <div class="metric-item">
@@ -216,7 +234,7 @@
             <br><strong>- Executive Director</strong>
           </div>
           
-          <a href="#" class="text-primary">Read Full Case Study →</a>
+          <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Read Full Case Study →</a>
         </div>
       </div>
 
@@ -225,7 +243,7 @@
         <div class="case-study-card" onclick="openCaseStudy(3)">
           <span class="industry-badge">Enterprise</span>
           <h3>Enterprise Workflow Integration</h3>
-          <p class="text-muted">Connected disparate systems and automated cross-department workflows</p>
+          <p style="color: rgba(255, 255, 255, 0.8);">Connected disparate systems and automated cross-department workflows</p>
           
           <div class="metrics-grid">
             <div class="metric-item">
@@ -247,7 +265,7 @@
             <br><strong>- COO</strong>
           </div>
           
-          <a href="#" class="text-primary">Read Full Case Study →</a>
+          <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Read Full Case Study →</a>
         </div>
       </div>
 
@@ -256,7 +274,7 @@
         <div class="case-study-card" onclick="openCaseStudy(4)">
           <span class="industry-badge">Small Business</span>
           <h3>Small Business Operations Optimization</h3>
-          <p class="text-muted">Automated administrative tasks for a growing small business</p>
+          <p style="color: rgba(255, 255, 255, 0.8);">Automated administrative tasks for a growing small business</p>
           
           <div class="metrics-grid">
             <div class="metric-item">
@@ -278,7 +296,7 @@
             <br><strong>- Business Owner</strong>
           </div>
           
-          <a href="#" class="text-primary">Read Full Case Study →</a>
+          <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Read Full Case Study →</a>
         </div>
       </div>
     </div>
@@ -287,7 +305,7 @@
     <div class="text-center my-5 py-5">
       <h2>Ready to Write Your Success Story?</h2>
       <p class="lead mb-4">Let's discuss how we can transform your operations</p>
-      <a href="/book-consultation.html" class="btn btn-primary btn-lg me-3" style="background: var(--yellow); color: var(--black); border: none; padding: 1rem 2.5rem; font-weight: 700;">Book Free Consultation</a>
+      <a href="/book-consultation.html" class="btn btn-primary btn-lg me-3" style="background: #E6A740; color: #000000; border: none; padding: 1rem 2.5rem; font-weight: 700;">Book Free Consultation</a>
       <a href="/contact.html" class="btn btn-outline-light btn-lg">Contact Us</a>
     </div>
   </div>

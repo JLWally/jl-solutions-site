@@ -323,7 +323,25 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/academy-progress.js"></script>
   <script>
+    // Check authentication first - redirect if not logged in
+    if (typeof getCurrentUser === 'function') {
+      const user = getCurrentUser();
+      if (!user) {
+        alert('Please sign in to access your dashboard.');
+        window.location.href = '/academy/signin.html?return=' + encodeURIComponent(window.location.pathname);
+      }
+    }
+
+    // Get user name
+    const user = getCurrentUser();
+    if (user) {
+      const userName = user.firstName || user.name || user.email || 'Student';
+      document.getElementById('dashboardUserName').textContent = userName;
+    }
+
     // Timer functionality
     let timerInterval = null;
     let timeLeft = 25 * 60; // 25 minutes in seconds
@@ -352,14 +370,36 @@
         timeLeft--;
         totalSecondsStudied++;
         updateTimerDisplay();
-        saveStats();
-        updateStats();
+        
+        // Save stats every 60 seconds
+        if (totalSecondsStudied % 60 === 0) {
+          saveStats();
+          addStudyTime(60); // Save 60 seconds of study time
+          updateStats();
+        }
         
         if (timeLeft === 0) {
           clearInterval(timerInterval);
           timerInterval = null;
           isRunning = false;
-          alert('⏰ Timer complete! Great work!');
+          
+          // Save final study time
+          if (totalSecondsStudied > 0) {
+            addStudyTime(totalSecondsStudied);
+            saveStats();
+          }
+          
+          // Add study session
+          const stats = loadUserStats();
+          stats.sessions = (stats.sessions || 0) + 1;
+          saveUserStats(stats);
+          
+          // Add activity
+          const minutes = Math.floor(totalSecondsStudied / 60);
+          addActivity('study_session', `Completed ${minutes}-minute study session`);
+          
+          alert('⏰ Timer complete! Great work! Your progress has been saved.');
+          totalSecondsStudied = 0;
         }
       }, 1000);
     }
@@ -382,13 +422,13 @@
       document.getElementById('timerDisplay').textContent = formatTime(timeLeft);
     }
 
-    // Progress tracking
+    // Progress tracking - USER SPECIFIC
     function updateProgress() {
-      const progress = localStorage.getItem('academyProgress') || '{}';
-      const progressData = JSON.parse(progress);
+      const progressData = loadUserProgress();
       
       const modulesCompleted = progressData.modulesCompleted || 0;
       const projectsCompleted = progressData.projectsCompleted || 0;
+      const totalStudyTime = progressData.totalStudyTime || 0;
       const totalModules = 12;
       const totalProjects = 16;
       
@@ -397,6 +437,7 @@
       document.getElementById('progressPercentage').textContent = overallProgress + '%';
       document.getElementById('modulesCompleted').textContent = modulesCompleted;
       document.getElementById('projectsCompleted').textContent = projectsCompleted;
+      document.getElementById('hoursStudied').textContent = Math.floor(totalStudyTime / 3600);
       
       // Update progress ring
       const circle = document.getElementById('progressCircle');
@@ -405,18 +446,15 @@
       circle.style.strokeDashoffset = offset;
     }
 
-    // Stats
+    // Stats - USER SPECIFIC
     function loadStats() {
+      const stats = loadUserStats();
       const today = new Date().toDateString();
-      const saved = localStorage.getItem('studyStats');
       
-      if (saved) {
-        const stats = JSON.parse(saved);
-        if (stats.date === today) {
-          const minutes = Math.floor((stats.totalSeconds || 0) / 60);
-          document.getElementById('todayMinutes').textContent = minutes + ' min';
-          document.getElementById('todaySessions').textContent = stats.sessions || 0;
-        }
+      if (stats.date === today) {
+        const minutes = Math.floor((stats.totalSeconds || 0) / 60);
+        document.getElementById('todayMinutes').textContent = minutes + ' min';
+        document.getElementById('todaySessions').textContent = stats.sessions || 0;
       }
       
       // Calculate streak
@@ -425,44 +463,61 @@
 
     function saveStats() {
       const today = new Date().toDateString();
-      const saved = localStorage.getItem('studyStats');
-      let stats = saved ? JSON.parse(saved) : {};
+      const stats = loadUserStats();
+      
+      let updatedStats = { ...stats };
       
       if (stats.date !== today) {
-        stats.totalSeconds = 0;
-        stats.sessions = 0;
-        stats.date = today;
+        updatedStats.totalSeconds = 0;
+        updatedStats.sessions = 0;
+        updatedStats.date = today;
       }
       
-      stats.totalSeconds = (stats.totalSeconds || 0) + 1;
-      localStorage.setItem('studyStats', JSON.stringify(stats));
+      updatedStats.totalSeconds = (updatedStats.totalSeconds || 0) + 1;
+      saveUserStats(updatedStats);
+      
+      // Also update progress study time
+      addStudyTime(1);
     }
 
     function updateStats() {
+      const stats = loadUserStats();
       const today = new Date().toDateString();
-      const saved = localStorage.getItem('studyStats');
       
-      if (saved) {
-        const stats = JSON.parse(saved);
-        if (stats.date === today) {
-          const minutes = Math.floor((stats.totalSeconds || 0) / 60);
-          document.getElementById('todayMinutes').textContent = minutes + ' min';
-        }
+      if (stats.date === today) {
+        const minutes = Math.floor((stats.totalSeconds || 0) / 60);
+        document.getElementById('todayMinutes').textContent = minutes + ' min';
+        document.getElementById('todaySessions').textContent = stats.sessions || 0;
       }
+      
+      // Update progress
+      updateProgress();
     }
 
     function calculateStreak() {
-      const studyHistory = JSON.parse(localStorage.getItem('studyHistory') || '[]');
+      const studyHistory = loadStudyHistory();
       let streak = 0;
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
       
-      for (let i = 0; i < studyHistory.length; i++) {
-        const date = new Date(studyHistory[i]);
+      // Sort dates (most recent first)
+      const sortedDates = studyHistory
+        .map(d => new Date(d))
+        .filter(d => !isNaN(d))
+        .map(d => {
+          d.setHours(0, 0, 0, 0);
+          return d;
+        })
+        .sort((a, b) => b - a);
+      
+      // Calculate consecutive days from today backwards
+      for (let i = 0; i < sortedDates.length; i++) {
+        const date = sortedDates[i];
         const diffDays = Math.floor((today - date) / (1000 * 60 * 60 * 24));
         
         if (diffDays === streak) {
           streak++;
-        } else {
+        } else if (diffDays > streak) {
           break;
         }
       }
@@ -470,47 +525,92 @@
       document.getElementById('studyStreak').textContent = streak + ' days';
     }
 
-    // Goals
+    // Goals - USER SPECIFIC
+    function loadGoals() {
+      const goals = loadUserGoals();
+      const goalsList = document.getElementById('goalsList');
+      
+      if (goals.length === 0) {
+        // Default goals for new users
+        const defaultGoals = [
+          { text: 'Complete HTML Fundamentals Module', dueDate: 'Next week', completed: false },
+          { text: 'Build First Portfolio Website', dueDate: 'In 2 weeks', completed: false },
+          { text: 'Study 5 hours this week', dueDate: 'This week', completed: false, progress: '2/5 hours' }
+        ];
+        
+        defaultGoals.forEach(goal => {
+          goals.push({
+            text: goal.text,
+            dueDate: goal.dueDate,
+            completed: goal.completed || false,
+            progress: goal.progress || null
+          });
+        });
+        
+        saveUserGoals(goals);
+      }
+      
+      displayGoals(goals);
+    }
+    
+    function displayGoals(goals) {
+      const goalsList = document.getElementById('goalsList');
+      goalsList.innerHTML = '';
+      
+      goals.filter(g => !g.completed).forEach(goal => {
+        const goalCard = document.createElement('div');
+        goalCard.className = 'goal-card';
+        goalCard.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <strong>${goal.text}</strong>
+              <p class="mb-0 text-muted small">${goal.progress || 'Due: ' + (goal.dueDate || 'Soon')}</p>
+            </div>
+            <button class="btn btn-sm btn-outline-success" onclick="completeGoal(this)">Mark Complete</button>
+          </div>
+        `;
+        goalsList.appendChild(goalCard);
+      });
+    }
+
     function completeGoal(button) {
       const goalCard = button.closest('.goal-card');
+      const goalText = goalCard.querySelector('strong').textContent;
+      
       goalCard.classList.add('completed');
       button.remove();
       
-      // Save goal completion
-      const goals = JSON.parse(localStorage.getItem('goals') || '[]');
-      const goalText = goalCard.querySelector('strong').textContent;
-      goals.push({ text: goalText, completed: new Date().toISOString() });
-      localStorage.setItem('goals', JSON.stringify(goals));
+      // Update and save goals
+      const goals = loadUserGoals();
+      const goalIndex = goals.findIndex(g => g.text === goalText && !g.completed);
+      if (goalIndex !== -1) {
+        goals[goalIndex].completed = true;
+        goals[goalIndex].completedAt = new Date().toISOString();
+        saveUserGoals(goals);
+      }
+      
+      // Add activity
+      addActivity('goal_complete', goalText);
     }
 
     function showAddGoalModal() {
       const goalText = prompt('Enter your new goal:');
       if (goalText) {
-        const goalsList = document.getElementById('goalsList');
-        const newGoal = document.createElement('div');
-        newGoal.className = 'goal-card';
-        newGoal.innerHTML = `
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <strong>${goalText}</strong>
-              <p class="mb-0 text-muted small">Due: This week</p>
-            </div>
-            <button class="btn btn-sm btn-outline-success" onclick="completeGoal(this)">Mark Complete</button>
-          </div>
-        `;
-        goalsList.appendChild(newGoal);
+        const goals = loadUserGoals();
+        goals.push({
+          text: goalText,
+          dueDate: 'This week',
+          completed: false
+        });
         
-        // Save goal
-        const goals = JSON.parse(localStorage.getItem('goals') || '[]');
-        goals.push({ text: goalText, completed: null });
-        localStorage.setItem('goals', JSON.stringify(goals));
+        saveUserGoals(goals);
+        displayGoals(goals);
       }
     }
 
-    // Learning path
+    // Learning path - USER SPECIFIC
     function updateLearningPath() {
-      const progress = localStorage.getItem('academyProgress') || '{}';
-      const progressData = JSON.parse(progress);
+      const progressData = loadUserProgress();
       const currentStep = progressData.currentStep || 1;
       
       document.querySelectorAll('.learning-path-item').forEach((item, index) => {
@@ -525,15 +625,29 @@
       });
     }
 
-    // Initialize
+    // Initialize - USER SPECIFIC
     document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is logged in
+      if (!getUserId()) {
+        alert('Please sign in to access your dashboard.');
+        window.location.href = '/academy/signin.html';
+        return;
+      }
+      
       updateProgress();
       loadStats();
+      loadGoals();
       updateLearningPath();
       updateTimerDisplay();
       
       // Update stats every minute
       setInterval(updateStats, 60000);
+      
+      // Save progress periodically
+      setInterval(() => {
+        const progress = loadUserProgress();
+        saveUserProgress(progress);
+      }, 30000); // Every 30 seconds
     });
   </script>
 </body>
