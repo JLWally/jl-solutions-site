@@ -8,7 +8,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/academy.css">
-  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/form-legibility.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <link rel="shortcut icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/images/jlsolutions-logo.png">
   <style>
     :root {
       --deep-slate: #1F2A33;
@@ -107,7 +110,7 @@
     .signup-link {
       text-align: center;
       margin-top: 1.5rem;
-      color: #666;
+      color: var(--deep-slate);
     }
     .signup-link a {
       color: var(--electric-blue);
@@ -123,6 +126,16 @@
       align-items: center;
       justify-content: space-between;
     }
+    /* Ensure all form labels are legible */
+    .form-check-label {
+      color: var(--deep-slate) !important;
+      font-weight: 500;
+    }
+    /* Ensure text-muted classes are legible on white background */
+    .text-muted {
+      color: var(--deep-slate) !important;
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
@@ -133,7 +146,7 @@
         <p class="slogan">From complexity to clarity.</p>
       </div>
 
-      <form id="signinForm">
+      <form id="signinForm" method="POST" action="#" onsubmit="return false;">
         <div class="mb-3">
           <label for="email" class="form-label">Email Address</label>
           <input type="email" class="form-control" id="email" name="email" required autofocus>
@@ -149,7 +162,7 @@
         <div class="mb-3 remember-me">
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="rememberMe">
-            <label class="form-check-label" for="rememberMe">
+            <label class="form-check-label" for="rememberMe" style="color: var(--deep-slate); font-weight: 500;">
               Remember me
             </label>
           </div>
@@ -177,9 +190,19 @@
     document.addEventListener('DOMContentLoaded', function() {
       const signinForm = document.getElementById('signinForm');
 
+      // SECURITY: Clear any credentials from URL immediately on page load
+      if (window.location.search.includes('email=') || window.location.search.includes('password=')) {
+        // Remove sensitive data from URL without reloading
+        window.history.replaceState({}, document.title, window.location.pathname);
+        // Show security warning
+        console.warn('Security: Credentials detected in URL. This should never happen. Please use the form to sign in.');
+        // Show user-friendly error
+        showError('generalError', 'Security: Please use the form below to sign in. Never enter credentials in the URL.');
+      }
+
       // Check if user is already logged in
       if (isAuthenticated()) {
-        window.location.href = '/academy/portal.html';
+        window.location.href = '/academy/dashboard.html';
         return;
       }
 
@@ -222,8 +245,11 @@
               localStorage.setItem('user', JSON.stringify(result.user));
             }
             
-            // Redirect to portal or return URL
-            const returnUrl = new URLSearchParams(window.location.search).get('return') || '/academy/portal.html';
+            // SECURITY: Clear any credentials from URL before redirecting
+            window.history.replaceState({}, document.title, '/academy/signin.html');
+            
+            // Redirect to dashboard or return URL (without credentials in URL)
+            const returnUrl = new URLSearchParams(window.location.search).get('return') || '/academy/dashboard.html';
             window.location.href = returnUrl;
           } else {
             showError('generalError', result.message || 'Invalid email or password. Please try again.');

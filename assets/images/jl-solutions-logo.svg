@@ -1,43 +1,68 @@
-<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="400" height="200" fill="#000000"/>
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- Black Background -->
+  <rect width="400" height="400" fill="#000000"/>
   
-  <!-- Lightbulb Base (Grey Rectangle) -->
-  <rect x="170" y="140" width="60" height="20" fill="#808080" rx="2"/>
+  <!-- White Circle -->
+  <circle cx="200" cy="200" r="175" fill="#FFFFFF"/>
+  
+  <!-- Lightbulb Base (Grey with Blue Outline) -->
+  <rect x="175" y="275" width="50" height="30" fill="#808080" stroke="#1A8CFF" stroke-width="2.5" rx="3"/>
   
   <!-- Lightbulb Bulb (Yellow with Blue Outline) -->
-  <path d="M 200 140 L 190 100 Q 190 80 200 80 Q 210 80 210 100 L 200 140" 
+  <ellipse cx="200" cy="200" rx="35" ry="50" fill="#FFD700" stroke="#1A8CFF" stroke-width="3"/>
+  
+  <!-- Lightbulb Bulb Top (rounded) -->
+  <path d="M 165 200 Q 165 160 200 160 Q 235 160 235 200" 
         fill="#FFD700" 
         stroke="#1A8CFF" 
         stroke-width="3"/>
   
-  <!-- JL Monogram inside lightbulb -->
-  <text x="200" y="110" 
+  <!-- JL Filament inside lightbulb -->
+  <text x="200" y="205" 
         font-family="Arial, sans-serif" 
-        font-size="24" 
+        font-size="28" 
         font-weight="bold" 
         fill="#1A8CFF" 
-        text-anchor="middle">JL</text>
+        text-anchor="middle" 
+        dominant-baseline="middle">JL</text>
   
-  <!-- Radiating Lines (Dashed Blue) -->
-  <line x1="160" y1="90" x2="150" y2="80" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
-  <line x1="240" y1="90" x2="250" y2="80" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
-  <line x1="200" y1="70" x2="200" y2="60" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
-  <line x1="175" y1="95" x2="165" y2="85" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
-  <line x1="225" y1="95" x2="235" y2="85" stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3"/>
+  <!-- Radiating Dashed Lines (Blue) - more numerous and circular pattern -->
+  <g stroke="#1A8CFF" stroke-width="2" stroke-dasharray="3,3" fill="none">
+    <!-- Top rays -->
+    <line x1="200" y1="150" x2="200" y2="130"/>
+    <line x1="185" y1="155" x2="170" y2="140"/>
+    <line x1="215" y1="155" x2="230" y2="140"/>
+    <line x1="175" y1="165" x2="155" y2="150"/>
+    <line x1="225" y1="165" x2="245" y2="150"/>
+    <!-- Side rays -->
+    <line x1="165" y1="180" x2="145" y2="175"/>
+    <line x1="235" y1="180" x2="255" y2="175"/>
+    <line x1="160" y1="200" x2="135" y2="200"/>
+    <line x1="240" y1="200" x2="265" y2="200"/>
+    <line x1="165" y1="220" x2="145" y2="225"/>
+    <line x1="235" y1="220" x2="255" y2="225"/>
+    <!-- Bottom rays -->
+    <line x1="175" y1="235" x2="155" y2="250"/>
+    <line x1="225" y1="235" x2="245" y2="250"/>
+    <line x1="185" y1="245" x2="170" y2="260"/>
+    <line x1="215" y1="245" x2="230" y2="260"/>
+    <line x1="200" y1="250" x2="200" y2="270"/>
+  </g>
   
-  <!-- Top Text: JL SOLUTIONS (Curved Up) -->
-  <path id="topCurve" d="M 50 50 Q 200 20 350 50" fill="none"/>
-  <text fill="#1A8CFF" font-family="Arial, sans-serif" font-size="18" font-weight="bold">
-    <textPath href="#topCurve" startOffset="5%">JL</textPath>
-    <textPath href="#topCurve" startOffset="60%">SOLUTIONS</textPath>
+  <!-- Top Text: JL SOLUTIONS (Curved along top inner edge of circle) -->
+  <defs>
+    <path id="topCurve" d="M 50 110 Q 200 80 350 110" fill="none"/>
+  </defs>
+  <text fill="#1A8CFF" font-family="Arial, sans-serif" font-size="22" font-weight="bold" letter-spacing="1">
+    <textPath href="#topCurve" startOffset="15%">JL</textPath>
+    <textPath href="#topCurve" startOffset="65%">SOLUTIONS</textPath>
   </text>
   
-  <!-- Bottom Text: AI SOLUTIONS FOR AI PROBLEMS (Curved Down) -->
-  <path id="bottomCurve" d="M 30 160 Q 200 180 370 160" fill="none"/>
-  <text fill="#1A8CFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">
-    <textPath href="#bottomCurve" startOffset="5%">AI SOLUTIONS</textPath>
-    <textPath href="#bottomCurve" startOffset="60%">FOR AI PROBLEMS</textPath>
+  <!-- Bottom Text: AI SOLUTIONS FOR AI PROBLEMS (Curved along bottom inner edge of circle) -->
+  <defs>
+    <path id="bottomCurve" d="M 40 290 Q 200 320 360 290" fill="none"/>
+  </defs>
+  <text fill="#1A8CFF" font-family="Arial, sans-serif" font-size="13" font-weight="bold" letter-spacing="0.5">
+    <textPath href="#bottomCurve" startOffset="0%">AI SOLUTIONS FOR AI PROBLEMS</textPath>
   </text>
 </svg>
-

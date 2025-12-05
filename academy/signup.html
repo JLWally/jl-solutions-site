@@ -8,7 +8,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/academy.css">
-  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/form-legibility.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <link rel="shortcut icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/images/jlsolutions-logo.png">
   <style>
     :root {
       --deep-slate: #1F2A33;
@@ -109,7 +112,7 @@
     .signin-link {
       text-align: center;
       margin-top: 1.5rem;
-      color: #666;
+      color: var(--deep-slate);
     }
     .signin-link a {
       color: var(--electric-blue);
@@ -130,7 +133,7 @@
         <p class="slogan">From complexity to clarity.</p>
       </div>
 
-      <form id="signupForm">
+      <form id="signupForm" method="POST" action="#" onsubmit="return false;">
         <div class="mb-3">
           <label for="firstName" class="form-label">First Name</label>
           <input type="text" class="form-control" id="firstName" name="firstName" required>
@@ -153,7 +156,7 @@
           <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" id="password" name="password" required minlength="8">
           <div class="password-strength" id="passwordStrength"></div>
-          <small class="text-muted">Must be at least 8 characters with letters and numbers</small>
+          <small style="color: var(--deep-slate); opacity: 0.8;">Must be at least 8 characters with letters and numbers</small>
           <div class="error-message" id="passwordError"></div>
         </div>
 
@@ -165,8 +168,8 @@
 
         <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" id="terms" required>
-          <label class="form-check-label" for="terms">
-            I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and <a href="/privacy.html" target="_blank">Privacy Policy</a>
+          <label class="form-check-label" for="terms" style="color: var(--deep-slate); font-weight: 500;">
+            I agree to the <a href="/terms.html" target="_blank" style="color: var(--electric-blue);">Terms of Service</a> and <a href="/privacy.html" target="_blank" style="color: var(--electric-blue);">Privacy Policy</a>
           </label>
           <div class="error-message" id="termsError"></div>
         </div>

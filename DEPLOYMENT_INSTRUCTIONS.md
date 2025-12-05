@@ -1,73 +1,53 @@
-# 🚀 Deployment Instructions
+# 🚀 Deployment Instructions - Logo Update
 
-## ✅ All Changes Complete!
+## Ready to Deploy!
 
-All requested changes have been successfully implemented and saved to your local files.
+All logo changes are complete and ready to be deployed to https://github.com/JLWally/jl-solutions-site
 
-### Changes Made:
+## Quick Deploy Command
 
-1. ✅ **Yellow Colors Updated**
-   - Changed from `#E6A740` to `#D4A574` (softer shade)
-   - Updated across all HTML and CSS files
+Run this single command to deploy everything:
 
-2. ✅ **Hero Image Resized**
-   - Home page hero image: max-height 400px
-   - Properly centered and scaled
+```bash
+cd /Users/jesswally/Desktop/Portfolio/jl-site-restore && git add -A && git commit -m "Update logo to new PNG version in navbar and favicon" && git push origin main
+```
 
-3. ✅ **Discord Community Added**
-   - Link: https://discord.gg/eA9WQdH4
-   - Added to footer on home and services pages
-   - New page: `discord-join.html` with form
-
-4. ✅ **Logo Added to Navbar**
-   - Logo displayed on all pages (35px height)
-
-5. ✅ **Services Page Updates**
-   - Bilingual support text restored
-   - Fix My App service added
-
-6. ✅ **Academy CTAs Fixed**
-   - All buttons visible and working
-
----
-
-## To Deploy:
-
-Run these commands in your terminal:
+Or use the deployment script:
 
 ```bash
 cd /Users/jesswally/Desktop/Portfolio/jl-site-restore
-
-# Stage all changes
-git add -A
-
-# Commit with descriptive message
-git commit -m "Update UI: Softer yellow colors, resized hero, Discord community, logo in navbar, Fix My App service, bilingual text restored"
-
-# Push to your repository
-git push origin main
+chmod +x deploy-logo.sh
+./deploy-logo.sh
 ```
 
-**Note:** If your default branch is `master` instead of `main`, use:
-```bash
-git push origin master
-```
+## What's Being Deployed
+
+✅ **Navbar Logo**: Updated from SVG to PNG (`jlsolutions-logo.png`)
+✅ **Browser Tab Icon**: New favicon using the PNG logo
+✅ **All Pages**: Consistent logo across entire site
+
+## Files Changed
+
+- All HTML pages (navbar logo references)
+- All HTML pages (favicon references)
+- Logo component file
+
+## After Deployment
+
+1. **GitHub**: Visit https://github.com/JLWally/jl-solutions-site to see the commit
+2. **Netlify**: Will auto-deploy within 1-2 minutes
+3. **Live Site**: Check https://www.jlsolutions.io
+
+## Verification Checklist
+
+After deployment completes:
+- [ ] Logo appears in navbar on all pages
+- [ ] Logo appears in browser tab/favicon
+- [ ] No broken image links
+- [ ] Site loads correctly
 
 ---
 
-## Verification Checklist:
-
-- [ ] Yellow colors changed to #D4A574
-- [ ] Hero image resized (400px max-height)
-- [ ] Discord link in footer
-- [ ] Discord join page exists
-- [ ] Logo in navbar
-- [ ] Bilingual text restored
-- [ ] Fix My App service added
-- [ ] All changes committed
-- [ ] Changes pushed to repository
-
----
-
-**All files are saved and ready to deploy!** 🎉
-
+**Repository**: https://github.com/JLWally/jl-solutions-site
+**Branch**: main
+**Auto-Deploy**: Netlify (automatic on push)
