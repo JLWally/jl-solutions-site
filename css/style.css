@@ -19,8 +19,13 @@ body {
   padding: 0;
 }
 
-h1, h2, h3, h4, h5, p, a, small, li {
-  color: #e0e0e0 !important;
+h1, h2, h3, h4, h5, p, small, li {
+  color: #e0e0e0;
+}
+
+/* Allow buttons to override text color */
+.btn, button, .btn-primary, .btn-secondary, .btn-success, .btn-outline, .btn-light {
+  color: inherit;
 }
 
 section {
@@ -40,30 +45,36 @@ section {
 }
 
 .btn-light {
-  background-color: #ffffff;
-  color: #121212;
+  background-color: #ffffff !important;
+  color: #121212 !important;
+  border: none;
 }
 
 .btn-light:hover {
-  background-color: #dddddd;
+  background-color: #dddddd !important;
+  color: #121212 !important;
 }
 
 .btn-primary {
-  background-color: #0078D4;
+  background-color: #0078D4 !important;
+  color: white !important;
   border: none;
 }
 
 .btn-primary:hover {
-  background-color: #005a9e;
+  background-color: #005a9e !important;
+  color: white !important;
 }
 
 .btn-success {
-  background-color: #00C853;
+  background-color: #00C853 !important;
+  color: white !important;
   border: none;
 }
 
 .btn-success:hover {
-  background-color: #00b14f;
+  background-color: #00b14f !important;
+  color: white !important;
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -123,12 +134,14 @@ blockquote {
 }
 
 .btn-primary {
-  background-color: #0078D4;
-  color: white;
+  background-color: #0078D4 !important;
+  color: white !important;
+  border: none;
 }
 
 .btn-primary:hover {
-  background-color: #005a9e;
+  background-color: #005a9e !important;
+  color: white !important;
 }
 
 .btn-outline {

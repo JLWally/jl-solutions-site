@@ -1,0 +1,97 @@
+/* UI Fixes - Fix broken buttons and text colors */
+
+/* Ensure buttons have proper colors and are not overridden by global styles */
+.btn, button, a.btn {
+  color: inherit !important;
+}
+
+/* Primary buttons - should be blue with white text */
+.btn-primary {
+  background-color: #0078D4 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.btn-primary:hover {
+  background-color: #005a9e !important;
+  color: white !important;
+}
+
+/* Success buttons - should be green with white text */
+.btn-success {
+  background-color: #00C853 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.btn-success:hover {
+  background-color: #00b14f !important;
+  color: white !important;
+}
+
+/* Light buttons - should be white/light with dark text */
+.btn-light {
+  background-color: #ffffff !important;
+  color: #121212 !important;
+  border: none !important;
+}
+
+.btn-light:hover {
+  background-color: #dddddd !important;
+  color: #121212 !important;
+}
+
+/* Outline buttons - transparent with colored border */
+.btn-outline, .btn-outline-light {
+  background-color: transparent !important;
+  border: 2px solid currentColor !important;
+}
+
+/* Yellow CTA buttons - should use new color #E6A740 */
+.btn-primary[style*="--yellow"],
+.btn[style*="--yellow"],
+a[style*="--yellow"] {
+  background-color: #E6A740 !important;
+  color: #000000 !important;
+}
+
+/* Service buttons */
+.btn-service {
+  background-color: #E6A740 !important;
+  color: #000000 !important;
+}
+
+.btn-service:hover {
+  background-color: #d4952f !important;
+  color: #000000 !important;
+}
+
+/* Fix white text on white backgrounds */
+.bg-white, .bg-light {
+  color: #121212 !important;
+}
+
+.bg-white h1, .bg-white h2, .bg-white h3, 
+.bg-white h4, .bg-white h5, .bg-white p,
+.bg-light h1, .bg-light h2, .bg-light h3,
+.bg-light h4, .bg-light h5, .bg-light p {
+  color: #121212 !important;
+}
+
+/* Ensure dark backgrounds have light text */
+body, .bg-dark, [style*="background: #000"],
+[style*="background: #121212"], [style*="background: #1a1a1a"] {
+  color: #e0e0e0 !important;
+}
+
+/* Academy buttons */
+.btn-academy {
+  background-color: #0078D4 !important;
+  color: white !important;
+}
+
+.btn-academy:hover {
+  background-color: #005a9e !important;
+  color: white !important;
+}
+
