@@ -106,7 +106,7 @@ All pages are fully responsive and look great on:
 
 - **Interactive Checklists**: Click items in the progress tracker to mark complete
 - **Smooth Navigation**: Quick links between all academy pages
-- **Titi's Tips**: Personal advice and encouragement throughout
+- **JL Solutions Tips**: Personal advice and encouragement throughout
 - **Real-World Focus**: Projects designed to build employable skills
 
 ## 🎓 Learning Philosophy

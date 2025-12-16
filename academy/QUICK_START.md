@@ -10,7 +10,7 @@ Welcome to YOUR tech academy. This is your personal learning portal built just f
 Visit: `/academy/index.html` in your browser
 
 ### Step 2: Read Your Welcome Letter
-Take a few minutes to read the letter from Titi. It's important.
+Take a few minutes to read the welcome letter. It's important.
 
 ### Step 3: Check Out Your Learning Path
 Click on "Training Modules" to see what you'll be learning over the next 90 days.
@@ -45,7 +45,7 @@ Click on "Training Modules" to see what you'll be learning over the next 90 days
 ### When You're Stuck:
 1. Check the **Resources** page for documentation
 2. Google your error message
-3. Text Titi (she's here to help!)
+3. Contact us at info@jlsolutions.io (we're here to help!)
 4. Remember: Everyone gets stuck. It's part of learning.
 
 ### When You Finish Something:
@@ -70,7 +70,7 @@ Click on "Training Modules" to see what you'll be learning over the next 90 days
 - ❌ Give up when things get hard
 - ❌ Skip the basics
 - ❌ Be afraid to break things (that's how you learn!)
-- ❌ Forget that Titi believes in you
+- ❌ Forget that we believe in you
 
 ## 📱 Bookmark These Pages
 
@@ -88,7 +88,7 @@ By the end of Week 1, you should:
 - [ ] Create your first HTML page
 - [ ] Style something with CSS
 - [ ] Deploy your first website to Netlify
-- [ ] Text Titi a screenshot of your work!
+- [ ] Share your work with us at info@jlsolutions.io!
 
 By the end of Month 1, you should:
 - [ ] Be comfortable with HTML and CSS
@@ -101,7 +101,7 @@ By the end of Month 1, you should:
 
 > "Every expert was once a beginner. You're not behind — you're exactly where you need to be: at the start of something amazing."
 > 
-> — Titi
+> — JL Solutions Team
 
 You've got this, Sierra. Let's build your future together! 🚀
 
@@ -111,7 +111,7 @@ You've got this, Sierra. Let's build your future together! 🚀
 Open `/academy/modules.html` and begin Phase 1!
 
 **Need help?**  
-Text Titi: theveteranfreelancer@gmail.com
+Email us: info@jlsolutions.io
 
 **Questions?**  
 Check the Resources page or just ask!
