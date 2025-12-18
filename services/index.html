@@ -34,6 +34,14 @@
       color: white;
     }
     
+    .core-services {
+      background: linear-gradient(135deg, rgba(0, 120, 212, 0.1) 0%, rgba(0, 66, 152, 0.1) 100%);
+      border: 2px solid var(--blue);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      margin: 3rem 0;
+    }
+    
     .service-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -44,6 +52,11 @@
       height: 100%;
       display: flex;
       flex-direction: column;
+    }
+    
+    .service-card.featured {
+      background: rgba(0, 120, 212, 0.1);
+      border: 2px solid var(--blue);
     }
     
     .service-card:hover {
@@ -106,6 +119,18 @@
       background: var(--blue);
       color: white;
     }
+    
+    .badge-featured {
+      background: var(--yellow);
+      color: var(--black);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
@@ -144,85 +169,90 @@
 
   <!-- Main Content -->
   <main id="main-content" role="main" class="container my-5">
-    <div class="row g-4">
-      <!-- Power Platform Consulting -->
-      <div class="col-md-6 col-lg-4">
-        <div class="service-card">
-          <div class="service-icon">⚡</div>
-          <h4>Power Platform Consulting</h4>
-          <p>Custom-built apps, workflows, and dashboards using Power Apps, Power Automate, and Power BI — fully accessible and mobile-ready.</p>
-          <a href="/services/power-platform.html" class="btn-outline-service">Learn More</a>
+    
+    <!-- Core Services Section -->
+    <div class="core-services">
+      <div class="text-center mb-4">
+        <span class="badge-featured">Core Services</span>
+        <h2 class="mb-3">Our Primary Services</h2>
+        <p class="lead">These are the services we focus on to help you make money and grow your business.</p>
+      </div>
+      
+      <div class="row g-4">
+        <!-- Fix My App -->
+        <div class="col-md-4">
+          <div class="service-card featured">
+            <div class="service-icon">🔧</div>
+            <h4>Fix My App</h4>
+            <p>Is your app broken, crashing, or not working? We fix apps fast. No judgment, just solutions. Quick fixes, app rescues, and ongoing maintenance.</p>
+            <a href="/services/fix-my-app.html" class="btn-service">Learn More</a>
+          </div>
+        </div>
+
+        <!-- Automation & AI Integration -->
+        <div class="col-md-4">
+          <div class="service-card featured">
+            <div class="service-icon">🤖</div>
+            <h4>Automation & AI Integration</h4>
+            <p>Use AI and automation to eliminate manual tasks, speed up decision making, and unlock real-time insight from your data. Transform your workflows with intelligent automation.</p>
+            <a href="/services/automation-ai.html" class="btn-service">Learn More</a>
+          </div>
+        </div>
+
+        <!-- Operations Optimization -->
+        <div class="col-md-4">
+          <div class="service-card featured">
+            <div class="service-icon">⚡</div>
+            <h4>Operations Optimization</h4>
+            <p>Streamline your business operations, reduce costs, and improve efficiency. We analyze your processes and implement solutions that drive real results.</p>
+            <a href="/services/operations-optimization.html" class="btn-service">Learn More</a>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Microsoft 365 Integration -->
-      <div class="col-md-6 col-lg-4">
-        <div class="service-card">
-          <div class="service-icon">🔗</div>
-          <h4>Microsoft 365 Integration</h4>
-          <p>We connect SharePoint, Teams, Outlook, and OneDrive into a seamless system for collaboration and compliance. Training included.</p>
-          <a href="/services/microsoft-365.html" class="btn-outline-service">Learn More</a>
+    <!-- Additional Services Section -->
+    <div class="mt-5">
+      <h3 class="text-center mb-4">Additional Services</h3>
+      <div class="row g-4">
+        <!-- Power Platform Consulting -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="service-icon">🎯</div>
+            <h4>Power Platform Consulting</h4>
+            <p>Custom-built apps, workflows, and dashboards using Power Apps, Power Automate, and Power BI — fully accessible and mobile-ready.</p>
+            <a href="/contact.html" class="btn-outline-service">Contact Us</a>
+          </div>
         </div>
-      </div>
 
-      <!-- Azure + AWS Cloud Migration -->
-      <div class="col-md-6 col-lg-4">
-        <div class="service-card">
-          <div class="service-icon">☁️</div>
-          <h4>Azure + AWS Cloud Migration</h4>
-          <p>Migrate with confidence. We help teams modernize legacy systems, reduce costs, and leverage cloud-native tools for performance.</p>
-          <a href="/services/cloud-migration.html" class="btn-outline-service">Learn More</a>
+        <!-- Azure + AWS Cloud Migration -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="service-icon">☁️</div>
+            <h4>Azure + AWS Cloud Migration</h4>
+            <p>Migrate with confidence. We help teams modernize legacy systems, reduce costs, and leverage cloud-native tools for performance.</p>
+            <a href="/services/cloud-migration.html" class="btn-outline-service">Learn More</a>
+          </div>
         </div>
-      </div>
 
-      <!-- Automation & AI Integration -->
-      <div class="col-md-6 col-lg-4">
-        <div class="service-card">
-          <div class="service-icon">🤖</div>
-          <h4>Automation & AI Integration</h4>
-          <p>Use AI and automation to eliminate manual tasks, speed up decision making, and unlock real-time insight from your data.</p>
-          <a href="/services/automation.html" class="btn-outline-service">Learn More</a>
+        <!-- Microsoft 365 Integration -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="service-icon">🔗</div>
+            <h4>Microsoft 365 Integration</h4>
+            <p>We connect SharePoint, Teams, Outlook, and OneDrive into a seamless system for collaboration and compliance. Training included.</p>
+            <a href="/contact.html" class="btn-outline-service">Contact Us</a>
+          </div>
         </div>
-      </div>
 
-      <!-- Fix My App -->
-      <div class="col-md-6 col-lg-4">
-        <div class="service-card">
-          <div class="service-icon">🔧</div>
-          <h4>Fix My App</h4>
-          <p>Is your app broken, crashing, or not working? We fix apps fast. No judgment, just solutions. Quick fixes, app rescues, and ongoing maintenance.</p>
-          <a href="/services/fix-my-app.html" class="btn-outline-service">Learn More</a>
-        </div>
-      </div>
-
-      <!-- Document Intelligence & Extraction -->
-      <div class="col-md-6 col-lg-4">
-        <div class="service-card">
-          <div class="service-icon">📄</div>
-          <h4>Document Intelligence & Extraction</h4>
-          <p>AI-powered document processing that extracts key information from large volumes of business documents. Perfect for invoices, contracts, forms, and compliance documents.</p>
-          <a href="/services/document-extraction.html" class="btn-outline-service">Learn More</a>
-          <a href="/services/document-extraction-demo.html" class="btn-service mt-2">Try Free Demo</a>
-        </div>
-      </div>
-
-      <!-- Nonprofit & Small Business Support -->
-      <div class="col-md-6 col-lg-4">
-        <div class="service-card">
-          <div class="service-icon">💚</div>
-          <h4>Nonprofit & Small Business Support</h4>
-          <p>We offer low-cost consulting and scalable tech stacks to help you do more with less.</p>
-          <a href="/services/nonprofit-support.html" class="btn-outline-service">Learn More</a>
-        </div>
-      </div>
-
-      <!-- Training, Docs & Handoff -->
-      <div class="col-md-6 col-lg-4">
-        <div class="service-card">
-          <div class="service-icon">📚</div>
-          <h4>Training, Docs & Handoff</h4>
-          <p>We build solutions you can own. Clear documentation, hands-on training, and post-launch support mean your team stays in control.</p>
-          <a href="/services/training.html" class="btn-outline-service">Learn More</a>
+        <!-- Document Intelligence & Extraction -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="service-icon">📄</div>
+            <h4>Document Intelligence & Extraction</h4>
+            <p>AI-powered document processing that extracts key information from large volumes of business documents.</p>
+            <a href="/services/document-extraction.html" class="btn-outline-service">Learn More</a>
+          </div>
         </div>
       </div>
     </div>
@@ -243,8 +273,6 @@
         <div class="col-md-4 mb-4 mb-md-0">
           <h5>JL Solutions</h5>
           <p>AI Solutions for AI Problems. From complexity to clarity.</p>
-          <p><a href="https://discord.gg/eA9WQdH4" target="_blank" rel="noopener noreferrer" style="color: #0078d4; text-decoration: none;">💬 Join Our Discord Community</a></p>
-          <p class="small" style="color: rgba(255, 255, 255, 0.6);">Note: Discord link expires in 7 days. If the link has expired, <a href="/discord-join.html" style="color: #0078d4;">fill out our quick 3-question form</a> to join.</p>
         </div>
         <div class="col-md-4 mb-4 mb-md-0">
           <h5>Quick Links</h5>
@@ -258,8 +286,7 @@
         </div>
         <div class="col-md-4">
           <h5>Connect With Us</h5>
-          <p>Email: <a href="mailto:jwally@jlsolutions.io" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">jwally@jlsolutions.io</a></p>
-          <p><a href="https://discord.gg/eA9WQdH4" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background: #5865F2; color: white; border: none; padding: 0.5rem 1rem;">Join Discord</a></p>
+          <p>Email: <a href="mailto:info@jlsolutions.io" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">info@jlsolutions.io</a></p>
         </div>
       </div>
       <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0;">
