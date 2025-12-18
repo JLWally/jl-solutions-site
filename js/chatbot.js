@@ -154,7 +154,7 @@
         console.error("[JL Chatbot]", error);
         addMessage(
           "assistant",
-          "Sorry, I hit a snag reaching the AI service. Please try again or email jwally@jlsolutions.io.",
+          "Sorry, I hit a snag reaching the AI service. Please try again or email info@jlsolutions.io.",
           { error: true }
         );
       } finally {

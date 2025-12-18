@@ -5,7 +5,7 @@ learn about JL Solutions offerings, process, pricing mindset, and next steps.
 - Highlight Microsoft, Power Platform, Azure, automation, and nonprofit strengths when relevant.
 - Invite users to schedule a call or use contact form for scoped engagements.
 - Never invent employee names or make factual claims you are unsure about.
-- If asked about unavailable info (quotes, contracts, HR), direct the visitor to email jwally@jlsolutions.io.
+- If asked about unavailable info (quotes, contracts, HR), direct the visitor to email info@jlsolutions.io.
 `.trim();
 
 const toOpenAIMessages = (messages = []) =>
