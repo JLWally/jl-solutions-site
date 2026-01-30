@@ -26,31 +26,86 @@ export default function TrailsPage() {
   useEffect(() => {
     const fetchTrails = async () => {
       try {
-        const response = await fetch('/api/trails?public=true')
-        if (!response.ok) throw new Error('Failed to fetch trails')
+        const response = await fetch('/api/trails?public=true', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        
         const data = await response.json()
         setTrails(data.trails || [])
       } catch (error) {
         console.error('Error fetching trails:', error)
-        // Fallback to sample data
+        // Fallback to comprehensive sample data
         setTrails([
           {
             id: 'sample-1',
             name: 'Eagles Stadium Run',
-            description: 'Run around the iconic Lincoln Financial Field with crowd sounds and stadium atmosphere',
+            description: 'Run around the iconic Lincoln Financial Field with crowd sounds and stadium atmosphere. Experience the energy of game day as you complete your workout.',
             duration: 3600,
+            distance: 3.5,
             difficulty: 'medium',
-            tags: ['sports', 'stadium', 'urban'],
+            tags: ['sports', 'stadium', 'urban', 'motivational'],
             isPublic: true,
             requiresSubscription: false,
           },
           {
             id: 'sample-2',
             name: 'Adventure Time - Land of Ooo',
-            description: 'Explore the colorful and whimsical world of Adventure Time',
+            description: 'Explore the colorful and whimsical world of Adventure Time. Run through the Candy Kingdom, past the Tree Fort, and into the Land of Ooo.',
             duration: 2400,
+            distance: 2.5,
             difficulty: 'easy',
-            tags: ['fantasy', 'cartoon', 'adventure'],
+            tags: ['fantasy', 'cartoon', 'adventure', 'fun'],
+            isPublic: true,
+            requiresSubscription: true,
+          },
+          {
+            id: 'sample-3',
+            name: 'Japanese Cherry Blossom Forest',
+            description: 'A serene run through a beautiful cherry blossom forest in spring. Experience the tranquility of nature with pink petals falling around you.',
+            duration: 1800,
+            distance: 2.0,
+            difficulty: 'easy',
+            tags: ['nature', 'peaceful', 'spring', 'japan'],
+            isPublic: true,
+            requiresSubscription: false,
+          },
+          {
+            id: 'sample-4',
+            name: 'Mountain Sunrise Trail',
+            description: 'Climb through mountain trails as the sun rises. Experience breathtaking views and challenging terrain perfect for your morning workout.',
+            duration: 4200,
+            distance: 5.0,
+            difficulty: 'hard',
+            tags: ['mountain', 'sunrise', 'challenging', 'scenic'],
+            isPublic: true,
+            requiresSubscription: true,
+          },
+          {
+            id: 'sample-5',
+            name: 'Urban Night Run',
+            description: 'Run through a vibrant cityscape at night. Neon lights, bustling streets, and the energy of the city keep you motivated through your workout.',
+            duration: 3000,
+            distance: 4.0,
+            difficulty: 'medium',
+            tags: ['urban', 'night', 'city', 'energetic'],
+            isPublic: true,
+            requiresSubscription: false,
+          },
+          {
+            id: 'sample-6',
+            name: 'Tropical Beach Paradise',
+            description: 'Run along pristine white sand beaches with crystal clear turquoise water. Feel the ocean breeze as you complete your coastal workout.',
+            duration: 2700,
+            distance: 3.0,
+            difficulty: 'easy',
+            tags: ['beach', 'tropical', 'relaxing', 'ocean'],
             isPublic: true,
             requiresSubscription: true,
           },

@@ -11,24 +11,34 @@ export async function GET(req: NextRequest) {
     // Fetch public trails or all trails
     const where = publicOnly ? { isPublic: true } : {}
 
-    const trails = await prisma.trail.findMany({
-      where,
-      take: limit,
-      skip: offset,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        thumbnailUrl: true,
-        duration: true,
-        distance: true,
-        difficulty: true,
-        tags: true,
-        isPublic: true,
-        createdAt: true,
-      },
-    })
+    let trails: any[] = []
+    let total = 0
+
+    // Try to fetch from database, but don't fail if DB is not configured
+    try {
+      trails = await prisma.trail.findMany({
+        where,
+        take: limit,
+        skip: offset,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          thumbnailUrl: true,
+          duration: true,
+          distance: true,
+          difficulty: true,
+          tags: true,
+          isPublic: true,
+          createdAt: true,
+        },
+      })
+      total = await prisma.trail.count({ where })
+    } catch (dbError) {
+      // Database not configured or connection failed - use sample data
+      console.log('Database not available, using sample trails')
+    }
 
     // If no trails in database, return sample trails
     if (trails.length === 0) {
