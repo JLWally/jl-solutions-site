@@ -3,25 +3,20 @@
   publish = "public"
   command = ""
 
-# Allow direct access to HTML files, redirect only non-file paths to index.html
+# Proxy TrailCrafter app (only if deployed) - comment out if not ready
+# [[redirects]]
+#   from = "/apps/trailcrafter"
+#   to = "https://trailcrafter.vercel.app/"
+#   status = 200
+#   force = true
+# [[redirects]]
+#   from = "/apps/trailcrafter/*"
+#   to = "https://trailcrafter.vercel.app/:splat"
+#   status = 200
+#   force = true
+
+# SPA fallback - only redirect non-file requests to index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = false
-  conditions = {Role = ["admin"]}
-  
-# Explicitly allow HTML files
-[[redirects]]
-  from = "/*.html"
-  to = "/:splat.html"
-  status = 200
-  force = true
-
-# Proxy TrailCrafter app - UNCOMMENT AND UPDATE once TrailCrafter is deployed
-# Replace YOUR_VERCEL_URL with your actual TrailCrafter deployment URL
-# [[redirects]]
-#   from = "/apps/trailcrafter/*"
-#   to = "https://YOUR_VERCEL_URL.vercel.app/:splat"
-#   status = 200
-#   force = true
