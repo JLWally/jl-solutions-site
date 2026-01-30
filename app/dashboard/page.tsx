@@ -78,7 +78,7 @@ export default function DashboardPage() {
 
             {trails.length === 0 ? (
               <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-12 text-center">
-                <p className="text-gray-400 mb-4">You haven't created any trails yet.</p>
+                <p className="text-gray-400 mb-4">You haven&apos;t created any trails yet.</p>
                 <Link
                   href="/create"
                   className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300"

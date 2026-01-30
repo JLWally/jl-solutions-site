@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Play, Lock, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -84,10 +85,11 @@ export default function TrailsPage() {
               >
                 <div className="aspect-video bg-gradient-to-br from-blue-600 to-purple-600 relative">
                   {trail.thumbnailUrl ? (
-                    <img
+                    <Image
                       src={trail.thumbnailUrl}
                       alt={trail.name}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
