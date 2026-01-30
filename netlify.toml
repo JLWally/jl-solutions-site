@@ -8,6 +8,12 @@
   function = "trailcrafter-proxy"
   path = "/apps/trailcrafter/*"
 
+# Explicit routes - handle specific HTML files first
+[[redirects]]
+  from = "/services"
+  to = "/services.html"
+  status = 301
+
 # SPA fallback - must come LAST
 [[redirects]]
   from = "/*"
