@@ -3,37 +3,21 @@
   publish = "public"
   command = ""
 
-# Handle /apps/trailcrafter path - serve the index.html file directly
-# This prevents the catch-all redirect from catching it
+# Proxy TrailCrafter app - Update URL after deployment
+# Once TrailCrafter is deployed on Netlify, uncomment and update:
 [[redirects]]
   from = "/apps/trailcrafter"
-  to = "/apps/trailcrafter/index.html"
+  to = "https://trailcrafter.netlify.app/"
   status = 200
   force = true
 
 [[redirects]]
-  from = "/apps/trailcrafter/"
-  to = "/apps/trailcrafter/index.html"
+  from = "/apps/trailcrafter/*"
+  to = "https://trailcrafter.netlify.app/:splat"
   status = 200
   force = true
 
-# Proxy TrailCrafter app - UNCOMMENT AND UPDATE once TrailCrafter is deployed
-# Option 1: If TrailCrafter is deployed on Netlify, use this:
-# [[redirects]]
-#   from = "/apps/trailcrafter/*"
-#   to = "https://trailcrafter-xxxxx.netlify.app/:splat"
-#   status = 200
-#   force = true
-
-# Option 2: If TrailCrafter is deployed on Vercel, use this:
-# [[redirects]]
-#   from = "/apps/trailcrafter/*"
-#   to = "https://trailcrafter.vercel.app/:splat"
-#   status = 200
-#   force = true
-
-# SPA fallback - only redirect non-file requests to index.html
-# This must come LAST so specific routes are handled first
+# SPA fallback - must come LAST
 [[redirects]]
   from = "/*"
   to = "/index.html"
