@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apps | JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon"/>
+  <link rel="shortcut icon" href="assets/icons/favicon.ico" type="image/x-icon"/>
+  <style>
+    .app-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid #333;
+      background-color: #1f1f1f;
+    }
+    .app-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 120, 212, 0.3);
+      border-color: #0078D4;
+    }
+    .app-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #0078D4, #00C853);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .tech-badge {
+      background-color: #0078D4;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+    .app-hero {
+      background: linear-gradient(135deg, #1a1a1a 0%, #0078D4 100%);
+      padding: 4rem 0;
+      margin-bottom: 3rem;
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">JL Solutions</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+            <li class="nav-item"><a class="nav-link active" href="apps.html">Apps</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="app-hero text-white text-center">
+    <div class="container">
+      <h1 class="display-4 mb-3">Our Applications</h1>
+      <p class="lead">Innovative solutions built with modern technology</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="py-5">
+    <div class="container">
+      
+      <!-- TrailCrafter Featured App -->
+      <div class="row mb-5">
+        <div class="col-12">
+          <div class="app-card rounded p-4 mb-4">
+            <div class="row align-items-center">
+              <div class="col-md-8">
+                <h2 class="mb-3">
+                  TrailCrafter
+                  <span class="app-badge">NEW</span>
+                </h2>
+                <p class="lead mb-3">
+                  AI-powered custom trail design for fitness equipment. Create virtual running and biking trails for Peloton, treadmills, and exercise bikes through natural language conversations with AI.
+                </p>
+                <p class="mb-3">
+                  Design your dream trail by simply describing it to our AI assistant. Want to run around the Eagles stadium? Explore Adventure Time worlds? Or create a trail through a Japanese cherry blossom forest? TrailCrafter makes it possible.
+                </p>
+                
+                <div class="tech-stack">
+                  <span class="tech-badge">Next.js 14</span>
+                  <span class="tech-badge">TypeScript</span>
+                  <span class="tech-badge">OpenAI API</span>
+                  <span class="tech-badge">Stripe</span>
+                  <span class="tech-badge">Prisma</span>
+                  <span class="tech-badge">PostgreSQL</span>
+                  <span class="tech-badge">Tailwind CSS</span>
+                </div>
+
+                <div class="mt-4">
+                  <h5 class="mb-3">Key Features:</h5>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <div class="feature-icon">🤖</div>
+                      <strong>AI-Powered Design</strong>
+                      <p class="small text-muted">Chat with AI to design custom trails through natural language</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="feature-icon">🎬</div>
+                      <strong>Trail Generation</strong>
+                      <p class="small text-muted">Generate video trails from your descriptions</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="feature-icon">💳</div>
+                      <strong>Subscription Model</strong>
+                      <p class="small text-muted">Flexible plans with different trail generation limits</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="feature-icon">🏃</div>
+                      <strong>Fitness Optimized</strong>
+                      <p class="small text-muted">Optimized for Peloton and other large fitness screens</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <a href="https://trailcrafter.app" target="_blank" rel="noopener noreferrer" class="btn btn-primary me-2">
+                    Visit TrailCrafter
+                  </a>
+                  <a href="https://github.com/jlsolutions/trailcrafter" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light">
+                    View on GitHub
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-4 text-center mt-4 mt-md-0">
+                <div class="bg-dark rounded p-4" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                  <div>
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏃</div>
+                    <p class="text-muted">TrailCrafter</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other Apps Section -->
+      <div class="row">
+        <div class="col-12 mb-4">
+          <h3 class="mb-4">More Applications</h3>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+          <div class="app-card rounded p-4 h-100">
+            <h4>Eligibility Wizard</h4>
+            <p>Streamline eligibility determination with an intelligent, user-friendly wizard interface.</p>
+            <a href="services/eligibility-wizard.html" class="btn btn-sm btn-primary">Learn More</a>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="app-card rounded p-4 h-100">
+            <h4>AI Intake Form</h4>
+            <p>Automated intake processing powered by AI to reduce manual work and improve accuracy.</p>
+            <a href="services/ai-intake-form.html" class="btn btn-sm btn-primary">Learn More</a>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="app-card rounded p-4 h-100">
+            <h4>Fix My App</h4>
+            <p>Diagnostic and repair tool for Power Platform applications.</p>
+            <a href="services/fix-my-app.html" class="btn btn-sm btn-primary">Learn More</a>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="app-card rounded p-4 h-100">
+            <h4>Automation Solutions</h4>
+            <p>Custom automation workflows to streamline your business processes.</p>
+            <a href="automation.html" class="btn btn-sm btn-primary">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+          <h3 class="mb-3">Need a Custom Application?</h3>
+          <p class="mb-4">We build custom solutions tailored to your needs. Let's discuss your project.</p>
+          <a href="contact.html" class="btn btn-success btn-lg">Contact Us</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
