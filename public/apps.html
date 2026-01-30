@@ -10,10 +10,33 @@
   <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon"/>
   <link rel="shortcut icon" href="assets/icons/favicon.ico" type="image/x-icon"/>
   <style>
+    body {
+      background-color: #121212;
+      color: #f4f4f4;
+    }
+    h1, h2, h3, h4, h5, h6, p, a, small, strong {
+      color: #f4f4f4 !important;
+    }
+    .text-muted {
+      color: #d0d0d0 !important;
+    }
+    .lead {
+      color: #e0e0e0 !important;
+    }
     .app-card {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       border: 1px solid #333;
       background-color: #1f1f1f;
+    }
+    .app-card h2,
+    .app-card h4,
+    .app-card h5,
+    .app-card p,
+    .app-card strong {
+      color: #f4f4f4 !important;
+    }
+    .app-card .text-muted {
+      color: #d0d0d0 !important;
     }
     .app-card:hover {
       transform: translateY(-5px);
@@ -95,14 +118,14 @@
           <div class="app-card rounded p-4 mb-4">
             <div class="row align-items-center">
               <div class="col-md-8">
-                <h2 class="mb-3">
+                <h2 class="mb-3" style="color: #ffffff !important;">
                   TrailCrafter
                   <span class="app-badge">NEW</span>
                 </h2>
-                <p class="lead mb-3">
+                <p class="lead mb-3" style="color: #e0e0e0 !important;">
                   AI-powered custom trail design for fitness equipment. Create virtual running and biking trails for Peloton, treadmills, and exercise bikes through natural language conversations with AI.
                 </p>
-                <p class="mb-3">
+                <p class="mb-3" style="color: #e0e0e0 !important;">
                   Design your dream trail by simply describing it to our AI assistant. Want to run around the Eagles stadium? Explore Adventure Time worlds? Or create a trail through a Japanese cherry blossom forest? TrailCrafter makes it possible.
                 </p>
                 
@@ -117,27 +140,27 @@
                 </div>
 
                 <div class="mt-4">
-                  <h5 class="mb-3">Key Features:</h5>
+                  <h5 class="mb-3" style="color: #ffffff !important;">Key Features:</h5>
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <div class="feature-icon">🤖</div>
-                      <strong>AI-Powered Design</strong>
-                      <p class="small text-muted">Chat with AI to design custom trails through natural language</p>
+                      <strong style="color: #ffffff !important;">AI-Powered Design</strong>
+                      <p class="small" style="color: #d0d0d0 !important;">Chat with AI to design custom trails through natural language</p>
                     </div>
                     <div class="col-md-6 mb-3">
                       <div class="feature-icon">🎬</div>
-                      <strong>Trail Generation</strong>
-                      <p class="small text-muted">Generate video trails from your descriptions</p>
+                      <strong style="color: #ffffff !important;">Trail Generation</strong>
+                      <p class="small" style="color: #d0d0d0 !important;">Generate video trails from your descriptions</p>
                     </div>
                     <div class="col-md-6 mb-3">
                       <div class="feature-icon">💳</div>
-                      <strong>Subscription Model</strong>
-                      <p class="small text-muted">Flexible plans with different trail generation limits</p>
+                      <strong style="color: #ffffff !important;">Subscription Model</strong>
+                      <p class="small" style="color: #d0d0d0 !important;">Flexible plans with different trail generation limits</p>
                     </div>
                     <div class="col-md-6 mb-3">
                       <div class="feature-icon">🏃</div>
-                      <strong>Fitness Optimized</strong>
-                      <p class="small text-muted">Optimized for Peloton and other large fitness screens</p>
+                      <strong style="color: #ffffff !important;">Fitness Optimized</strong>
+                      <p class="small" style="color: #d0d0d0 !important;">Optimized for Peloton and other large fitness screens</p>
                     </div>
                   </div>
                 </div>
@@ -155,7 +178,7 @@
                 <div class="bg-dark rounded p-4" style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
                   <div>
                     <div style="font-size: 4rem; margin-bottom: 1rem;">🏃</div>
-                    <p class="text-muted">TrailCrafter</p>
+                    <p style="color: #d0d0d0 !important;">TrailCrafter</p>
                   </div>
                 </div>
               </div>
@@ -167,37 +190,37 @@
       <!-- Other Apps Section -->
       <div class="row">
         <div class="col-12 mb-4">
-          <h3 class="mb-4">More Applications</h3>
+          <h3 class="mb-4" style="color: #ffffff !important;">More Applications</h3>
         </div>
         
         <div class="col-md-6 mb-4">
           <div class="app-card rounded p-4 h-100">
-            <h4>Eligibility Wizard</h4>
-            <p>Streamline eligibility determination with an intelligent, user-friendly wizard interface.</p>
+            <h4 style="color: #ffffff !important;">Eligibility Wizard</h4>
+            <p style="color: #e0e0e0 !important;">Streamline eligibility determination with an intelligent, user-friendly wizard interface.</p>
             <a href="services/eligibility-wizard.html" class="btn btn-sm btn-primary">Learn More</a>
           </div>
         </div>
 
         <div class="col-md-6 mb-4">
           <div class="app-card rounded p-4 h-100">
-            <h4>AI Intake Form</h4>
-            <p>Automated intake processing powered by AI to reduce manual work and improve accuracy.</p>
+            <h4 style="color: #ffffff !important;">AI Intake Form</h4>
+            <p style="color: #e0e0e0 !important;">Automated intake processing powered by AI to reduce manual work and improve accuracy.</p>
             <a href="services/ai-intake-form.html" class="btn btn-sm btn-primary">Learn More</a>
           </div>
         </div>
 
         <div class="col-md-6 mb-4">
           <div class="app-card rounded p-4 h-100">
-            <h4>Fix My App</h4>
-            <p>Diagnostic and repair tool for Power Platform applications.</p>
+            <h4 style="color: #ffffff !important;">Fix My App</h4>
+            <p style="color: #e0e0e0 !important;">Diagnostic and repair tool for Power Platform applications.</p>
             <a href="services/fix-my-app.html" class="btn btn-sm btn-primary">Learn More</a>
           </div>
         </div>
 
         <div class="col-md-6 mb-4">
           <div class="app-card rounded p-4 h-100">
-            <h4>Automation Solutions</h4>
-            <p>Custom automation workflows to streamline your business processes.</p>
+            <h4 style="color: #ffffff !important;">Automation Solutions</h4>
+            <p style="color: #e0e0e0 !important;">Custom automation workflows to streamline your business processes.</p>
             <a href="automation.html" class="btn btn-sm btn-primary">Learn More</a>
           </div>
         </div>
@@ -206,8 +229,8 @@
       <!-- CTA Section -->
       <div class="row mt-5">
         <div class="col-12 text-center">
-          <h3 class="mb-3">Need a Custom Application?</h3>
-          <p class="mb-4">We build custom solutions tailored to your needs. Let's discuss your project.</p>
+          <h3 class="mb-3" style="color: #ffffff !important;">Need a Custom Application?</h3>
+          <p class="mb-4" style="color: #e0e0e0 !important;">We build custom solutions tailored to your needs. Let's discuss your project.</p>
           <a href="contact.html" class="btn btn-success btn-lg">Contact Us</a>
         </div>
       </div>
