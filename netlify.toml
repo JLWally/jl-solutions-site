@@ -3,6 +3,12 @@
   publish = "public"
   command = ""
 
+# Contact form email configuration
+# Configure email notifications in Netlify dashboard:
+# Site settings > Forms > Notifications
+# Add email notification to: info@jlsolutions.io
+# Enable auto-responder for confirmation emails
+
 # Use Edge Function to proxy TrailCrafter (true proxy, not redirect)
 [[edge_functions]]
   function = "trailcrafter-proxy"
