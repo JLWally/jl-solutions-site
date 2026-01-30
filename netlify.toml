@@ -3,7 +3,7 @@
   publish = "public"
   command = ""
 
-# Proxy TrailCrafter app - LIVE DEPLOYMENT
+# Proxy TrailCrafter app - Use proxy pass instead of redirect
 [[redirects]]
   from = "/apps/trailcrafter"
   to = "https://trailcrafter.netlify.app/"
@@ -16,8 +16,9 @@
   status = 200
   force = true
 
-# SPA fallback - must come LAST
+# SPA fallback - must come LAST and exclude /apps/trailcrafter
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  conditions = {Role = ["admin"]}
