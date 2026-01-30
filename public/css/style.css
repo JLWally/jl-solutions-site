@@ -24,11 +24,15 @@ h1, h2, h3, h4, h5, h6, p, small, li, strong {
 }
 
 .text-muted {
-  color: #d0d0d0 !important;
+  color: #e8e8e8 !important;
 }
 
 .lead {
-  color: #e0e0e0 !important;
+  color: #f0f0f0 !important;
+}
+
+.small {
+  color: #e8e8e8 !important;
 }
 
 /* Allow buttons to override text color */
