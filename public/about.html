@@ -11,14 +11,15 @@
 <style>
   body {
     font-family: 'Open Sans', sans-serif;
-    background-color: #f8f9fa;
-    color: #212529;
+    background-color: #121212 !important;
+    color: #f4f4f4 !important;
     margin: 0;
     padding: 0;
   }
 
   section {
     padding: 4rem 1rem;
+    border-bottom: 1px solid #333;
   }
 
   .container {
@@ -28,8 +29,8 @@
   }
 
   .hero {
-    background: linear-gradient(to right, #004d7a, #00bf72);
-    color: white;
+    background: linear-gradient(to right, #0078D4, #00C853) !important;
+    color: white !important;
     padding: 4rem 1rem;
     text-align: center;
   }
@@ -37,12 +38,19 @@
   .hero h1 {
     font-size: 3rem;
     font-weight: 700;
+    color: white !important;
+  }
+
+  .hero .lead {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: white !important;
   }
 
   .lead {
     font-size: 1.25rem;
     font-weight: 400;
-    color: #212529 !important;
+    color: #e0e0e0 !important;
   }
 
   .section-title {
@@ -50,7 +58,7 @@
     font-weight: 600;
     text-align: center;
     margin-bottom: 2rem;
-    color: #212529;
+    color: #f4f4f4 !important;
   }
 
   ul {
@@ -61,10 +69,11 @@
 
   li {
     margin-bottom: 0.5rem;
+    color: #e0e0e0 !important;
   }
 
-  h2, h3, h4, h5, p, li {
-    color: #212529;
+  h2, h3, h4, h5, p {
+    color: #f4f4f4 !important;
   }
 
   .row {
@@ -83,18 +92,22 @@
 
   .card-style {
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-    border: none;
-    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid #333 !important;
+    background-color: #1f1f1f !important;
     padding: 2rem;
     text-align: center;
-    color: #212529 !important;
+    color: #f4f4f4 !important;
+  }
+
+  .card-style h5 {
+    color: #f4f4f4 !important;
   }
 
   .card-style p {
     margin: 0.5rem 0 0;
     font-size: 0.95rem;
-    color: #212529 !important;
+    color: #e0e0e0 !important;
   }
 
   .btn-lg {
@@ -105,18 +118,22 @@
   }
 
   .footer {
-    background: #004d7a;
+    background: #1a1a1a !important;
     padding: 2rem 1rem;
     text-align: center;
   }
 
   .footer * {
-    color: rgb(226, 223, 234) !important;
+    color: #aaaaaa !important;
   }
 
   .footer a:hover {
     color: #ffffff !important;
     text-decoration: underline;
+  }
+
+  .text-muted {
+    color: #aaaaaa !important;
   }
 
   /* Responsive tweaks */
@@ -141,7 +158,24 @@
 
 </head>
 <body>
-  <div id="header"></div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="apps.html">Apps</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
   <!-- HERO -->
 <section class="hero text-center py-5">
