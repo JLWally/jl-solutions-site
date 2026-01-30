@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+// Pre-generated image URLs (update these after running the image generation script)
+const TRAIL_IMAGES: Record<string, string> = {
+  'sample-1': 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1792&h=1024&fit=crop&q=80', // Stadium
+  'sample-2': 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1792&h=1024&fit=crop&q=80', // Fantasy/Cartoon
+  'sample-3': 'https://images.unsplash.com/photo-1522383225653-ed111181a951?w=1792&h=1024&fit=crop&q=80', // Cherry Blossom
+  'sample-4': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1792&h=1024&fit=crop&q=80', // Mountain
+  'sample-5': 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1792&h=1024&fit=crop&q=80', // Urban Night
+  'sample-6': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1792&h=1024&fit=crop&q=80', // Beach
+}
+
 export async function GET(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams
@@ -40,7 +50,7 @@ export async function GET(req: NextRequest) {
       console.log('Database not available, using sample trails')
     }
 
-    // If no trails in database, return sample trails
+    // If no trails in database, return sample trails with images
     if (trails.length === 0) {
       return NextResponse.json({
         trails: [
@@ -48,7 +58,7 @@ export async function GET(req: NextRequest) {
             id: 'sample-1',
             name: 'Eagles Stadium Run',
             description: 'Run around the iconic Lincoln Financial Field with crowd sounds and stadium atmosphere. Experience the energy of game day as you complete your workout.',
-            thumbnailUrl: null,
+            thumbnailUrl: TRAIL_IMAGES['sample-1'],
             duration: 3600,
             distance: 3.5,
             difficulty: 'medium',
@@ -61,7 +71,7 @@ export async function GET(req: NextRequest) {
             id: 'sample-2',
             name: 'Adventure Time - Land of Ooo',
             description: 'Explore the colorful and whimsical world of Adventure Time. Run through the Candy Kingdom, past the Tree Fort, and into the Land of Ooo.',
-            thumbnailUrl: null,
+            thumbnailUrl: TRAIL_IMAGES['sample-2'],
             duration: 2400,
             distance: 2.5,
             difficulty: 'easy',
@@ -74,7 +84,7 @@ export async function GET(req: NextRequest) {
             id: 'sample-3',
             name: 'Japanese Cherry Blossom Forest',
             description: 'A serene run through a beautiful cherry blossom forest in spring. Experience the tranquility of nature with pink petals falling around you.',
-            thumbnailUrl: null,
+            thumbnailUrl: TRAIL_IMAGES['sample-3'],
             duration: 1800,
             distance: 2.0,
             difficulty: 'easy',
@@ -87,7 +97,7 @@ export async function GET(req: NextRequest) {
             id: 'sample-4',
             name: 'Mountain Sunrise Trail',
             description: 'Climb through mountain trails as the sun rises. Experience breathtaking views and challenging terrain perfect for your morning workout.',
-            thumbnailUrl: null,
+            thumbnailUrl: TRAIL_IMAGES['sample-4'],
             duration: 4200,
             distance: 5.0,
             difficulty: 'hard',
@@ -100,7 +110,7 @@ export async function GET(req: NextRequest) {
             id: 'sample-5',
             name: 'Urban Night Run',
             description: 'Run through a vibrant cityscape at night. Neon lights, bustling streets, and the energy of the city keep you motivated through your workout.',
-            thumbnailUrl: null,
+            thumbnailUrl: TRAIL_IMAGES['sample-5'],
             duration: 3000,
             distance: 4.0,
             difficulty: 'medium',
@@ -113,7 +123,7 @@ export async function GET(req: NextRequest) {
             id: 'sample-6',
             name: 'Tropical Beach Paradise',
             description: 'Run along pristine white sand beaches with crystal clear turquoise water. Feel the ocean breeze as you complete your coastal workout.',
-            thumbnailUrl: null,
+            thumbnailUrl: TRAIL_IMAGES['sample-6'],
             duration: 2700,
             distance: 3.0,
             difficulty: 'easy',
@@ -157,7 +167,7 @@ export async function GET(req: NextRequest) {
           id: 'sample-1',
           name: 'Eagles Stadium Run',
           description: 'Run around the iconic Lincoln Financial Field with crowd sounds and stadium atmosphere.',
-          thumbnailUrl: null,
+          thumbnailUrl: TRAIL_IMAGES['sample-1'],
           duration: 3600,
           distance: 3.5,
           difficulty: 'medium',
@@ -170,7 +180,7 @@ export async function GET(req: NextRequest) {
           id: 'sample-2',
           name: 'Adventure Time - Land of Ooo',
           description: 'Explore the colorful and whimsical world of Adventure Time.',
-          thumbnailUrl: null,
+          thumbnailUrl: TRAIL_IMAGES['sample-2'],
           duration: 2400,
           distance: 2.5,
           difficulty: 'easy',
