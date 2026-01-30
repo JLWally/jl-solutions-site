@@ -10,8 +10,8 @@ interface LogoProps {
 }
 
 export default function Logo({ className = '', showText = true, size = 'medium' }: LogoProps) {
-  // Logo image URL - update this after generating the logo
-  const logoUrl = process.env.NEXT_PUBLIC_LOGO_URL || '/logo.svg'
+  // Logo image URL - using the TrailCrafter logo
+  const logoUrl = process.env.NEXT_PUBLIC_LOGO_URL || '/TrailCrafterLogo.jpeg'
   
   const sizeClasses = {
     small: 'w-16 h-16 md:w-20 md:h-20',
@@ -20,8 +20,8 @@ export default function Logo({ className = '', showText = true, size = 'medium' 
   }
 
   return (
-    <Link href="/" className={`flex flex-col items-center gap-2 ${className}`}>
-      <div className={`relative ${sizeClasses[size]}`}>
+    <Link href="/" className={`flex items-center gap-3 ${className}`}>
+      <div className={`relative ${sizeClasses[size]} flex-shrink-0`}>
         <Image
           src={logoUrl}
           alt="TrailCrafter Logo"
