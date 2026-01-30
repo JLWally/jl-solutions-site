@@ -11,7 +11,7 @@ export default function Home() {
         <div className="text-center max-w-4xl mx-auto">
           {/* Logo */}
           <div className="mb-8 flex justify-center">
-            <Logo showText={true} className="text-3xl md:text-4xl" />
+            <Logo showText={true} size="large" />
           </div>
           
           <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full mb-8">

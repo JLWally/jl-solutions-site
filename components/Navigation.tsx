@@ -20,7 +20,13 @@ export default function Navigation() {
       {/* Desktop Navigation */}
       <nav className="hidden md:flex fixed top-0 left-0 right-0 bg-slate-900/90 backdrop-blur-sm border-b border-white/10 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Logo showText={true} />
+          <Logo showText={false} size="small" />
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-bold">
+              <span className="text-gray-300">Trail</span>
+              <span className="text-orange-500">Crafter</span>
+            </span>
+          </div>
           <div className="flex gap-6">
             {navItems.map((item) => {
               const Icon = item.icon
