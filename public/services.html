@@ -102,14 +102,14 @@
     }
     
     .service-card h4 {
-      color: var(--white);
+      color: var(--white) !important;
       font-weight: 600;
       font-size: 1.5rem;
       margin-bottom: 1rem;
     }
     
     .service-card p {
-      color: #aaaaaa;
+      color: #e0e0e0 !important;
       font-size: 1rem;
       line-height: 1.6;
       margin-bottom: 1.5rem;
@@ -132,15 +132,28 @@
     
     /* Section Headings */
     section h2 {
-      color: var(--white);
+      color: var(--white) !important;
       font-weight: 700;
       font-size: 2.5rem;
       margin-bottom: 1rem;
     }
     
     section p.text-muted {
-      color: #aaaaaa;
+      color: #d0d0d0 !important;
       font-size: 1.1rem;
+    }
+    
+    /* Ensure all text is readable */
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--white) !important;
+    }
+    
+    p, .lead {
+      color: #e0e0e0 !important;
+    }
+    
+    .text-muted {
+      color: #d0d0d0 !important;
     }
     
     /* Buttons */
@@ -195,24 +208,24 @@
     }
     
     footer h5 {
-      color: var(--white);
+      color: var(--white) !important;
       font-weight: 600;
       margin-bottom: 1rem;
     }
     
     footer p,
     footer .text-muted {
-      color: #aaaaaa;
+      color: #d0d0d0 !important;
     }
     
     footer a {
-      color: #aaaaaa;
+      color: #d0d0d0 !important;
       text-decoration: none;
       transition: color 0.3s;
     }
     
     footer a:hover {
-      color: var(--white);
+      color: var(--white) !important;
     }
     
     footer hr {
@@ -275,8 +288,8 @@
     <div class="container">
       <div class="text-center mb-5">
         <div class="core-services-badge">CORE SERVICES</div>
-        <h2 class="mt-3 mb-3">Our Primary Services</h2>
-        <p class="text-muted">These are the services we focus on to help you make money and grow your business.</p>
+        <h2 class="mt-3 mb-3" style="color: #ffffff !important;">Our Primary Services</h2>
+        <p style="color: #d0d0d0 !important; font-size: 1.1rem;">These are the services we focus on to help you make money and grow your business.</p>
       </div>
       
       <div class="row g-4">
@@ -284,8 +297,8 @@
         <div class="col-md-6 col-lg-4">
           <div class="service-card">
             <div class="service-icon">🔧</div>
-            <h4 class="mb-3">Fix My App</h4>
-            <p class="text-muted mb-4">Is your app broken, crashing, or not working? We fix apps fast. No judgment, just solutions. Quick fixes, app rescues, and ongoing maintenance.</p>
+            <h4 class="mb-3" style="color: #ffffff !important;">Fix My App</h4>
+            <p class="mb-4" style="color: #e0e0e0 !important;">Is your app broken, crashing, or not working? We fix apps fast. No judgment, just solutions. Quick fixes, app rescues, and ongoing maintenance.</p>
             <a href="services/fix-my-app.html" class="btn-outline-light-custom">Learn More</a>
           </div>
         </div>
@@ -294,8 +307,8 @@
         <div class="col-md-6 col-lg-4">
           <div class="service-card">
             <div class="service-icon">🚀</div>
-            <h4 class="mb-3">Create an App</h4>
-            <p class="text-muted mb-4">Turn your ideas into powerful, production-ready applications. Full-stack web and mobile apps built with modern technologies like Next.js, React, TypeScript, and cloud infrastructure.</p>
+            <h4 class="mb-3" style="color: #ffffff !important;">Create an App</h4>
+            <p class="mb-4" style="color: #e0e0e0 !important;">Turn your ideas into powerful, production-ready applications. Full-stack web and mobile apps built with modern technologies like Next.js, React, TypeScript, and cloud infrastructure.</p>
             <a href="contact.html" class="btn-outline-light-custom">Get Started</a>
           </div>
         </div>
@@ -304,8 +317,8 @@
         <div class="col-md-6 col-lg-4">
           <div class="service-card">
             <div class="service-icon">🤖</div>
-            <h4 class="mb-3">Automation & AI Integration</h4>
-            <p class="text-muted mb-4">Use AI and automation to eliminate manual tasks, speed up decision making, and unlock real-time insight from your data. Transform your workflows with intelligent automation.</p>
+            <h4 class="mb-3" style="color: #ffffff !important;">Automation & AI Integration</h4>
+            <p class="mb-4" style="color: #e0e0e0 !important;">Use AI and automation to eliminate manual tasks, speed up decision making, and unlock real-time insight from your data. Transform your workflows with intelligent automation.</p>
             <a href="services/automation.html" class="btn-outline-light-custom">Learn More</a>
           </div>
         </div>
@@ -316,15 +329,15 @@
   <!-- Additional Services Section -->
   <section class="py-5" style="background-color: var(--gray);">
     <div class="container">
-      <h2 class="text-center mb-5">Additional Services</h2>
+      <h2 class="text-center mb-5" style="color: #ffffff !important;">Additional Services</h2>
       
       <div class="row g-4">
         <!-- Operations Optimization (moved here first) -->
         <div class="col-md-6 col-lg-4">
           <div class="service-card">
             <div class="service-icon">⚡</div>
-            <h4 class="mb-3">Operations Optimization</h4>
-            <p class="text-muted mb-4">Streamline your business operations, reduce costs, and improve efficiency. We analyze your processes and implement solutions that drive real results.</p>
+            <h4 class="mb-3" style="color: #ffffff !important;">Operations Optimization</h4>
+            <p class="mb-4" style="color: #e0e0e0 !important;">Streamline your business operations, reduce costs, and improve efficiency. We analyze your processes and implement solutions that drive real results.</p>
             <a href="services/operations-optimization.html" class="btn-outline-light-custom">Learn More</a>
           </div>
         </div>
@@ -333,8 +346,8 @@
         <div class="col-md-6 col-lg-4">
           <div class="service-card">
             <div class="service-icon">📍</div>
-            <h4 class="mb-3">Power Platform Consulting</h4>
-            <p class="text-muted mb-4">Custom-built apps, workflows, and dashboards using Power Apps, Power Automate, and Power BI - fully accessible and mobile-ready.</p>
+            <h4 class="mb-3" style="color: #ffffff !important;">Power Platform Consulting</h4>
+            <p class="mb-4" style="color: #e0e0e0 !important;">Custom-built apps, workflows, and dashboards using Power Apps, Power Automate, and Power BI - fully accessible and mobile-ready.</p>
             <a href="contact.html" class="btn-outline-light-custom">Contact Us</a>
           </div>
         </div>
@@ -343,8 +356,8 @@
         <div class="col-md-6 col-lg-4">
           <div class="service-card">
             <div class="service-icon">☁️</div>
-            <h4 class="mb-3">Azure + AWS Cloud Migration</h4>
-            <p class="text-muted mb-4">Migrate with confidence. We help teams modernize legacy systems, reduce costs, and leverage cloud-native tools for performance.</p>
+            <h4 class="mb-3" style="color: #ffffff !important;">Azure + AWS Cloud Migration</h4>
+            <p class="mb-4" style="color: #e0e0e0 !important;">Migrate with confidence. We help teams modernize legacy systems, reduce costs, and leverage cloud-native tools for performance.</p>
             <a href="contact.html" class="btn-outline-light-custom">Learn More</a>
           </div>
         </div>
@@ -353,8 +366,8 @@
         <div class="col-md-6 col-lg-4">
           <div class="service-card">
             <div class="service-icon">∞</div>
-            <h4 class="mb-3">Microsoft 365 Integration</h4>
-            <p class="text-muted mb-4">We connect SharePoint, Teams, Outlook, and OneDrive into a seamless system for collaboration and compliance. Training included.</p>
+            <h4 class="mb-3" style="color: #ffffff !important;">Microsoft 365 Integration</h4>
+            <p class="mb-4" style="color: #e0e0e0 !important;">We connect SharePoint, Teams, Outlook, and OneDrive into a seamless system for collaboration and compliance. Training included.</p>
             <a href="contact.html" class="btn-outline-light-custom">Contact Us</a>
           </div>
         </div>
@@ -363,8 +376,8 @@
         <div class="col-md-6 col-lg-4">
           <div class="service-card">
             <div class="service-icon">📄</div>
-            <h4 class="mb-3">Document Intelligence & Extraction</h4>
-            <p class="text-muted mb-4">AI-powered document processing that extracts key information from large volumes of business documents.</p>
+            <h4 class="mb-3" style="color: #ffffff !important;">Document Intelligence & Extraction</h4>
+            <p class="mb-4" style="color: #e0e0e0 !important;">AI-powered document processing that extracts key information from large volumes of business documents.</p>
             <a href="services/document-extraction.html" class="btn-outline-light-custom">Learn More</a>
           </div>
         </div>
@@ -375,8 +388,8 @@
   <!-- CTA Section -->
   <section class="py-5 text-center" style="background-color: var(--black);">
     <div class="container">
-      <h2 class="mb-4">Ready to Get Started?</h2>
-      <p class="mb-4 text-muted">Let's discuss how we can help transform your operations.</p>
+      <h2 class="mb-4" style="color: #ffffff !important;">Ready to Get Started?</h2>
+      <p class="mb-4" style="color: #d0d0d0 !important; font-size: 1.1rem;">Let's discuss how we can help transform your operations.</p>
       <div class="d-flex gap-3 justify-content-center flex-wrap">
         <a href="contact.html" class="btn-orange">Schedule Consultation</a>
         <a href="contact.html" class="btn-outline-light-custom">Contact Us</a>
