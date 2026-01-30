@@ -3,12 +3,15 @@
   publish = "public"
   command = ""
 
-# Proxy TrailCrafter app (only if deployed) - comment out if not ready
+# Proxy TrailCrafter app - Update the URL once TrailCrafter is deployed
+# Option 1: If TrailCrafter is deployed on Netlify, use this:
 # [[redirects]]
-#   from = "/apps/trailcrafter"
-#   to = "https://trailcrafter.vercel.app/"
+#   from = "/apps/trailcrafter/*"
+#   to = "https://trailcrafter.netlify.app/:splat"
 #   status = 200
 #   force = true
+
+# Option 2: If TrailCrafter is deployed on Vercel, use this:
 # [[redirects]]
 #   from = "/apps/trailcrafter/*"
 #   to = "https://trailcrafter.vercel.app/:splat"
