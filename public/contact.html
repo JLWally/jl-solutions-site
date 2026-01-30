@@ -19,10 +19,16 @@
       <p class="text-center lead mb-5">Let’s start something great together.</p>
 
       <!-- Netlify Form START -->
+      <!-- 
+        Note: Email notifications must be configured in Netlify dashboard:
+        1. Go to Site settings > Forms > Notifications
+        2. Add email notification to info@jlsolutions.io
+        3. Enable auto-responder for confirmation emails
+      -->
       <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="mx-auto" style="max-width: 600px;">
         <!-- Honeypot field for bots -->
         <p hidden>
-          <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
+          <label>Don't fill this out if you're human: <input name="bot-field" /></label>
         </p>
 
         <div class="mb-3">
