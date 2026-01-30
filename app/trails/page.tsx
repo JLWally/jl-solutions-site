@@ -12,6 +12,7 @@ interface Trail {
   description: string
   thumbnailUrl?: string
   duration?: number
+  distance?: number
   difficulty?: string
   tags: string[]
   isPublic: boolean
