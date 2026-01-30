@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// Pre-generated image URLs (update these after running the image generation script)
+// Pre-generated image URLs - Update these with DALL-E generated images
+// To generate: POST /api/generate-all-trail-assets or run scripts/generate-specific-images.ts
 const TRAIL_IMAGES: Record<string, string> = {
-  'sample-1': 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1792&h=1024&fit=crop&q=80', // Stadium
-  'sample-2': 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1792&h=1024&fit=crop&q=80', // Fantasy/Cartoon
+  // Eagles Stadium - will be replaced with custom generated image
+  'sample-1': 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1792&h=1024&fit=crop&q=80',
+  // Adventure Time - will be replaced with custom generated image  
+  'sample-2': 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1792&h=1024&fit=crop&q=80',
   'sample-3': 'https://images.unsplash.com/photo-1522383225653-ed111181a951?w=1792&h=1024&fit=crop&q=80', // Cherry Blossom
   'sample-4': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1792&h=1024&fit=crop&q=80', // Mountain
   'sample-5': 'https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1792&h=1024&fit=crop&q=80', // Urban Night

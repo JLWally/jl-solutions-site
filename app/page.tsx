@@ -1,12 +1,19 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Sparkles, Mountain, Zap } from 'lucide-react'
+import Logo from '@/components/Logo'
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 md:pt-24">
         <div className="text-center max-w-4xl mx-auto">
+          {/* Logo */}
+          <div className="mb-8 flex justify-center">
+            <Logo showText={true} className="text-3xl md:text-4xl" />
+          </div>
+          
           <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full mb-8">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-medium">AI-Powered Trail Design</span>
