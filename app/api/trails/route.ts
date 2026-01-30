@@ -133,11 +133,18 @@ export async function GET(req: NextRequest) {
       requiresSubscription: false, // In real app, check subscription requirements
     }))
 
-    const total = await prisma.trail.count({ where })
+    // Only count if we successfully fetched from DB
+    if (total === 0 && trails.length > 0) {
+      try {
+        total = await prisma.trail.count({ where })
+      } catch (e) {
+        total = trails.length
+      }
+    }
 
     return NextResponse.json({
       trails: transformedTrails,
-      total,
+      total: total || transformedTrails.length,
       limit,
       offset,
     })
