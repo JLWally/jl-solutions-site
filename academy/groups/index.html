@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Groups - JL Solutions Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/academy.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --academy-primary: #0078D4;
+      --academy-success: #00C853;
+      --academy-bg: #121212;
+      --academy-card: #1a1a1a;
+      --academy-text: #e0e0e0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--academy-bg);
+      color: var(--academy-text);
+    }
+    
+    .groups-hero {
+      background: linear-gradient(135deg, var(--academy-primary) 0%, #004298 100%);
+      padding: 3rem 0;
+      color: white;
+    }
+    
+    .group-card {
+      background: var(--academy-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .member-count {
+      display: inline-block;
+      background: rgba(0, 200, 83, 0.2);
+      color: var(--academy-success);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/academy/index.html" aria-current="page">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="groups-hero" role="banner">
+    <div class="container">
+      <h1 class="display-4 mb-3">Study Groups</h1>
+      <p class="lead">Join a cohort and learn together with accountability partners</p>
+    </div>
+  </header>
+
+  <main id="main-content" role="main" class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Available Study Groups</h2>
+      <button class="btn" style="background: var(--academy-success); color: white;" onclick="showCreateGroupModal()">
+        + Create Group
+      </button>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="group-card">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <h4>Beginner JavaScript Cohort</h4>
+              <p class="text-muted small mb-2">Meets: Monday & Wednesday 7pm EST</p>
+            </div>
+            <span class="member-count">8 members</span>
+          </div>
+          <p>Perfect for students just starting with JavaScript. Weekly study sessions and group projects.</p>
+          <button class="btn btn-sm" style="background: var(--academy-primary); color: white;" onclick="joinGroup('js-beginner')">Join Group</button>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="group-card">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+              <h4>React Study Group</h4>
+              <p class="text-muted small mb-2">Meets: Tuesday & Thursday 8pm EST</p>
+            </div>
+            <span class="member-count">12 members</span>
+          </div>
+          <p>Intermediate React developers building projects together. Code reviews and collaborative learning.</p>
+          <button class="btn btn-sm" style="background: var(--academy-primary); color: white;" onclick="joinGroup('react-group')">Join Group</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="group-card mt-4">
+      <h4>My Groups</h4>
+      <p class="text-muted">You're not in any groups yet. Join one above or create your own!</p>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3 mt-5" role="contentinfo">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions Academy. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function joinGroup(groupId) {
+      alert('Successfully joined the group! You\'ll receive meeting invitations via email.');
+    }
+    
+    function showCreateGroupModal() {
+      const name = prompt('Group Name:');
+      if (!name) return;
+      alert('Group created! (Full implementation requires backend integration)');
+    }
+  </script>
+</body>
+</html>
+

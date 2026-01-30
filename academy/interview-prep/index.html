@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interview Prep - JL Solutions Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/academy.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --academy-primary: #0078D4;
+      --academy-success: #00C853;
+      --academy-bg: #121212;
+      --academy-card: #1a1a1a;
+      --academy-text: #e0e0e0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--academy-bg);
+      color: var(--academy-text);
+    }
+    
+    .prep-hero {
+      background: linear-gradient(135deg, var(--academy-primary) 0%, #004298 100%);
+      padding: 3rem 0;
+      color: white;
+    }
+    
+    .prep-card {
+      background: var(--academy-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .question-card {
+      background: rgba(0, 120, 212, 0.1);
+      border-left: 4px solid var(--academy-primary);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+    
+    .question-card:hover {
+      background: rgba(0, 120, 212, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/academy/index.html" aria-current="page">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="prep-hero" role="banner">
+    <div class="container">
+      <h1 class="display-4 mb-3">Interview Prep</h1>
+      <p class="lead">Master common interview questions and ace your next tech interview</p>
+    </div>
+  </header>
+
+  <main id="main-content" role="main" class="container my-5">
+    <div class="row">
+      <div class="col-lg-8">
+        <h2 class="mb-4">Common Interview Questions</h2>
+        
+        <div class="prep-card">
+          <h4>Technical Questions</h4>
+          <div class="question-card" onclick="toggleAnswer(this)">
+            <strong>Q: Explain the difference between let, const, and var in JavaScript.</strong>
+            <div class="answer mt-2" style="display: none;">
+              <p><strong>A:</strong> `let` and `const` are block-scoped, while `var` is function-scoped. `const` cannot be reassigned, `let` can be reassigned, and `var` has hoisting behavior that can lead to unexpected results.</p>
+            </div>
+          </div>
+          
+          <div class="question-card" onclick="toggleAnswer(this)">
+            <strong>Q: What is the difference between == and === in JavaScript?</strong>
+            <div class="answer mt-2" style="display: none;">
+              <p><strong>A:</strong> `==` performs type coercion before comparison, while `===` compares both value and type. Always use `===` for more predictable results.</p>
+            </div>
+          </div>
+          
+          <div class="question-card" onclick="toggleAnswer(this)">
+            <strong>Q: Explain closures in JavaScript.</strong>
+            <div class="answer mt-2" style="display: none;">
+              <p><strong>A:</strong> A closure is a function that has access to variables in its outer (enclosing) scope, even after the outer function has returned. This allows for data privacy and function factories.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="prep-card">
+          <h4>Behavioral Questions</h4>
+          <div class="question-card" onclick="toggleAnswer(this)">
+            <strong>Q: Tell me about a challenging project you worked on.</strong>
+            <div class="answer mt-2" style="display: none;">
+              <p><strong>A:</strong> Use the STAR method: Situation, Task, Action, Result. Describe a specific project, the challenge you faced, what actions you took, and the outcome.</p>
+            </div>
+          </div>
+          
+          <div class="question-card" onclick="toggleAnswer(this)">
+            <strong>Q: How do you handle working under pressure?</strong>
+            <div class="answer mt-2" style="display: none;">
+              <p><strong>A:</strong> Discuss your time management strategies, prioritization skills, and how you stay organized. Give a concrete example if possible.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="prep-card">
+          <h4>Practical Challenges</h4>
+          <p>Practice coding challenges on platforms like:</p>
+          <ul>
+            <li>LeetCode</li>
+            <li>HackerRank</li>
+            <li>CodeWars</li>
+            <li>FreeCodeCamp</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="col-lg-4">
+        <div class="prep-card">
+          <h5>Interview Tips</h5>
+          <ul>
+            <li>Practice your answers out loud</li>
+            <li>Research the company beforehand</li>
+            <li>Prepare questions to ask the interviewer</li>
+            <li>Dress appropriately</li>
+            <li>Bring copies of your resume</li>
+          </ul>
+        </div>
+        
+        <div class="prep-card mt-3">
+          <h5>Mock Interview</h5>
+          <p>Practice with a friend or mentor. The more you practice, the more confident you'll be!</p>
+          <a href="/academy/careers/index.html" class="btn btn-sm" style="background: var(--academy-primary); color: white;">View Job Board</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3 mt-5" role="contentinfo">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions Academy. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function toggleAnswer(card) {
+      const answer = card.querySelector('.answer');
+      if (answer.style.display === 'none') {
+        answer.style.display = 'block';
+      } else {
+        answer.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
+

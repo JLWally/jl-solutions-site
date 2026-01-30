@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Board & Careers - JL Solutions Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/academy.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --academy-primary: #0078D4;
+      --academy-success: #00C853;
+      --academy-bg: #121212;
+      --academy-card: #1a1a1a;
+      --academy-text: #e0e0e0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--academy-bg);
+      color: var(--academy-text);
+    }
+    
+    .careers-hero {
+      background: linear-gradient(135deg, var(--academy-primary) 0%, #004298 100%);
+      padding: 3rem 0;
+      color: white;
+    }
+    
+    .job-card {
+      background: var(--academy-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+    }
+    
+    .job-card:hover {
+      border-color: var(--academy-primary);
+      transform: translateY(-2px);
+    }
+    
+    .job-type {
+      display: inline-block;
+      background: rgba(0, 200, 83, 0.2);
+      color: var(--academy-success);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+    }
+    
+    .job-type.remote {
+      background: rgba(0, 120, 212, 0.2);
+      color: var(--academy-primary);
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/academy/index.html" aria-current="page">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="careers-hero" role="banner">
+    <div class="container">
+      <h1 class="display-4 mb-3">Job Board & Career Resources</h1>
+      <p class="lead">Find entry-level opportunities and launch your tech career</p>
+    </div>
+  </header>
+
+  <main id="main-content" role="main" class="container my-5">
+    <div class="row">
+      <div class="col-lg-8">
+        <h2 class="mb-4">Open Positions</h2>
+        <div id="jobListings">
+          <div class="job-card">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <h4>Frontend Developer (Entry Level)</h4>
+                <p class="text-muted mb-2">Tech Startup • Remote</p>
+              </div>
+              <span class="job-type remote">Remote</span>
+            </div>
+            <p>Looking for a motivated entry-level frontend developer to join our growing team. HTML, CSS, JavaScript experience required.</p>
+            <div class="mt-3">
+              <a href="#" class="btn btn-sm" style="background: var(--academy-primary); color: white;">View Details</a>
+              <a href="/academy/careers/resume-builder.html" class="btn btn-sm btn-outline-light ms-2">Build Resume</a>
+            </div>
+          </div>
+          
+          <div class="job-card">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <h4>Junior Web Developer</h4>
+                <p class="text-muted mb-2">Digital Agency • Hybrid</p>
+              </div>
+              <span class="job-type">Hybrid</span>
+            </div>
+            <p>Join our creative team building modern web applications. React experience preferred but not required.</p>
+            <div class="mt-3">
+              <a href="#" class="btn btn-sm" style="background: var(--academy-primary); color: white;">View Details</a>
+              <a href="/academy/careers/resume-builder.html" class="btn btn-sm btn-outline-light ms-2">Build Resume</a>
+            </div>
+          </div>
+          
+          <p class="text-muted">More positions updated weekly. Check back soon!</p>
+        </div>
+      </div>
+      
+      <div class="col-lg-4">
+        <div class="job-card">
+          <h4>Career Resources</h4>
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <a href="/academy/careers/resume-builder.html" style="color: var(--academy-primary);">📝 Resume Builder</a>
+            </li>
+            <li class="mb-2">
+              <a href="/academy/interview-prep/index.html" style="color: var(--academy-primary);">💼 Interview Prep</a>
+            </li>
+            <li class="mb-2">
+              <a href="/academy/portfolio/index.html" style="color: var(--academy-primary);">🎨 Portfolio Builder</a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="job-card mt-3">
+          <h5>Career Tips</h5>
+          <p class="small">Build a strong portfolio, network with industry professionals, and continue learning. Your Academy experience is a great start!</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3 mt-5" role="contentinfo">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions Academy. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

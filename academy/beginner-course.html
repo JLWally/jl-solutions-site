@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Beginner Course - JL Solutions Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/academy.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    .course-hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 0;
+    }
+    .game-container {
+      background: #1f1f1f;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 2px solid #333;
+    }
+    .code-editor {
+      background: #1e1e1e;
+      border-radius: 8px;
+      padding: 1.5rem;
+      font-family: 'Courier New', monospace;
+      color: #d4d4d4;
+      min-height: 200px;
+      border: 2px solid #333;
+    }
+    .run-button {
+      background: linear-gradient(135deg, #00C853, #00a043);
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .run-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+    }
+    .output-box {
+      background: #2a2a2a;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      min-height: 100px;
+      color: #00C853;
+      font-family: 'Courier New', monospace;
+    }
+    .lesson-card {
+      background: #1f1f1f;
+      border: 2px solid #333;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s;
+    }
+    .lesson-card:hover {
+      border-color: #667eea;
+      transform: translateY(-5px);
+    }
+    .lesson-card.completed {
+      border-color: #00C853;
+      background: linear-gradient(135deg, #1f1f1f 0%, #1a2e1f 100%);
+    }
+    .game-score {
+      font-size: 2rem;
+      color: #00C853;
+      font-weight: bold;
+    }
+    .interactive-exercise {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    .hint-box {
+      background: rgba(0, 120, 212, 0.1);
+      border-left: 4px solid #0078D4;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="course-hero text-center">
+    <div class="container">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🎮</div>
+      <h1 class="display-3 mb-3">JavaScript Beginner Course</h1>
+      <p class="lead mb-4">Learn JavaScript from absolute zero through games, projects, and fun!</p>
+      <p class="mb-0">No prior coding experience needed. We'll teach you everything step by step.</p>
+    </div>
+  </header>
+
+  <!-- Course Overview -->
+  <section class="py-5">
+    <div class="container">
+      <div class="welcome-card">
+        <h2 class="mb-4">Welcome to Your Coding Journey! 🚀</h2>
+        <p class="lead">This course is designed for <strong>absolute beginners</strong>. You don't need to know anything about coding, HTML, CSS, or GitHub. We'll teach you everything from scratch!</p>
+        
+        <div class="row g-4 mt-4">
+          <div class="col-md-4">
+            <div class="text-center">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+              <h5>Learn by Doing</h5>
+              <p>Build real projects from day one. No boring theory!</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-center">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">🎮</div>
+              <h5>Gamified Learning</h5>
+              <p>Play games while you learn. Make coding fun!</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-center">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">💼</div>
+              <h5>Job Ready</h5>
+              <p>Skills that employers actually want. Real-world projects.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Course Structure -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center mb-5">Your Learning Path</h2>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="lesson-card">
+            <div class="text-center mb-3">
+              <div style="font-size: 2.5rem;">📚</div>
+              <h5>Week 1-2</h5>
+            </div>
+            <h6>Basics & Setup</h6>
+            <ul class="small">
+              <li>What is coding?</li>
+              <li>Setting up your tools</li>
+              <li>Your first program</li>
+              <li>Variables & data</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="lesson-card">
+            <div class="text-center mb-3">
+              <div style="font-size: 2.5rem;">🎲</div>
+              <h5>Week 3-4</h5>
+            </div>
+            <h6>Logic & Games</h6>
+            <ul class="small">
+              <li>Making decisions</li>
+              <li>Loops & repetition</li>
+              <li>Number Guessing Game</li>
+              <li>Rock Paper Scissors</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="lesson-card">
+            <div class="text-center mb-3">
+              <div style="font-size: 2.5rem;">🎨</div>
+              <h5>Week 5-6</h5>
+            </div>
+            <h6>Functions & Projects</h6>
+            <ul class="small">
+              <li>Reusable code</li>
+              <li>Building functions</li>
+              <li>Calculator Project</li>
+              <li>Todo List App</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="lesson-card">
+            <div class="text-center mb-3">
+              <div style="font-size: 2.5rem;">🌐</div>
+              <h5>Week 7-8</h5>
+            </div>
+            <h6>Web & APIs</h6>
+            <ul class="small">
+              <li>HTML basics</li>
+              <li>Making web pages</li>
+              <li>Working with data</li>
+              <li>Weather App</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lesson 1: Getting Started -->
+  <section class="py-5" id="lesson1">
+    <div class="container">
+      <div class="lesson-card">
+        <h2>Lesson 1: What is Coding? 🤔</h2>
+        
+        <p class="lead">Before we write code, let's understand what coding actually is!</p>
+        
+        <div class="hint-box">
+          <strong>💡 Think of coding like giving instructions:</strong> Just like you'd tell someone how to make a sandwich step-by-step, coding is telling a computer what to do, step-by-step.
+        </div>
+
+        <h4 class="mt-4">Your First Program</h4>
+        <p>Let's write your very first line of code! Type this in the box below and click "Run":</p>
+        
+        <div class="interactive-exercise">
+          <div class="code-editor" contenteditable="true" id="code1" style="white-space: pre-wrap;">console.log("Hello, I'm learning to code!");</div>
+          <button class="run-button" onclick="runCode('code1', 'output1')">▶ Run Code</button>
+          <div class="output-box" id="output1">Output will appear here...</div>
+        </div>
+
+        <div class="hint-box mt-3">
+          <strong>What just happened?</strong> <code>console.log()</code> is like telling the computer "print this message". It's how we see what our code is doing!
+        </div>
+
+        <h4 class="mt-4">Try It Yourself!</h4>
+        <p>Change the message inside the quotes. Try: <code>"I'm going to be a developer!"</code> or <code>"Coding is fun!"</code></p>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson1')">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lesson 2: Variables Game -->
+  <section class="py-5 bg-light" id="lesson2">
+    <div class="container">
+      <div class="lesson-card">
+        <h2>Lesson 2: Variables - The Memory Game 🧠</h2>
+        
+        <p class="lead">Variables are like boxes where we store information. Let's play a game to understand them!</p>
+
+        <div class="game-container">
+          <h3 class="text-center mb-4">🎮 Variable Memory Game</h3>
+          <p class="text-center">In this game, you'll learn how variables work by storing and using information.</p>
+          
+          <div class="interactive-exercise">
+            <h5>Step 1: Create a variable</h5>
+            <p>Type this code to create a variable called <code>playerName</code>:</p>
+            <div class="code-editor" contenteditable="true" id="code2" style="white-space: pre-wrap;">let playerName = "Sierra";
+console.log("Welcome, " + playerName + "!");</div>
+            <button class="run-button" onclick="runCode('code2', 'output2')">▶ Run Code</button>
+            <div class="output-box" id="output2">Output will appear here...</div>
+          </div>
+
+          <div class="hint-box mt-3">
+            <strong>💡 What's happening?</strong><br>
+            • <code>let</code> creates a new variable (a box to store things)<br>
+            • <code>playerName</code> is the name of our variable<br>
+            • <code>= "Sierra"</code> puts the value "Sierra" into the box<br>
+            • We can use the variable later by typing its name!
+          </div>
+
+          <div class="interactive-exercise mt-4">
+            <h5>Step 2: Change your score</h5>
+            <p>Now let's create a score variable and change it:</p>
+            <div class="code-editor" contenteditable="true" id="code3" style="white-space: pre-wrap;">let score = 0;
+console.log("Starting score: " + score);
+
+score = score + 10;
+console.log("After earning points: " + score);
+
+score = score + 5;
+console.log("Final score: " + score);</div>
+            <button class="run-button" onclick="runCode('code3', 'output3')">▶ Run Code</button>
+            <div class="output-box" id="output3">Output will appear here...</div>
+          </div>
+
+          <div class="mt-4">
+            <h5>🎯 Challenge: Create Your Own Variables</h5>
+            <p>Create three variables:</p>
+            <ul>
+              <li><code>favoriteColor</code> - store your favorite color</li>
+              <li><code>age</code> - store your age (as a number, no quotes!)</li>
+              <li><code>isLearning</code> - store <code>true</code> (because you are learning!)</li>
+            </ul>
+            <p>Then print them all out using <code>console.log()</code></p>
+            
+            <div class="code-editor" contenteditable="true" id="code4" style="white-space: pre-wrap;">// Your code here!</div>
+            <button class="run-button" onclick="runCode('code4', 'output4')">▶ Run Code</button>
+            <div class="output-box" id="output4">Output will appear here...</div>
+          </div>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson2')">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lesson 3: Number Guessing Game -->
+  <section class="py-5" id="lesson3">
+    <div class="container">
+      <div class="lesson-card">
+        <h2>Lesson 3: Build Your First Game! 🎲</h2>
+        
+        <p class="lead">Let's build a Number Guessing Game! This will teach you about making decisions in code.</p>
+
+        <div class="game-container">
+          <h3 class="text-center mb-4">🎮 Number Guessing Game</h3>
+          
+          <div class="interactive-exercise">
+            <h5>Step 1: The Game Logic</h5>
+            <p>First, let's understand how the game works. Read through this code:</p>
+            <div class="code-editor" contenteditable="true" id="code5" style="white-space: pre-wrap; background: #1e1e1e; color: #d4d4d4; padding: 1.5rem; border-radius: 8px; font-family: 'Courier New', monospace; border: 2px solid #333;">// The secret number (between 1 and 10)
+let secretNumber = 7;
+
+// The player's guess - Try changing this number!
+let playerGuess = 5;
+
+// Check if the guess is correct
+if (playerGuess === secretNumber) {
+    console.log("🎉 You win! The number was " + secretNumber);
+} else if (playerGuess < secretNumber) {
+    console.log("📈 Too low! Try a higher number.");
+} else {
+    console.log("📉 Too high! Try a lower number.");
+}</div>
+            <button class="run-button" onclick="runCode('code5', 'output5')">▶ Run Code</button>
+            <div class="output-box" id="output5">Output will appear here...</div>
+          </div>
+
+          <div class="hint-box mt-3">
+            <strong>💡 Understanding the Code:</strong><br>
+            • <code>if</code> checks a condition - "Is the guess equal to the secret number?"<br>
+            • <code>===</code> means "is equal to" (three equals signs!)<br>
+            • <code>else if</code> checks another condition if the first one is false<br>
+            • <code>else</code> handles everything else<br>
+            • Try changing <code>playerGuess</code> to different numbers and run it again!
+          </div>
+
+          <div class="interactive-exercise mt-4">
+            <h5>Step 2: Make It Interactive</h5>
+            <p>Now let's make a version you can actually play! Click the button below to start:</p>
+            <button class="run-button" onclick="startGuessingGame()">🎮 Play Number Guessing Game</button>
+            <div class="output-box" id="output6" style="min-height: 200px;">Click the button above to start playing!</div>
+          </div>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson3')">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lesson 4: Rock Paper Scissors -->
+  <section class="py-5 bg-light" id="lesson4">
+    <div class="container">
+      <div class="lesson-card">
+        <h2>Lesson 4: Rock Paper Scissors Game 🪨📄✂️</h2>
+        
+        <p class="lead">Let's build a complete game! This teaches you about arrays, random numbers, and more complex logic.</p>
+
+        <div class="game-container">
+          <h3 class="text-center mb-4">🎮 Rock Paper Scissors</h3>
+          
+          <div class="interactive-exercise">
+            <h5>Step 1: Understanding Arrays</h5>
+            <p>An array is like a list. Let's create one with our game options:</p>
+            <div class="code-editor" contenteditable="true" id="code7" style="white-space: pre-wrap;">let choices = ["rock", "paper", "scissors"];
+
+console.log("Available choices: " + choices);
+console.log("First choice: " + choices[0]);
+console.log("Second choice: " + choices[1]);
+console.log("Third choice: " + choices[2]);</div>
+            <button class="run-button" onclick="runCode('code7', 'output7')">▶ Run Code</button>
+            <div class="output-box" id="output7">Output will appear here...</div>
+          </div>
+
+          <div class="hint-box mt-3">
+            <strong>💡 Arrays Explained:</strong><br>
+            • Arrays store multiple values in a list<br>
+            • Use <code>[ ]</code> to create an array<br>
+            • Access items by their position: <code>choices[0]</code> gets the first item<br>
+            • Arrays start counting at 0, not 1!
+          </div>
+
+          <div class="interactive-exercise mt-4">
+            <h5>Step 2: Play the Game!</h5>
+            <p>Click the buttons below to play Rock Paper Scissors against the computer:</p>
+            <div class="text-center mb-3">
+              <button class="btn btn-lg btn-primary me-2" onclick="playRPS('rock')">🪨 Rock</button>
+              <button class="btn btn-lg btn-primary me-2" onclick="playRPS('paper')">📄 Paper</button>
+              <button class="btn btn-lg btn-primary" onclick="playRPS('scissors')">✂️ Scissors</button>
+            </div>
+            <div class="output-box" id="output8" style="min-height: 150px; text-align: center; padding: 2rem;">
+              <p style="font-size: 1.2rem; margin: 0;">Choose your move above!</p>
+            </div>
+            <div class="text-center mt-3">
+              <p class="game-score mb-0">Score: <span id="rpsScore">0</span> wins</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson4')">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lesson 5: Functions -->
+  <section class="py-5" id="lesson5">
+    <div class="container">
+      <div class="lesson-card">
+        <h2>Lesson 5: Functions - Reusable Code 🛠️</h2>
+        
+        <p class="lead">Functions let you write code once and use it many times. Think of them as recipes!</p>
+
+        <div class="interactive-exercise">
+          <h5>Step 1: Your First Function</h5>
+          <p>Functions are like creating your own command. Let's make one that greets someone:</p>
+          <div class="code-editor" contenteditable="true" id="code9" style="white-space: pre-wrap;">// Create a function called "greet"
+function greet(name) {
+    console.log("Hello, " + name + "! Welcome to coding!");
+}
+
+// Use the function
+greet("Sierra");
+greet("Jess");
+greet("World");</div>
+          <button class="run-button" onclick="runCode('code9', 'output9')">▶ Run Code</button>
+          <div class="output-box" id="output9">Output will appear here...</div>
+        </div>
+
+        <div class="hint-box mt-3">
+          <strong>💡 Function Breakdown:</strong><br>
+          • <code>function</code> - keyword to create a function<br>
+          • <code>greet</code> - the name of our function<br>
+          • <code>(name)</code> - parameter (information the function needs)<br>
+          • <code>{ }</code> - the code inside runs when we call the function<br>
+          • We can call it multiple times with different values!
+        </div>
+
+        <div class="interactive-exercise mt-4">
+          <h5>Step 2: Math Function</h5>
+          <p>Let's create a function that does math:</p>
+          <div class="code-editor" contenteditable="true" id="code10" style="white-space: pre-wrap;">// Function to add two numbers
+function add(a, b) {
+    return a + b;
+}
+
+// Use it
+let result1 = add(5, 3);
+let result2 = add(10, 20);
+
+console.log("5 + 3 = " + result1);
+console.log("10 + 20 = " + result2);</div>
+          <button class="run-button" onclick="runCode('code10', 'output10')">▶ Run Code</button>
+          <div class="output-box" id="output10">Output will appear here...</div>
+        </div>
+
+        <div class="hint-box mt-3">
+          <strong>💡 Return Statement:</strong><br>
+          • <code>return</code> sends a value back from the function<br>
+          • We can store that value in a variable<br>
+          • Functions can take multiple parameters: <code>add(a, b)</code>
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('lesson5')">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project: Calculator -->
+  <section class="py-5 bg-light" id="project1">
+    <div class="container">
+      <div class="lesson-card">
+        <h2>🎯 Project 1: Build a Calculator!</h2>
+        
+        <p class="lead">Now let's build something real! A calculator that can add, subtract, multiply, and divide.</p>
+
+        <div class="interactive-exercise">
+          <h5>Step 1: Create Calculator Functions</h5>
+          <p>Write functions for each operation:</p>
+          <div class="code-editor" contenteditable="true" id="code11" style="white-space: pre-wrap;">// Calculator functions
+function add(a, b) {
+    return a + b;
+}
+
+function subtract(a, b) {
+    return a - b;
+}
+
+function multiply(a, b) {
+    return a * b;
+}
+
+function divide(a, b) {
+    return a / b;
+}
+
+// Test them
+console.log("10 + 5 = " + add(10, 5));
+console.log("10 - 5 = " + subtract(10, 5));
+console.log("10 * 5 = " + multiply(10, 5));
+console.log("10 / 5 = " + divide(10, 5));</div>
+          <button class="run-button" onclick="runCode('code11', 'output11')">▶ Run Code</button>
+          <div class="output-box" id="output11">Output will appear here...</div>
+        </div>
+
+        <div class="interactive-exercise mt-4">
+          <h5>Step 2: Interactive Calculator</h5>
+          <p>Try the calculator below! Enter two numbers and choose an operation:</p>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <input type="number" class="form-control" id="calcNum1" placeholder="First number" value="10">
+            </div>
+            <div class="col-md-4">
+              <select class="form-select" id="calcOp">
+                <option value="add">+ Add</option>
+                <option value="subtract">- Subtract</option>
+                <option value="multiply">× Multiply</option>
+                <option value="divide">÷ Divide</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <input type="number" class="form-control" id="calcNum2" placeholder="Second number" value="5">
+            </div>
+          </div>
+          <button class="run-button" onclick="calculate()">🧮 Calculate</button>
+          <div class="output-box" id="output12" style="text-align: center; font-size: 1.5rem; padding: 2rem;">
+            Result will appear here...
+          </div>
+        </div>
+
+        <div class="hint-box mt-3">
+          <strong>🎉 Congratulations!</strong> You just built a working calculator! This is real code that you could use in a real application.
+        </div>
+        
+        <div class="text-center mt-4">
+          <button class="btn btn-success btn-lg" onclick="markComplete('project1')">✓ Mark Complete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Next Steps -->
+  <section class="py-5">
+    <div class="container">
+      <div class="welcome-card text-center">
+        <h2>🎉 You're Making Progress!</h2>
+        <p class="lead">You've learned the fundamentals of JavaScript! Here's what's next:</p>
+        
+        <div class="row g-4 mt-4">
+          <div class="col-md-4">
+            <h5>📚 Continue Learning</h5>
+            <p>Move on to the full <a href="/academy/modules.html">Training Modules</a> to learn more advanced topics.</p>
+          </div>
+          <div class="col-md-4">
+            <h5>🛠️ Build Projects</h5>
+            <p>Check out the <a href="/academy/projects.html">Projects</a> page for more things to build!</p>
+          </div>
+          <div class="col-md-4">
+            <h5>📊 Track Progress</h5>
+            <p>Mark your progress on the <a href="/academy/progress.html">Progress Tracker</a>!</p>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <h4>What You've Learned So Far:</h4>
+          <div class="row g-3 mt-3">
+            <div class="col-md-6">
+              <ul class="text-start">
+                <li>✅ What coding is and how it works</li>
+                <li>✅ Variables (storing information)</li>
+                <li>✅ Making decisions with if/else</li>
+                <li>✅ Arrays (lists of data)</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul class="text-start">
+                <li>✅ Functions (reusable code)</li>
+                <li>✅ Building interactive games</li>
+                <li>✅ Creating a calculator</li>
+                <li>✅ Running and testing code</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-primary text-white text-center py-5">
+    <div class="container">
+      <h2>Keep Going, Sierra! 🚀</h2>
+      <p class="lead mb-4">You're doing amazing! Every line of code you write makes you a better developer.</p>
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <a href="/academy/modules.html" class="btn btn-light btn-lg">Continue to Full Course</a>
+        <a href="/academy/projects.html" class="btn btn-light btn-lg">View Projects</a>
+        <a href="/academy/progress.html" class="btn btn-light btn-lg">Track Progress</a>
+        <a href="/academy/timer.html" class="btn btn-light btn-lg">⏱️ Study Timer</a>
+        <a href="/academy/index.html" class="btn btn-success btn-lg">Back to Academy</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions Academy. Built with love for Sierra.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.js"></script>
+  <script>
+    // Run code in editor
+    function runCode(editorId, outputId) {
+      const code = document.getElementById(editorId).textContent;
+      const output = document.getElementById(outputId);
+      
+      // Clear previous output
+      output.innerHTML = '';
+      output.style.color = '#00C853';
+      
+      // Capture console.log
+      const logs = [];
+      const originalLog = console.log;
+      console.log = function(...args) {
+        logs.push(args.join(' '));
+        originalLog.apply(console, args);
+      };
+      
+      try {
+        // Execute code
+        eval(code);
+        
+        // Display output
+        if (logs.length > 0) {
+          output.innerHTML = logs.join('<br>');
+        } else {
+          output.innerHTML = 'Code executed successfully! (No output)';
+          output.style.color = '#bbbbbb';
+        }
+      } catch (error) {
+        output.innerHTML = '❌ Error: ' + error.message;
+        output.style.color = '#ff4444';
+      } finally {
+        console.log = originalLog;
+      }
+    }
+
+    // Number Guessing Game
+    let secretNumber = Math.floor(Math.random() * 10) + 1;
+    let attempts = 0;
+
+    function startGuessingGame() {
+      secretNumber = Math.floor(Math.random() * 10) + 1;
+      attempts = 0;
+      const output = document.getElementById('output6');
+      output.innerHTML = `
+        <h4>🎮 Number Guessing Game</h4>
+        <p>I'm thinking of a number between 1 and 10. Can you guess it?</p>
+        <input type="number" id="guessInput" min="1" max="10" class="form-control mb-3" style="max-width: 200px; margin: 0 auto;">
+        <button class="run-button" onclick="checkGuess()">Submit Guess</button>
+        <p id="gameResult" class="mt-3"></p>
+        <p>Attempts: <span id="attemptCount">0</span></p>
+      `;
+    }
+
+    function checkGuess() {
+      const guess = parseInt(document.getElementById('guessInput').value);
+      const result = document.getElementById('gameResult');
+      const attemptsEl = document.getElementById('attemptCount');
+      
+      if (isNaN(guess) || guess < 1 || guess > 10) {
+        result.innerHTML = '❌ Please enter a number between 1 and 10!';
+        result.style.color = '#ff4444';
+        return;
+      }
+      
+      attempts++;
+      attemptsEl.textContent = attempts;
+      
+      if (guess === secretNumber) {
+        result.innerHTML = `🎉 You win! The number was ${secretNumber}! It took you ${attempts} attempt(s).`;
+        result.style.color = '#00C853';
+        setTimeout(() => {
+          if (confirm('Play again?')) {
+            startGuessingGame();
+          }
+        }, 1000);
+      } else if (guess < secretNumber) {
+        result.innerHTML = '📈 Too low! Try a higher number.';
+        result.style.color = '#ffa500';
+      } else {
+        result.innerHTML = '📉 Too high! Try a lower number.';
+        result.style.color = '#ffa500';
+      }
+    }
+
+    // Rock Paper Scissors
+    let rpsScore = 0;
+
+    function playRPS(playerChoice) {
+      const choices = ['rock', 'paper', 'scissors'];
+      const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+      const output = document.getElementById('output8');
+      
+      let result = '';
+      let emoji = '';
+      
+      if (playerChoice === computerChoice) {
+        result = "It's a tie!";
+        emoji = '🤝';
+      } else if (
+        (playerChoice === 'rock' && computerChoice === 'scissors') ||
+        (playerChoice === 'paper' && computerChoice === 'rock') ||
+        (playerChoice === 'scissors' && computerChoice === 'paper')
+      ) {
+        result = 'You win!';
+        emoji = '🎉';
+        rpsScore++;
+        document.getElementById('rpsScore').textContent = rpsScore;
+      } else {
+        result = 'Computer wins!';
+        emoji = '😔';
+      }
+      
+      const choiceEmojis = {
+        rock: '🪨',
+        paper: '📄',
+        scissors: '✂️'
+      };
+      
+      output.innerHTML = `
+        <div style="font-size: 4rem; margin-bottom: 1rem;">
+          ${choiceEmojis[playerChoice]} vs ${choiceEmojis[computerChoice]}
+        </div>
+        <h3>${emoji} ${result}</h3>
+        <p>You chose: ${playerChoice}<br>Computer chose: ${computerChoice}</p>
+      `;
+    }
+
+    // Calculator
+    function calculate() {
+      const num1 = parseFloat(document.getElementById('calcNum1').value);
+      const num2 = parseFloat(document.getElementById('calcNum2').value);
+      const op = document.getElementById('calcOp').value;
+      const output = document.getElementById('output12');
+      
+      if (isNaN(num1) || isNaN(num2)) {
+        output.innerHTML = '❌ Please enter valid numbers!';
+        output.style.color = '#ff4444';
+        return;
+      }
+      
+      let result;
+      switch(op) {
+        case 'add':
+          result = num1 + num2;
+          break;
+        case 'subtract':
+          result = num1 - num2;
+          break;
+        case 'multiply':
+          result = num1 * num2;
+          break;
+        case 'divide':
+          if (num2 === 0) {
+            output.innerHTML = '❌ Cannot divide by zero!';
+            output.style.color = '#ff4444';
+            return;
+          }
+          result = num1 / num2;
+          break;
+      }
+      
+      output.innerHTML = `<strong>${num1} ${op === 'add' ? '+' : op === 'subtract' ? '-' : op === 'multiply' ? '×' : '÷'} ${num2} = ${result}</strong>`;
+      output.style.color = '#00C853';
+    }
+
+    // Mark lesson complete
+    function markComplete(lessonId) {
+      localStorage.setItem(`lesson-${lessonId}`, 'completed');
+      const card = document.getElementById(lessonId).querySelector('.lesson-card');
+      card.classList.add('completed');
+      alert('Lesson marked as complete! 🎉');
+    }
+
+    // Restore completed lessons
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[id^="lesson"], [id^="project"]').forEach(section => {
+        const lessonId = section.id;
+        if (localStorage.getItem(`lesson-${lessonId}`) === 'completed') {
+          section.querySelector('.lesson-card')?.classList.add('completed');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

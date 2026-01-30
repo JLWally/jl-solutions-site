@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Review - JL Solutions Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/academy.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --academy-primary: #0078D4;
+      --academy-success: #00C853;
+      --academy-warning: #FFA500;
+      --academy-bg: #121212;
+      --academy-card: #1a1a1a;
+      --academy-text: #e0e0e0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--academy-bg);
+      color: var(--academy-text);
+    }
+    
+    .code-review-hero {
+      background: linear-gradient(135deg, var(--academy-primary) 0%, #004298 100%);
+      padding: 3rem 0;
+      color: white;
+    }
+    
+    .review-card {
+      background: var(--academy-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .code-editor {
+      background: #1e1e1e;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #d4d4d4;
+      min-height: 200px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    
+    .review-status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    
+    .status-pending {
+      background: rgba(255, 165, 0, 0.2);
+      color: var(--academy-warning);
+    }
+    
+    .status-reviewed {
+      background: rgba(0, 200, 83, 0.2);
+      color: var(--academy-success);
+    }
+    
+    .feedback-item {
+      background: rgba(0, 120, 212, 0.1);
+      border-left: 4px solid var(--academy-primary);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .feedback-item.suggestion {
+      border-left-color: var(--academy-success);
+    }
+    
+    .feedback-item.issue {
+      border-left-color: #ff4444;
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip Navigation Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html" aria-label="JL Solutions Home">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation menu">
+        <span class="navbar-toggler-icon" aria-hidden="true"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/academy/index.html" aria-current="page">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="code-review-hero" role="banner">
+    <div class="container">
+      <h1 class="display-4 mb-3">Code Review</h1>
+      <p class="lead">Get personalized feedback on your projects and improve your coding skills</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" role="main" class="container my-5">
+    <!-- Submit New Review -->
+    <div class="review-card mb-5">
+      <h3 class="mb-4">Submit Code for Review</h3>
+      <form id="codeReviewForm" onsubmit="submitCodeReview(event); return false;">
+        <div class="mb-3">
+          <label for="projectName" class="form-label">Project Name</label>
+          <input type="text" class="form-control" id="projectName" required style="background: var(--academy-card); border: 1px solid rgba(255,255,255,0.1); color: var(--academy-text);">
+        </div>
+        <div class="mb-3">
+          <label for="projectDescription" class="form-label">Project Description</label>
+          <textarea class="form-control" id="projectDescription" rows="3" required style="background: var(--academy-card); border: 1px solid rgba(255,255,255,0.1); color: var(--academy-text);"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="codeSnippet" class="form-label">Code to Review</label>
+          <textarea class="form-control code-editor" id="codeSnippet" rows="15" placeholder="Paste your code here..." required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="githubUrl" class="form-label">GitHub Repository (Optional)</label>
+          <input type="url" class="form-control" id="githubUrl" placeholder="https://github.com/username/project" style="background: var(--academy-card); border: 1px solid rgba(255,255,255,0.1); color: var(--academy-text);">
+        </div>
+        <button type="submit" class="btn" style="background: var(--academy-primary); color: white;">
+          Submit for Review
+        </button>
+      </form>
+    </div>
+
+    <!-- My Submissions -->
+    <div class="review-card">
+      <h3 class="mb-4">My Code Reviews</h3>
+      <div id="myReviews">
+        <p class="text-muted">No submissions yet. Submit your first code review above!</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5" role="contentinfo">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions Academy. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/code-review.js"></script>
+</body>
+</html>
+

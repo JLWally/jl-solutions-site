@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insights & Blog - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --black: #000000;
+      --blue: #0078d4;
+      --white: #ffffff;
+      --dark-blue: #004298;
+      --yellow: #ffbd59;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+    }
+    
+    .insights-hero {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+      padding: 4rem 0;
+      text-align: center;
+      color: white;
+    }
+    
+    .blog-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 0;
+      margin-bottom: 2rem;
+      transition: all 0.3s;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0, 120, 212, 0.2);
+      border-color: var(--blue);
+    }
+    
+    .blog-card-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, var(--blue), var(--dark-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    
+    .blog-card-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .blog-card-meta {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 0.75rem;
+    }
+    
+    .blog-card-title {
+      color: var(--white);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    
+    .blog-card-excerpt {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+    
+    .blog-tag {
+      display: inline-block;
+      background: rgba(0, 120, 212, 0.2);
+      color: var(--blue);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .newsletter-signup {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      margin: 3rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip Navigation Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/insights/index.html" aria-current="page">Insights</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="insights-hero" role="banner">
+    <div class="container">
+      <h1 class="display-4 mb-3">Insights & Resources</h1>
+      <p class="lead">Learn about AI automation, process optimization, and industry best practices</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" role="main" class="container my-5">
+    <!-- Filter Tabs -->
+    <ul class="nav nav-tabs mb-4" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">All Posts</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#automation" type="button" role="tab">Automation</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ai" type="button" role="tab">AI Solutions</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tutorials" type="button" role="tab">Tutorials</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#industry" type="button" role="tab">Industry News</button>
+      </li>
+    </ul>
+
+    <!-- Blog Posts -->
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="all" role="tabpanel">
+        <div class="row" id="blogPosts">
+          <!-- Blog posts will be loaded here -->
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">🤖</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">December 15, 2024 • 5 min read</div>
+                <h3 class="blog-card-title">Getting Started with AI Automation</h3>
+                <p class="blog-card-excerpt">Learn how to identify processes in your organization that are perfect candidates for AI automation...</p>
+                <div>
+                  <span class="blog-tag">Automation</span>
+                  <span class="blog-tag">AI</span>
+                </div>
+                <a href="/insights/post.html?id=getting-started-ai-automation" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
+          
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">📊</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">December 10, 2024 • 7 min read</div>
+                <h3 class="blog-card-title">Measuring ROI of Process Automation</h3>
+                <p class="blog-card-excerpt">Discover the key metrics and methods to calculate the return on investment for your automation projects...</p>
+                <div>
+                  <span class="blog-tag">ROI</span>
+                  <span class="blog-tag">Business</span>
+                </div>
+                <a href="/insights/post.html?id=measuring-roi-automation" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
+          
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">🔒</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">December 5, 2024 • 6 min read</div>
+                <h3 class="blog-card-title">Security Best Practices for AI Integration</h3>
+                <p class="blog-card-excerpt">Essential security considerations when integrating AI solutions into your existing infrastructure...</p>
+                <div>
+                  <span class="blog-tag">Security</span>
+                  <span class="blog-tag">AI</span>
+                </div>
+                <a href="/insights/post.html?id=security-ai-integration" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Category tabs will show filtered posts -->
+      <div class="tab-pane fade" id="automation" role="tabpanel">
+        <div class="row">
+          <p class="text-muted">More automation posts coming soon!</p>
+        </div>
+      </div>
+      
+      <div class="tab-pane fade" id="ai" role="tabpanel">
+        <div class="row">
+          <p class="text-muted">More AI solution posts coming soon!</p>
+        </div>
+      </div>
+      
+      <div class="tab-pane fade" id="tutorials" role="tabpanel">
+        <div class="row">
+          <p class="text-muted">More tutorial posts coming soon!</p>
+        </div>
+      </div>
+      
+      <div class="tab-pane fade" id="industry" role="tabpanel">
+        <div class="row">
+          <p class="text-muted">More industry news posts coming soon!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter Signup -->
+    <section class="newsletter-signup" aria-labelledby="newsletter-heading">
+      <h2 id="newsletter-heading">Stay Updated</h2>
+      <p class="lead mb-4">Subscribe to our newsletter for the latest insights on AI automation and process optimization</p>
+      <form class="d-flex gap-2 justify-content-center flex-wrap" onsubmit="subscribeNewsletter(event); return false;">
+        <input type="email" 
+               class="form-control" 
+               placeholder="Enter your email" 
+               required
+               style="max-width: 300px; background: var(--black); border: 1px solid rgba(255,255,255,0.2); color: var(--white);"
+               aria-label="Email address">
+        <button type="submit" class="btn" style="background: var(--yellow); color: var(--black);">Subscribe</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5" role="contentinfo">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/live-chat.js"></script>
+  <script>
+    function subscribeNewsletter(event) {
+      event.preventDefault();
+      const email = event.target.querySelector('input[type="email"]').value;
+      alert('Thank you for subscribing! You\'ll receive our latest insights via email.');
+      event.target.reset();
+    }
+  </script>
+</body>
+</html>
+

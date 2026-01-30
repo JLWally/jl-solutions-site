@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROI Calculator - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --black: #000000;
+      --blue: #0078d4;
+      --white: #ffffff;
+      --dark-blue: #004298;
+      --yellow: #ffbd59;
+      --success: #00C853;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+    }
+    
+    .calculator-hero {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+      padding: 4rem 0;
+      text-align: center;
+      color: white;
+    }
+    
+    .calculator-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    
+    .calc-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .form-control, .form-select {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.75rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--blue);
+      color: white;
+      box-shadow: 0 0 0 0.2rem rgba(0, 120, 212, 0.25);
+    }
+    
+    .form-label {
+      color: white;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .result-card {
+      background: linear-gradient(135deg, var(--success) 0%, #00a043 100%);
+      border-radius: 16px;
+      padding: 2rem;
+      color: white;
+      text-align: center;
+    }
+    
+    .result-value {
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 1rem 0;
+    }
+    
+    .chart-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .btn-calculate {
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      padding: 1rem 3rem;
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+    
+    .btn-calculate:hover {
+      background: #ffa726;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="calculator-hero">
+    <div class="container">
+      <h1 class="display-4 mb-3">ROI Calculator</h1>
+      <p class="lead">Calculate your potential savings with automation and process optimization</p>
+    </div>
+  </div>
+
+  <div class="calculator-container">
+    <!-- Input Form -->
+    <div class="calc-card">
+      <h2 class="mb-4">Enter Your Information</h2>
+      <form id="roiForm">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="teamSize" class="form-label">Team Size</label>
+            <input type="number" class="form-control" id="teamSize" value="10" min="1" required>
+          </div>
+          <div class="col-md-6">
+            <label for="avgSalary" class="form-label">Average Hourly Rate ($)</label>
+            <input type="number" class="form-control" id="avgSalary" value="30" min="10" step="0.01" required>
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="hoursPerWeek" class="form-label">Hours Spent on Manual Tasks (per week)</label>
+            <input type="number" class="form-control" id="hoursPerWeek" value="20" min="1" required>
+          </div>
+          <div class="col-md-6">
+            <label for="errorRate" class="form-label">Current Error Rate (%)</label>
+            <input type="number" class="form-control" id="errorRate" value="5" min="0" max="100" step="0.1" required>
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="errorCost" class="form-label">Average Cost per Error ($)</label>
+            <input type="number" class="form-control" id="errorCost" value="500" min="0" step="0.01" required>
+          </div>
+          <div class="col-md-6">
+            <label for="errorsPerWeek" class="form-label">Number of Errors per Week</label>
+            <input type="number" class="form-control" id="errorsPerWeek" value="10" min="0" required>
+          </div>
+        </div>
+        
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <label for="automationEfficiency" class="form-label">Expected Time Savings (%)</label>
+            <input type="number" class="form-control" id="automationEfficiency" value="60" min="0" max="100" required>
+            <small class="text-muted">Typical automation saves 50-75% of time</small>
+          </div>
+          <div class="col-md-6">
+            <label for="errorReduction" class="form-label">Expected Error Reduction (%)</label>
+            <input type="number" class="form-control" id="errorReduction" value="80" min="0" max="100" required>
+            <small class="text-muted">Automation typically reduces errors by 70-90%</small>
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <button type="button" class="btn-calculate" onclick="calculateROI()">Calculate ROI</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" style="display: none;">
+      <!-- Annual Savings -->
+      <div class="result-card mb-4">
+        <h3>Annual Savings</h3>
+        <div class="result-value" id="annualSavings">$0</div>
+        <p class="mb-0">Estimated annual cost savings with automation</p>
+      </div>
+
+      <!-- ROI Breakdown -->
+      <div class="calc-card">
+        <h3 class="mb-4">ROI Breakdown</h3>
+        <div class="row">
+          <div class="col-md-4 text-center mb-4">
+            <h4 style="color: var(--yellow);" id="timeSavings">0 hours</h4>
+            <p class="text-muted">Time Saved/Year</p>
+          </div>
+          <div class="col-md-4 text-center mb-4">
+            <h4 style="color: var(--yellow);" id="costSavings">$0</h4>
+            <p class="text-muted">Labor Cost Savings/Year</p>
+          </div>
+          <div class="col-md-4 text-center mb-4">
+            <h4 style="color: var(--yellow);" id="errorSavings">$0</h4>
+            <p class="text-muted">Error Cost Reduction/Year</p>
+          </div>
+        </div>
+        
+        <div class="chart-container">
+          <canvas id="roiChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Comparison -->
+      <div class="calc-card">
+        <h3 class="mb-4">Before vs After</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <h5 class="text-danger">Before Automation</h5>
+            <ul>
+              <li>Hours/week: <span id="beforeHours">0</span></li>
+              <li>Labor cost/week: <span id="beforeLaborCost">$0</span></li>
+              <li>Error cost/week: <span id="beforeErrorCost">$0</span></li>
+              <li>Total cost/week: <span id="beforeTotalCost">$0</span></li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <h5 class="text-success">After Automation</h5>
+            <ul>
+              <li>Hours/week: <span id="afterHours">0</span></li>
+              <li>Labor cost/week: <span id="afterLaborCost">$0</span></li>
+              <li>Error cost/week: <span id="afterErrorCost">$0</span></li>
+              <li>Total cost/week: <span id="afterTotalCost">$0</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="calc-card text-center" style="background: rgba(255, 189, 89, 0.1); border-color: var(--yellow);">
+        <h3 class="mb-3">Ready to Achieve These Savings?</h3>
+        <p class="lead mb-4">Let's discuss how we can help you achieve these results</p>
+        <a href="/book-consultation.html" class="btn-calculate me-3">Schedule Consultation</a>
+        <button class="btn btn-outline-light" onclick="downloadResults()">Download Results</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let roiChart = null;
+
+    function calculateROI() {
+      // Get input values
+      const teamSize = parseFloat(document.getElementById('teamSize').value) || 0;
+      const avgSalary = parseFloat(document.getElementById('avgSalary').value) || 0;
+      const hoursPerWeek = parseFloat(document.getElementById('hoursPerWeek').value) || 0;
+      const errorRate = parseFloat(document.getElementById('errorRate').value) || 0;
+      const errorCost = parseFloat(document.getElementById('errorCost').value) || 0;
+      const errorsPerWeek = parseFloat(document.getElementById('errorsPerWeek').value) || 0;
+      const automationEfficiency = parseFloat(document.getElementById('automationEfficiency').value) || 0;
+      const errorReduction = parseFloat(document.getElementById('errorReduction').value) || 0;
+
+      // Calculate before values
+      const beforeHours = hoursPerWeek * 52;
+      const beforeLaborCost = hoursPerWeek * avgSalary * 52;
+      const beforeErrorCost = errorsPerWeek * errorCost * 52;
+      const beforeTotalCost = beforeLaborCost + beforeErrorCost;
+
+      // Calculate after values
+      const timeSavingsPercent = automationEfficiency / 100;
+      const afterHours = beforeHours * (1 - timeSavingsPercent);
+      const afterLaborCost = beforeLaborCost * (1 - timeSavingsPercent);
+      
+      const errorReductionPercent = errorReduction / 100;
+      const afterErrorsPerWeek = errorsPerWeek * (1 - errorReductionPercent);
+      const afterErrorCost = afterErrorsPerWeek * errorCost * 52;
+      
+      const afterTotalCost = afterLaborCost + afterErrorCost;
+
+      // Calculate savings
+      const timeSavings = beforeHours - afterHours;
+      const laborSavings = beforeLaborCost - afterLaborCost;
+      const errorSavings = beforeErrorCost - afterErrorCost;
+      const totalSavings = laborSavings + errorSavings;
+
+      // Display results
+      document.getElementById('annualSavings').textContent = formatCurrency(totalSavings);
+      document.getElementById('timeSavings').textContent = Math.round(timeSavings) + ' hours';
+      document.getElementById('costSavings').textContent = formatCurrency(laborSavings);
+      document.getElementById('errorSavings').textContent = formatCurrency(errorSavings);
+
+      // Before values
+      document.getElementById('beforeHours').textContent = Math.round(beforeHours);
+      document.getElementById('beforeLaborCost').textContent = formatCurrency(beforeLaborCost / 52);
+      document.getElementById('beforeErrorCost').textContent = formatCurrency(beforeErrorCost / 52);
+      document.getElementById('beforeTotalCost').textContent = formatCurrency(beforeTotalCost / 52);
+
+      // After values
+      document.getElementById('afterHours').textContent = Math.round(afterHours);
+      document.getElementById('afterLaborCost').textContent = formatCurrency(afterLaborCost / 52);
+      document.getElementById('afterErrorCost').textContent = formatCurrency(afterErrorCost / 52);
+      document.getElementById('afterTotalCost').textContent = formatCurrency(afterTotalCost / 52);
+
+      // Show results
+      document.getElementById('resultsSection').style.display = 'block';
+      document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+
+      // Create chart
+      createChart(beforeTotalCost, afterTotalCost, laborSavings, errorSavings);
+    }
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+    }
+
+    function createChart(beforeCost, afterCost, laborSavings, errorSavings) {
+      const ctx = document.getElementById('roiChart').getContext('2d');
+      
+      if (roiChart) {
+        roiChart.destroy();
+      }
+
+      roiChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Before Automation', 'After Automation', 'Time Savings', 'Error Savings'],
+          datasets: [{
+            label: 'Annual Cost ($)',
+            data: [beforeCost, afterCost, laborSavings, errorSavings],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.8)',
+              'rgba(75, 192, 192, 0.8)',
+              'rgba(255, 189, 89, 0.8)',
+              'rgba(255, 189, 89, 0.8)'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return formatCurrency(context.parsed.y);
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return formatCurrency(value);
+                },
+                color: 'white'
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              }
+            },
+            x: {
+              ticks: {
+                color: 'white'
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function downloadResults() {
+      const results = {
+        annualSavings: document.getElementById('annualSavings').textContent,
+        timeSavings: document.getElementById('timeSavings').textContent,
+        costSavings: document.getElementById('costSavings').textContent,
+        errorSavings: document.getElementById('errorSavings').textContent,
+        calculatedAt: new Date().toISOString()
+      };
+
+      const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `roi-calculator-results-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
+

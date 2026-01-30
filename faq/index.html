@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root {
+      --black: #000000;
+      --blue: #0078d4;
+      --white: #ffffff;
+      --dark-blue: #004298;
+      --yellow: #ffbd59;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+    }
+    
+    .faq-hero {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+      padding: 4rem 0;
+      text-align: center;
+      color: white;
+    }
+    
+    .faq-container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    
+    .faq-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    
+    .faq-question {
+      padding: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+    }
+    
+    .faq-question:hover {
+      background: rgba(0, 120, 212, 0.1);
+    }
+    
+    .faq-question h4 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .faq-icon {
+      font-size: 1.5rem;
+      transition: transform 0.3s;
+    }
+    
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 1000px;
+    }
+    
+    .faq-answer-content {
+      padding: 0 1.5rem 1.5rem 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.7;
+    }
+    
+    .search-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      color: white;
+      width: 100%;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 0.2rem rgba(0, 120, 212, 0.25);
+    }
+    
+    .faq-category {
+      margin-bottom: 3rem;
+    }
+    
+    .category-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--yellow);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="faq-hero">
+    <div class="container">
+      <h1 class="display-4 mb-3">Frequently Asked Questions</h1>
+      <p class="lead">Find answers to common questions about our services</p>
+    </div>
+  </div>
+
+  <div class="faq-container">
+    <!-- Search Box -->
+    <input type="text" class="search-box" id="searchBox" placeholder="Search FAQs...">
+    
+    <!-- General Questions -->
+    <div class="faq-category">
+      <h2 class="category-title">General Questions</h2>
+      
+      <div class="faq-item" data-category="general">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What is JL Solutions?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            JL Solutions provides AI-powered operations optimization and automation services. We help organizations transform complex processes into streamlined, efficient systems. Our mission is to bring clarity from complexity through automation, integration, and elevation.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-category="general">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What industries do you serve?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            We serve government agencies, nonprofit organizations, enterprises, and small businesses across various industries. Our solutions are adaptable to any organization looking to optimize operations and automate processes.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-category="general">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>How quickly can you start working on our project?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Typically, we can begin a project within 2-4 weeks after the initial consultation and contract signing. Timeline depends on project complexity and current availability. We'll provide a detailed project timeline during your consultation.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services Questions -->
+    <div class="faq-category">
+      <h2 class="category-title">Services & Solutions</h2>
+      
+      <div class="faq-item" data-category="services">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What types of automation do you provide?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            We provide various automation solutions including workflow automation, document processing, data integration, API development, and AI-powered decision systems. Each solution is customized to your specific needs and existing infrastructure.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-category="services">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>Do you work with existing systems?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Yes! We specialize in integrating with existing systems including Microsoft 365, AWS services, databases, CRMs, and custom applications. We can work with virtually any system through APIs, webhooks, or custom integrations.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-category="services">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What is operations optimization?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Operations optimization involves analyzing your current processes, identifying bottlenecks and inefficiencies, and implementing improvements through automation, better workflows, and system integration. The goal is to reduce manual work, increase accuracy, and improve overall efficiency.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Process Questions -->
+    <div class="faq-category">
+      <h2 class="category-title">Process & Implementation</h2>
+      
+      <div class="faq-item" data-category="process">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What does the implementation process look like?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Our process typically includes: (1) Initial consultation and needs assessment, (2) Detailed proposal and project planning, (3) Development and testing phase, (4) Training and documentation, (5) Launch and support. We'll work closely with your team throughout each phase.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-category="process">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>Will our team need special training?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            We provide comprehensive training as part of every project. Training is tailored to your team's needs and can include documentation, video tutorials, and live training sessions. We ensure your team is comfortable using the new systems before launch.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-category="process">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What kind of support do you provide after implementation?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            We offer ongoing support packages that include monitoring, maintenance, updates, and technical assistance. Support levels can be customized based on your needs, from basic email support to 24/7 monitoring and rapid response times.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing Questions -->
+    <div class="faq-category">
+      <h2 class="category-title">Pricing & ROI</h2>
+      
+      <div class="faq-item" data-category="pricing">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>How much do your services cost?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Pricing varies based on project scope, complexity, and requirements. We provide detailed quotes after understanding your specific needs. Many of our clients see ROI within the first year through time savings and efficiency gains. Contact us for a free consultation and custom quote.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-category="pricing">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>What kind of ROI can we expect?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            ROI varies by project, but our clients typically see 50-75% time savings on automated processes, significant cost reductions, and improved accuracy. During your consultation, we'll analyze your current processes and provide ROI projections specific to your situation.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-category="pricing">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h4>Do you offer payment plans or financing?</h4>
+          <span class="faq-icon">▼</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Yes, we offer flexible payment options including milestone-based payments and monthly payment plans for larger projects. We'll work with you to find a payment structure that fits your budget.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="text-center my-5 py-5">
+      <h2>Still Have Questions?</h2>
+      <p class="lead mb-4">We're here to help! Get in touch with us.</p>
+      <a href="/book-consultation.html" class="btn btn-primary btn-lg me-3" style="background: var(--yellow); color: var(--black); border: none; padding: 1rem 2.5rem; font-weight: 700;">Book Free Consultation</a>
+      <a href="/contact.html" class="btn btn-outline-light btn-lg">Contact Us</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+      <small>&copy; 2025 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function toggleFaq(element) {
+      const faqItem = element.closest('.faq-item');
+      const isActive = faqItem.classList.contains('active');
+      
+      // Close all FAQs
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // Open clicked FAQ if it wasn't active
+      if (!isActive) {
+        faqItem.classList.add('active');
+      }
+    }
+    
+    // Search functionality
+    document.getElementById('searchBox').addEventListener('input', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question h4').textContent.toLowerCase();
+        const answer = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+        
+        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

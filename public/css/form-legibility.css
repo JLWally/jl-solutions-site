@@ -1,0 +1,48 @@
+/* Form Legibility Fixes - Ensure all text is readable */
+
+/* Sign up and Sign in forms - white background, so text must be dark */
+.signup-card .form-check-label,
+.signin-card .form-check-label {
+  color: #1F2A33 !important; /* Deep slate - dark enough for white background */
+  font-weight: 500;
+}
+
+.signup-card .text-muted,
+.signin-card .text-muted {
+  color: #1F2A33 !important; /* Deep slate instead of gray */
+  opacity: 0.8;
+}
+
+/* Ensure all links in forms are visible */
+.signup-card a,
+.signin-card a {
+  color: #1A8CFF !important; /* Electric blue */
+}
+
+.signup-card a:hover,
+.signin-card a:hover {
+  color: #1473CC !important; /* Darker blue on hover */
+}
+
+/* Ensure all text on white background forms is dark */
+.signup-card,
+.signin-card {
+  color: #1F2A33 !important;
+}
+
+.signup-card p,
+.signin-card p,
+.signup-card small,
+.signin-card small,
+.signup-card label:not(.form-check-label),
+.signin-card label:not(.form-check-label) {
+  color: #1F2A33 !important;
+}
+
+/* Override Bootstrap's muted text on forms */
+.signup-card .text-muted,
+.signin-card .text-muted {
+  color: #1F2A33 !important;
+  opacity: 0.8;
+}
+

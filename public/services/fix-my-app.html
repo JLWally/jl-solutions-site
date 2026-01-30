@@ -1,21 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fix My App | JL Solutions</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background-color: #f2f4f6; }
-    .hero { background: #212529; color: white; padding: 5rem 1rem; text-align: center; }
-    .hero h1 { font-size: 3rem; font-weight: 700; }
-    .section-title { margin-top: 4rem; margin-bottom: 2rem; font-weight: 600; text-align: center; }
-    .card-style { border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.05); border: none; }
-    .footer { background: #212529; color: white; padding: 2rem 0; text-align: center; }
-    .pricing-plan h2 { color: #0d6efd; font-weight: 700; }
+    :root {
+      --black: #000000;
+      --blue: #0078d4;
+      --white: #ffffff;
+      --dark-blue: #004298;
+      --yellow: #D4A574;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+      padding: 5rem 0;
+      text-align: center;
+      color: white;
+    }
+    
+    .content-section {
+      padding: 4rem 0;
+    }
+    
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      height: 100%;
+      transition: all 0.3s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--blue);
+      box-shadow: 0 10px 40px rgba(0, 120, 212, 0.2);
+    }
+    
+    .banner-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin: 2rem 0;
+    }
+    
+    .btn-primary-custom {
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      padding: 1rem 2rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-primary-custom:hover {
+      background: #d4952f;
+      transform: translateY(-2px);
+      color: var(--black);
+    }
+    
+    .pricing-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      height: 100%;
+    }
+    
+    .pricing-card h2 {
+      color: var(--blue);
+      font-weight: 700;
+      margin: 1rem 0;
+    }
+    
+    .form-section {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 16px;
+      padding: 3rem;
+      margin: 3rem 0;
+    }
+    
+    .form-control, .form-select {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--white);
+    }
+    
+    .form-control:focus, .form-select:focus {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--blue);
+      color: var(--white);
+    }
+    
+    .form-label {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
+<<<<<<< HEAD:public/services/fix-my-app.html
 
 <!-- Navigation -->
   <header>
@@ -65,209 +167,358 @@
       <div class="card card-style p-4 mb-4">
         <h5>Crash or Freeze</h5>
         <p>When your app stalls out and users bounce, we dive in and diagnose fast.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card card-style p-4 mb-4">
-        <h5>Look Dated or Unusable</h5>
-        <p>We modernize the UI, add accessibility, and make it mobile-friendly.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card card-style p-4 mb-4">
-        <h5>Break When You Need Them Most</h5>
-        <p>Broken forms, failed API calls, or unresponsive dashboards? We’ve got you.</p>
-      </div>
-    </div>
-  </div>
-</section>
+||||||| c237372:services/fix-my-app.html
 
-<!-- HOW IT WORKS -->
-<section class="container">
-  <h2 class="section-title">How It Works</h2>
-  <div class="row text-center">
-    <div class="col-md-3">
-      <div class="card card-style p-3 mb-4">
-        <h6>1. Submit Your Fix</h6>
-        <p>Share your app’s problem areas via our quick form.</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card card-style p-3 mb-4">
-        <h6>2. Get a Fix Plan</h6>
-        <p>We send you a no-fluff breakdown: timeline, cost, and deliverables.</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card card-style p-3 mb-4">
-        <h6>3. Approve + Relax</h6>
-        <p>You greenlight the work. We fix it. You exhale.</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card card-style p-3 mb-4">
-        <h6>4. Walkthrough + Docs</h6>
-        <p>We hand over a clean, working version and full documentation.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="container">
-  <h2 class="section-title">Transparent Pricing</h2>
-  <div class="row text-center">
-    <div class="col-md-4">
-      <div class="card pricing-plan card-style p-4 mb-4">
-        <h4>Quick Fix</h4>
-        <h2>$500</h2>
-        <p>1 issue or small feature. 48–72 hour turnaround.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card pricing-plan card-style p-4 mb-4">
-        <h4>App Rescue</h4>
-        <h2>From $2,500</h2>
-        <p>Audit + Fix multiple issues. Timeline scoped per app.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card pricing-plan card-style p-4 mb-4">
-        <h4>Ongoing TLC</h4>
-        <h2>$1,000/mo</h2>
-        <p>Monthly fixes, updates, and peace of mind.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WHY CHOOSE US -->
-<section class="container">
-  <h2 class="section-title">Why Choose JL Solutions?</h2>
-  <div class="row text-center">
-    <div class="col-md-4">
-      <div class="card card-style p-4 mb-4">
-        <h5>Veteran-Owned</h5>
-        <p>We bring military precision to your app’s rescue mission.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card card-style p-4 mb-4">
-        <h5>Fast Turnarounds</h5>
-        <p>We know time is money. We fix fast without cutting corners.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card card-style p-4 mb-4">
-        <h5>Transparent Pricing</h5>
-        <p>No hidden fees. No surprises. Just clear, upfront costs.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FIX MY APP FORM -->
-<section id="get-started" class="container py-5">
-  <h2 class="text-center mb-4">Let’s Fix That App.</h2>
-  <p class="text-center lead mb-4">We’ll review and respond within 1–2 business days.</p>
-
-  <!-- Netlify Form START -->
-  <form name="fix-my-app" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="mx-auto" style="max-width: 600px;">
-    <p hidden>
-      <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
-    </p>
-
-    <div class="mb-3">
-      <label for="name" class="form-label">Name</label>
-      <input type="text" class="form-control" id="name" name="name" required>
-    </div>
-
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" id="email" name="email" required>
-    </div>
-
-    <div class="mb-3">
-      <label for="company" class="form-label">Company Name</label>
-      <input type="text" class="form-control" id="company" name="company">
-    </div>
-
-    <div class="mb-3">
-      <label for="url" class="form-label">App or Website URL</label>
-      <input type="url" class="form-control" id="url" name="url">
-    </div>
-
-    <div class="mb-3">
-      <label for="issue" class="form-label">What’s broken?</label>
-      <textarea class="form-control" id="issue" name="issue" rows="5" required></textarea>
-    </div>
-
-    <div class="mb-3">
-      <label for="tech" class="form-label">What is this app built with?</label>
-      <select class="form-select" id="tech" name="tech" required>
-        <option value="">Select one...</option>
-        <option>Power Apps</option>
-        <option>Power Pages</option>
-        <option>React / Node</option>
-        <option>.NET / C#</option>
-        <option>WordPress / No-code</option>
-        <option>Not sure</option>
-      </select>
-    </div>
-
-    <div class="mb-3">
-      <label for="access" class="form-label">Can you share access?</label>
-      <select class="form-select" id="access" name="access">
-        <option value="">Select one...</option>
-        <option>Yes, I can invite your team</option>
-        <option>I need help setting that up</option>
-        <option>Not sure yet</option>
-      </select>
-    </div>
-
-    <div class="mb-3">
-      <label for="urgency" class="form-label">How urgent is this?</label>
-      <select class="form-select" id="urgency" name="urgency">
-        <option value="">Select one...</option>
-        <option>Normal (3–7 business days)</option>
-        <option>Rush (ASAP — rush fee applies)</option>
-      </select>
-    </div>
-
-    <div class="form-check mb-4">
-      <input class="form-check-input" type="checkbox" value="yes" id="bundle" name="bundle">
-      <label class="form-check-label" for="bundle">
-        I’m also interested in AzureIntel+ for AI upgrades (10% discount)
-      </label>
-    </div>
-
-    <div class="text-center">
-      <button type="submit" class="btn btn-success btn-lg">Submit Fix Request</button>
-    </div>
-  </form>
-  <!-- Netlify Form END -->
-
-  <div class="text-center mt-5">
-    <p class="text-muted">Need a full rebuild or AI upgrade? Ask about <strong>AzureIntel+</strong>.</p>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="container">
-  <h2 class="section-title">What Our Clients Say</h2>
-  <div class="row text-center">
-    <div class="col-md-4">
-      <div class="card card-style p-4 mb-4">
-        <p class="mb-0">“JL Solutions turned our broken app into a reliable tool we can trust. Their team is responsive, professional, and truly cares about our success.”</p>
-        <p class="text-muted">– Sarah T., Nonprofit Director</p>
-      </div>   
-
-<!-- FOOTER -->
-<footer class="footer">
+<!-- HERO -->
+<section class="hero">
   <div class="container">
-    <p>&copy; 2025 JL Solutions. Fix My App is your no-judgment dev team on demand.</p>
+    <h1>Fix My App</h1>
+    <p class="lead">We don’t judge your code. We just fix it.</p>
+    <a href="#get-started" class="btn btn-light btn-lg mt-3">Submit a Fix Request</a>
   </div>
-</footer>
+</section>
 
+<!-- BANNER IMAGE -->
+<div class="container my-5 text-center">
+  <img src="assets/images/fix_my_app_banner.png" alt="Fix My App Banner" class="img-fluid rounded shadow">
+</div>
+
+
+<!-- WHAT WE FIX -->
+<section class="container">
+  <h2 class="section-title">We Fix Apps That...</h2>
+  <div class="row text-center">
+    <div class="col-md-4">
+      <div class="card card-style p-4 mb-4">
+        <h5>Crash or Freeze</h5>
+        <p>When your app stalls out and users bounce, we dive in and diagnose fast.</p>
+=======
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html" style="display: flex; align-items: center; gap: 0.75rem;">
+        <img src="/assets/images/jlsolutions-logo.png" alt="JL Solutions Logo" style="height: 100px; width: auto;">
+        <span>JL Solutions</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/academy/index.html">Academy</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+>>>>>>> 3db269953f7bf113ee9d4684979eb5186d800fa6:services/fix-my-app.html
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section" role="banner">
+    <div class="container">
+      <h1 class="display-4 mb-3">Fix My App</h1>
+      <p class="lead">We don't judge your code. We just fix it.</p>
+      <a href="#get-started" class="btn-primary-custom mt-3">Submit a Fix Request</a>
+    </div>
+  </header>
+
+  <!-- Banner Image -->
+  <section class="content-section">
+    <div class="container text-center">
+      <img src="/assets/images/fix_my_app_banner.png" alt="Fix My App Banner" class="banner-image">
+    </div>
+  </section>
+
+  <!-- What We Fix -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="text-center mb-5">We Fix Apps That...</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <h4>Crash or Freeze</h4>
+            <p>When your app stalls out and users bounce, we dive in and diagnose fast. We identify the root cause and fix it permanently.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <h4>Look Dated or Unusable</h4>
+            <p>We modernize the UI, add accessibility, and make it mobile-friendly. Your app will look and feel professional.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <h4>Break When You Need Them Most</h4>
+            <p>Broken forms, failed API calls, or unresponsive dashboards? We've got you. We fix critical issues fast.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="content-section" style="background: rgba(255, 255, 255, 0.02);">
+    <div class="container">
+      <h2 class="text-center mb-5">How It Works</h2>
+      <div class="row g-4">
+        <div class="col-md-3">
+          <div class="feature-card text-center">
+            <h3 class="text-primary mb-3">1</h3>
+            <h5>Submit Your Fix</h5>
+            <p>Share your app's problem areas via our quick form. Tell us what's broken.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-card text-center">
+            <h3 class="text-primary mb-3">2</h3>
+            <h5>Get a Fix Plan</h5>
+            <p>We send you a no-fluff breakdown: timeline, cost, and deliverables.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-card text-center">
+            <h3 class="text-primary mb-3">3</h3>
+            <h5>Approve + Relax</h5>
+            <p>You greenlight the work. We fix it. You exhale.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-card text-center">
+            <h3 class="text-primary mb-3">4</h3>
+            <h5>Walkthrough + Docs</h5>
+            <p>We hand over a clean, working version and full documentation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="text-center mb-5">Transparent Pricing</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="pricing-card">
+            <h4>Quick Fix</h4>
+            <h2>$500</h2>
+            <p>1 issue or small feature. 48–72 hour turnaround.</p>
+            <ul class="list-unstyled mt-4">
+              <li>✓ Single bug fix</li>
+              <li>✓ Fast turnaround</li>
+              <li>✓ Documentation included</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-card" style="border-color: var(--blue); border-width: 2px;">
+            <h4>App Rescue</h4>
+            <h2>From $2,500</h2>
+            <p>Audit + Fix multiple issues. Timeline scoped per app.</p>
+            <ul class="list-unstyled mt-4">
+              <li>✓ Full app audit</li>
+              <li>✓ Multiple fixes</li>
+              <li>✓ Performance optimization</li>
+              <li>✓ Complete documentation</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-card">
+            <h4>Ongoing TLC</h4>
+            <h2>$1,000/mo</h2>
+            <p>Monthly fixes, updates, and peace of mind.</p>
+            <ul class="list-unstyled mt-4">
+              <li>✓ Monthly maintenance</li>
+              <li>✓ Priority support</li>
+              <li>✓ Regular updates</li>
+              <li>✓ Proactive monitoring</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section class="content-section" style="background: rgba(255, 255, 255, 0.02);">
+    <div class="container">
+      <h2 class="text-center mb-5">Why Choose JL Solutions?</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card text-center">
+            <h5>Veteran-Owned</h5>
+            <p>We bring military precision to your app's rescue mission. No excuses, just results.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card text-center">
+            <h5>Fast Turnarounds</h5>
+            <p>We know time is money. We fix fast without cutting corners. Quality and speed.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card text-center">
+            <h5>Transparent Pricing</h5>
+            <p>No hidden fees. No surprises. Just clear, upfront costs. You know what you're paying for.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fix My App Form -->
+  <section id="get-started" class="content-section">
+    <div class="container">
+      <div class="form-section">
+        <h2 class="text-center mb-4">Let's Fix That App.</h2>
+        <p class="text-center lead mb-4">We'll review and respond within 1–2 business days.</p>
+
+        <!-- Netlify Form START -->
+        <form name="fix-my-app" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="mx-auto" style="max-width: 600px;">
+          <p hidden>
+            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+          </p>
+
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="company" class="form-label">Company Name</label>
+            <input type="text" class="form-control" id="company" name="company">
+          </div>
+
+          <div class="mb-3">
+            <label for="url" class="form-label">App or Website URL</label>
+            <input type="url" class="form-control" id="url" name="url">
+          </div>
+
+          <div class="mb-3">
+            <label for="issue" class="form-label">What's broken?</label>
+            <textarea class="form-control" id="issue" name="issue" rows="5" required></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="tech" class="form-label">What is this app built with?</label>
+            <select class="form-select" id="tech" name="tech" required>
+              <option value="">Select one...</option>
+              <option>Power Apps</option>
+              <option>Power Pages</option>
+              <option>React / Node</option>
+              <option>.NET / C#</option>
+              <option>WordPress / No-code</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="access" class="form-label">Can you share access?</label>
+            <select class="form-select" id="access" name="access">
+              <option value="">Select one...</option>
+              <option>Yes, I can invite your team</option>
+              <option>I need help setting that up</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="urgency" class="form-label">How urgent is this?</label>
+            <select class="form-select" id="urgency" name="urgency">
+              <option value="">Select one...</option>
+              <option>Normal (3–7 business days)</option>
+              <option>Rush (ASAP — rush fee applies)</option>
+            </select>
+          </div>
+
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" value="yes" id="bundle" name="bundle">
+            <label class="form-check-label" for="bundle">
+              I'm also interested in Automation & AI Integration (10% discount)
+            </label>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn-primary-custom">Submit Fix Request</button>
+          </div>
+        </form>
+        <!-- Netlify Form END -->
+
+        <div class="text-center mt-5">
+          <p style="color: rgba(255, 255, 255, 0.7);">Need a full rebuild or AI upgrade? <a href="/services/automation-ai.html" style="color: var(--blue);">Check out our Automation & AI Integration service</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="content-section" style="background: rgba(255, 255, 255, 0.02);">
+    <div class="container">
+      <h2 class="text-center mb-5">What Our Clients Say</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="feature-card">
+            <p class="mb-3">"JL Solutions turned our broken app into a reliable tool we can trust. Their team is responsive, professional, and truly cares about our success."</p>
+            <p class="text-muted mb-0">– Sarah T., Nonprofit Director</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="feature-card">
+            <p class="mb-3">"We had a critical app failure right before a major deadline. JL Solutions fixed it in 24 hours and saved our project. Incredible service."</p>
+            <p class="text-muted mb-0">– Michael R., Operations Manager</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="content-section">
+    <div class="container text-center">
+      <h2 class="mb-4">Ready to Fix Your App?</h2>
+      <p class="lead mb-4">Let's get your app working perfectly again.</p>
+      <a href="#get-started" class="btn-primary-custom me-3">Submit Fix Request</a>
+      <a href="/contact.html" class="btn btn-outline-light">Contact Us</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-5 mt-5" role="contentinfo">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>JL Solutions</h5>
+          <p>AI Solutions for AI Problems. From complexity to clarity.</p>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="/services/index.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">Services</a></li>
+            <li><a href="/contact.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Connect With Us</h5>
+          <p>Email: <a href="mailto:info@jlsolutions.io" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">info@jlsolutions.io</a></p>
+        </div>
+      </div>
+      <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0;">
+      <div class="text-center">
+        <small>&copy; 2025 JL Solutions. Fix My App is your no-judgment dev team on demand.</small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.js"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>
