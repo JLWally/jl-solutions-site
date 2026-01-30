@@ -3,18 +3,10 @@
   publish = "public"
   command = ""
 
-# Proxy TrailCrafter using rewrites (not redirects)
-[[redirects]]
-  from = "/apps/trailcrafter"
-  to = "https://trailcrafter.netlify.app/"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/apps/trailcrafter/*"
-  to = "https://trailcrafter.netlify.app/:splat"
-  status = 200
-  force = true
+# Use Edge Function to proxy TrailCrafter (true proxy, not redirect)
+[[edge_functions]]
+  function = "trailcrafter-proxy"
+  path = "/apps/trailcrafter/*"
 
 # SPA fallback - must come LAST
 [[redirects]]
