@@ -3,19 +3,18 @@
   publish = "public"
   command = ""
 
-# TrailCrafter proxy - COMMENTED OUT until TrailCrafter is deployed
-# Uncomment and update URL once TrailCrafter is live on Netlify
-# [[redirects]]
-#   from = "/apps/trailcrafter"
-#   to = "https://trailcrafter.netlify.app/"
-#   status = 200
-#   force = true
-# 
-# [[redirects]]
-#   from = "/apps/trailcrafter/*"
-#   to = "https://trailcrafter.netlify.app/:splat"
-#   status = 200
-#   force = true
+# Proxy TrailCrafter app - LIVE DEPLOYMENT
+[[redirects]]
+  from = "/apps/trailcrafter"
+  to = "https://trailcrafter.netlify.app/"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/apps/trailcrafter/*"
+  to = "https://trailcrafter.netlify.app/:splat"
+  status = 200
+  force = true
 
 # SPA fallback - must come LAST
 [[redirects]]
