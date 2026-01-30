@@ -17,95 +17,234 @@
       --orange: #FF6B35;
       --gray: #1a1a1a;
       --light-gray: #2a2a2a;
+      --card-bg: #1a1a1a;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
     
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--black);
       color: var(--white);
+      line-height: 1.6;
     }
     
+    /* Navbar with gradient */
+    .navbar {
+      background: linear-gradient(135deg, var(--dark-blue) 0%, var(--blue) 100%) !important;
+      padding: 1rem 0;
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--white) !important;
+    }
+    
+    .navbar-nav .nav-link {
+      color: var(--white) !important;
+      font-weight: 500;
+      padding: 0.5rem 1rem !important;
+    }
+    
+    .navbar-nav .nav-link.active {
+      font-weight: 600;
+    }
+    
+    .navbar-nav .nav-link:hover {
+      opacity: 0.8;
+    }
+    
+    /* Hero Section */
     .hero-section {
       background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
-      padding: 5rem 0;
+      padding: 6rem 0 5rem;
       text-align: center;
       color: white;
     }
     
+    .hero-section h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .hero-section .lead {
+      font-size: 1.25rem;
+      font-weight: 400;
+      opacity: 0.95;
+    }
+    
+    /* Service Cards */
     .service-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(0, 120, 212, 0.3);
-      border-radius: 16px;
-      padding: 2rem;
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
       height: 100%;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
     }
     
     .service-card:hover {
       transform: translateY(-5px);
-      border-color: var(--blue);
-      box-shadow: 0 10px 30px rgba(0, 120, 212, 0.2);
+      border-color: var(--orange);
+      box-shadow: 0 10px 30px rgba(255, 107, 53, 0.15);
     }
     
     .service-icon {
-      font-size: 3rem;
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+    
+    .service-card h4 {
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1.5rem;
       margin-bottom: 1rem;
     }
     
+    .service-card p {
+      color: #aaaaaa;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Core Services Badge */
     .core-services-badge {
-      background: rgba(0, 120, 212, 0.2);
+      background: rgba(0, 120, 212, 0.25);
       border: 1px solid var(--blue);
-      border-radius: 20px;
+      border-radius: 25px;
       padding: 0.5rem 1.5rem;
       display: inline-block;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 1px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
+      color: var(--white);
     }
     
+    /* Section Headings */
+    section h2 {
+      color: var(--white);
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    section p.text-muted {
+      color: #aaaaaa;
+      font-size: 1.1rem;
+    }
+    
+    /* Buttons */
     .btn-outline-light-custom {
       background: transparent;
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: var(--white);
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
+      padding: 0.75rem 1.75rem;
+      border-radius: 6px;
       text-decoration: none;
       display: inline-block;
-      transition: all 0.3s;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
     }
     
     .btn-outline-light-custom:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--white);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--orange);
       color: var(--white);
+      transform: translateY(-2px);
     }
     
     .btn-orange {
       background: var(--orange);
       border: none;
       color: var(--white);
-      padding: 0.75rem 2rem;
-      border-radius: 8px;
+      padding: 0.875rem 2.25rem;
+      border-radius: 6px;
       text-decoration: none;
       display: inline-block;
       font-weight: 600;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
+      font-size: 1rem;
     }
     
     .btn-orange:hover {
       background: #e55a2b;
       color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    }
+    
+    /* Sections */
+    section {
+      padding: 5rem 0;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--gray) !important;
+    }
+    
+    footer h5 {
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    footer p,
+    footer .text-muted {
+      color: #aaaaaa;
+    }
+    
+    footer a {
+      color: #aaaaaa;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    footer a:hover {
+      color: var(--white);
+    }
+    
+    footer hr {
+      border-color: #333;
+      margin: 2rem 0 1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-section {
+        padding: 4rem 0 3rem;
+      }
+      
+      section {
+        padding: 3rem 0;
+      }
+      
+      .service-card {
+        margin-bottom: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--dark-blue);">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand" href="index.html">
-        <img src="assets/images/jlsolutions-logo.png" alt="JL Solutions" height="30" class="me-2">
         JL Solutions
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -256,10 +395,11 @@
         <div class="col-md-4 mb-4">
           <h5>Quick Links</h5>
           <ul class="list-unstyled">
-            <li><a href="services.html" class="text-muted text-decoration-none">Services</a></li>
-            <li><a href="apps.html" class="text-muted text-decoration-none">Apps</a></li>
-            <li><a href="about.html" class="text-muted text-decoration-none">About</a></li>
-            <li><a href="contact.html" class="text-muted text-decoration-none">Contact</a></li>
+            <li class="mb-2"><a href="index.html">Home</a></li>
+            <li class="mb-2"><a href="about.html">About</a></li>
+            <li class="mb-2"><a href="services.html">Services</a></li>
+            <li class="mb-2"><a href="apps.html">Apps</a></li>
+            <li class="mb-2"><a href="contact.html">Contact</a></li>
           </ul>
         </div>
         <div class="col-md-4 mb-4">
