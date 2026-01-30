@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+// Mark as dynamic to prevent static rendering
+export const dynamic = 'force-dynamic'
+
 // Pre-generated image URLs - Update these with DALL-E generated images
 // To generate: POST /api/generate-all-trail-assets or run scripts/generate-specific-images.ts
 const TRAIL_IMAGES: Record<string, string> = {
