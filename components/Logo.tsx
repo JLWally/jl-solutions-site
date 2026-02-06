@@ -6,12 +6,13 @@ import Link from 'next/link'
 interface LogoProps {
   className?: string
   showText?: boolean
+  showTagline?: boolean
   size?: 'small' | 'medium' | 'large'
 }
 
-export default function Logo({ className = '', showText = true, size = 'medium' }: LogoProps) {
-  // Logo image URL - using the TrailCrafter logo
-  const logoUrl = process.env.NEXT_PUBLIC_LOGO_URL || '/TrailCrafterLogo.jpeg'
+export default function Logo({ className = '', showText = true, showTagline = true, size = 'medium' }: LogoProps) {
+  // Logo image URL - JL Solutions logo
+  const logoUrl = process.env.NEXT_PUBLIC_LOGO_URL || ''
   
   const sizeClasses = {
     small: 'w-16 h-16 md:w-20 md:h-20',
@@ -21,24 +22,27 @@ export default function Logo({ className = '', showText = true, size = 'medium' 
 
   return (
     <Link href="/" className={`flex items-center gap-3 ${className}`}>
-      <div className={`relative ${sizeClasses[size]} flex-shrink-0`}>
-        <Image
-          src={logoUrl}
-          alt="TrailCrafter Logo"
-          fill
-          className="object-contain"
-          priority
-        />
-      </div>
+      {logoUrl && (
+        <div className={`relative ${sizeClasses[size]} flex-shrink-0`}>
+          <Image
+            src={logoUrl}
+            alt="JL Solutions Logo"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
+      )}
       {showText && (
         <div className="text-center">
-          <div className="text-2xl md:text-3xl font-bold">
-            <span className="text-gray-300 drop-shadow-[0_0_2px_rgba(34,197,94,0.8)]">Trail</span>
-            <span className="text-orange-500 drop-shadow-[0_0_2px_rgba(249,115,22,0.8)]">Crafter</span>
+          <div className="text-2xl md:text-3xl font-bold text-white">
+            JL Solutions
           </div>
-          <div className="text-xs md:text-sm text-gray-400 mt-1 font-medium">
-            CREATE YOUR ADVENTURE
-          </div>
+          {showTagline && (
+            <div className="text-xs md:text-sm text-gray-400 mt-1 font-medium">
+              Fix, Build, Manage Apps
+            </div>
+          )}
         </div>
       )}
     </Link>

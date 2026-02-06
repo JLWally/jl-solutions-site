@@ -26,9 +26,15 @@ OPENAI_API_KEY=your_openai_key
 STRIPE_SECRET_KEY=your_stripe_secret
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable
 STRIPE_WEBHOOK_SECRET=your_webhook_secret
+STRIPE_BASIC_PRICE_ID=price_xxxxx
+STRIPE_PRO_PRICE_ID=price_xxxxx
+STRIPE_PREMIUM_PRICE_ID=price_xxxxx
+NEXT_PUBLIC_APP_URL=https://jlsolutions.io/apps/trailcrafter
 JWT_SECRET=random_secret_string
 NODE_ENV=production
 ```
+
+See `PAYMENTS_JLSOLUTIONS_SETUP.md` for full Stripe setup for jlsolutions.io.
 
 ## Step 5: Update Site Name (Optional)
 - Go to **"Site settings"** → **"Change site name"**

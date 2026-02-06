@@ -28,31 +28,74 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session
-        const userId = session.metadata?.userId
         const plan = session.metadata?.plan
+        const service = session.metadata?.service
+        const referralCode = session.metadata?.referralCode as string | undefined
+        const amountTotal = session.amount_total ?? 0 // cents
 
-        if (userId && plan) {
-          // Create or update subscription
-          await prisma.subscription.upsert({
-            where: { userId },
-            create: {
-              userId,
-              stripeId: session.subscription as string,
-              status: 'active',
-              plan,
-              currentPeriodEnd: new Date(
-                Date.now() + 30 * 24 * 60 * 60 * 1000
-              ), // 30 days from now
-            },
-            update: {
-              stripeId: session.subscription as string,
-              status: 'active',
-              plan,
-              currentPeriodEnd: new Date(
-                Date.now() + 30 * 24 * 60 * 60 * 1000
-              ),
-            },
+        // Referral: attribute sale to partner and record commission (45% for first two months)
+        if (referralCode && amountTotal > 0) {
+          const partner = await prisma.partner.findUnique({
+            where: { referralCode: referralCode.toLowerCase() },
           })
+          if (partner) {
+            const commissionCents = Math.floor((amountTotal * partner.commissionPct) / 100)
+            await prisma.referralSale.create({
+              data: {
+                partnerId: partner.id,
+                stripeSessionId: session.id,
+                amountCents: amountTotal,
+                commissionCents: commissionCents,
+                status: 'pending',
+                planOrService: plan ?? service ?? undefined,
+              },
+            })
+          }
+        }
+
+        // Subscription: create/update subscription record
+        if (plan) {
+          let userId = session.metadata?.userId as string | undefined
+          if (!userId) {
+            const email =
+              session.customer_details?.email ??
+              session.customer_email ??
+              null
+            if (email) {
+              let user = await prisma.user.findUnique({ where: { email } })
+              if (!user) {
+                user = await prisma.user.create({
+                  data: {
+                    email,
+                    name: session.customer_details?.name ?? undefined,
+                  },
+                })
+              }
+              userId = user.id
+            }
+          }
+          if (userId) {
+            await prisma.subscription.upsert({
+              where: { userId },
+              create: {
+                userId,
+                stripeId: session.subscription as string,
+                status: 'active',
+                plan,
+                currentPeriodEnd: new Date(
+                  Date.now() + 30 * 24 * 60 * 60 * 1000
+                ),
+              },
+              update: {
+                stripeId: session.subscription as string,
+                status: 'active',
+                plan,
+                currentPeriodEnd: new Date(
+                  Date.now() + 30 * 24 * 60 * 60 * 1000
+                ),
+              },
+            })
+          }
         }
         break
       }

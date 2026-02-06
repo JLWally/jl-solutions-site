@@ -34,6 +34,16 @@
 5. **Open in Browser**
    Navigate to http://localhost:3000
 
+## Calendly (free consultation)
+
+If you already have a Calendly (or other booking) link on your website, add it here so “Book your free call” works in the app:
+
+- **Variable:** `NEXT_PUBLIC_CALENDLY_URL`
+- **Example:** `https://calendly.com/yourname/30min`
+- Add it in your `.env.local` (dev) or in your host’s environment (e.g. Netlify). No other setup needed.
+
+The welcome video on the Onboarding page is **optional**. Add it later when you have a YouTube/Vimeo link; until then the guide and slides are enough.
+
 ## Stripe Setup
 
 1. Create a Stripe account at https://stripe.com

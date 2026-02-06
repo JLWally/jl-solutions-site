@@ -27,6 +27,10 @@ Netlify will auto-detect Next.js and deploy it.
 - `STRIPE_SECRET_KEY` - Stripe secret
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe publishable
 - `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret
+- `STRIPE_BASIC_PRICE_ID` - Stripe price ID for Basic plan
+- `STRIPE_PRO_PRICE_ID` - Stripe price ID for Pro plan
+- `STRIPE_PREMIUM_PRICE_ID` - Stripe price ID for Premium plan
+- `NEXT_PUBLIC_APP_URL` - `https://jlsolutions.io/apps/trailcrafter` (for Stripe redirects)
 - `JWT_SECRET` - Random string
 - `NODE_ENV=production`
 

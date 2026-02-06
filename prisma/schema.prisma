@@ -18,8 +18,6 @@ model User {
   updatedAt     DateTime  @updatedAt
   
   subscription  Subscription?
-  trails        Trail[]
-  conversations Conversation[]
 }
 
 model Subscription {
@@ -34,46 +32,46 @@ model Subscription {
   updatedAt     DateTime @updatedAt
 }
 
-model Trail {
-  id            String   @id @default(cuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name          String
-  description   String?
-  prompt        String   // The original AI prompt used to generate this trail
-  videoUrl      String?  // URL to the generated trail video
-  thumbnailUrl  String?  // Thumbnail image
-  duration      Int?     // Duration in seconds
-  distance      Float?   // Distance in miles/km
-  difficulty    String?  // easy, medium, hard
-  tags          String[] // Array of tags
-  isPublic      Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  @@index([userId])
-  @@index([isPublic])
+// Referral / partner program: partners get a unique link; sales attributed to them earn commission
+model Partner {
+  id             String   @id @default(cuid())
+  referralCode   String   @unique  // e.g. "jane-doe" or short random id
+  name           String
+  email          String
+  commissionPct  Int      @default(45)  // 45% for first two months
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  referralSales  ReferralSale[]
 }
 
-model Conversation {
-  id            String   @id @default(cuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  messages      Message[]
-  trailId       String?  // If this conversation resulted in a trail
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  @@index([userId])
+model ReferralSale {
+  id              String   @id @default(cuid())
+  partnerId       String
+  partner         Partner  @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  stripeSessionId String?  @unique
+  amountCents     Int      // sale amount in cents
+  commissionCents Int      // partner commission in cents
+  status          String   @default("pending")  // pending, paid
+  planOrService   String?  // plan id or service id for reference
+  createdAt       DateTime @default(now())
+  @@index([partnerId])
+  @@index([status])
 }
 
-model Message {
-  id            String   @id @default(cuid())
-  conversationId String
-  conversation  Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role          String   // user or assistant
-  content       String
-  createdAt     DateTime @default(now())
-  
-  @@index([conversationId])
+// Lead generation: free consultation, contact form, etc. AI can summarize/score.
+model Lead {
+  id          String   @id @default(cuid())
+  email       String
+  name        String?
+  source      String   @default("consultation")  // consultation, contact, referral_link
+  referralCode String?  // ref from URL if they came from a partner link
+  message     String?  // optional "what do you need help with?"
+  status      String   @default("new")  // new, contacted, qualified, converted
+  aiSummary   String?  // AI-generated one-line summary and/or score (hot/warm/cold)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([email])
+  @@index([source])
+  @@index([status])
+  @@index([createdAt])
 }
