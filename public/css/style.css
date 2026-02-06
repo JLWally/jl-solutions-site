@@ -89,6 +89,12 @@ section {
   color: white !important;
 }
 
+/* Nav: always black on all pages (no blue) */
+.navbar.navbar-dark.bg-dark,
+nav.navbar.navbar-dark {
+  background-color: #000000 !important;
+}
+
 .navbar-dark .navbar-nav .nav-link {
   color: #f4f4f4;
 }

@@ -14,14 +14,8 @@
   function = "trailcrafter-proxy"
   path = "/apps/trailcrafter/*"
 
-# Explicit routes - handle specific HTML files first
+# Static site: serve real HTML files (no SPA fallback)
 [[redirects]]
   from = "/services"
   to = "/services.html"
   status = 301
-
-# SPA fallback - must come LAST
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
