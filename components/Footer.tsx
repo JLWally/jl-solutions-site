@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { hasAcademy, ACADEMY_URL } from '@/lib/config'
 
 export default function Footer() {
   return (
@@ -11,6 +12,9 @@ export default function Footer() {
             <Link href="/subscribe" className="hover:text-white transition-colors">Services</Link>
             <Link href="/portal" className="hover:text-white transition-colors">Portal</Link>
             <Link href="/subscribe?service=consultation" className="hover:text-white transition-colors">Free consultation</Link>
+            {hasAcademy && (
+              <a href={ACADEMY_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Academy</a>
+            )}
           </div>
         </div>
       </div>
