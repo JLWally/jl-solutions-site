@@ -97,6 +97,27 @@ section {
   color: #bbbbbb;
 }
 
+/* Section directly below nav: blue (consistent across all pages) */
+.hero-section-below-nav,
+.hero-section,
+.hero,
+.app-hero {
+  background: linear-gradient(135deg, #004298 0%, #0078D4 100%) !important;
+  color: #fff !important;
+  padding: 3rem 0;
+}
+
+.hero-section-below-nav h1,
+.hero-section-below-nav .lead,
+.hero-section h1,
+.hero-section .lead,
+.hero h1,
+.hero .lead,
+.app-hero h1,
+.app-hero .lead {
+  color: #fff !important;
+}
+
 footer small {
   color: #aaaaaa;
 }
