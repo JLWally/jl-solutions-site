@@ -3,54 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JL Solutions</title>
+  <title>JL Solutions | Operations optimization. From complexity to clarity.</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="assets/icons/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
   <style>
-    body {
-      font-family: 'Open Sans', sans-serif;
-      background-color: #121212;
-      color: #f4f4f4;
+    body { font-family: 'Inter', -apple-system, sans-serif; }
+    .hero-jl {
+      background: linear-gradient(135deg, #004298 0%, #0078D4 100%);
+      padding: 4rem 0 5rem;
+      color: white;
+      text-align: center;
     }
-    h1, h2, h5, p, a, small {
-      color: #f4f4f4;
-    }
-    section {
-      border-bottom: 1px solid #333;
-    }
-    .bg-primary {
-      background-color: #0078D4 !important;
-    }
-    .bg-dark {
-      background-color: #1a1a1a !important;
-    }
-    .bg-light {
-      background-color: #1f1f1f !important;
-    }
-    .btn-light {
-      background-color: #ffffff;
-      color: #121212;
-    }
-    .btn-light:hover {
-      background-color: #dddddd;
-    }
-    .btn-primary {
-      background-color: #0078D4;
+    .hero-jl .lead { opacity: 0.95; font-size: 1.2rem; }
+    .btn-cta {
+      background: #00C853;
+      color: #000;
+      font-weight: 600;
+      padding: 0.9rem 2rem;
+      border-radius: 8px;
       border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .btn-primary:hover {
-      background-color: #005a9e;
+    .btn-cta:hover {
+      background: #00b14f;
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,200,83,0.3);
     }
-    .btn-success {
-      background-color: #00C853;
-      border: none;
+    .funnel-section { padding: 4rem 0; }
+    .funnel-step {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 2rem;
+      height: 100%;
+      text-align: center;
     }
-    .btn-success:hover {
-      background-color: #00b14f;
+    .funnel-step h3 { color: #fff !important; font-weight: 600; margin-bottom: 0.75rem; }
+    .funnel-step .step-num {
+      display: inline-block;
+      width: 2.5rem;
+      height: 2.5rem;
+      line-height: 2.5rem;
+      background: #0078D4;
+      color: #fff;
+      border-radius: 50%;
+      font-weight: 700;
+      margin-bottom: 1rem;
     }
+    .services-preview { padding: 3rem 0; border-top: 1px solid #333; }
+    .services-preview h2 { color: #f4f4f4 !important; margin-bottom: 2rem; }
+    .services-preview h5 { color: #f4f4f4 !important; }
+    .cta-section {
+      background: linear-gradient(135deg, #004298 0%, #0078D4 100%);
+      padding: 4rem 0;
+      color: white;
+      text-align: center;
+    }
+    .cta-section .btn-cta { background: #fff; color: #0078D4; }
+    .cta-section .btn-cta:hover { background: #f0f0f0; color: #004298; }
   </style>
 </head>
 <body>
@@ -63,72 +77,119 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
-          <li class="nav-item"><a class="nav-link" href="apps.html">Apps</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/apps.html">Apps</a></li>
+          <li class="nav-item"><a class="nav-link" href="/book-consultation.html">Free consultation</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="bg-primary text-white text-center py-5">
+  <!-- Hero -->
+  <header class="hero-jl">
     <div class="container">
-      <h1 class="display-4">Modern Solutions for Modern Problems</h1>
-      <p class="lead">Empowering organizations with Microsoft and AWS technologies</p>
-      <a href="contact.html" class="btn btn-light btn-lg mt-3">Let's Talk</a>
+      <h1 class="display-4 mb-3">Operations optimization.<br>From complexity to clarity.</h1>
+      <p class="lead mb-4">We help teams automate, build, and fix so you can focus on what matters.</p>
+      <a href="/book-consultation.html" class="btn btn-cta btn-lg">Book a free consultation</a>
     </div>
   </header>
 
-  <!-- Services Preview -->
-  <section class="py-5 text-center">
+  <!-- Sales funnel: Discover → Explore → Get started -->
+  <section class="funnel-section" style="background-color: #121212;">
     <div class="container">
-      <h2 class="mb-4">What We Do</h2>
-      <div class="row">
+      <h2 class="text-center mb-5" style="color: #f4f4f4 !important;">How we work with you</h2>
+      <div class="row g-4">
         <div class="col-md-4">
-          <h5>Power Platform Consulting</h5>
-          <p>Build fast, scale smart with Power Apps, Automate, and BI.</p>
+          <div class="funnel-step">
+            <span class="step-num">1</span>
+            <h3>Discover</h3>
+            <p class="mb-4" style="color: #e0e0e0;">Tell us your goals and pain points. We listen and ask the right questions.</p>
+            <a href="/book-consultation.html" class="btn btn-outline-light btn-sm">Book a call</a>
+          </div>
         </div>
         <div class="col-md-4">
-          <h5>Cloud & Automation</h5>
-          <p>Secure migrations, workflow automation, and AI integrations.</p>
+          <div class="funnel-step">
+            <span class="step-num">2</span>
+            <h3>Explore</h3>
+            <p class="mb-4" style="color: #e0e0e0;">We outline options: apps, automation, operations, or document intelligence—and what fits you.</p>
+            <a href="/services.html" class="btn btn-outline-light btn-sm">See services</a>
+          </div>
         </div>
         <div class="col-md-4">
-          <h5>Small Biz Support</h5>
-          <p>Simple, scalable systems for nonprofits and small teams.</p>
+          <div class="funnel-step">
+            <span class="step-num">3</span>
+            <h3>Get started</h3>
+            <p class="mb-4" style="color: #e0e0e0;">Clear scope, timeline, and next steps. No surprises—just progress.</p>
+            <a href="/book-consultation.html" class="btn btn-cta btn-sm">Get started</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- About Summary -->
-  <section class="bg-light py-5">
-    <div class="container text-center">
-      <h2 class="mb-4">About JL Solutions</h2>
-      <p class="mx-auto" style="max-width: 700px;">Founded by a veteran developer with a passion for impact-driven tech, JL Solutions helps government, nonprofit, and enterprise clients harness the cloud, automate processes, and serve their communities better.</p>
-      <a href="about.html" class="btn btn-primary mt-3">Learn More</a>
+  <!-- Services preview -->
+  <section class="services-preview" style="background-color: #1a1a1a;">
+    <div class="container">
+      <h2 class="text-center">What we do</h2>
+      <div class="row text-center">
+        <div class="col-md-4 mb-4">
+          <h5>Fix & build apps</h5>
+          <p style="color: #e0e0e0;">Broken app? We fix it. New idea? We build it—web, mobile, and cloud.</p>
+          <a href="/services.html#fix" class="btn btn-outline-light btn-sm">Learn more</a>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Automation & AI</h5>
+          <p style="color: #e0e0e0;">Workflows, integrations, and document intelligence so you spend less time on repeat work.</p>
+          <a href="/services.html" class="btn btn-outline-light btn-sm">Learn more</a>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Operations & cloud</h5>
+          <p style="color: #e0e0e0;">Power Platform, Azure, AWS—migrations, dashboards, and small-business support.</p>
+          <a href="/services.html" class="btn btn-outline-light btn-sm">Learn more</a>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <a href="/services.html" class="btn btn-primary">View all services</a>
+      </div>
     </div>
   </section>
 
-  <!-- Contact CTA -->
-  <section class="py-5 text-center">
+  <!-- About one-liner -->
+  <section class="py-4" style="background-color: #121212; border-top: 1px solid #333;">
+    <div class="container text-center">
+      <p class="mb-0" style="color: #e0e0e0; max-width: 640px; margin-left: auto; margin-right: auto;">Founded by a veteran developer, JL Solutions helps government, nonprofit, and enterprise clients harness the cloud, automate processes, and serve their communities better.</p>
+      <a href="/about.html" class="btn btn-outline-light btn-sm mt-3">About us</a>
+    </div>
+  </section>
+
+  <!-- Final CTA: Free consultation -->
+  <section class="cta-section">
     <div class="container">
-      <h2>Let’s Build Something Together</h2>
-      <p class="mb-4">Schedule a call and let’s turn your vision into reality.</p>
-      <a href="contact.html" class="btn btn-success">Contact Us</a>
+      <h2 class="mb-3">Ready to simplify?</h2>
+      <p class="lead mb-4">Book a free 30-minute consultation. No pitch, no pressure.</p>
+      <a href="/book-consultation.html" class="btn btn-cta btn-lg me-2">Book free consultation</a>
+      <a href="/contact.html" class="btn btn-outline-light btn-lg">Contact us</a>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="bg-dark text-white text-center py-3">
     <div class="container">
+      <p class="mb-1">
+        <a href="/index.html" class="text-white-50 text-decoration-none me-2">Home</a>
+        <a href="/services.html" class="text-white-50 text-decoration-none me-2">Services</a>
+        <a href="/book-consultation.html" class="text-white-50 text-decoration-none me-2">Free consultation</a>
+        <a href="/contact.html" class="text-white-50 text-decoration-none me-2">Contact</a>
+        <a href="https://discord.gg/Wn9MNEyxSM" target="_blank" rel="noopener noreferrer" class="text-white-50 text-decoration-none">Discord</a>
+      </p>
       <small>&copy; 2026 JL Solutions. Built with purpose.</small>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/main.js"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>

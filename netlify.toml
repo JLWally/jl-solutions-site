@@ -19,3 +19,8 @@
   from = "/services"
   to = "/services.html"
   status = 301
+
+[[redirects]]
+  from = "/free-consultation.html"
+  to = "/book-consultation.html"
+  status = 301
