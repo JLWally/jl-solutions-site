@@ -17,3 +17,10 @@
   to = "/sales.html"
   status = 302
   force = true
+
+# Services: ai-intake-form without .html
+[[redirects]]
+  from = "/services/ai-intake-form"
+  to = "/services/ai-intake-form.html"
+  status = 302
+  force = true

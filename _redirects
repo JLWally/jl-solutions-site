@@ -1,3 +1,6 @@
 # Sales portal: redirect to root file so it always loads
 /sales/    /sales.html   302
 /sales     /sales.html   302
+
+# Services: allow URL without .html
+/services/ai-intake-form    /services/ai-intake-form.html   302

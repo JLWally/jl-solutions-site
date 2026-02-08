@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Intake Form - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <style>
+    :root { --black: #000; --blue: #0078d4; --white: #fff; --dark-blue: #004298; --yellow: #D4A574; }
+    body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); }
+    .service-hero { background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%); padding: 4rem 0; text-align: center; color: white; }
+    .service-container { max-width: 900px; margin: 3rem auto; padding: 0 1rem; }
+    .feature-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+    .slide-deck { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 2rem; min-height: 280px; position: relative; }
+    .slide-deck .slide { display: none; }
+    .slide-deck .slide.active { display: block; }
+    .slide-deck h3 { color: var(--yellow); margin-bottom: 1rem; }
+    .slide-nav { margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .slide-nav button { background: var(--blue); color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; }
+    .slide-nav button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .slide-dots { display: flex; gap: 0.5rem; justify-content: center; }
+    .slide-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; }
+    .slide-dots span.active { background: var(--blue); }
+    .demo-form { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; }
+    .demo-form .form-control { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; }
+    .demo-form .form-control:focus { background: rgba(255,255,255,0.15); border-color: var(--blue); color: white; }
+    .badge-coming { background: rgba(212, 165, 116, 0.2); color: var(--yellow); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/case-studies/index.html">Case Studies</a></li>
+          <li class="nav-item"><a class="nav-link" href="/resources/index.html">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="/book-consultation.html">Book Consultation</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="service-hero">
+    <div class="container">
+      <h1 class="display-4 mb-3">AI-Powered Intake Form</h1>
+      <p class="lead">Smart forms that adapt and streamline client onboarding. Demo preview below.</p>
+      <span class="badge-coming mt-2">Full slide deck &amp; interactive demo coming soon</span>
+    </div>
+  </div>
+
+  <div class="service-container">
+    <div class="feature-card">
+      <h2 class="mb-3">What It Does</h2>
+      <p class="lead">Our AI intake form template helps you collect structured information from clients, reduce manual data entry, and route submissions automatically. Customize it for your workflows or use it as a starting point.</p>
+    </div>
+
+    <!-- Slide-format demo (preview) -->
+    <div class="feature-card">
+      <h2 class="mb-3">Demo in slide format</h2>
+      <p class="text-muted small mb-3">Preview — full deck in progress.</p>
+      <div class="slide-deck">
+        <div class="slide active" data-slide="0">
+          <h3>Slide 1: Welcome</h3>
+          <p>AI-powered intake forms guide users step-by-step, validate inputs in real time, and reduce errors. Perfect for consultations, onboarding, and service requests.</p>
+        </div>
+        <div class="slide" data-slide="1">
+          <h3>Slide 2: How it works</h3>
+          <p>Smart fields adapt to previous answers. Conditional logic shows only relevant questions. Data is structured and ready for your CRM or automation.</p>
+        </div>
+        <div class="slide" data-slide="2">
+          <h3>Slide 3: Next steps</h3>
+          <p>We'll customize the form for your use case, connect it to your tools, and train your team. <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a> to get started.</p>
+        </div>
+        <div class="slide-nav">
+          <button type="button" id="slidePrev" aria-label="Previous slide">← Previous</button>
+          <div class="slide-dots" id="slideDots"></div>
+          <button type="button" id="slideNext" aria-label="Next slide">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive demo (preview) -->
+    <div class="feature-card">
+      <h2 class="mb-3">Interactive demo</h2>
+      <p class="text-muted small mb-3">Try a simplified version — full interactive demo in progress.</p>
+      <div class="demo-form">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" placeholder="Your name" id="demoName">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">What do you need help with?</label>
+          <select class="form-select form-control" id="demoNeed">
+            <option value="">Select...</option>
+            <option value="intake">Client intake / onboarding</option>
+            <option value="consultation">Consultation request</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Brief description</label>
+          <textarea class="form-control" rows="2" placeholder="Tell us a bit more..." id="demoDesc"></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" id="demoSubmit" style="background: var(--blue); border: none;">Submit (preview)</button>
+        <p class="small text-muted mt-2 mb-0">This is a preview. Submissions are not stored. <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a> for a real intake flow.</p>
+      </div>
+    </div>
+
+    <div class="feature-card text-center">
+      <h3 class="mb-3">Want the full template or a custom intake form?</h3>
+      <a href="/book-consultation.html" class="btn btn-lg me-2" style="background: var(--yellow); color: var(--black); border: none; font-weight: 600;">Book Consultation</a>
+      <a href="/services/index.html" class="btn btn-outline-light btn-lg">Back to Services</a>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <small>&copy; 2026 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function() {
+      var slides = document.querySelectorAll('.slide-deck .slide');
+      var prev = document.getElementById('slidePrev');
+      var next = document.getElementById('slideNext');
+      var dots = document.getElementById('slideDots');
+      var idx = 0;
+      function show(i) {
+        idx = Math.max(0, Math.min(i, slides.length - 1));
+        slides.forEach(function(s, k) { s.classList.toggle('active', k === idx); });
+        if (dots) {
+          dots.innerHTML = '';
+          for (var k = 0; k < slides.length; k++) {
+            (function(kk) {
+              var s = document.createElement('span');
+              s.classList.toggle('active', kk === idx);
+              s.setAttribute('aria-label', 'Slide ' + (kk + 1));
+              s.onclick = function() { show(kk); };
+              dots.appendChild(s);
+            })(k);
+          }
+        }
+        if (prev) prev.disabled = idx === 0;
+        if (next) next.disabled = idx === slides.length - 1;
+      }
+      if (prev) prev.addEventListener('click', function() { show(idx - 1); });
+      if (next) next.addEventListener('click', function() { show(idx + 1); });
+      show(0);
+
+      document.getElementById('demoSubmit').addEventListener('click', function() {
+        var n = document.getElementById('demoName').value.trim();
+        var need = document.getElementById('demoNeed').value;
+        if (!n) { alert('Enter your name to try the preview.'); return; }
+        alert('Preview only — nothing is saved. For a real intake, use Book Consultation.');
+      });
+    })();
+  </script>
+</body>
+</html>
