@@ -1,6 +1,6 @@
-# JL Solutions Website - Phase 1: Trainee Guide
+# JL Solutions Website - Academy Project
 
-Welcome to the JL Solutions website repository! This is a real, live website that you'll be working on as you learn to code. This README is specifically for **Phase 1: Trainee (Weeks 1-4)** and will guide you through making your first contributions.
+Welcome to the JL Solutions website repository! This is a real, live website that you'll be working on as you learn to code. This README will guide you through making changes, fixing bugs, and contributing to the project.
 
 ## 🎯 What Is This Project?
 
@@ -11,38 +11,6 @@ This is the official JL Solutions website, which includes:
 
 **Live Site:** https://www.jlsolutions.io
 
-## 🎓 Phase 1: Trainee Overview
-
-**Weeks 1-4 • Foundation Building**
-
-Welcome to the team! As a trainee, you're learning the absolute basics and getting comfortable with code. No pressure — everyone starts here.
-
-### What You're Learning:
-- HTML structure and elements
-- Basic CSS styling
-- How to use VS Code and Chrome DevTools
-- Git basics (clone, commit, push)
-- Reading and understanding existing code
-
-### What You'll Do for JL Solutions:
-- Fix simple typos on website pages
-- Update text content when we ask
-- Make small CSS changes (colors, spacing, fonts)
-- Follow along with small tutorials
-- Ask questions and learn from feedback
-
-### Success Looks Like:
-- ✓ You can create a simple HTML page from scratch
-- ✓ You can style elements with CSS
-- ✓ You understand how to navigate files and folders
-- ✓ You've made your first commit to GitHub
-- ✓ You're comfortable asking for help when stuck
-
-### Projects to Complete:
-- Personal Bio Page
-- Simple Portfolio Homepage
-- Styled Card Layout
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -51,7 +19,7 @@ Before you start, make sure you have:
 - [ ] A GitHub account
 - [ ] Git installed on your computer
 - [ ] A code editor (VS Code recommended)
-- [ ] Chrome browser (for DevTools)
+- [ ] Basic knowledge of HTML, CSS, and JavaScript
 
 ### Step 1: Clone the Repository
 
@@ -115,48 +83,51 @@ jl-solutions-site/
 └── netlify/               # Netlify functions
 ```
 
-## ✏️ Making Changes (Phase 1 Tasks)
+## ✏️ Making Changes
 
-### Task 1: Fix a Typo or Update Text
+### Common Tasks
 
-**This is your most common task as a trainee!**
+#### 1. Fix a Typo or Update Text
 
 1. Find the file you need to edit (e.g., `academy/index.html`)
 2. Open it in VS Code
-3. Find the text you want to change (use Ctrl+F or Cmd+F to search)
+3. Find the text you want to change
 4. Make your edit
 5. Save the file (Ctrl+S or Cmd+S)
 6. Test it locally (refresh your browser)
 7. Commit and push (see "Committing Changes" below)
 
-**Example:** Fix "Welcom" to "Welcome" on the homepage
+#### 2. Add a New Academy Page
 
-### Task 2: Make Small CSS Changes
-
-**Learn to change colors, spacing, and fonts**
-
-1. Open the relevant CSS file (`css/style.css` or `css/academy.css`)
-2. Find the element you want to style (ask us for help finding it!)
-3. Change the color, padding, margin, or font-size
-4. Save and refresh to see changes
-5. Test it looks good
+1. Create a new HTML file in the `academy/` folder
+2. Copy the structure from an existing page (like `academy/index.html`)
+3. Update the content
+4. Add a link to it from the main academy index page
+5. Test it locally
 6. Commit and push
 
-**Example:** Change a button color from blue to green
+#### 3. Fix a Bug
 
-### Task 3: Update Content When Asked
+1. Identify the bug (what's not working?)
+2. Find the relevant file (HTML, CSS, or JavaScript)
+3. Debug:
+   - Open browser DevTools (F12)
+   - Check the Console for errors
+   - Use `console.log()` to debug JavaScript
+4. Fix the issue
+5. Test thoroughly
+6. Commit and push
 
-**We'll give you specific instructions**
+#### 4. Update Styling
 
-1. We'll tell you which file to edit
-2. We'll tell you what text to change
-3. You make the change
-4. Test it locally
-5. Commit and push
+1. Open the relevant CSS file (`css/style.css` or `css/academy.css`)
+2. Find the element you want to style (use browser DevTools to inspect)
+3. Add or modify CSS rules
+4. Save and refresh to see changes
+5. Test on different screen sizes
+6. Commit and push
 
-**Example:** Update the contact email address
-
-## 🔄 Git Workflow (Phase 1 Basics)
+## 🔄 Git Workflow
 
 ### Before Making Changes
 
@@ -165,7 +136,7 @@ Always pull the latest changes first:
 git pull origin main
 ```
 
-### Making Your First Commit
+### Making a Commit
 
 1. **Check what you've changed:**
    ```bash
@@ -186,10 +157,10 @@ git pull origin main
    git commit -m "Fix typo in academy welcome letter"
    ```
    
-   Good commit messages for Phase 1:
+   Good commit messages:
    - ✅ "Fix typo in academy welcome letter"
-   - ✅ "Update contact email address"
-   - ✅ "Change button color to green"
+   - ✅ "Add new FAQ section to academy"
+   - ✅ "Update calculator project tutorial"
    - ❌ "changes"
    - ❌ "fix stuff"
 
@@ -198,7 +169,25 @@ git pull origin main
    git push origin main
    ```
 
-**Congratulations!** You just made your first contribution to a live website! 🎉
+### Creating a Branch (For Bigger Changes)
+
+For larger features or experiments, create a branch:
+
+1. **Create and switch to a new branch:**
+   ```bash
+   git checkout -b feature/new-page
+   ```
+
+2. **Make your changes**
+
+3. **Commit as usual:**
+   ```bash
+   git add .
+   git commit -m "Add new feature"
+   git push origin feature/new-page
+   ```
+
+4. **Create a Pull Request on GitHub** (ask Titi for help with this!)
 
 ## 🧪 Testing Your Changes
 
@@ -206,22 +195,23 @@ git pull origin main
 
 1. **Test locally:**
    - Open the page in your browser
-   - Check the change looks correct
-   - Make sure nothing broke
-   - Check for typos
+   - Check all links work
+   - Test on mobile (resize browser window)
+   - Check for console errors (F12 → Console)
 
 2. **Check for common issues:**
-   - ✅ Text is correct
-   - ✅ Colors look good
-   - ✅ Page still loads
-   - ✅ No obvious errors
+   - ✅ All images load
+   - ✅ Links work correctly
+   - ✅ No JavaScript errors
+   - ✅ Page looks good on mobile
+   - ✅ Text is readable
 
 ### After Pushing
 
 1. Wait 1-2 minutes for Netlify to deploy
 2. Visit https://www.jlsolutions.io
 3. Check your changes are live
-4. Celebrate! 🎉
+4. Test on the live site
 
 ## 🚀 Deployment
 
@@ -234,60 +224,69 @@ This site is automatically deployed via **Netlify**. When you push to the `main`
 
 **No manual deployment needed!** Just push to GitHub and it goes live automatically.
 
-## 📝 Phase 1 Common Tasks
+## 📝 Common Tasks Guide
 
-### Fixing a Typo
+### Adding a New Project Tutorial
 
-1. Find the file with the typo
-2. Use VS Code's search (Ctrl+F or Cmd+F) to find it
-3. Fix the typo
-4. Save and test
-5. Commit: `git commit -m "Fix typo: [what you fixed]"`
+1. Open `academy/projects.html`
+2. Find the appropriate section (Beginner/Intermediate/Advanced)
+3. Add a new project card following the existing pattern
+4. Add the tutorial content in the expandable section
+5. Test it works
+6. Commit: `git commit -m "Add new project tutorial: [Project Name]"`
 
-### Updating Text Content
+### Updating Progress Tracker
 
-1. We'll tell you which file and what to change
-2. Make the change
-3. Save and test
-4. Commit: `git commit -m "Update [page name] content"`
+1. Open `academy/progress.html`
+2. Find the checklist item you want to update
+3. Modify the HTML structure if needed
+4. Update `js/academy-progress.js` if adding new functionality
+5. Test the checkboxes work
+6. Commit: `git commit -m "Update progress tracker with new skills"`
 
-### Changing Colors
+### Fixing a Broken Link
 
-1. Open the CSS file
-2. Find the color you want to change (ask us for help!)
-3. Change the color value
-4. Save and refresh
-5. Commit: `git commit -m "Change [element] color to [color]"`
+1. Find the file with the broken link
+2. Use VS Code's search (Ctrl+F or Cmd+F) to find the link
+3. Fix the path (make sure it starts with `/` for absolute paths)
+4. Test the link works
+5. Commit: `git commit -m "Fix broken link to [page name]"`
 
-## 🐛 Debugging Tips (Phase 1)
+## 🐛 Debugging Tips
+
+### JavaScript Not Working?
+
+1. Open browser DevTools (F12)
+2. Go to the Console tab
+3. Look for red error messages
+4. Check the line number mentioned
+5. Common issues:
+   - Missing closing bracket `}`
+   - Typo in function name
+   - Variable not defined
+
+### CSS Not Applying?
+
+1. Right-click the element → Inspect
+2. Check if your CSS rule is there
+3. Check if it's being overridden (crossed out)
+4. Make sure your selector is correct
+5. Check for typos in class/ID names
 
 ### Page Not Loading?
 
 1. Check the file path is correct
 2. Make sure the file is saved
-3. Try refreshing the browser
-4. Ask us for help!
+3. Check browser console for 404 errors
+4. Verify the HTML structure is valid
 
-### Change Not Showing?
+## 📚 Resources
 
-1. Make sure you saved the file
-2. Refresh your browser (Ctrl+R or Cmd+R)
-3. Check you edited the right file
-4. Ask us for help!
-
-### Git Not Working?
-
-1. Make sure you're in the right folder
-2. Check you've saved your changes
-3. Ask us for help!
-
-## 📚 Resources for Phase 1
-
-- **HTML Basics:** https://developer.mozilla.org/en-US/docs/Learn/HTML
-- **CSS Basics:** https://developer.mozilla.org/en-US/docs/Learn/CSS
-- **VS Code Guide:** https://code.visualstudio.com/docs
 - **Git Basics:** https://git-scm.com/doc
-- **Chrome DevTools:** https://developer.chrome.com/docs/devtools/
+- **HTML Reference:** https://developer.mozilla.org/en-US/docs/Web/HTML
+- **CSS Reference:** https://developer.mozilla.org/en-US/docs/Web/CSS
+- **JavaScript Reference:** https://developer.mozilla.org/en-US/docs/Web/JavaScript
+- **VS Code Guide:** https://code.visualstudio.com/docs
 
 ## 🆘 Getting Help
 
@@ -296,7 +295,7 @@ This site is automatically deployed via **Netlify**. When you push to the `main`
 1. **Check the error message** - Often tells you exactly what's wrong
 2. **Google the error** - Someone else has had this problem
 3. **Check the FAQ:** `/academy/faq.html`
-4. **Ask us!** - Email: info@jlsolutions.io
+4. **Ask Titi!** - Text or email: theveteranfreelancer@gmail.com
 
 ### Before Asking for Help
 
@@ -306,9 +305,7 @@ Include:
 - What file you're working on
 - What you've already tried
 
-**Remember:** Asking questions is part of learning! We're here to help.
-
-## ✅ Best Practices for Phase 1
+## ✅ Best Practices
 
 1. **Always pull before starting work:**
    ```bash
@@ -323,36 +320,28 @@ Include:
 
 5. **Ask questions** - Better to ask than break something
 
-6. **Start small** - Fix one thing at a time
+6. **Back up your work** - Commit often!
 
-7. **Celebrate small wins** - Every fix counts!
+## 🎓 Learning Path
 
-## 🎓 Phase 1 Learning Goals
+As you work on this project, you'll learn:
 
-By the end of Week 4, you should be able to:
-
-- [ ] Navigate the project folder structure
-- [ ] Open and edit HTML files
-- [ ] Make simple CSS changes
-- [ ] Use VS Code effectively
-- [ ] Use Chrome DevTools to inspect elements
-- [ ] Make a git commit
-- [ ] Push changes to GitHub
-- [ ] See your changes go live
+- **Week 1-2:** HTML structure, making simple edits
+- **Week 3-4:** CSS styling, fixing layout issues
+- **Week 5-6:** JavaScript basics, adding interactivity
+- **Week 7-8:** Git workflow, version control
+- **Week 9-10:** Debugging, problem-solving
+- **Week 11-12:** Building new features, React basics
 
 ## 📞 Contact
 
-**Email:** info@jlsolutions.io
-
-For questions, help, or to report issues, email us at info@jlsolutions.io. We're here to support your learning journey!
-
----
-
-**Remember:** This is a learning project! It's okay to make mistakes. Every bug you fix and every change you make helps you learn and helps JL Solutions. You've got this! 💪
-
-**Phase 1 Focus:** Keep it simple. Fix typos. Update text. Change colors. Learn the basics. Build confidence. You're doing great!
+**Mentor:** Jess Walcott (Titi)  
+**Email:** theveteranfreelancer@gmail.com
 
 ---
 
-*Last Updated: January 2025*  
-*Phase 1: Trainee (Weeks 1-4)*
+**Remember:** This is a learning project! It's okay to make mistakes. Every bug you fix and every feature you add makes you a better developer. You've got this! 💪
+
+---
+
+*Last Updated: January 2025*

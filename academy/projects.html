@@ -9,89 +9,6 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/academy.css">
   <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
-  <style>
-    body {
-      background: #121212;
-      color: #e0e0e0;
-    }
-    .project-expanded {
-      background: #1f1f1f;
-      border-radius: 12px;
-      padding: 2rem;
-      margin: 2rem 0;
-      border: 2px solid #333;
-    }
-    .step-card {
-      background: #2a2a2a;
-      border-left: 4px solid #0078D4;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin: 1rem 0;
-    }
-    .step-number {
-      display: inline-block;
-      background: #0078D4;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 30px;
-      font-weight: bold;
-      margin-right: 1rem;
-    }
-    .code-block {
-      background: #1e1e1e;
-      border-radius: 8px;
-      padding: 1rem;
-      margin: 1rem 0;
-      overflow-x: auto;
-      border: 1px solid #333;
-    }
-    .code-block code {
-      color: #d4d4d4;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-    }
-    .checkpoint {
-      background: rgba(0, 200, 83, 0.1);
-      border-left: 4px solid #00C853;
-      padding: 1rem;
-      margin: 1rem 0;
-      border-radius: 4px;
-    }
-    .expand-btn {
-      background: linear-gradient(135deg, #0078D4, #005a9e);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 1rem;
-    }
-    .expand-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
-    }
-    .github-setup {
-      background: linear-gradient(135deg, #1f1f1f 0%, #1a2e1f 100%);
-      border: 2px solid #00C853;
-      border-radius: 12px;
-      padding: 2rem;
-      margin: 2rem 0;
-    }
-    .project-card {
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .project-card:hover {
-      transform: translateY(-5px);
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
 </head>
 <body>
   <!-- Navbar -->
@@ -117,891 +34,429 @@
   <header class="bg-primary text-white text-center py-5">
     <div class="container">
       <h1 class="display-4">Project Portfolio</h1>
-      <p class="lead">Build real-world applications step-by-step and deploy to GitHub</p>
+      <p class="lead">Build real-world applications and showcase your skills</p>
     </div>
   </header>
 
   <!-- Introduction -->
-  <section class="py-5" style="background: #1a1a1a;">
+  <section class="py-4 bg-light">
     <div class="container">
-      <div class="welcome-card">
-        <h2 class="mb-3" style="color: #f4f4f4;">🎯 How These Projects Work</h2>
-        <p style="color: #e0e0e0;">Each project includes:</p>
-        <ul style="color: #d0d0d0;">
-          <li><strong style="color: #00C853;">Step-by-step instructions</strong> - Follow along from start to finish</li>
-          <li><strong style="color: #00C853;">GitHub setup guide</strong> - Create a real repository for each project</li>
-          <li><strong style="color: #00C853;">Code checkpoints</strong> - Test your code at each step</li>
-          <li><strong style="color: #00C853;">Deployment instructions</strong> - Get your project live on the web</li>
-          <li><strong style="color: #00C853;">Real portfolio pieces</strong> - Everything you build goes on your GitHub</li>
-        </ul>
-        <p class="mt-3" style="color: #e0e0e0;"><strong style="color: #00C853;">Click any project card below</strong> to see the full interactive tutorial!</p>
-      </div>
+      <p class="text-center mb-0">These projects will form your portfolio. Each one is designed to teach you practical skills you'll use as a professional developer. Start with beginner projects and work your way up!</p>
     </div>
   </section>
 
   <!-- Beginner Projects -->
-  <section class="py-5" style="background: #121212;">
+  <section class="py-5">
     <div class="container">
-      <h2 class="mb-4" style="color: #f4f4f4;">🌱 Beginner Projects</h2>
-      <p class="mb-4" style="color: #d0d0d0;">Perfect for weeks 1-4. Focus on HTML, CSS, and basic JavaScript.</p>
+      <h2 class="mb-4">🌱 Beginner Projects</h2>
+      <p class="mb-4">Perfect for weeks 1-4. Focus on HTML, CSS, and basic JavaScript.</p>
       
-      <!-- Project 1: Personal Portfolio -->
-      <div class="project-card" onclick="toggleProject('portfolio')">
-        <div class="project-expanded">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
             <span class="project-level beginner">Beginner</span>
-              <h4 style="color: #f4f4f4; margin-top: 1rem;">Personal Portfolio Website</h4>
-              <p style="color: #bbbbbb;">Create a beautiful personal website showcasing who you are, your skills, and your journey into tech.</p>
-            </div>
-            <button class="expand-btn" id="btn-portfolio">▶ View Tutorial</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="tutorial-portfolio" class="hidden">
-        <div class="project-expanded">
-          <h3 style="color: #00C853;">📚 Complete Tutorial: Personal Portfolio Website</h3>
-          
-          <!-- GitHub Setup -->
-          <div class="github-setup">
-            <h4 style="color: #00C853;">Step 0: Set Up Your GitHub Repository</h4>
-            <div class="step-card">
-              <p><span class="step-number">1</span> Go to <a href="https://github.com/new" target="_blank" style="color: #0078D4;">github.com/new</a></p>
-              <p><span class="step-number">2</span> Repository name: <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">my-portfolio</code></p>
-              <p><span class="step-number">3</span> Make it <strong>Public</strong> (so you can use GitHub Pages)</p>
-              <p><span class="step-number">4</span> Check "Add a README file"</p>
-              <p><span class="step-number">5</span> Click "Create repository"</p>
-            </div>
-            <div class="step-card">
-              <p><strong style="color: #00C853;">Clone to your computer:</strong></p>
-              <div class="code-block">
-                <code>git clone https://github.com/YOUR-USERNAME/my-portfolio.git<br>
-cd my-portfolio</code>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 1 -->
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">1</span> Create Your HTML Structure</h5>
-            <p style="color: #d0d0d0;">Create a file called <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">index.html</code></p>
-            <div class="code-block">
-              <code>&lt;!DOCTYPE html&gt;<br>
-&lt;html lang="en"&gt;<br>
-&lt;head&gt;<br>
-&nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;<br>
-&nbsp;&nbsp;&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>
-&nbsp;&nbsp;&lt;title&gt;Your Name - Portfolio&lt;/title&gt;<br>
-&nbsp;&nbsp;&lt;link rel="stylesheet" href="style.css"&gt;<br>
-&lt;/head&gt;<br>
-&lt;body&gt;<br>
-&nbsp;&nbsp;&lt;header&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Your Name&lt;/h1&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;nav&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="#about"&gt;About&lt;/a&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="#projects"&gt;Projects&lt;/a&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="#contact"&gt;Contact&lt;/a&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/nav&gt;<br>
-&nbsp;&nbsp;&lt;/header&gt;<br>
-<br>
-&nbsp;&nbsp;&lt;section id="about"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;About Me&lt;/h2&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Write a paragraph about yourself here!&lt;/p&gt;<br>
-&nbsp;&nbsp;&lt;/section&gt;<br>
-<br>
-&nbsp;&nbsp;&lt;section id="projects"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;My Projects&lt;/h2&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="project-grid"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- Projects will go here --&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;&lt;/section&gt;<br>
-<br>
-&nbsp;&nbsp;&lt;section id="contact"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;Contact Me&lt;/h2&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Email: your.email@example.com&lt;/p&gt;<br>
-&nbsp;&nbsp;&lt;/section&gt;<br>
-<br>
-&nbsp;&nbsp;&lt;footer&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;&copy; 2025 Your Name&lt;/p&gt;<br>
-&nbsp;&nbsp;&lt;/footer&gt;<br>
-&lt;/body&gt;<br>
-&lt;/html&gt;</code>
-            </div>
-            <div class="checkpoint">
-              <strong style="color: #00C853;">✓ Checkpoint:</strong> Open <code>index.html</code> in your browser. You should see your basic page structure!
-          </div>
-        </div>
-
-          <!-- Step 2 -->
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">2</span> Add CSS Styling</h5>
-            <p style="color: #d0d0d0;">Create <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">style.css</code></p>
-            <div class="code-block">
-              <code>* {<br>
-&nbsp;&nbsp;margin: 0;<br>
-&nbsp;&nbsp;padding: 0;<br>
-&nbsp;&nbsp;box-sizing: border-box;<br>
-}<br>
-<br>
-body {<br>
-&nbsp;&nbsp;font-family: 'Arial', sans-serif;<br>
-&nbsp;&nbsp;line-height: 1.6;<br>
-&nbsp;&nbsp;color: #333;<br>
-}<br>
-<br>
-header {<br>
-&nbsp;&nbsp;background: #0078D4;<br>
-&nbsp;&nbsp;color: white;<br>
-&nbsp;&nbsp;padding: 2rem;<br>
-&nbsp;&nbsp;text-align: center;<br>
-}<br>
-<br>
-nav a {<br>
-&nbsp;&nbsp;color: white;<br>
-&nbsp;&nbsp;text-decoration: none;<br>
-&nbsp;&nbsp;margin: 0 1rem;<br>
-}<br>
-<br>
-section {<br>
-&nbsp;&nbsp;padding: 3rem 2rem;<br>
-&nbsp;&nbsp;max-width: 1200px;<br>
-&nbsp;&nbsp;margin: 0 auto;<br>
-}</code>
-            </div>
-            <div class="checkpoint">
-              <strong style="color: #00C853;">✓ Checkpoint:</strong> Your page should now have colors and styling!
-            </div>
-          </div>
-
-          <!-- Step 3 -->
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">3</span> Make It Responsive</h5>
-            <p style="color: #d0d0d0;">Add media queries to your CSS:</p>
-            <div class="code-block">
-              <code>@media (max-width: 768px) {<br>
-&nbsp;&nbsp;header {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;padding: 1rem;<br>
-&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;nav a {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;display: block;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;margin: 0.5rem 0;<br>
-&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;section {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;padding: 2rem 1rem;<br>
-&nbsp;&nbsp;}<br>
-}</code>
-          </div>
-        </div>
-
-          <!-- Step 4 -->
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">4</span> Commit to GitHub</h5>
-            <div class="code-block">
-              <code>git add .<br>
-git commit -m "Create personal portfolio website"<br>
-git push origin main</code>
-            </div>
-          </div>
-
-          <!-- Step 5 -->
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">5</span> Deploy to GitHub Pages</h5>
-            <p style="color: #d0d0d0;">1. Go to your repository on GitHub</p>
-            <p style="color: #d0d0d0;">2. Click "Settings" → "Pages"</p>
-            <p style="color: #d0d0d0;">3. Under "Source", select "main" branch</p>
-            <p style="color: #d0d0d0;">4. Click "Save"</p>
-            <p style="color: #d0d0d0;">5. Your site will be live at: <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">https://YOUR-USERNAME.github.io/my-portfolio</code></p>
-          </div>
-
-          <div class="checkpoint" style="margin-top: 2rem;">
-            <strong style="color: #00C853; font-size: 1.2rem;">🎉 Congratulations!</strong> You now have a live portfolio website on GitHub! Share the link with us at info@jlsolutions.io!
+            <h4>Personal Portfolio Website</h4>
+            <p>Create a beautiful personal website showcasing who you are, your skills, and your journey into tech.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>HTML structure</li>
+              <li>CSS styling & layout</li>
+              <li>Responsive design</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
             </div>
           </div>
         </div>
 
-      <!-- Project 2: Calculator -->
-      <div class="project-card" onclick="toggleProject('calculator')">
-        <div class="project-expanded">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
             <span class="project-level beginner">Beginner</span>
-              <h4 style="color: #f4f4f4; margin-top: 1rem;">Simple Calculator</h4>
-              <p style="color: #bbbbbb;">Build a functional calculator that performs basic arithmetic operations.</p>
+            <h4>Simple Calculator</h4>
+            <p>Build a functional calculator that performs basic arithmetic operations.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>JavaScript functions</li>
+              <li>Event listeners</li>
+              <li>DOM manipulation</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
             </div>
-            <button class="expand-btn" id="btn-calculator">▶ View Tutorial</button>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level beginner">Beginner</span>
+            <h4>Todo List App</h4>
+            <p>Create a task management app with add, complete, and delete functionality.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Array manipulation</li>
+              <li>Local storage</li>
+              <li>Dynamic UI updates</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level beginner">Beginner</span>
+            <h4>Random Quote Generator</h4>
+            <p>Display random inspirational quotes with a click of a button.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Working with arrays</li>
+              <li>Random selection</li>
+              <li>Simple UI interactions</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level beginner">Beginner</span>
+            <h4>Color Theme Switcher</h4>
+            <p>Build a page with light/dark mode toggle and save user preferences.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>CSS variables</li>
+              <li>Local storage</li>
+              <li>Theme management</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level beginner">Beginner</span>
+            <h4>Simple Photo Gallery</h4>
+            <p>Create a responsive image gallery with lightbox functionality.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>CSS Grid</li>
+              <li>Modal dialogs</li>
+              <li>Image optimization</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
+            </div>
           </div>
         </div>
       </div>
-
-      <div id="tutorial-calculator" class="hidden">
-        <div class="project-expanded">
-          <h3 style="color: #00C853;">📚 Complete Tutorial: Simple Calculator</h3>
-          
-          <div class="github-setup">
-            <h4 style="color: #00C853;">Step 0: Create GitHub Repository</h4>
-            <p style="color: #d0d0d0;">Create a new repo called <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">calculator-app</code> and clone it.</p>
-          </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">1</span> HTML Structure</h5>
-            <div class="code-block">
-              <code>&lt;!DOCTYPE html&gt;<br>
-&lt;html lang="en"&gt;<br>
-&lt;head&gt;<br>
-&nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;<br>
-&nbsp;&nbsp;&lt;title&gt;Calculator&lt;/title&gt;<br>
-&nbsp;&nbsp;&lt;link rel="stylesheet" href="style.css"&gt;<br>
-&lt;/head&gt;<br>
-&lt;body&gt;<br>
-&nbsp;&nbsp;&lt;div class="calculator"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="display" id="display"&gt;0&lt;/div&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="buttons"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="clearDisplay()"&gt;C&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('7')"&gt;7&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('8')"&gt;8&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('9')"&gt;9&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendOperator('/')"&gt;/&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('4')"&gt;4&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('5')"&gt;5&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('6')"&gt;6&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendOperator('*')"&gt;×&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('1')"&gt;1&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('2')"&gt;2&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('3')"&gt;3&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendOperator('-')"&gt;-&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('0')"&gt;0&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendNumber('.')"&gt;.&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="calculate()"&gt;=&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="appendOperator('+')"&gt;+&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;&lt;script src="script.js"&gt;&lt;/script&gt;<br>
-&lt;/body&gt;<br>
-&lt;/html&gt;</code>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">2</span> JavaScript Logic</h5>
-            <p style="color: #d0d0d0;">Create <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">script.js</code></p>
-            <div class="code-block">
-              <code>let display = document.getElementById('display');<br>
-let currentInput = '0';<br>
-let previousInput = '';<br>
-let operation = null;<br>
-<br>
-function updateDisplay() {<br>
-&nbsp;&nbsp;display.textContent = currentInput;<br>
-}<br>
-<br>
-function appendNumber(number) {<br>
-&nbsp;&nbsp;if (currentInput === '0') {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;currentInput = number;<br>
-&nbsp;&nbsp;} else {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;currentInput += number;<br>
-&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;updateDisplay();<br>
-}<br>
-<br>
-function appendOperator(op) {<br>
-&nbsp;&nbsp;previousInput = currentInput;<br>
-&nbsp;&nbsp;currentInput = '0';<br>
-&nbsp;&nbsp;operation = op;<br>
-}<br>
-<br>
-function calculate() {<br>
-&nbsp;&nbsp;let result;<br>
-&nbsp;&nbsp;const prev = parseFloat(previousInput);<br>
-&nbsp;&nbsp;const current = parseFloat(currentInput);<br>
-<br>
-&nbsp;&nbsp;switch(operation) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;case '+':<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = prev + current;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;case '-':<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = prev - current;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;case '*':<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = prev * current;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;case '/':<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = prev / current;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;default:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;<br>
-&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;currentInput = result.toString();<br>
-&nbsp;&nbsp;operation = null;<br>
-&nbsp;&nbsp;previousInput = '';<br>
-&nbsp;&nbsp;updateDisplay();<br>
-}<br>
-<br>
-function clearDisplay() {<br>
-&nbsp;&nbsp;currentInput = '0';<br>
-&nbsp;&nbsp;previousInput = '';<br>
-&nbsp;&nbsp;operation = null;<br>
-&nbsp;&nbsp;updateDisplay();<br>
-}<br>
-<br>
-updateDisplay();</code>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">3</span> Add CSS Styling</h5>
-            <p style="color: #d0d0d0;">Style your calculator in <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">style.css</code></p>
-            <div class="code-block">
-              <code>.calculator {<br>
-&nbsp;&nbsp;max-width: 300px;<br>
-&nbsp;&nbsp;margin: 50px auto;<br>
-&nbsp;&nbsp;background: #1f1f1f;<br>
-&nbsp;&nbsp;padding: 20px;<br>
-&nbsp;&nbsp;border-radius: 10px;<br>
-}<br>
-<br>
-.display {<br>
-&nbsp;&nbsp;background: #2a2a2a;<br>
-&nbsp;&nbsp;color: #00C853;<br>
-&nbsp;&nbsp;padding: 20px;<br>
-&nbsp;&nbsp;text-align: right;<br>
-&nbsp;&nbsp;font-size: 2rem;<br>
-&nbsp;&nbsp;margin-bottom: 10px;<br>
-&nbsp;&nbsp;border-radius: 5px;<br>
-}<br>
-<br>
-.buttons {<br>
-&nbsp;&nbsp;display: grid;<br>
-&nbsp;&nbsp;grid-template-columns: repeat(4, 1fr);<br>
-&nbsp;&nbsp;gap: 10px;<br>
-}<br>
-<br>
-button {<br>
-&nbsp;&nbsp;padding: 20px;<br>
-&nbsp;&nbsp;font-size: 1.2rem;<br>
-&nbsp;&nbsp;border: none;<br>
-&nbsp;&nbsp;background: #333;<br>
-&nbsp;&nbsp;color: white;<br>
-&nbsp;&nbsp;border-radius: 5px;<br>
-&nbsp;&nbsp;cursor: pointer;<br>
-}<br>
-<br>
-button:hover {<br>
-&nbsp;&nbsp;background: #0078D4;<br>
-}</code>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">4</span> Commit & Deploy</h5>
-            <div class="code-block">
-              <code>git add .<br>
-git commit -m "Create calculator app"<br>
-git push origin main</code>
-            </div>
-            <p style="color: #d0d0d0; margin-top: 1rem;">Deploy to GitHub Pages (same steps as Portfolio project)</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Continue with more projects... Due to length, I'll add a few key ones and make them expandable -->
-      
     </div>
   </section>
 
   <!-- Intermediate Projects -->
-  <section class="py-5" style="background: #1a1a1a;">
+  <section class="py-5 bg-light">
     <div class="container">
-      <h2 class="mb-4" style="color: #f4f4f4;">🚀 Intermediate Projects</h2>
-      <p class="mb-4" style="color: #d0d0d0;">For weeks 5-10. Working with APIs and more complex JavaScript.</p>
+      <h2 class="mb-4">🚀 Intermediate Projects</h2>
+      <p class="mb-4">For weeks 5-10. Working with APIs and more complex JavaScript.</p>
       
-      <!-- Weather Dashboard Project -->
-      <div class="project-card" onclick="toggleProject('weather')">
-        <div class="project-expanded">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
             <span class="project-level intermediate">Intermediate</span>
-              <h4 style="color: #f4f4f4; margin-top: 1rem;">Weather Dashboard</h4>
-              <p style="color: #bbbbbb;">Build a weather app that shows current conditions and forecasts using the OpenWeather API.</p>
+            <h4>Weather Dashboard</h4>
+            <p>Build a weather app that shows current conditions and forecasts using the OpenWeather API.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>API integration</li>
+              <li>Async/await</li>
+              <li>Geolocation</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Fetch API</span>
+              <span class="tech-tag">OpenWeather</span>
             </div>
-            <button class="expand-btn" id="btn-weather">▶ View Tutorial</button>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level intermediate">Intermediate</span>
+            <h4>Movie Search App</h4>
+            <p>Search for movies and view details using the OMDB API. Save favorites to local storage.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Search functionality</li>
+              <li>API data handling</li>
+              <li>Filtering & sorting</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">OMDB API</span>
+              <span class="tech-tag">Local Storage</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level intermediate">Intermediate</span>
+            <h4>Currency Converter</h4>
+            <p>Convert between different currencies using real-time exchange rates.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Working with numbers</li>
+              <li>Real-time data</li>
+              <li>Form handling</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Exchange Rate API</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level intermediate">Intermediate</span>
+            <h4>Recipe Search & Save</h4>
+            <p>Search for recipes, view ingredients and instructions, and save your favorites.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Complex data structures</li>
+              <li>Pagination</li>
+              <li>User preferences</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Recipe API</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level intermediate">Intermediate</span>
+            <h4>Expense Tracker</h4>
+            <p>Track income and expenses with categories, charts, and summaries.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Data management</li>
+              <li>Charts & visualization</li>
+              <li>CRUD operations</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Chart.js</span>
+              <span class="tech-tag">Local Storage</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card">
+            <span class="project-level intermediate">Intermediate</span>
+            <h4>Utility Bill Helper</h4>
+            <p>Simple calculator inspired by WAFF experience - help users estimate utility costs.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Complex calculations</li>
+              <li>Multi-step forms</li>
+              <li>Branching logic</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Forms</span>
+            </div>
           </div>
         </div>
       </div>
-
-      <div id="tutorial-weather" class="hidden">
-        <div class="project-expanded">
-          <h3 style="color: #00C853;">📚 Complete Tutorial: Weather Dashboard</h3>
-          
-          <div class="github-setup">
-            <h4 style="color: #00C853;">Step 0: Create GitHub Repository</h4>
-            <p style="color: #d0d0d0;">Create repo: <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">weather-dashboard</code></p>
-        </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">1</span> Get API Key</h5>
-            <p style="color: #d0d0d0;">1. Go to <a href="https://openweathermap.org/api" target="_blank" style="color: #0078D4;">openweathermap.org/api</a></p>
-            <p style="color: #d0d0d0;">2. Sign up for a free account</p>
-            <p style="color: #d0d0d0;">3. Get your API key from the dashboard</p>
-            <div class="checkpoint">
-              <strong style="color: #00C853;">⚠️ Important:</strong> Never commit your API key to GitHub! We'll use environment variables.
-          </div>
-        </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">2</span> HTML Structure</h5>
-            <div class="code-block">
-              <code>&lt;!DOCTYPE html&gt;<br>
-&lt;html lang="en"&gt;<br>
-&lt;head&gt;<br>
-&nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;<br>
-&nbsp;&nbsp;&lt;title&gt;Weather Dashboard&lt;/title&gt;<br>
-&nbsp;&nbsp;&lt;link rel="stylesheet" href="style.css"&gt;<br>
-&lt;/head&gt;<br>
-&lt;body&gt;<br>
-&nbsp;&nbsp;&lt;div class="container"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Weather Dashboard&lt;/h1&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="search-box"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="text" id="cityInput" placeholder="Enter city name"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="getWeather()"&gt;Search&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div id="weatherInfo"&gt;&lt;/div&gt;<br>
-&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;&lt;script src="script.js"&gt;&lt;/script&gt;<br>
-&lt;/body&gt;<br>
-&lt;/html&gt;</code>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">3</span> JavaScript API Call</h5>
-            <p style="color: #d0d0d0;">Create <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">script.js</code></p>
-            <div class="code-block">
-              <code>const API_KEY = 'YOUR_API_KEY_HERE';<br>
-const API_URL = 'https://api.openweathermap.org/data/2.5/weather';<br>
-<br>
-async function getWeather() {<br>
-&nbsp;&nbsp;const city = document.getElementById('cityInput').value;<br>
-&nbsp;&nbsp;if (!city) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;alert('Please enter a city name');<br>
-&nbsp;&nbsp;&nbsp;&nbsp;return;<br>
-&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;try {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;const response = await fetch(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`${API_URL}?q=${city}&appid=${API_KEY}&units=imperial`<br>
-&nbsp;&nbsp;&nbsp;&nbsp;);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;const data = await response.json();<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;if (data.cod === '404') {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert('City not found');<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;displayWeather(data);<br>
-&nbsp;&nbsp;} catch (error) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;console.error('Error:', error);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;alert('Failed to fetch weather data');<br>
-&nbsp;&nbsp;}<br>
-}<br>
-<br>
-function displayWeather(data) {<br>
-&nbsp;&nbsp;const weatherInfo = document.getElementById('weatherInfo');<br>
-&nbsp;&nbsp;weatherInfo.innerHTML = `<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;${data.name}&lt;/h2&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Temperature: ${data.main.temp}°F&lt;/p&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Description: ${data.weather[0].description}&lt;/p&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Humidity: ${data.main.humidity}%&lt;/p&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Wind Speed: ${data.wind.speed} mph&lt;/p&gt;<br>
-&nbsp;&nbsp;`;<br>
-}</code>
-        </div>
-            <div class="checkpoint">
-              <strong style="color: #00C853;">✓ Checkpoint:</strong> Test your API call! Enter a city and see the weather data.
-          </div>
-        </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">4</span> Commit & Deploy</h5>
-            <p style="color: #d0d0d0;"><strong>Important:</strong> Create a <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">.gitignore</code> file to exclude your API key:</p>
-            <div class="code-block">
-              <code># .gitignore<br>
-script.js<br>
-# Add script.js to .gitignore if it contains your API key<br>
-# Then create script.example.js with placeholder</code>
-            </div>
-            <p style="color: #d0d0d0; margin-top: 1rem;">For production, use environment variables or Netlify's environment variable feature.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- More intermediate projects would go here... -->
-      
     </div>
   </section>
 
   <!-- Advanced Projects -->
-  <section class="py-5" style="background: #121212;">
+  <section class="py-5">
     <div class="container">
-      <h2 class="mb-4" style="color: #f4f4f4;">⚡ Advanced Projects</h2>
-      <p class="mb-4" style="color: #d0d0d0;">For weeks 11-12. Full React applications that showcase professional skills.</p>
+      <h2 class="mb-4">⚡ Advanced Projects</h2>
+      <p class="mb-4">For weeks 11-12. Full React applications that showcase professional skills.</p>
       
-      <!-- React Weather App -->
-      <div class="project-card" onclick="toggleProject('react-weather')">
-        <div class="project-expanded">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="project-card">
             <span class="project-level advanced">Advanced</span>
-              <h4 style="color: #f4f4f4; margin-top: 1rem;">React Weather App</h4>
-              <p style="color: #bbbbbb;">Rebuild your weather dashboard using React with modern component architecture.</p>
-            </div>
-            <button class="expand-btn" id="btn-react-weather">▶ View Tutorial</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="tutorial-react-weather" class="hidden">
-        <div class="project-expanded">
-          <h3 style="color: #00C853;">📚 Complete Tutorial: React Weather App</h3>
-          
-          <div class="github-setup">
-            <h4 style="color: #00C853;">Step 0: Create React App & GitHub Repo</h4>
-            <div class="step-card">
-              <p><span class="step-number">1</span> Create GitHub repo: <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">react-weather-app</code></p>
-              <p><span class="step-number">2</span> Clone it locally</p>
-              <p><span class="step-number">3</span> Create React app:</p>
-              <div class="code-block">
-                <code>npx create-react-app .<br>
-npm start</code>
-              </div>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">1</span> Create Weather Component</h5>
-            <p style="color: #d0d0d0;">Create <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">src/Weather.js</code></p>
-            <div class="code-block">
-              <code>import { useState } from 'react';<br>
-<br>
-function Weather() {<br>
-&nbsp;&nbsp;const [city, setCity] = useState('');<br>
-&nbsp;&nbsp;const [weather, setWeather] = useState(null);<br>
-&nbsp;&nbsp;const [loading, setLoading] = useState(false);<br>
-<br>
-&nbsp;&nbsp;const API_KEY = 'YOUR_API_KEY';<br>
-<br>
-&nbsp;&nbsp;const fetchWeather = async () => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;setLoading(true);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const response = await fetch(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=imperial`<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const data = await response.json();<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setWeather(data);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;} catch (error) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error('Error:', error);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;} finally {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setLoading(false);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;};<br>
-<br>
-&nbsp;&nbsp;return (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="weather-app"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Weather App&lt;/h1&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="search-box"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="text"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value={city}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onChange={(e) => setCity(e.target.value)}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder="Enter city"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onClick={fetchWeather} disabled={loading}&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{loading ? 'Loading...' : 'Search'}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{weather && (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="weather-info"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;{weather.name}&lt;/h2&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{weather.main.temp}°F&lt;/p&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{weather.weather[0].description}&lt;/p&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;);<br>
-}<br>
-<br>
-export default Weather;</code>
-          </div>
-        </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">2</span> Update App.js</h5>
-            <div class="code-block">
-              <code>import Weather from './Weather';<br>
-import './App.css';<br>
-<br>
-function App() {<br>
-&nbsp;&nbsp;return (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="App"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Weather /&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;);<br>
-}<br>
-<br>
-export default App;</code>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">3</span> Deploy to Vercel</h5>
-            <p style="color: #d0d0d0;">1. Push your code to GitHub</p>
-            <p style="color: #d0d0d0;">2. Go to <a href="https://vercel.com" target="_blank" style="color: #0078D4;">vercel.com</a></p>
-            <p style="color: #d0d0d0;">3. Import your GitHub repository</p>
-            <p style="color: #d0d0d0;">4. Add environment variable for API key in Vercel settings</p>
-            <p style="color: #d0d0d0;">5. Deploy! Your app will be live instantly.</p>
+            <h4>React Weather App</h4>
+            <p>Rebuild your weather dashboard using React with modern component architecture.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>React components</li>
+              <li>State management</li>
+              <li>useEffect for APIs</li>
+              <li>React best practices</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Hooks</span>
+              <span class="tech-tag">API Integration</span>
             </div>
           </div>
         </div>
 
-      <!-- NEW PROJECT: File Manager App -->
-      <div class="project-card" onclick="toggleProject('file-manager')">
-        <div class="project-expanded">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
+        <div class="col-md-6">
+          <div class="project-card">
             <span class="project-level advanced">Advanced</span>
-              <h4 style="color: #f4f4f4; margin-top: 1rem;">File Manager App</h4>
-              <p style="color: #bbbbbb;">Build a React app for managing files with upload, preview, filters, and pagination.</p>
+            <h4>React Task Manager</h4>
+            <p>Full-featured task management app with projects, tags, filters, and search.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Complex state</li>
+              <li>Component composition</li>
+              <li>Filtering & searching</li>
+              <li>Local storage in React</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Context API</span>
             </div>
-            <button class="expand-btn" id="btn-file-manager">▶ View Tutorial</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="tutorial-file-manager" class="hidden">
-        <div class="project-expanded">
-          <h3 style="color: #00C853;">📚 Complete Tutorial: File Manager App</h3>
-          
-          <div class="github-setup">
-            <h4 style="color: #00C853;">Step 0: Create React App & GitHub Repo</h4>
-            <p style="color: #d0d0d0;">Create repo: <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">file-manager-app</code></p>
-            <div class="code-block">
-              <code>npx create-react-app .<br>
-npm start</code>
-      </div>
-    </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">1</span> File Upload Component</h5>
-            <p style="color: #d0d0d0;">Create <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">src/FileUpload.js</code></p>
-            <div class="code-block">
-              <code>import { useState } from 'react';<br>
-<br>
-function FileUpload({ onFileAdd }) {<br>
-&nbsp;&nbsp;const handleFileChange = (e) => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;const files = Array.from(e.target.files);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;files.forEach(file => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const fileData = {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: Date.now() + Math.random(),<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: file.name,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size: file.size,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: file.type,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file: file<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onFileAdd(fileData);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;});<br>
-&nbsp;&nbsp;};<br>
-<br>
-&nbsp;&nbsp;return (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="file-upload"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="file"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onChange={handleFileChange}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;);<br>
-}<br>
-<br>
-export default FileUpload;</code>
-            </div>
-          </div>
-
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">2</span> File List with Filters</h5>
-            <p style="color: #d0d0d0;">Create <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">src/FileList.js</code></p>
-            <div class="code-block">
-              <code>import { useState, useMemo } from 'react';<br>
-<br>
-function FileList({ files, onDelete }) {<br>
-&nbsp;&nbsp;const [filter, setFilter] = useState('all');<br>
-&nbsp;&nbsp;const [searchTerm, setSearchTerm] = useState('');<br>
-&nbsp;&nbsp;const [currentPage, setCurrentPage] = useState(1);<br>
-&nbsp;&nbsp;const itemsPerPage = 10;<br>
-<br>
-&nbsp;&nbsp;const filteredFiles = useMemo(() => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;let result = files;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;// Filter by type<br>
-&nbsp;&nbsp;&nbsp;&nbsp;if (filter !== 'all') {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = result.filter(file => file.type.startsWith(filter));<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;// Search by name<br>
-&nbsp;&nbsp;&nbsp;&nbsp;if (searchTerm) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = result.filter(file =><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file.name.toLowerCase().includes(searchTerm.toLowerCase())<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;return result;<br>
-&nbsp;&nbsp;}, [files, filter, searchTerm]);<br>
-<br>
-&nbsp;&nbsp;const paginatedFiles = useMemo(() => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;const start = (currentPage - 1) * itemsPerPage;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;return filteredFiles.slice(start, start + itemsPerPage);<br>
-&nbsp;&nbsp;}, [filteredFiles, currentPage]);<br>
-<br>
-&nbsp;&nbsp;const totalPages = Math.ceil(filteredFiles.length / itemsPerPage);<br>
-<br>
-&nbsp;&nbsp;return (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="file-list"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="filters"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="text"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder="Search files..."<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value={searchTerm}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onChange={(e) => setSearchTerm(e.target.value)}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select value={filter} onChange={(e) => setFilter(e.target.value)}&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value="all"&gt;All Files&lt;/option&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value="image"&gt;Images&lt;/option&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option value="application"&gt;Documents&lt;/option&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="files"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{paginatedFiles.map(file => (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div key={file.id} className="file-item"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;{file.name}&lt;/span&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;{(file.size / 1024).toFixed(2)} KB&lt;/span&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onClick={() => onDelete(file.id)}&gt;Delete&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;))}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="pagination"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled={currentPage === 1}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onClick={() => setCurrentPage(currentPage - 1)}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;Previous&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;Page {currentPage} of {totalPages}&lt;/span&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled={currentPage === totalPages}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onClick={() => setCurrentPage(currentPage + 1)}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;Next&lt;/button&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;);<br>
-}<br>
-<br>
-export default FileList;</code>
-            </div>
-            <div class="checkpoint">
-              <strong style="color: #00C853;">What You're Learning:</strong> File handling, complex filters, pagination, and real-world app structure!
           </div>
         </div>
 
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">3</span> Main App Component</h5>
-            <p style="color: #d0d0d0;">Update <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">src/App.js</code></p>
-            <div class="code-block">
-              <code>import { useState } from 'react';<br>
-import FileUpload from './FileUpload';<br>
-import FileList from './FileList';<br>
-import './App.css';<br>
-<br>
-function App() {<br>
-&nbsp;&nbsp;const [files, setFiles] = useState([]);<br>
-<br>
-&nbsp;&nbsp;const handleFileAdd = (fileData) => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;setFiles([...files, fileData]);<br>
-&nbsp;&nbsp;};<br>
-<br>
-&nbsp;&nbsp;const handleFileDelete = (id) => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;setFiles(files.filter(file => file.id !== id));<br>
-&nbsp;&nbsp;};<br>
-<br>
-&nbsp;&nbsp;return (<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;div className="App"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;File Manager&lt;/h1&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FileUpload onFileAdd={handleFileAdd} /&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;FileList files={files} onDelete={handleFileDelete} /&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
-&nbsp;&nbsp;);<br>
-}<br>
-<br>
-export default App;</code>
+        <div class="col-md-6">
+          <div class="project-card">
+            <span class="project-level advanced">Advanced</span>
+            <h4>React Dashboard</h4>
+            <p>Interactive dashboard with charts, metrics, and data visualization.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>Data visualization</li>
+              <li>Complex layouts</li>
+              <li>Third-party libraries</li>
+              <li>Performance optimization</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Chart.js</span>
+              <span class="tech-tag">API</span>
             </div>
           </div>
+        </div>
 
-          <div class="step-card">
-            <h5 style="color: #0078D4;"><span class="step-number">4</span> Commit & Deploy</h5>
-            <div class="code-block">
-              <code>git add .<br>
-git commit -m "Create file manager app with upload, filters, and pagination"<br>
-git push origin main</code>
+        <div class="col-md-6">
+          <div class="project-card">
+            <span class="project-level advanced">Advanced</span>
+            <h4>"Capture Lite" - Mini Capture411</h4>
+            <p>Simplified version of Capture411 with file upload, cards, filters, and pagination.</p>
+            <h6>What You'll Learn:</h6>
+            <ul>
+              <li>File handling</li>
+              <li>Complex filters</li>
+              <li>Pagination</li>
+              <li>Real-world app structure</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Forms</span>
+              <span class="tech-tag">Routing</span>
             </div>
-            <p style="color: #d0d0d0; margin-top: 1rem;">Deploy to Vercel for instant hosting!</p>
           </div>
         </div>
       </div>
-
-      <!-- More advanced projects... -->
-      
     </div>
   </section>
 
-  <!-- Deployment Guide -->
-  <section class="py-5" style="background: #1a1a1a;">
+  <!-- JL Solutions Projects -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="mb-4">💼 JL Solutions Practice Projects</h2>
+      <p class="mb-4">Once you're ready, these projects can actually be used for JL Solutions!</p>
+      
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="project-card">
+            <span class="project-level advanced">Advanced</span>
+            <h4>Freelancer Invoice Generator</h4>
+            <p>Create professional invoices for JL Solutions clients with PDF export.</p>
+            <h6>Features:</h6>
+            <ul>
+              <li>Client management</li>
+              <li>Service line items</li>
+              <li>Tax calculations</li>
+              <li>PDF generation</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">PDF.js</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="project-card">
+            <span class="project-level advanced">Advanced</span>
+            <h4>Client Onboarding Portal</h4>
+            <p>Simple portal for new JL Solutions clients to submit information and documents.</p>
+            <h6>Features:</h6>
+            <ul>
+              <li>Multi-step forms</li>
+              <li>File uploads</li>
+              <li>Progress tracking</li>
+              <li>Email notifications</li>
+            </ul>
+            <div class="project-tech">
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Forms</span>
+              <span class="tech-tag">API</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deployment Section -->
+  <section class="py-5">
     <div class="container">
       <div class="welcome-card">
-        <h2 class="mb-3" style="color: #f4f4f4;">📦 Deployment Guide</h2>
-        <p style="color: #e0e0e0;">Every project you build should be deployed live! Here's how:</p>
+        <h2 class="mb-3">📦 Deploying Your Projects</h2>
+        <p>Every project you build should be deployed live! This makes your portfolio real and impressive.</p>
         
-        <div class="step-card" style="border-left-color: #00C853;">
-          <h5 style="color: #00C853;"><span class="step-number">1</span> GitHub Pages <strong style="color: #00C853;">(Start Here!)</strong></h5>
-          <p style="color: #d0d0d0;"><strong style="color: #00C853;">Recommended first option</strong> - Perfect for HTML/CSS/JavaScript projects:</p>
-          <ol style="color: #d0d0d0;">
-            <li>Push your code to GitHub</li>
-            <li>Go to Settings → Pages</li>
-            <li>Select "main" branch</li>
-            <li>Your site is live at: <code style="background: #1e1e1e; padding: 0.25rem 0.5rem; border-radius: 4px;">username.github.io/repo-name</code></li>
-          </ol>
-          <p style="color: #00C853; margin-top: 1rem;"><strong>✓ Free • Easy • Integrated with GitHub</strong></p>
+        <h4 class="mt-4 mb-3">Recommended Platforms:</h4>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="resource-card">
+              <h5>Netlify</h5>
+              <p>Best for static sites and React apps. Free tier is generous.</p>
+              <a href="https://www.netlify.com" target="_blank" class="resource-link">Visit Netlify →</a>
             </div>
-
-        <div class="step-card">
-          <h5 style="color: #0078D4;"><span class="step-number">2</span> Netlify (Alternative Option)</h5>
-          <p style="color: #d0d0d0;">Great for all projects if you want more features:</p>
-          <ol style="color: #d0d0d0;">
-            <li>Go to <a href="https://netlify.com" target="_blank" style="color: #0078D4;">netlify.com</a></li>
-            <li>Drag and drop your project folder</li>
-            <li>Or connect your GitHub repo for auto-deploy</li>
-            <li>Your site gets a custom URL instantly!</li>
-          </ol>
           </div>
-
-        <div class="step-card">
-          <h5 style="color: #0078D4;"><span class="step-number">3</span> Vercel (React Apps)</h5>
-          <p style="color: #d0d0d0;">Best for React projects:</p>
-          <ol style="color: #d0d0d0;">
-            <li>Go to <a href="https://vercel.com" target="_blank" style="color: #0078D4;">vercel.com</a></li>
-            <li>Import your GitHub repository</li>
-            <li>Add environment variables if needed</li>
-            <li>Deploy! Changes auto-deploy on every push.</li>
-          </ol>
+          <div class="col-md-4">
+            <div class="resource-card">
+              <h5>Vercel</h5>
+              <p>Perfect for React and Next.js apps with instant deployment.</p>
+              <a href="https://vercel.com" target="_blank" class="resource-link">Visit Vercel →</a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="resource-card">
+              <h5>GitHub Pages</h5>
+              <p>Free hosting for static sites directly from your repo.</p>
+              <a href="https://pages.github.com" target="_blank" class="resource-link">Visit GitHub Pages →</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1011,7 +466,7 @@ git push origin main</code>
   <section class="bg-primary text-white text-center py-5">
     <div class="container">
       <h2>Ready to Start Building?</h2>
-      <p class="lead mb-4">Click any project above to see the full step-by-step tutorial!</p>
+      <p class="lead mb-4">Pick a project and start coding. Remember: done is better than perfect!</p>
       <a href="/academy/modules.html" class="btn btn-light btn-lg me-2">Back to Modules</a>
       <a href="/academy/progress.html" class="btn btn-success btn-lg">Track Progress</a>
     </div>
@@ -1025,19 +480,6 @@ git push origin main</code>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    function toggleProject(projectId) {
-      const tutorial = document.getElementById(`tutorial-${projectId}`);
-      const btn = document.getElementById(`btn-${projectId}`);
-      
-      if (tutorial.classList.contains('hidden')) {
-        tutorial.classList.remove('hidden');
-        btn.textContent = '▼ Hide Tutorial';
-      } else {
-        tutorial.classList.add('hidden');
-        btn.textContent = '▶ View Tutorial';
-      }
-    }
-  </script>
 </body>
 </html>
+

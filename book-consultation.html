@@ -201,6 +201,7 @@
           <form id="consultationForm" name="consultation" method="POST" data-netlify="true" action="/thank-you.html">
             <input type="hidden" name="form-name" value="consultation">
             <input type="hidden" id="selectedDateTime" name="selectedDateTime">
+            <input type="hidden" id="referralCodeHidden" name="referralCode">
             
             <div class="mb-3">
               <label for="name" class="form-label">Full Name *</label>
@@ -232,6 +233,11 @@
                 <option value="custom-solution">Custom Solution</option>
                 <option value="not-sure">Not Sure Yet</option>
               </select>
+            </div>
+            
+            <div class="mb-3">
+              <label for="referralCode" class="form-label">Referral Code <span class="text-muted">(optional)</span></label>
+              <input type="text" class="form-control" id="referralCode" name="referralCode" placeholder="e.g. AGENT-ABC123" style="text-transform:uppercase;">
             </div>
             
             <div class="mb-3">
@@ -401,6 +407,38 @@
       generateTimeSlots();
     }
     
+    // Sync referral code to hidden field (for Netlify Forms)
+    document.getElementById('referralCode').addEventListener('input', function() {
+      document.getElementById('referralCodeHidden').value = this.value.trim().toUpperCase();
+    });
+
+    // Submit to Supabase consultation API if available (optional backend)
+    document.getElementById('consultationForm').addEventListener('submit', async function(e) {
+      const hidden = document.getElementById('referralCodeHidden');
+      const refInput = document.getElementById('referralCode');
+      if (refInput && refInput.value) hidden.value = refInput.value.trim().toUpperCase();
+
+      if (window.supabaseClient && window.fetch) {
+        try {
+          await fetch('/.netlify/functions/consultation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: document.getElementById('name').value,
+              email: document.getElementById('email').value,
+              company: document.getElementById('company').value || undefined,
+              phone: document.getElementById('phone').value || undefined,
+              service: document.getElementById('service').value || undefined,
+              challenge: document.getElementById('challenge').value,
+              goals: document.getElementById('goals').value || undefined,
+              referralCode: refInput?.value?.trim().toUpperCase() || undefined,
+              selectedDateTime: document.getElementById('selectedDateTime').value || undefined,
+            }),
+          });
+        } catch (_) { /* Netlify form will still submit */ }
+      }
+    });
+
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       generateTimeSlots();

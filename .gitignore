@@ -1,0 +1,17 @@
+# Local Netlify folder
+.netlify
+
+# Dependencies
+node_modules/
+
+# Environment and secrets (use *.example.js for templates)
+.env
+.env.*
+!.env.example
+js/referral-config.js
+
+# OS
+.DS_Store
+
+# Snapshots / local dev
+.snapshots/
