@@ -1,12 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=/sales/">
-  <title>Redirecting to Sales Team...</title>
-  <script>window.location.replace('/sales/');</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Team Onboarding - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <style>
+    :root { --primary: #0078D4; --dark: #004298; --bg: #0a0a0a; --card: #1a1a1a; --yellow: #D4A574; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e0e0e0; }
+    .sales-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%); padding: 4rem 0; color: white; text-align: center; }
+    .sales-hero h1 { font-weight: 700; margin-bottom: 0.5rem; }
+    .sales-hero .lead { opacity: 0.95; }
+    .onboard-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+    .onboard-card h3 { color: var(--primary); font-weight: 700; margin-bottom: 1rem; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; background: var(--primary); color: white; border-radius: 50%; font-weight: 700; margin-right: 0.75rem; }
+    .btn-sales { background: var(--primary); color: white; border: none; padding: 0.75rem 2rem; font-weight: 600; border-radius: 8px; }
+    .btn-sales:hover { background: var(--dark); color: white; }
+    .btn-sales-outline { background: transparent; color: white; border: 2px solid white; padding: 0.75rem 2rem; font-weight: 600; border-radius: 8px; }
+    .btn-sales-outline:hover { background: rgba(255,255,255,0.1); color: white; }
+  </style>
 </head>
 <body>
-  <p>Redirecting to <a href="/sales/">Sales Team onboarding</a>...</p>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/case-studies/index.html">Case Studies</a></li>
+          <li class="nav-item"><a class="nav-link" href="/resources/index.html">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="/book-consultation.html">Book Consultation</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/sales.html">Sales Team</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sales-hero">
+    <div class="container">
+      <h1>Sales Team Onboarding</h1>
+      <p class="lead">Join as a JL Solutions partner. Get your referral code, share with clients, and earn commission.</p>
+      <div class="mt-4">
+        <a href="/referral/signup.html" class="btn btn-sales me-2 mb-2">Sign Up as Sales Agent</a>
+        <a href="/referral/login.html" class="btn btn-sales-outline mb-2">Sign In to Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container my-5">
+    <h2 class="text-center mb-4">How It Works</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="onboard-card h-100">
+          <h3><span class="step-num">1</span>Sign Up</h3>
+          <p class="mb-0">Create your sales agent account. You'll get access to the partner dashboard and your unique referral code.</p>
+          <a href="/referral/signup.html" class="btn btn-sales mt-3">Get Started</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="onboard-card h-100">
+          <h3><span class="step-num">2</span>Get Your Code</h3>
+          <p class="mb-0">Use your referral code when sharing consultations or links. We track referrals and commissions in your dashboard.</p>
+          <a href="/referral/login.html" class="btn btn-sales-outline mt-3">Sign In to View</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="onboard-card h-100">
+          <h3><span class="step-num">3</span>Share & Earn</h3>
+          <p class="mb-0">Share JL Solutions with clients. When they book a consultation or become a customer, you earn commission.</p>
+          <a href="/referral-dashboard/" class="btn btn-sales-outline mt-3">Open Dashboard</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5 py-4">
+      <p class="text-muted mb-2">Questions about the partner program?</p>
+      <a href="mailto:info@jlsolutions.io" class="btn btn-sales">Email info@jlsolutions.io</a>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-1"><a href="/" style="color: rgba(255,255,255,0.8); text-decoration: none;">Home</a> · <a href="/referral/signup.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Sign Up</a> · <a href="/referral/login.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Sign In</a> · <a href="/contact.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Contact</a></p>
+      <small>&copy; 2026 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

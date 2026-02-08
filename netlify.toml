@@ -5,8 +5,15 @@
 [functions]
   node_bundler = "esbuild"
 
+# Sales portal: use root sales.html so it always loads
+[[redirects]]
+  from = "/sales/"
+  to = "/sales.html"
+  status = 302
+  force = true
+
 [[redirects]]
   from = "/sales"
-  to = "/sales/"
+  to = "/sales.html"
   status = 302
   force = true

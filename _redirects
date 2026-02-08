@@ -1,0 +1,3 @@
+# Sales portal: redirect to root file so it always loads
+/sales/    /sales.html   302
+/sales     /sales.html   302
