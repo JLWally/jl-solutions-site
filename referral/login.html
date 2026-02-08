@@ -24,11 +24,15 @@
     .error-msg { color: #f44336; font-size: 0.875rem; margin-top: 0.5rem; }
     .signup-link { text-align: center; margin-top: 1.5rem; }
     .signup-link a { color: var(--electric-blue); font-weight: 600; }
+    .login-card .text-muted { color: #495057 !important; }
   </style>
 </head>
 <body>
   <div class="login-container">
     <div class="login-card">
+      <div id="loginConfigNotice" class="alert alert-warning py-2 small" style="display:none;">
+        Dashboard not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in Netlify environment variables.
+      </div>
       <div class="login-header">
         <h1>Referral Dashboard</h1>
         <p class="slogan">Sign in to view your referrals</p>
@@ -55,12 +59,13 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>window.JL_SUPABASE = { url: 'SUPABASE_URL_PLACEHOLDER', anonKey: 'SUPABASE_ANON_KEY_PLACEHOLDER' };</script>
-  <script src="/js/supabase-client.js"></script>
-  <script src="/js/referral-auth.js"></script>
+  <script src="/js/referral-bootstrap.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    window.onReferralReady = function() {
+      if (!window.JL_REFERRAL_CONFIGURED) {
+        document.getElementById('loginConfigNotice').style.display = 'block';
+      }
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
       const err = document.getElementById('errorMsg');
@@ -79,7 +84,8 @@
       }
       const returnUrl = new URLSearchParams(location.search).get('return') || '/referral-dashboard/';
       window.location.href = returnUrl.startsWith('/') ? returnUrl : '/' + returnUrl;
-    });
+      });
+    };
   </script>
 </body>
 </html>

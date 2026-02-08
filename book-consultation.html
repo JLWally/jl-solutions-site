@@ -200,7 +200,7 @@
           </div>
           
           <!-- Booking Form -->
-          <form id="consultationForm" name="consultation" method="POST" data-netlify="true" action="/thank-you.html">
+          <form id="consultationForm" name="consultation" method="POST" action="/.netlify/functions/send-form-email">
             <input type="hidden" name="form-name" value="consultation">
             <input type="hidden" id="selectedDateTime" name="selectedDateTime">
             <input type="hidden" id="referralCodeHidden" name="referralCode">

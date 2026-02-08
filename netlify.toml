@@ -4,3 +4,9 @@
 
 [functions]
   node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/sales"
+  to = "/sales/"
+  status = 302
+  force = true

@@ -19,7 +19,8 @@
       <p class="text-center lead mb-5">Let’s start something great together.</p>
 
       <!-- Netlify Form START -->
-      <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="mx-auto" style="max-width: 600px;">
+      <form name="contact" method="POST" netlify-honeypot="bot-field" action="/.netlify/functions/send-form-email" class="mx-auto" style="max-width: 600px;">
+        <input type="hidden" name="form-name" value="contact">
         <!-- Honeypot field for bots -->
         <p hidden>
           <label>Don’t fill this out if you're human: <input name="bot-field" /></label>

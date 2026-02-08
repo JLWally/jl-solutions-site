@@ -21,9 +21,10 @@ This guide covers the referral system, Stripe payments, and consultation form fo
 4. Add to Netlify **Site settings → Environment variables**:
    ```
    SUPABASE_URL=https://xxx.supabase.co
-   SUPABASE_ANON_KEY=eyJ...
-   SUPABASE_SERVICE_ROLE_KEY=eyJ...   # Server-side only
+   SUPABASE_ANON_KEY=eyJ...            # Used by referral-config (public); needed for login/signup/dashboard
+   SUPABASE_SERVICE_ROLE_KEY=eyJ...    # Server-side only (consultation, referrals, stripe-webhook)
    ```
+   The referral portal (login, signup, dashboard) loads config from `/.netlify/functions/referral-config`, which returns `SUPABASE_URL` and `SUPABASE_ANON_KEY`. Without these, users see "Supabase not configured".
 
 5. In Supabase **Authentication → URL Configuration**:
    - Site URL: `https://jlsolutions.io` (or your domain)
