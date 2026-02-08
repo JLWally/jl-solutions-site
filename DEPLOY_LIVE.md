@@ -33,7 +33,7 @@ Your **feature/azure-aws-cloud-migration-page** branch (pushed to GitHub) includ
 **Option A – Deploy this branch from Netlify (recommended)**
 
 1. In **Netlify**: Site → **Site configuration** → **Build & deploy** → **Continuous deployment**.
-2. Set **Branch to deploy** to: `feature/azure-aws-cloud-migration-page`.
+2. Set **Branch to deploy** to: `main`.
 3. Set **Publish directory** to: `.` (or leave blank if the UI uses repo root).
 4. Save. Netlify will build and deploy this branch to your production URL (e.g. jlsolutions.io).
 
@@ -54,3 +54,7 @@ Your **feature/azure-aws-cloud-migration-page** branch (pushed to GitHub) includ
 - **Pay**: https://www.jlsolutions.io/pay/
 
 Ensure Netlify env vars and Supabase/Stripe are set per `JLSOLUTIONS_REFERRAL_SETUP.md` and your Netlify dashboard.
+
+## Academy (separate repo)
+
+Academy lives at **[github.com/JLWally/jl-solutions-academy](https://github.com/JLWally/jl-solutions-academy)**. Deploy that repo to **https://academy.jlsolutions.io**. The main site (jlsolutions.io) links to the academy in the nav and footer.
