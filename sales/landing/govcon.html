@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Government Contracting Solutions - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <style>
+    :root { --primary: #0078D4; --dark: #004298; --bg: #0a0a0a; --yellow: #D4A574; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e0e0e0; min-height: 100vh; }
+    .landing-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+      padding: 4rem 0;
+      color: white;
+      text-align: center;
+    }
+    .landing-hero h1 { font-weight: 800; margin-bottom: 1rem; }
+    .landing-hero .lead { opacity: 0.95; font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+    .landing-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .benefit-item {
+      padding: 1rem;
+      background: rgba(0,120,212,0.1);
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .btn-cta {
+      background: var(--yellow);
+      color: #000;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+    .btn-cta:hover { background: #e6a740; color: #000; transform: translateY(-2px); }
+    .btn-secondary-cta {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,0.5);
+      padding: 1rem 2rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .btn-secondary-cta:hover { background: rgba(255,255,255,0.1); color: white; border-color: white; }
+    .badge-gov { background: rgba(212,165,116,0.3); color: var(--yellow); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">JL Solutions</a>
+      <a href="/services/document-extraction-demo.html" class="btn btn-secondary-cta btn-sm me-2">Try Demo</a>
+      <a href="/book-consultation.html" class="btn btn-secondary-cta btn-sm">Book Consultation</a>
+    </div>
+  </nav>
+
+  <div class="landing-hero">
+    <div class="container">
+      <span class="badge-gov mb-2">RFP · FAR · DFARS · Compliance</span>
+      <h1>Government Contracting</h1>
+      <p class="lead">AI-powered solutions for gov con teams. Extract from RFPs, streamline compliance docs, and cut proposal prep time.</p>
+      <div class="mt-4">
+        <a href="/services/document-extraction-demo.html" class="btn btn-secondary-cta me-2 mb-2">Try Free Demo</a>
+        <a href="#" id="ctaBook" class="btn btn-cta mb-2">Get Free Consultation</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="landing-card">
+          <h2 class="mb-4">Built for Gov Con</h2>
+          <p class="text-white-50 mb-4">We understand the compliance landscape. Our document intelligence and automation solutions are designed for government contractors who need accuracy, auditability, and security.</p>
+          
+          <div class="benefit-item">
+            <h5>RFP & Solicitation Extraction</h5>
+            <p class="mb-0 text-white-50">Pull due dates, evaluation criteria, and requirements from RFPs automatically.</p>
+          </div>
+          <div class="benefit-item">
+            <h5>Compliance Documentation</h5>
+            <p class="mb-0 text-white-50">Process FAR/DFARS docs, certifications, and audit-related paperwork with consistency.</p>
+          </div>
+          <div class="benefit-item">
+            <h5>Your Environment, CMMC-Ready</h5>
+            <p class="mb-0 text-white-50">Solutions run in your infrastructure. We work with your security and compliance team.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="landing-card">
+          <h3 class="mb-3">Next Step</h3>
+          <p class="text-white-50 mb-3">30–45 minute free consultation. No obligation.</p>
+          <ul class="list-unstyled text-white-50 small mb-4">
+            <li>✓ Gov con workflow review</li>
+            <li>✓ Extraction accuracy demo</li>
+            <li>✓ Security & CMMC discussion</li>
+          </ul>
+          <a href="#" id="ctaSidebar" class="btn btn-cta w-100">Book Consultation</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <small>&copy; 2026 JL Solutions. <a href="/" style="color: rgba(255,255,255,0.7);">Home</a></small>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get('ref');
+      const base = '/book-consultation.html';
+      const url = ref ? base + '?ref=' + encodeURIComponent(ref) : base;
+      document.querySelectorAll('#ctaBook, #ctaSidebar').forEach(function(a) {
+        a.href = url;
+      });
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

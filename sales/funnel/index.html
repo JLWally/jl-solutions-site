@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Funnel - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <style>
+    :root {
+      --primary: #0078D4;
+      --dark: #004298;
+      --bg: #0a0a0a;
+      --card: #1a1a1a;
+      --yellow: #D4A574;
+      --success: #00C853;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e0e0e0; }
+    .funnel-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+      padding: 3rem 0;
+      color: white;
+      text-align: center;
+    }
+    .funnel-hero h1 { font-weight: 800; margin-bottom: 0.5rem; }
+    .funnel-hero .lead { opacity: 0.95; font-size: 1.1rem; }
+    
+    .funnel-stage {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+    }
+    .funnel-stage:hover {
+      border-color: var(--primary);
+      box-shadow: 0 8px 30px rgba(0,120,212,0.15);
+    }
+    .funnel-stage h3 {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .stage-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.75rem;
+      height: 1.75rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .funnel-stage p { color: rgba(255,255,255,0.8); font-size: 0.95rem; margin-bottom: 1rem; }
+    
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .link-btn:hover { background: var(--primary); border-color: var(--primary); color: white; }
+    .link-btn.copy:hover { background: var(--success); border-color: var(--success); }
+    
+    .ref-code-box {
+      background: rgba(0,0,0,0.3);
+      border: 2px solid var(--yellow);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .ref-code-box label { font-weight: 600; color: var(--yellow); }
+    .ref-code-box input {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .campaign-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+      height: 100%;
+      transition: all 0.3s;
+    }
+    .campaign-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .campaign-card h4 { color: white; font-weight: 700; margin-bottom: 0.5rem; }
+    .campaign-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    
+    .btn-funnel { background: var(--yellow); color: #000; border: none; padding: 0.75rem 1.5rem; font-weight: 700; border-radius: 8px; }
+    .btn-funnel:hover { background: #e6a740; color: #000; }
+    .btn-funnel-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.5); padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 8px; }
+    .btn-funnel-outline:hover { background: rgba(255,255,255,0.1); color: white; }
+    
+    .toast-copy { position: fixed; bottom: 2rem; right: 2rem; z-index: 1050; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">JL Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/book-consultation.html">Book Consultation</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/sales/funnel/">Sales Funnel</a></li>
+          <li class="nav-item"><a class="nav-link" href="/referral/login.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="/sales.html">Sales Team</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="funnel-hero">
+    <div class="container">
+      <h1>Sales Funnel Toolkit</h1>
+      <p class="lead">Everything you need to move prospects from awareness to action. Share the right link at the right stage.</p>
+    </div>
+  </div>
+
+  <div class="container my-5">
+    <!-- Referral Code -->
+    <div class="ref-code-box">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <label for="refCode">Your Referral Code</label>
+          <p class="small mb-2 text-white-50">Enter your code to auto-append it to all links. Find it in your <a href="/referral/login.html" class="text-warning">dashboard</a>.</p>
+          <input type="text" id="refCode" class="form-control" placeholder="e.g. AGENT-ABC123" style="max-width: 220px;">
+        </div>
+        <div class="col-md-4 text-md-end mt-2 mt-md-0">
+          <a href="/referral/login.html" class="btn btn-funnel-outline me-2">Get Dashboard</a>
+          <a href="/referral/signup.html" class="btn btn-funnel">Sign Up as Agent</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Funnel Stages -->
+    <h2 class="mb-4">Funnel Stages</h2>
+    
+    <div class="funnel-stage">
+      <h3><span class="stage-badge">1</span> Awareness — Top of Funnel</h3>
+      <p>First touch. Share high-level value. Introduce JL Solutions and our AI-powered approach.</p>
+      <div class="link-row">
+        <a href="/" class="link-btn" target="_blank">🏠 Homepage</a>
+        <a href="/about.html" class="link-btn" target="_blank">📖 About</a>
+        <button class="link-btn copy get-copy-btn" data-base="/">📋 Copy Home</button>
+      </div>
+    </div>
+
+    <div class="funnel-stage">
+      <h3><span class="stage-badge">2</span> Interest — Middle of Funnel</h3>
+      <p>Prospect is curious. Share proof, demos, and resources that show results.</p>
+      <div class="link-row">
+        <a href="/case-studies/" class="link-btn" target="_blank">📊 Case Studies</a>
+        <a href="/resources/" class="link-btn" target="_blank">📚 Resources</a>
+        <a href="/services/document-extraction-demo.html" class="link-btn" target="_blank">⚡ Doc Demo</a>
+        <a href="/tools/roi-calculator.html" class="link-btn" target="_blank">💰 ROI Calculator</a>
+      </div>
+    </div>
+
+    <div class="funnel-stage">
+      <h3><span class="stage-badge">3</span> Decision — Campaign Landing Pages</h3>
+      <p>Prospect is evaluating. Send them to a focused landing page matched to their need.</p>
+      <div class="row g-3 mt-2">
+        <div class="col-md-4">
+          <div class="campaign-card">
+            <div class="icon">🤖</div>
+            <h4>Operations Optimization</h4>
+            <p class="small text-white-50 mb-2">For process-heavy teams needing automation</p>
+            <a href="#" class="link-btn get-link" data-base="/sales/landing/operations.html">Get Link</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="campaign-card">
+            <div class="icon">⚡</div>
+            <h4>AI Solutions</h4>
+            <p class="small text-white-50 mb-2">For teams exploring AI and intelligent automation</p>
+            <a href="#" class="link-btn get-link" data-base="/sales/landing/ai.html">Get Link</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="campaign-card">
+            <div class="icon">📄</div>
+            <h4>Document Intelligence</h4>
+            <p class="small text-white-50 mb-2">For gov con, compliance, document-heavy workflows</p>
+            <a href="#" class="link-btn get-link" data-base="/sales/landing/documents.html">Get Link</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="campaign-card">
+            <div class="icon">🔄</div>
+            <h4>Process Automation</h4>
+            <p class="small text-white-50 mb-2">For repetitive workflows, data entry, approvals</p>
+            <a href="#" class="link-btn get-link" data-base="/sales/landing/automation.html">Get Link</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="campaign-card">
+            <div class="icon">🏛️</div>
+            <h4>Government Contracting</h4>
+            <p class="small text-white-50 mb-2">RFP responses, compliance, FAR/DFARS workflows</p>
+            <a href="#" class="link-btn get-link" data-base="/sales/landing/govcon.html">Get Link</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="funnel-stage">
+      <h3><span class="stage-badge">4</span> Action — Bottom of Funnel</h3>
+      <p>Prospect is ready. Book a consultation or get started. Your referral code is included.</p>
+      <div class="link-row">
+        <a href="#" class="link-btn get-link" data-base="/book-consultation.html">📅 Book Consultation</a>
+        <a href="#" class="link-btn get-link" data-base="/onboard/">🚀 Get Started Wizard</a>
+        <button class="link-btn copy get-copy-btn" data-base="/book-consultation.html">📋 Copy Book Link</button>
+      </div>
+    </div>
+
+    <div class="funnel-stage">
+      <h3><span class="stage-badge">5</span> Follow-Up — Re-engagement</h3>
+      <p>Prospect went quiet. Re-engage with value-first content or a soft reminder.</p>
+      <div class="link-row">
+        <a href="/resources/" class="link-btn" target="_blank">📚 Resources</a>
+        <a href="/faq/" class="link-btn" target="_blank">❓ FAQ</a>
+        <a href="/services/document-extraction-demo.html" class="link-btn" target="_blank">⚡ Try Demo</a>
+        <button class="link-btn copy get-copy-btn" data-base="/book-consultation.html">📋 Copy Book Link</button>
+      </div>
+    </div>
+
+    <!-- Quick Scripts -->
+    <div class="mt-5 pt-4 border-top border-secondary">
+      <h3 class="mb-3">Quick Talking Points</h3>
+      <div class="accordion" id="scriptsAccordion">
+        <div class="accordion-item bg-dark border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#script1">
+              Elevator pitch (30 sec)
+            </button>
+          </h2>
+          <div id="script1" class="accordion-collapse collapse" data-bs-parent="#scriptsAccordion">
+            <div class="accordion-body text-white-50">
+              "JL Solutions helps organizations turn complex operations into clarity using AI and automation. We specialize in operations optimization, document intelligence for government contracting, and custom AI solutions. Our free consultation helps you see exactly where automation can save time and cost."
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item bg-dark border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#script2">
+              Objection: "We're not ready for AI"
+            </button>
+          </h2>
+          <div id="script2" class="accordion-collapse collapse" data-bs-parent="#scriptsAccordion">
+            <div class="accordion-body text-white-50">
+              "That's exactly why the consultation is free and no-obligation. We'll assess your current processes and show you where small automation steps can add up. You don't have to go all-in—we often start with one workflow. Many clients see ROI in weeks."
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item bg-dark border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#script3">
+              Objection: "We handle sensitive documents"
+            </button>
+          </h2>
+          <div id="script3" class="accordion-collapse collapse" data-bs-parent="#scriptsAccordion">
+            <div class="accordion-body text-white-50">
+              "We specialize in document intelligence for government and compliance-heavy environments. Our solutions run in your environment, with your security. You can try our free document extraction demo on jlsolutions.io—no signup, no data retention."
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item bg-dark border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#script4">
+              Objection: "Too expensive" / "We need to check budget"
+            </button>
+          </h2>
+          <div id="script4" class="accordion-collapse collapse" data-bs-parent="#scriptsAccordion">
+            <div class="accordion-body text-white-50">
+              "The consultation is free—no cost to explore. We'll map ROI so you have numbers for budget discussions. Many clients start with a single workflow pilot that pays for itself in the first quarter. No big upfront commitment."
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item bg-dark border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#script5">
+              Objection: "We have IT / already use tools"
+            </button>
+          </h2>
+          <div id="script5" class="accordion-collapse collapse" data-bs-parent="#scriptsAccordion">
+            <div class="accordion-body text-white-50">
+              "We integrate with what you've got. We're not replacing your stack—we're plugging automation into your existing tools and workflows. IT usually loves that we reduce shadow IT and centralize automation."
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item bg-dark border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#script6">
+              Discovery questions (use in calls)
+            </button>
+          </h2>
+          <div id="script6" class="accordion-collapse collapse" data-bs-parent="#scriptsAccordion">
+            <div class="accordion-body text-white-50">
+              • "What's the most time-consuming manual task your team does every week?"<br>
+              • "Where do errors or rework tend to creep in?"<br>
+              • "How are you handling RFPs, contracts, or compliance documents today?"<br>
+              • "If you could automate one thing tomorrow, what would it be?"
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item bg-dark border-secondary">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed bg-dark text-white" type="button" data-bs-toggle="collapse" data-bs-target="#script7">
+              Email intro template (cold outreach)
+            </button>
+          </h2>
+          <div id="script7" class="accordion-collapse collapse" data-bs-parent="#scriptsAccordion">
+            <div class="accordion-body text-white-50 small">
+              Subject: Quick question about [their process/industry]<br><br>
+              Hi [Name],<br><br>
+              I help teams at [similar companies] streamline [documents/operations/workflows]. Many are drowning in manual data entry or compliance paperwork.<br><br>
+              I'd love to show you our free document extraction demo—takes 2 minutes, no signup. If it's relevant, we can chat about a quick consultation. No obligation either way.<br><br>
+              [Your name]<br>
+              P.S. Book a free consultation here: [paste your referral link]
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastCopy" class="toast-copy alert alert-success d-none" role="alert">
+    Link copied to clipboard!
+  </div>
+
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-1">
+        <a href="/" style="color: rgba(255,255,255,0.8); text-decoration: none;">Home</a> ·
+        <a href="/referral/login.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Dashboard</a> ·
+        <a href="/sales.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Sales Team</a> ·
+        <a href="mailto:info@jlsolutions.io" style="color: rgba(255,255,255,0.8); text-decoration: none;">Contact</a>
+      </p>
+      <small>&copy; 2026 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function() {
+      const baseUrl = window.location.origin || 'https://jlsolutions.io';
+      const refInput = document.getElementById('refCode');
+      
+      // Restore ref from URL or localStorage
+      const urlRef = new URLSearchParams(window.location.search).get('ref');
+      if (urlRef) {
+        refInput.value = urlRef.toUpperCase();
+        if (typeof localStorage !== 'undefined') localStorage.setItem('jl-ref', urlRef.toUpperCase());
+      } else if (typeof localStorage !== 'undefined' && localStorage.getItem('jl-ref')) {
+        refInput.value = localStorage.getItem('jl-ref');
+      }
+      
+      refInput.addEventListener('input', function() {
+        if (typeof localStorage !== 'undefined') localStorage.setItem('jl-ref', this.value.trim().toUpperCase());
+      });
+
+      function getRef() {
+        const v = refInput.value.trim().toUpperCase();
+        return v ? v : null;
+      }
+
+      function buildUrl(path) {
+        const ref = getRef();
+        const sep = path.indexOf('?') >= 0 ? '&' : '?';
+        return baseUrl + path + (ref ? sep + 'ref=' + ref : '');
+      }
+
+      function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        const toast = document.getElementById('toastCopy');
+        toast.classList.remove('d-none');
+        setTimeout(function() { toast.classList.add('d-none'); }, 2000);
+      }
+
+      document.querySelectorAll('.get-link').forEach(function(btn) {
+        const base = btn.getAttribute('data-base');
+        if (!base) return;
+        btn.href = buildUrl(base);
+        btn.target = '_blank';
+      });
+
+      document.querySelectorAll('.get-copy-btn').forEach(function(btn) {
+        const base = btn.getAttribute('data-base');
+        if (!base) return;
+        btn.addEventListener('click', function() {
+          copyToClipboard(buildUrl(base));
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>

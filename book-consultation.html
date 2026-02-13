@@ -255,6 +255,7 @@
             <button type="submit" class="btn btn-book w-100" id="submitBtn" disabled>
               Book Consultation
             </button>
+            <p class="text-center mt-3 mb-0 small opacity-75">Prefer a guided experience? <a href="/onboard/" style="color: var(--yellow);">Get Started wizard</a> →</p>
           </form>
         </div>
       </div>
@@ -441,9 +442,15 @@
       }
     });
 
-    // Initialize
+    // Pre-fill referral code from URL (?ref=)
     document.addEventListener('DOMContentLoaded', () => {
       generateTimeSlots();
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get('ref');
+      if (ref && document.getElementById('referralCode')) {
+        document.getElementById('referralCode').value = ref.trim().toUpperCase();
+        document.getElementById('referralCodeHidden').value = ref.trim().toUpperCase();
+      }
     });
   </script>
 </body>
