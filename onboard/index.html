@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Started - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <style>
+    :root { --black: #000; --blue: #0078d4; --white: #fff; --dark-blue: #004298; --yellow: #D4A574; }
+    body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; }
+    .wizard-hero { background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%); padding: 2rem 0; color: white; text-align: center; }
+    .wizard-container { max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+    .wizard-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; }
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    .step-progress { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .step-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.3s; }
+    .step-dot.done { background: var(--yellow); }
+    .step-dot.current { background: var(--blue); transform: scale(1.3); }
+    .path-btn { display: block; width: 100%; padding: 1.25rem; margin-bottom: 1rem; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; text-align: left; transition: all 0.3s; cursor: pointer; }
+    .path-btn:hover { border-color: var(--blue); background: rgba(0,120,212,0.15); color: white; }
+    .path-btn.selected { border-color: var(--yellow); background: rgba(212,165,116,0.2); }
+    .path-btn h5 { margin: 0 0 0.25rem 0; }
+    .path-btn small { opacity: 0.8; }
+    .form-control, .form-select { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.75rem; }
+    .form-control:focus, .form-select:focus { background: rgba(255,255,255,0.15); border-color: var(--blue); color: white; box-shadow: 0 0 0 0.2rem rgba(0,120,212,0.25); }
+    .form-label { font-weight: 600; color: rgba(255,255,255,0.9); }
+    .btn-wizard { background: var(--yellow); color: var(--black); border: none; padding: 0.75rem 2rem; font-weight: 700; border-radius: 8px; }
+    .btn-wizard:hover { background: #e6a740; color: var(--black); }
+    .btn-wizard-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.5); padding: 0.75rem 2rem; font-weight: 600; border-radius: 8px; }
+    .btn-wizard-outline:hover { background: rgba(255,255,255,0.1); color: white; }
+    .time-slot { display: inline-block; padding: 0.5rem 1rem; margin: 0.25rem; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 8px; cursor: pointer; color: white; font-size: 0.9rem; }
+    .time-slot:hover { background: var(--blue); border-color: var(--blue); }
+    .time-slot.selected { background: var(--yellow); border-color: var(--yellow); color: var(--black); }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+        <img src="/assets/images/jlsolutions-logo.png" alt="" height="32" onerror="this.style.display='none'">
+        JL Solutions
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="/book-consultation.html" class="text-white-50 small text-decoration-none">Book directly</a>
+        <a href="/" class="text-white-50 small">← Exit</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wizard-hero">
+    <div class="container">
+      <h1 class="h3 mb-1">Get Started</h1>
+      <p class="mb-0 opacity-75 small">Your path to AI-powered solutions — consultation or payment in minutes</p>
+    </div>
+  </div>
+
+  <div class="wizard-container">
+    <div class="step-progress" id="stepProgress"></div>
+    <div class="wizard-card">
+      <form id="wizardForm">
+        <!-- Step 1: Who are you? -->
+        <div class="wizard-step active" data-step="1">
+          <h2 class="mb-4">Who are you?</h2>
+          <button type="button" class="path-btn" data-choice="client">
+            <h5>👤 I'm a potential client</h5>
+            <small>I need consultation, automation, or a custom solution</small>
+          </button>
+          <button type="button" class="path-btn" data-choice="agent">
+            <h5>🤝 I'm a sales agent / partner</h5>
+            <small>I want to refer clients and earn commission</small>
+          </button>
+        </div>
+
+        <!-- Step 2: What do you need? -->
+        <div class="wizard-step" data-step="2">
+          <h2 class="mb-4">What do you need?</h2>
+          <button type="button" class="path-btn" data-choice="consultation">
+            <h5>📞 Free consultation</h5>
+            <small>Discuss your needs and get a tailored plan — no obligation</small>
+          </button>
+          <button type="button" class="path-btn" data-choice="payment">
+            <h5>💳 Ready to pay</h5>
+            <small>Purchase a service or package now</small>
+          </button>
+        </div>
+
+        <!-- Step 3: Contact -->
+        <div class="wizard-step" data-step="3">
+          <h2 class="mb-4">Your contact info</h2>
+          <div class="mb-3">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-control" id="name" required placeholder="John Doe">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email *</label>
+            <input type="email" class="form-control" id="email" required placeholder="john@example.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Company</label>
+            <input type="text" class="form-control" id="company" placeholder="Your Company">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input type="tel" class="form-control" id="phone" placeholder="(555) 123-4567">
+          </div>
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-wizard-outline" onclick="wizard.prev()">Back</button>
+            <button type="button" class="btn btn-wizard" onclick="wizard.next()">Next</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Needs -->
+        <div class="wizard-step" data-step="4">
+          <h2 class="mb-4">Tell us more</h2>
+          <div class="mb-3">
+            <label class="form-label">Service of interest *</label>
+            <select class="form-select" id="service" required>
+              <option value="">Select...</option>
+              <option value="operations-optimization">Operations Optimization</option>
+              <option value="ai-solutions">AI Solutions</option>
+              <option value="automation-services">Automation Services</option>
+              <option value="document-intelligence">Document Intelligence</option>
+              <option value="government-contracting">Government Contracting</option>
+              <option value="custom-solution">Custom Solution</option>
+              <option value="not-sure">Not Sure Yet</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">What challenges are you facing? *</label>
+            <textarea class="form-control" id="challenge" rows="3" required placeholder="Briefly describe your current situation..."></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Goals</label>
+            <textarea class="form-control" id="goals" rows="2" placeholder="What would success look like?"></textarea>
+          </div>
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-wizard-outline" onclick="wizard.prev()">Back</button>
+            <button type="button" class="btn btn-wizard" onclick="wizard.next()">Next</button>
+          </div>
+        </div>
+
+        <!-- Step 5: Referral -->
+        <div class="wizard-step" data-step="5">
+          <h2 class="mb-4">Referral code</h2>
+          <p class="small mb-3 opacity-75">If a sales agent or partner gave you a code, enter it here. Otherwise skip.</p>
+          <div class="mb-4">
+            <input type="text" class="form-control" id="referralCode" placeholder="e.g. AGENT-ABC123" style="text-transform:uppercase;">
+          </div>
+          <div class="d-flex justify-content-between flex-wrap gap-2 align-items-center">
+            <button type="button" class="btn btn-wizard-outline" onclick="wizard.prev()">Back</button>
+            <div class="d-flex gap-2 align-items-center">
+              <button type="button" class="btn btn-link text-white-50 px-0 small" onclick="wizard.next()">Skip</button>
+              <button type="button" class="btn btn-wizard" onclick="wizard.next()">Next</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 6a: Schedule (consultation path) -->
+        <div class="wizard-step" data-step="6a">
+          <h2 class="mb-4">Pick a time</h2>
+          <p class="small mb-3 opacity-75">Select a preferred slot. We'll confirm via email.</p>
+          <div id="timeSlots" class="mb-4"></div>
+          <p class="small text-warning mb-3 d-none" id="timeRequired">Please select a time slot.</p>
+          <div class="d-flex flex-column gap-2">
+            <div class="d-flex justify-content-between gap-2">
+              <button type="button" class="btn btn-wizard-outline" onclick="wizard.prev()">Back</button>
+              <button type="button" class="btn btn-wizard" id="btnBookConsult" onclick="wizard.submitConsultation()">Book consultation</button>
+            </div>
+            <p class="text-center mb-0"><a href="/book-consultation.html" data-full-calendar class="text-white-50 small text-decoration-none">Or pick from full calendar →</a></p>
+          </div>
+        </div>
+
+        <!-- Step 6b: Payment -->
+        <div class="wizard-step" data-step="6b">
+          <h2 class="mb-4">Complete payment</h2>
+          <p class="small mb-3 opacity-75">Choose an amount or enter a custom value. You'll be redirected to secure checkout.</p>
+          <div class="mb-3">
+            <label class="form-label">Amount (USD)</label>
+            <input type="number" class="form-control" id="amount" value="99" min="1" step="0.01" placeholder="99.00">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description (optional)</label>
+            <input type="text" class="form-control" id="paymentDesc" placeholder="e.g. Consultation package">
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-wizard-outline" onclick="wizard.prev()">Back</button>
+            <button type="button" class="btn btn-wizard" id="btnPay" onclick="wizard.submitPayment()">Proceed to checkout</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <p class="mb-2 small">
+        <a href="/" class="text-white-50 text-decoration-none">Home</a> ·
+        <a href="/book-consultation.html" class="text-white-50 text-decoration-none">Book Consultation</a> ·
+        <a href="/contact.html" class="text-white-50 text-decoration-none">Contact</a>
+      </p>
+      <small class="text-white-50">&copy; 2026 JL Solutions. Built with purpose.</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const wizard = (function() {
+      var step = 1;
+      var path = {}; // { who: 'client'|'agent', need: 'consultation'|'payment' }
+      var totalSteps = 5;
+      var currentPathSteps = [1, 2, 3, 4, 5];
+
+      function getStepEl(n) { return document.querySelector('.wizard-step[data-step="' + n + '"]'); }
+      function getNextStep() {
+        if (path.who === 'agent') return null;
+        if (step === 1) return 2;
+        if (step === 2) return path.need ? 3 : null;
+        if (step === 3) return 4;
+        if (step === 4) return 5;
+        if (step === 5) return path.need === 'consultation' ? '6a' : '6b';
+        return null;
+      }
+      function getPrevStep() {
+        if (step === 2) return 1;
+        if (step === 3) return 2;
+        if (step === 4) return 3;
+        if (step === 5) return 4;
+        if (step === '6a' || step === '6b') return 5;
+        return null;
+      }
+
+      function renderProgress() {
+        var container = document.getElementById('stepProgress');
+        var steps = path.who === 'client' && path.need
+          ? (path.need === 'consultation' ? [1,2,3,4,5,'6a'] : [1,2,3,4,5,'6b'])
+          : (step >= 2 ? [1,2] : [1,2]);
+        var currentIdx = steps.indexOf(String(step));
+        if (currentIdx < 0) currentIdx = steps.length - 1;
+        container.innerHTML = steps.map(function(s, i) {
+          var c = 'step-dot';
+          if (i < currentIdx) c += ' done';
+          else if (i === currentIdx) c += ' current';
+          return '<span class="' + c + '" aria-hidden="true"></span>';
+        }).join('');
+      }
+
+      function showStep(s) {
+        document.querySelectorAll('.wizard-step').forEach(function(el) { el.classList.remove('active'); });
+        var el = getStepEl(s);
+        if (el) el.classList.add('active');
+        step = s;
+        renderProgress();
+
+        if (s === '6a') {
+          window._selectedDateTime = null;
+          generateTimeSlots();
+        }
+      }
+
+      function generateTimeSlots() {
+        var container = document.getElementById('timeSlots');
+        container.innerHTML = '';
+        var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        var times = [
+          { label: '9:00 AM', h: 9 },
+          { label: '10:00 AM', h: 10 },
+          { label: '11:00 AM', h: 11 },
+          { label: '2:00 PM', h: 14 },
+          { label: '3:00 PM', h: 15 },
+          { label: '4:00 PM', h: 16 }
+        ];
+        var now = new Date();
+        var todayStr = now.toDateString();
+        var currentHour = now.getHours() + (now.getMinutes() / 60);
+        for (var i = 0; i < 14; i++) {
+          var day = new Date(now);
+          day.setDate(now.getDate() + i);
+          if (day.getDay() === 0 || day.getDay() === 6) continue;
+          var isToday = day.toDateString() === todayStr;
+          times.forEach(function(t) {
+            if (isToday && t.h <= currentHour) return;
+            var dayStr = dayNames[day.getDay()];
+            var dateStr = (day.getMonth() + 1) + '/' + day.getDate();
+            var val = dayStr + ' ' + dateStr + ' ' + t.label;
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'time-slot';
+            btn.textContent = val;
+            btn.dataset.datetime = val;
+            btn.onclick = slotClick;
+            container.appendChild(btn);
+          });
+        }
+        var fullCal = document.querySelector('[data-full-calendar]');
+        if (fullCal) {
+          var ref = (document.getElementById('referralCode') || {}).value;
+          ref = (ref || '').trim().toUpperCase();
+          fullCal.href = ref ? '/book-consultation.html?ref=' + encodeURIComponent(ref) : '/book-consultation.html';
+        }
+      }
+      function slotClick() {
+        var req = document.getElementById('timeRequired');
+        if (req) req.classList.add('d-none');
+        document.querySelectorAll('#timeSlots .time-slot').forEach(function(b) { b.classList.remove('selected'); });
+        this.classList.add('selected');
+        window._selectedDateTime = this.dataset.datetime;
+      }
+
+      function next() {
+        if (step === 1) {
+          var sel = document.querySelector('.path-btn.selected[data-choice]');
+          if (!sel) return;
+          path.who = sel.dataset.choice;
+          if (path.who === 'agent') {
+            window.location.href = '/referral/signup.html?from=onboard';
+            return;
+          }
+        }
+        if (step === 2) {
+          var sel = document.querySelector('.path-btn.selected[data-choice]');
+          if (!sel) return;
+          path.need = sel.dataset.choice;
+        }
+        if (step === 3 || step === 4) {
+          var form = document.getElementById('wizardForm');
+          var inputs = getStepEl(step).querySelectorAll('input, select, textarea');
+          for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].required && !inputs[i].value.trim()) return;
+          }
+        }
+        var nextS = getNextStep();
+        if (nextS) showStep(nextS);
+      }
+
+      function prev() {
+        var prevS = getPrevStep();
+        if (prevS) showStep(prevS);
+      }
+
+      function getFormData() {
+        return {
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          company: document.getElementById('company').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          service: document.getElementById('service').value,
+          challenge: document.getElementById('challenge').value.trim(),
+          goals: document.getElementById('goals').value.trim(),
+          referralCode: document.getElementById('referralCode').value.trim().toUpperCase() || undefined,
+          selectedDateTime: window._selectedDateTime || ''
+        };
+      }
+
+      function submitConsultation() {
+        if (!window._selectedDateTime) {
+          var req = document.getElementById('timeRequired');
+          if (req) {
+            req.classList.remove('d-none');
+            req.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+          return;
+        }
+        var btn = document.getElementById('btnBookConsult');
+        btn.disabled = true;
+        btn.textContent = 'Booking...';
+        var data = getFormData();
+        var params = new URLSearchParams();
+        params.append('form-name', 'consultation');
+        params.append('name', data.name);
+        params.append('email', data.email);
+        params.append('company', data.company);
+        params.append('phone', data.phone);
+        params.append('service', data.service);
+        params.append('challenge', data.challenge);
+        params.append('goals', data.goals);
+        params.append('referralCode', data.referralCode || '');
+        params.append('selectedDateTime', data.selectedDateTime);
+
+        fetch('/.netlify/functions/send-form-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString()
+        }).then(function(r) {
+          if (r.redirected) window.location.href = r.url;
+          else window.location.href = '/thank-you.html';
+        }).catch(function() {
+          alert('Something went wrong. Please try again or email info@jlsolutions.io.');
+          btn.disabled = false;
+          btn.textContent = 'Book consultation';
+        });
+      }
+
+      function submitPayment() {
+        var btn = document.getElementById('btnPay');
+        btn.disabled = true;
+        btn.textContent = 'Redirecting...';
+        var data = getFormData();
+        var amount = parseFloat(document.getElementById('amount').value) || 99;
+        var desc = document.getElementById('paymentDesc').value.trim() || 'JL Solutions Service';
+
+        fetch('/.netlify/functions/stripe-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: amount,
+            customerEmail: data.email,
+            referralCode: data.referralCode,
+            description: desc
+          })
+        }).then(function(r) { return r.json(); }).then(function(d) {
+          if (d.url) window.location.href = d.url;
+          else throw new Error(d.error || 'Checkout failed');
+        }).catch(function(err) {
+          alert(err.message || 'Something went wrong. Please try again.');
+          btn.disabled = false;
+          btn.textContent = 'Proceed to checkout';
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.path-btn[data-choice]').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var parent = this.closest('.wizard-step');
+            parent.querySelectorAll('.path-btn').forEach(function(b) { b.classList.remove('selected'); });
+            this.classList.add('selected');
+            wizard.next();
+          });
+        });
+        renderProgress();
+
+        var ref = new URLSearchParams(window.location.search).get('ref');
+        if (ref) document.getElementById('referralCode').value = ref.toUpperCase();
+      });
+
+      return { next: next, prev: prev, submitConsultation: submitConsultation, submitPayment: submitPayment };
+    })();
+  </script>
+</body>
+</html>
