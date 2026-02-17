@@ -200,8 +200,11 @@
           </div>
           
           <!-- Booking Form -->
-          <form id="consultationForm" name="consultation" method="POST" action="/.netlify/functions/send-form-email">
+          <form id="consultationForm" name="consultation" method="POST" action="/.netlify/functions/send-form-email" netlify-honeypot="bot-field">
             <input type="hidden" name="form-name" value="consultation">
+            <p class="d-none" aria-hidden="true">
+              <label>Leave empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
             <input type="hidden" id="selectedDateTime" name="selectedDateTime">
             <input type="hidden" id="referralCodeHidden" name="referralCode">
             

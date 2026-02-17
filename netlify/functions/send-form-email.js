@@ -109,19 +109,53 @@ exports.handler = async (event) => {
     const built = buildConsultationEmail(data);
     subject = built.subject;
     html = built.html;
+
+    const useSimpleAuth = process.env.REFERRAL_USE_SIMPLE_AUTH === 'true' || process.env.REFERRAL_USE_SIMPLE_AUTH === '1';
+    const refCode = (data.referralCode || data.referral_code || '').trim().toUpperCase();
+    if (useSimpleAuth && refCode && data.email) {
+      try {
+        const { appendReferral } = require('./referral-blob-append');
+        await appendReferral({
+          code: refCode,
+          referred_email: data.email,
+          amount_cents: 0,
+          commission_cents: 0,
+          status: 'consultation',
+          source: 'consultation',
+        });
+      } catch (e) {
+        console.error('[send-form-email] Failed to append consultation referral:', e);
+      }
+    }
   } else {
     const built = buildContactEmail(data);
     subject = built.subject;
     html = built.html;
   }
 
+  const redirectSuccess = () => ({
+    statusCode: 302,
+    headers: { Location: '/thank-you.html' },
+    body: '',
+  });
+
   if (!RESEND_API_KEY) {
-    console.error('[send-form-email] RESEND_API_KEY not set');
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Email not configured. Set RESEND_API_KEY in Netlify.' }),
-    };
+    console.error('[send-form-email] RESEND_API_KEY not set - storing in Blobs as fallback. Add RESEND_API_KEY to Netlify to enable email.');
+    try {
+      const { getStore } = require('@netlify/blobs');
+      const store = getStore('consultation-leads');
+      const raw = await store.get('fallback', { type: 'json' });
+      const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
+      list.push({
+        ...data,
+        _storedAt: new Date().toISOString(),
+        _formName: formName,
+      });
+      await store.setJSON('fallback', list);
+    } catch (e) {
+      console.error('[send-form-email] Blob fallback failed:', e);
+    }
+    return redirectSuccess();
   }
 
   try {
@@ -137,24 +171,32 @@ exports.handler = async (event) => {
 
     if (error) {
       console.error('[send-form-email]', error);
-      return {
-        statusCode: 500,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ error: 'Failed to send email' }),
-      };
+      try {
+        const { getStore } = require('@netlify/blobs');
+        const store = getStore('consultation-leads');
+        const raw = await store.get('fallback', { type: 'json' });
+        const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
+        list.push({ ...data, _storedAt: new Date().toISOString(), _formName: formName, _resendError: error.message });
+        await store.setJSON('fallback', list);
+      } catch (e) {
+        console.error('[send-form-email] Blob fallback failed:', e);
+      }
+      return redirectSuccess();
     }
   } catch (err) {
     console.error('[send-form-email]', err);
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Failed to send email' }),
-    };
+    try {
+      const { getStore } = require('@netlify/blobs');
+      const store = getStore('consultation-leads');
+      const raw = await store.get('fallback', { type: 'json' });
+      const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
+      list.push({ ...data, _storedAt: new Date().toISOString(), _formName: formName, _error: err.message });
+      await store.setJSON('fallback', list);
+    } catch (e) {
+      console.error('[send-form-email] Blob fallback failed:', e);
+    }
+    return redirectSuccess();
   }
 
-  return {
-    statusCode: 302,
-    headers: { Location: '/thank-you.html' },
-    body: '',
-  };
+  return redirectSuccess();
 };
