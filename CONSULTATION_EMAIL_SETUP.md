@@ -1,10 +1,13 @@
-# Fix "Book Consultation" — Emails to You and the Customer
+# Consultation & Contact Forms — Sales Leads to info@jlsolutions.io
 
-The form sends:
-- **You (info@jlsolutions.io):** The lead details
-- **Customer:** A confirmation that you received their request
+These forms are for **sales agents** and **new customers** to book consultations or get in touch. Submissions go to **info@jlsolutions.io** and appear in the **referral/sales dashboard** (when a referral code is used).
 
-To enable both, add one environment variable in Netlify.
+**Flow:**
+- **You (info@jlsolutions.io):** Receive the lead
+- **Customer:** Gets a confirmation email
+- **Sales dashboard:** Leads with referral codes show under the agent’s referrals
+
+To enable emails, add one environment variable in Netlify.
 
 ---
 
@@ -52,7 +55,9 @@ To check the backup: Netlify → **Storage** → **Blobs** → store `consultati
 
 ## Quick check: Is the key set?
 
-Visit **https://www.jlsolutions.io/.netlify/functions/email-status** (or your domain + `/.netlify/functions/email-status`). It will show `"configured": true` or `false`.
+Visit **https://www.jlsolutions.io/.netlify/functions/email-status** (use your live domain). It will show `"configured": true` or `false`.
+
+> **Note:** If you see “jl-solutions-academy” in the Netlify URL, that’s just the Netlify project name. You can rename it in Netlify (Site configuration → General → Site name) to something like “jlsolutions” if you prefer. The forms and emails work the same.
 
 ## Not getting emails?
 
