@@ -68,6 +68,20 @@ function buildConsultationEmail(data) {
   };
 }
 
+function buildCustomerConfirmation(data) {
+  const name = (data.name || 'there').trim().split(' ')[0];
+  return {
+    subject: 'We received your request - JL Solutions',
+    html: `
+      <h2>Hi ${escapeHtml(name)},</h2>
+      <p>Thank you for reaching out. We received your consultation request and will be in touch within 1-2 business days.</p>
+      <p>In the meantime, feel free to reply to this email with any questions.</p>
+      <p>— The JL Solutions team</p>
+      <p><em>info@jlsolutions.io</em></p>
+    `,
+  };
+}
+
 function escapeHtml(s) {
   if (s == null) return '';
   return String(s)
@@ -161,7 +175,9 @@ exports.handler = async (event) => {
   try {
     const Resend = require('resend');
     const resend = new Resend(RESEND_API_KEY);
-    const { error } = await resend.emails.send({
+
+    // 1. Send lead to info@jlsolutions.io
+    const { error: err1 } = await resend.emails.send({
       from: FROM_EMAIL,
       to: [TO_EMAIL],
       subject,
@@ -169,19 +185,43 @@ exports.handler = async (event) => {
       replyTo: data.email || undefined,
     });
 
-    if (error) {
-      console.error('[send-form-email]', error);
+    if (err1) {
+      console.error('[send-form-email] Lead email failed:', err1);
       try {
         const { getStore } = require('@netlify/blobs');
         const store = getStore('consultation-leads');
         const raw = await store.get('fallback', { type: 'json' });
         const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
-        list.push({ ...data, _storedAt: new Date().toISOString(), _formName: formName, _resendError: error.message });
+        list.push({ ...data, _storedAt: new Date().toISOString(), _formName: formName, _resendError: err1.message });
         await store.setJSON('fallback', list);
       } catch (e) {
         console.error('[send-form-email] Blob fallback failed:', e);
       }
       return redirectSuccess();
+    }
+
+    // 2. Send confirmation to customer (consultation and contact forms)
+    const customerEmail = (data.email || '').trim();
+    if (customerEmail) {
+      const cust = formName === 'consultation' ? buildCustomerConfirmation(data) : {
+        subject: 'We received your message - JL Solutions',
+        html: `
+          <h2>Thank you for reaching out</h2>
+          <p>We received your message and will get back to you within 1-2 business days.</p>
+          <p>— The JL Solutions team</p>
+          <p><em>info@jlsolutions.io</em></p>
+        `,
+      };
+      const { error: err2 } = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [customerEmail],
+        subject: cust.subject,
+        html: cust.html,
+        replyTo: TO_EMAIL,
+      });
+      if (err2) {
+        console.warn('[send-form-email] Customer confirmation failed (lead was sent):', err2);
+      }
     }
   } catch (err) {
     console.error('[send-form-email]', err);

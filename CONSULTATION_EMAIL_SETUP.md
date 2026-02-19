@@ -1,6 +1,10 @@
-# Fix "Book Consultation" — Email to info@jlsolutions.io
+# Fix "Book Consultation" — Emails to You and the Customer
 
-The consultation form sends leads to **info@jlsolutions.io** and shows them in your referral dashboard. To enable email, add one environment variable in Netlify.
+The form sends:
+- **You (info@jlsolutions.io):** The lead details
+- **Customer:** A confirmation that you received their request
+
+To enable both, add one environment variable in Netlify.
 
 ---
 
@@ -29,8 +33,8 @@ The consultation form sends leads to **info@jlsolutions.io** and shows them in y
 
 ## What changes when it’s set up
 
-- **Book consultation form** → email to info@jlsolutions.io → redirect to thank-you page  
-- **Contact form** → same behavior  
+- **Book consultation form** → (1) email to info@jlsolutions.io, (2) confirmation to customer → thank-you page  
+- **Contact form** → same: lead to you, confirmation to customer  
 - **Onboard wizard** → same behavior  
 - **Referral dashboard** → consultations with a referral code show up for agents  
 
@@ -43,6 +47,14 @@ The consultation form sends leads to **info@jlsolutions.io** and shows them in y
 - You will not receive emails until you add the key.
 
 To check the backup: Netlify → **Storage** → **Blobs** → store `consultation-leads` → key `fallback`.
+
+---
+
+## Not getting emails?
+
+1. **Check spam** – info@ and customer inbox (Promotions, Spam)
+2. **Netlify logs** – Functions → send-form-email → Logs. Look for `RESEND_API_KEY not set` or `Lead email failed`
+3. **Resend dashboard** – [resend.com/emails](https://resend.com/emails) shows sent/failed status
 
 ---
 
