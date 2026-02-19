@@ -92,6 +92,7 @@ function escapeHtml(s) {
 }
 
 exports.handler = async (event) => {
+  console.log('[send-form-email] Invoked', event.httpMethod, 'form:', event.body ? 'has body' : 'no body');
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 204,
@@ -154,7 +155,7 @@ exports.handler = async (event) => {
   });
 
   if (!RESEND_API_KEY) {
-    console.error('[send-form-email] RESEND_API_KEY not set - storing in Blobs as fallback. Add RESEND_API_KEY to Netlify to enable email.');
+    console.error('[send-form-email] RESEND_API_KEY not set. Add it in Netlify: Site configuration → Environment variables → RESEND_API_KEY = your Resend key. Storing in Blobs as fallback.');
     try {
       const { getStore } = require('@netlify/blobs');
       const store = getStore('consultation-leads');
@@ -176,6 +177,7 @@ exports.handler = async (event) => {
     const Resend = require('resend');
     const resend = new Resend(RESEND_API_KEY);
 
+    console.log('[send-form-email] Sending to', TO_EMAIL, 'subject:', subject);
     // 1. Send lead to info@jlsolutions.io
     const { error: err1 } = await resend.emails.send({
       from: FROM_EMAIL,
@@ -186,7 +188,7 @@ exports.handler = async (event) => {
     });
 
     if (err1) {
-      console.error('[send-form-email] Lead email failed:', err1);
+      console.error('[send-form-email] Resend error:', JSON.stringify(err1));
       try {
         const { getStore } = require('@netlify/blobs');
         const store = getStore('consultation-leads');

@@ -50,11 +50,16 @@ To check the backup: Netlify → **Storage** → **Blobs** → store `consultati
 
 ---
 
+## Quick check: Is the key set?
+
+Visit **https://www.jlsolutions.io/.netlify/functions/email-status** (or your domain + `/.netlify/functions/email-status`). It will show `"configured": true` or `false`.
+
 ## Not getting emails?
 
-1. **Check spam** – info@ and customer inbox (Promotions, Spam)
-2. **Netlify logs** – Functions → send-form-email → Logs. Look for `RESEND_API_KEY not set` or `Lead email failed`
-3. **Resend dashboard** – [resend.com/emails](https://resend.com/emails) shows sent/failed status
+1. **Verify RESEND_API_KEY** – Netlify → **Site configuration** → **Environment variables** (not inside Functions). Add `RESEND_API_KEY` with your full `re_...` key. **Redeploy** after adding.
+2. **Check spam** – info@ and customer inbox (Promotions, Spam)
+3. **Netlify logs** – Submit the form, then Functions → send-form-email → Logs. Look for `[send-form-email]` messages
+4. **Resend dashboard** – [resend.com/emails](https://resend.com/emails) shows sent/failed status
 
 ---
 
