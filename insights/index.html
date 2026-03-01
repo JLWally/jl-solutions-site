@@ -107,6 +107,37 @@
       text-align: center;
       margin: 3rem 0;
     }
+    
+    /* Tab styling for dark background - ensure legible text */
+    .nav-tabs {
+      border-bottom-color: rgba(255, 255, 255, 0.2);
+    }
+    .nav-tabs .nav-link {
+      color: rgba(255, 255, 255, 0.9) !important;
+      border-color: transparent transparent rgba(255, 255, 255, 0.2);
+      background: transparent;
+    }
+    .nav-tabs .nav-link:hover {
+      color: var(--white) !important;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .nav-tabs .nav-link.active {
+      color: var(--white) !important;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.4) rgba(255, 255, 255, 0.4) transparent;
+    }
+    .tab-content .text-muted {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+    .blog-card .btn-primary {
+      background: var(--yellow);
+      color: #000;
+      border: none;
+    }
+    .blog-card .btn-primary:hover {
+      background: #e6a740;
+      color: #000;
+    }
   </style>
 </head>
 <body>
@@ -167,8 +198,22 @@
     <!-- Blog Posts -->
     <div class="tab-content">
       <div class="tab-pane fade show active" id="all" role="tabpanel">
-        <div class="row" id="blogPosts">
-          <!-- Blog posts will be loaded here -->
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">📅</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">February 28, 2025 • 6 min read</div>
+                <h3 class="blog-card-title">Weekend Reset for Busy Businesses</h3>
+                <p class="blog-card-excerpt">Turn operational chaos into automated flow. Fix the 4 pain points that quietly cost you money—missed leads, slow follow-ups, manual scheduling, and spreadsheet chaos.</p>
+                <div>
+                  <span class="blog-tag">Automation</span>
+                  <span class="blog-tag">Operations</span>
+                </div>
+                <a href="/insights/weekend-reset-busy-businesses.html" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
           <div class="col-md-6 col-lg-4">
             <article class="blog-card">
               <div class="blog-card-image">🤖</div>
@@ -180,11 +225,10 @@
                   <span class="blog-tag">Automation</span>
                   <span class="blog-tag">AI</span>
                 </div>
-                <a href="/insights/post.html?id=getting-started-ai-automation" class="btn btn-primary mt-auto">Read More</a>
+                <a href="/insights/getting-started-ai-automation.html" class="btn btn-primary mt-auto">Read More</a>
               </div>
             </article>
           </div>
-          
           <div class="col-md-6 col-lg-4">
             <article class="blog-card">
               <div class="blog-card-image">📊</div>
@@ -196,39 +240,68 @@
                   <span class="blog-tag">ROI</span>
                   <span class="blog-tag">Business</span>
                 </div>
-                <a href="/insights/post.html?id=measuring-roi-automation" class="btn btn-primary mt-auto">Read More</a>
-              </div>
-            </article>
-          </div>
-          
-          <div class="col-md-6 col-lg-4">
-            <article class="blog-card">
-              <div class="blog-card-image">🔒</div>
-              <div class="blog-card-content">
-                <div class="blog-card-meta">December 5, 2024 • 6 min read</div>
-                <h3 class="blog-card-title">Security Best Practices for AI Integration</h3>
-                <p class="blog-card-excerpt">Essential security considerations when integrating AI solutions into your existing infrastructure...</p>
-                <div>
-                  <span class="blog-tag">Security</span>
-                  <span class="blog-tag">AI</span>
-                </div>
-                <a href="/insights/post.html?id=security-ai-integration" class="btn btn-primary mt-auto">Read More</a>
+                <a href="/insights/measuring-roi-automation.html" class="btn btn-primary mt-auto">Read More</a>
               </div>
             </article>
           </div>
         </div>
       </div>
       
-      <!-- Category tabs will show filtered posts -->
       <div class="tab-pane fade" id="automation" role="tabpanel">
         <div class="row">
-          <p class="text-muted">More automation posts coming soon!</p>
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">📅</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">February 28, 2025 • 6 min read</div>
+                <h3 class="blog-card-title">Weekend Reset for Busy Businesses</h3>
+                <p class="blog-card-excerpt">Turn operational chaos into automated flow. Fix the 4 pain points that quietly cost you money.</p>
+                <div><span class="blog-tag">Automation</span><span class="blog-tag">Operations</span></div>
+                <a href="/insights/weekend-reset-busy-businesses.html" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">🤖</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">December 15, 2024 • 5 min read</div>
+                <h3 class="blog-card-title">Getting Started with AI Automation</h3>
+                <p class="blog-card-excerpt">Learn how to identify processes in your organization that are perfect candidates for AI automation...</p>
+                <div><span class="blog-tag">Automation</span><span class="blog-tag">AI</span></div>
+                <a href="/insights/getting-started-ai-automation.html" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">📊</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">December 10, 2024 • 7 min read</div>
+                <h3 class="blog-card-title">Measuring ROI of Process Automation</h3>
+                <p class="blog-card-excerpt">Discover the key metrics and methods to calculate the return on investment for your automation projects...</p>
+                <div><span class="blog-tag">ROI</span><span class="blog-tag">Business</span></div>
+                <a href="/insights/measuring-roi-automation.html" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
       
       <div class="tab-pane fade" id="ai" role="tabpanel">
         <div class="row">
-          <p class="text-muted">More AI solution posts coming soon!</p>
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">🤖</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">December 15, 2024 • 5 min read</div>
+                <h3 class="blog-card-title">Getting Started with AI Automation</h3>
+                <p class="blog-card-excerpt">Learn how to identify processes in your organization that are perfect candidates for AI automation...</p>
+                <div><span class="blog-tag">Automation</span><span class="blog-tag">AI</span></div>
+                <a href="/insights/getting-started-ai-automation.html" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
       
@@ -240,7 +313,18 @@
       
       <div class="tab-pane fade" id="industry" role="tabpanel">
         <div class="row">
-          <p class="text-muted">More industry news posts coming soon!</p>
+          <div class="col-md-6 col-lg-4">
+            <article class="blog-card">
+              <div class="blog-card-image">📅</div>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">February 28, 2025 • 6 min read</div>
+                <h3 class="blog-card-title">Weekend Reset for Busy Businesses</h3>
+                <p class="blog-card-excerpt">Turn operational chaos into automated flow. Fix the 4 pain points that quietly cost you money.</p>
+                <div><span class="blog-tag">Automation</span><span class="blog-tag">Operations</span></div>
+                <a href="/insights/weekend-reset-busy-businesses.html" class="btn btn-primary mt-auto">Read More</a>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
     </div>
