@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Services | JL Solutions</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
@@ -131,6 +132,87 @@
       margin-bottom: 1rem;
       display: inline-block;
     }
+    
+    /* How We Deliver Strip */
+    .how-we-deliver {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin: 3rem 0;
+    }
+    
+    .how-we-deliver .step-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      height: 100%;
+      transition: all 0.3s;
+    }
+    
+    .how-we-deliver .step-card.step-discover { border-left: 4px solid #00c853; }
+    .how-we-deliver .step-card.step-develop { border-left: 4px solid #ff9800; }
+    .how-we-deliver .step-card.step-deploy { border-left: 4px solid #0078d4; }
+    
+    .how-we-deliver .step-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+    }
+    .how-we-deliver .step-discover .step-icon { background: rgba(0, 200, 83, 0.2); color: #00c853; }
+    .how-we-deliver .step-develop .step-icon { background: rgba(255, 152, 0, 0.2); color: #ff9800; }
+    .how-we-deliver .step-deploy .step-icon { background: rgba(0, 120, 212, 0.2); color: #0078d4; }
+    
+    .how-we-deliver .step-card h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    
+    .how-we-deliver .step-card p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0;
+    }
+    
+    .best-for-chip {
+      display: inline-block;
+      background: rgba(0, 120, 212, 0.15);
+      color: var(--blue);
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin: 0.2rem;
+    }
+    
+    .btn-book-demo {
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      padding: 0.6rem 1.25rem;
+      font-weight: 600;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 0.5rem;
+      transition: all 0.3s;
+    }
+    
+    .btn-book-demo:hover {
+      background: #e6a740;
+      transform: translateY(-2px);
+      color: var(--black);
+    }
   </style>
 </head>
 <body>
@@ -172,6 +254,34 @@
   <!-- Main Content -->
   <main id="main-content" role="main" class="container my-5">
     
+    <!-- How We Deliver Strip -->
+    <section class="how-we-deliver" aria-labelledby="how-we-deliver-heading">
+      <h2 id="how-we-deliver-heading" class="text-center mb-4">How We Deliver</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="step-card step-discover">
+            <div class="step-icon"><i class="bi bi-search"></i></div>
+            <h4>Discover</h4>
+            <p>We analyze your workflows and identify automation opportunities.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="step-card step-develop">
+            <div class="step-icon"><i class="bi bi-gear"></i></div>
+            <h4>Develop</h4>
+            <p>We build tailored solutions that fit your business and processes.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="step-card step-deploy">
+            <div class="step-icon"><i class="bi bi-rocket-takeoff"></i></div>
+            <h4>Deploy</h4>
+            <p>We launch, train your team, and support you every step of the way.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Our Services Section -->
     <div class="core-services">
       <div class="text-center mb-5">
@@ -183,72 +293,88 @@
         <!-- 1. Lead & Client Intake Automation -->
         <div class="col-md-6 col-lg-4">
           <div class="service-card featured">
-            <div class="service-icon">📋</div>
+            <div class="service-icon"><i class="bi bi-clipboard-list"></i></div>
             <h4>1. Lead & Client Intake Automation</h4>
-            <p><strong>Problem:</strong> Calls, forms, or inquiries get lost, especially after hours.</p>
-            <p><strong>Solution:</strong> Capture every lead or request automatically, pre-qualify, and route efficiently.</p>
-            <p><strong>Result:</strong> No missed jobs, clients, or applications.</p>
-            <a href="/contact.html" class="btn-service">Learn More</a>
+            <div class="mb-2">
+              <span class="best-for-chip">Home services</span>
+              <span class="best-for-chip">Clinics</span>
+              <span class="best-for-chip">Catering</span>
+            </div>
+            <p>Capture every lead or request automatically, pre-qualify, and route efficiently. No missed jobs, clients, or applications.</p>
+            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
           </div>
         </div>
 
         <!-- 2. Eligibility & Application Wizards -->
         <div class="col-md-6 col-lg-4">
           <div class="service-card featured">
-            <div class="service-icon">✨</div>
+            <div class="service-icon"><i class="bi bi-clipboard2-check"></i></div>
             <h4>2. Eligibility & Application Wizards</h4>
-            <p><strong>Problem:</strong> Screening clients or program applicants is slow and error-prone.</p>
-            <p><strong>Solution:</strong> Custom wizards and forms gather information, validate eligibility, and trigger approvals automatically.</p>
-            <p><strong>Result:</strong> More clients served, less staff time, accurate records.</p>
-            <a href="/services/eligibility-wizard.html" class="btn-service">Learn More</a>
+            <div class="mb-2">
+              <span class="best-for-chip">Nonprofits</span>
+              <span class="best-for-chip">Clinics</span>
+              <span class="best-for-chip">Assistance programs</span>
+            </div>
+            <p>Custom wizards gather information, validate eligibility, and trigger approvals automatically. More clients served, less staff time.</p>
+            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
           </div>
         </div>
 
         <!-- 3. Quote, Proposal, & Order Automation -->
         <div class="col-md-6 col-lg-4">
           <div class="service-card featured">
-            <div class="service-icon">📄</div>
+            <div class="service-icon"><i class="bi bi-file-earmark-text"></i></div>
             <h4>3. Quote, Proposal, & Order Automation</h4>
-            <p><strong>Problem:</strong> Slow response costs revenue.</p>
-            <p><strong>Solution:</strong> Automated estimates, proposals, or order confirmations sent immediately.</p>
-            <p><strong>Result:</strong> Faster turnaround, higher booking and order conversion rates.</p>
-            <a href="/contact.html" class="btn-service">Learn More</a>
+            <div class="mb-2">
+              <span class="best-for-chip">Contractors</span>
+              <span class="best-for-chip">Catering</span>
+              <span class="best-for-chip">B2B services</span>
+            </div>
+            <p>Automated estimates, proposals, or order confirmations sent immediately. Faster turnaround, higher conversion rates.</p>
+            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
           </div>
         </div>
 
         <!-- 4. Scheduling & Resource Routing -->
         <div class="col-md-6 col-lg-4">
           <div class="service-card featured">
-            <div class="service-icon">📅</div>
+            <div class="service-icon"><i class="bi bi-calendar-week"></i></div>
             <h4>4. Scheduling & Resource Routing</h4>
-            <p><strong>Problem:</strong> Manual assignment wastes hours and causes mistakes.</p>
-            <p><strong>Solution:</strong> Jobs, appointments, and events routed automatically by skills, location, and availability.</p>
-            <p><strong>Result:</strong> Maximize staff efficiency and reduce stress.</p>
-            <a href="/contact.html" class="btn-service">Learn More</a>
+            <div class="mb-2">
+              <span class="best-for-chip">Home services</span>
+              <span class="best-for-chip">Field teams</span>
+              <span class="best-for-chip">Clinics</span>
+            </div>
+            <p>Jobs, appointments, and events routed automatically by skills, location, and availability. Maximize staff efficiency.</p>
+            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
           </div>
         </div>
 
         <!-- 5. Follow-Up & Retention Automation -->
         <div class="col-md-6 col-lg-4">
           <div class="service-card featured">
-            <div class="service-icon">🔄</div>
+            <div class="service-icon"><i class="bi bi-arrow-repeat"></i></div>
             <h4>5. Follow-Up & Retention Automation</h4>
-            <p><strong>Problem:</strong> Leads or clients go cold when no one follows up.</p>
-            <p><strong>Solution:</strong> Automated reminders and follow-ups keep every potential job or client active.</p>
-            <p><strong>Result:</strong> Close more opportunities without extra office work.</p>
-            <a href="/contact.html" class="btn-service">Learn More</a>
+            <div class="mb-2">
+              <span class="best-for-chip">All industries</span>
+              <span class="best-for-chip">Sales teams</span>
+            </div>
+            <p>Automated reminders and follow-ups keep every potential job or client active. Close more opportunities without extra office work.</p>
+            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
           </div>
         </div>
 
         <!-- 6. Peak & Event Scalability -->
         <div class="col-md-6 col-lg-4">
           <div class="service-card featured">
-            <div class="service-icon">📈</div>
+            <div class="service-icon"><i class="bi bi-graph-up-arrow"></i></div>
             <h4>6. Peak & Event Scalability</h4>
-            <p><strong>Problem:</strong> High-demand periods overwhelm your office.</p>
-            <p><strong>Solution:</strong> Systems scale automatically when business is busiest.</p>
-            <p><strong>Result:</strong> Business grows without chaos or hiring new staff.</p>
-            <a href="/contact.html" class="btn-service">Learn More</a>
+            <div class="mb-2">
+              <span class="best-for-chip">Seasonal businesses</span>
+              <span class="best-for-chip">Event-based</span>
+            </div>
+            <p>Systems scale automatically when business is busiest. Business grows without chaos or hiring new staff.</p>
+            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
           </div>
         </div>
       </div>

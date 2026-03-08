@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JL Solutions - Never Miss a Lead. Streamline Intake. Automate Your Workflows.</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/responsive.css">
@@ -64,7 +65,21 @@
     .hero-section {
       background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
       padding: 5rem 0 6rem;
-      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .hero-content {
+      flex: 1;
+      min-width: 0;
     }
     
     .hero-section h1 {
@@ -73,19 +88,47 @@
       color: var(--white);
       margin-bottom: 1.5rem;
       line-height: 1.2;
+      text-align: left;
+    }
+    
+    .hero-welcome {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
     }
     
     .hero-section .hero-subheadline {
       font-size: 1.25rem;
       color: rgba(255, 255, 255, 0.95);
-      max-width: 800px;
-      margin: 0 auto 2.5rem;
+      max-width: 540px;
+      margin-bottom: 2rem;
       line-height: 1.7;
+      text-align: left;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
     }
     
     .hero-section .btn-primary {
-      margin-right: 0.75rem;
-      margin-bottom: 0.75rem;
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+    
+    .hero-visual {
+      flex: 0 0 45%;
+      max-width: 520px;
+    }
+    
+    .hero-visual img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
     
     /* Why JL Solutions */
@@ -98,33 +141,52 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 16px;
-      padding: 2.5rem;
+      padding: 2rem;
       height: 100%;
       margin-bottom: 2rem;
+      transition: all 0.3s ease;
     }
     
-    .psr-card .problem {
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.5rem;
+    .psr-card:hover {
+      border-color: var(--blue);
+      background: rgba(0, 120, 212, 0.08);
     }
     
-    .psr-card .solution {
-      color: var(--blue);
-      font-weight: 600;
-      margin-bottom: 0.5rem;
+    .psr-card .psr-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 120, 212, 0.2);
+      border-radius: 12px;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
     }
     
-    .psr-card .result {
-      color: var(--yellow);
-      font-weight: 600;
-    }
-    
-    .psr-card p {
-      color: rgba(255, 255, 255, 0.8);
+    .psr-card .psr-headline {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--white);
       margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+    
+    .psr-card .psr-desc {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .psr-card .psr-outcome {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--yellow);
+      padding: 0.5rem 0.75rem;
+      background: rgba(212, 165, 116, 0.15);
+      border-radius: 8px;
+      display: inline-block;
     }
     
     /* Industries Section */
@@ -135,7 +197,9 @@
     }
     
     .industry-pill {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 50px;
@@ -144,6 +208,11 @@
       color: rgba(255, 255, 255, 0.9);
       font-size: 0.95rem;
       transition: all 0.3s;
+    }
+    
+    .industry-pill i {
+      font-size: 1.1rem;
+      opacity: 0.9;
     }
     
     .industry-pill:hover {
@@ -168,6 +237,19 @@
       font-style: italic;
     }
     
+    .testimonial-card .testimonial-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--dark-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      flex-shrink: 0;
+    }
+    
     .testimonial-card blockquote {
       color: rgba(255, 255, 255, 0.9);
       font-size: 1rem;
@@ -179,6 +261,9 @@
       color: var(--yellow);
       font-size: 0.9rem;
       font-style: normal;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     
     /* Services Section */
@@ -344,6 +429,34 @@
     }
     
     /* Responsive */
+    @media (max-width: 992px) {
+      .hero-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .hero-welcome,
+      .hero-section h1,
+      .hero-section .hero-subheadline {
+        text-align: center;
+      }
+      
+      .hero-section .hero-subheadline {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .hero-buttons {
+        justify-content: center;
+      }
+      
+      .hero-visual {
+        flex: none;
+        max-width: 100%;
+        order: -1;
+      }
+    }
+    
     @media (max-width: 768px) {
       .section-title {
         font-size: 2rem;
@@ -393,48 +506,55 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container">
-      <h1>Never Miss a Lead. Streamline Intake. Automate Your Workflows.</h1>
-      <p class="hero-subheadline">From electricians and landscapers to clinics, caterers, and nonprofits — JL Solutions helps B2B businesses capture every lead, qualify requests, schedule efficiently, and follow up automatically. Less paperwork. More clients served.</p>
-      <a href="book-consultation.html" class="btn btn-primary">See How It Works — 15-Minute Demo</a>
-      <a href="resources/index.html" class="btn btn-outline">Download our "5 Ways to Never Miss a Lead" Guide</a>
+      <div class="hero-inner">
+        <div class="hero-content">
+          <p class="hero-welcome">Welcome — we're glad you're here.</p>
+          <h1>Never Miss a Lead. Streamline Intake. Automate Your Workflows.</h1>
+          <p class="hero-subheadline">From electricians and landscapers to clinics, caterers, and nonprofits — we help B2B businesses capture every lead, qualify requests, schedule efficiently, and follow up automatically. Less paperwork. More clients served.</p>
+          <div class="hero-buttons">
+            <a href="book-consultation.html" class="btn btn-primary">See How It Works — 15-Minute Demo</a>
+            <a href="resources/index.html" class="btn btn-outline">Download our "5 Ways to Never Miss a Lead" Guide</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <picture>
+            <source srcset="assets/images/hero-homepage.webp" type="image/webp">
+            <img src="assets/images/hero-homepage.png" alt="JL Solutions: Innovative IT and data solutions for your business, featuring professional consultancy and automated workflow dashboards" width="520" height="auto" loading="eager">
+          </picture>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Why JL Solutions? -->
   <section class="why-section">
     <div class="container">
-      <h2 class="section-title">Why JL Solutions?</h2>
-      <p class="section-subtitle">Problem → Solution → Result</p>
+      <h2 class="section-title">How We Help You Win</h2>
+      <p class="section-subtitle">Three ways we turn operational friction into growth</p>
       
       <div class="row g-4">
         <div class="col-md-4">
           <div class="psr-card">
-            <div class="problem">Problem</div>
-            <p>Leads, client requests, or applications slip through the cracks.</p>
-            <div class="solution">Solution</div>
-            <p>Our automation captures every request, pre-qualifies it, and routes it to the right team.</p>
-            <div class="result">Result</div>
-            <p>No missed opportunities. More clients or jobs booked without adding staff.</p>
+            <div class="psr-icon" aria-hidden="true">📋</div>
+            <h3 class="psr-headline">Never Miss a Lead Again</h3>
+            <p class="psr-desc">Our automation captures every request, pre-qualifies it, and routes it to the right team — so nothing slips through the cracks.</p>
+            <span class="psr-outcome">Cut missed opportunities to zero</span>
           </div>
         </div>
         <div class="col-md-4">
           <div class="psr-card">
-            <div class="problem">Problem</div>
-            <p>Slow quotes, approvals, or scheduling frustrate clients and cost revenue.</p>
-            <div class="solution">Solution</div>
-            <p>Automated workflows trigger estimates, confirmations, and follow-ups instantly.</p>
-            <div class="result">Result</div>
-            <p>Faster turnaround, higher booking rates, happier clients.</p>
+            <div class="psr-icon" aria-hidden="true">⚡</div>
+            <h3 class="psr-headline">Faster Quotes & Turnaround</h3>
+            <p class="psr-desc">Automated workflows trigger estimates, confirmations, and follow-ups instantly — no more slow response times.</p>
+            <span class="psr-outcome">Cut response time by 50%</span>
           </div>
         </div>
         <div class="col-md-4">
           <div class="psr-card">
-            <div class="problem">Problem</div>
-            <p>Peak season or event surges overwhelm your office.</p>
-            <div class="solution">Solution</div>
-            <p>Systems scale automatically — intake, scheduling, follow-ups.</p>
-            <div class="result">Result</div>
-            <p>Your business grows without chaos.</p>
+            <div class="psr-icon" aria-hidden="true">📈</div>
+            <h3 class="psr-headline">Scale Without Chaos</h3>
+            <p class="psr-desc">Systems scale automatically during peak season — intake, scheduling, and follow-ups handle the surge.</p>
+            <span class="psr-outcome">Grow without adding staff</span>
           </div>
         </div>
       </div>
@@ -448,15 +568,15 @@
   <!-- Target Industries -->
   <section class="industries-section">
     <div class="container text-center">
-      <h2 class="section-title">Industries We Serve</h2>
-      <p class="section-subtitle">From home services to healthcare, catering to nonprofits</p>
+      <h2 class="section-title">Who We Work With</h2>
+      <p class="section-subtitle">From home services to healthcare, catering to nonprofits — we've got you</p>
       <div class="mt-4">
-        <span class="industry-pill">Electricians & HVAC</span>
-        <span class="industry-pill">Roofing, Siding, Landscaping</span>
-        <span class="industry-pill">Mental Health & Substance Abuse Clinics</span>
-        <span class="industry-pill">Nonprofits & Assistance Programs</span>
-        <span class="industry-pill">Restaurants & Catering</span>
-        <span class="industry-pill">Food Trucks / Pop-Up Operations</span>
+        <span class="industry-pill"><i class="bi bi-lightning-charge-fill"></i> Electricians & HVAC</span>
+        <span class="industry-pill"><i class="bi bi-house-gear-fill"></i> Roofing, Siding, Landscaping</span>
+        <span class="industry-pill"><i class="bi bi-heart-pulse-fill"></i> Mental Health & Substance Abuse Clinics</span>
+        <span class="industry-pill"><i class="bi bi-people-fill"></i> Nonprofits & Assistance Programs</span>
+        <span class="industry-pill"><i class="bi bi-cup-hot-fill"></i> Restaurants & Catering</span>
+        <span class="industry-pill"><i class="bi bi-truck"></i> Food Trucks / Pop-Up Operations</span>
       </div>
     </div>
   </section>
@@ -465,23 +585,27 @@
   <section class="testimonials-section">
     <div class="container">
       <h2 class="section-title">What Our Clients Say</h2>
+      <p class="section-subtitle">Real results from businesses like yours</p>
       <div class="row g-4 mt-3">
         <div class="col-md-4">
           <div class="testimonial-card">
+            <div class="testimonial-avatar" aria-hidden="true"><i class="bi bi-heart-pulse"></i></div>
             <blockquote>"JL Solutions automated our client intake and eligibility tracking — we onboard more patients in a day than we used to in a week."</blockquote>
-            <div class="attribution">— Mental Health Clinic</div>
+            <div class="attribution"><i class="bi bi-building"></i> Mental Health Clinic</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="testimonial-card">
+            <div class="testimonial-avatar" aria-hidden="true"><i class="bi bi-cup-hot"></i></div>
             <blockquote>"Our catering requests used to get lost in email. Now everything is captured automatically, and we never miss an event."</blockquote>
-            <div class="attribution">— Local Catering Company</div>
+            <div class="attribution"><i class="bi bi-building"></i> Local Catering Company</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="testimonial-card">
+            <div class="testimonial-avatar" aria-hidden="true"><i class="bi bi-lightning-charge"></i></div>
             <blockquote>"JL Solutions cut our quote turnaround in half. We're booking jobs we used to miss."</blockquote>
-            <div class="attribution">— Electrical Contractor</div>
+            <div class="attribution"><i class="bi bi-building"></i> Electrical Contractor</div>
           </div>
         </div>
       </div>
@@ -492,9 +616,9 @@
   <section class="about-section">
     <div class="container">
       <div class="about-content">
-        <h2>We Build Systems That Let B2B Businesses Focus on What They Do Best</h2>
-        <p>JL Solutions exists to help small-to-mid B2B companies — from home service teams to mental health clinics, caterers, and nonprofits — scale without breaking their office. Most businesses are amazing at what they do, but back-office processes are stuck on sticky notes, voicemail, and slow workflows.</p>
-        <a href="about.html" class="btn btn-outline">Learn More</a>
+        <h2>We Build Systems So You Can Focus on What You Do Best</h2>
+        <p>Most businesses are amazing at their craft — but back-office processes get stuck on sticky notes, voicemail, and slow workflows. We help small-to-mid B2B companies scale without breaking their office. No jargon, no runaround. Just systems that work.</p>
+        <a href="about.html" class="btn btn-outline">Learn More About Us</a>
       </div>
     </div>
   </section>
@@ -502,8 +626,8 @@
   <!-- CTA Section -->
   <section class="cta-section">
     <div class="container">
-      <h2>See How We Can Help Your Business Run Itself</h2>
-      <p>Schedule a 15-minute demo and discover how your workflows can run themselves.</p>
+      <h2>Ready to See How It Works?</h2>
+      <p>Book a free 15-minute demo. No pressure — we'll show you what's possible and you decide what's right for you.</p>
       <a href="book-consultation.html" class="btn btn-primary">Schedule Your 15-Minute Demo</a>
     </div>
   </section>

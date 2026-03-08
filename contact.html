@@ -5,8 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact | JL Solutions</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .contact-wrapper { max-width: 900px; margin: 0 auto; }
+    .contact-helper { font-size: 0.95rem; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+    .what-happens-next {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+    .what-happens-next h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+    .what-happens-next ol { padding-left: 1.25rem; margin: 0; color: rgba(255,255,255,0.85); }
+    .what-happens-next li { margin-bottom: 0.5rem; }
+    .contact-human {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .contact-human img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .contact-human .blurb { font-size: 1rem; color: rgba(255,255,255,0.9); }
+  </style>
   <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 </head>
@@ -15,11 +44,13 @@
 
   <main class="py-5">
     <div class="container">
-      <h1 class="text-center mb-4">Contact Us</h1>
-      <p class="text-center lead mb-5">Let’s start something great together.</p>
+      <div class="contact-wrapper">
+        <h1 class="text-center mb-2">Contact Us</h1>
+        <p class="text-center lead mb-4">Let's start something great together.</p>
+        <p class="contact-helper text-center">Typical response time: within 1 business day.</p>
 
       <!-- Netlify Form START -->
-      <form name="contact" method="POST" netlify-honeypot="bot-field" action="/.netlify/functions/send-form-email" class="mx-auto" style="max-width: 600px;">
+      <form name="contact" method="POST" netlify-honeypot="bot-field" action="/.netlify/functions/send-form-email" class="mx-auto">
         <input type="hidden" name="form-name" value="contact">
         <!-- Honeypot field for bots -->
         <p hidden>
@@ -45,9 +76,26 @@
       </form>
       <!-- Netlify Form END -->
 
-      <div class="text-center mt-5">
-        <p>Email: <a href="mailto:info@jlsolutions.io">info@jlsolutions.io</a></p>
-        <p>LinkedIn: <a href="https://www.linkedin.com/in/jess-walcott-3423aa87">Jess on LinkedIn</a></p>
+        <div class="what-happens-next">
+          <h3>What happens next</h3>
+          <ol>
+            <li>We'll reply within 1 business day (usually sooner).</li>
+            <li>We'll schedule a quick 15-minute call to understand your needs.</li>
+            <li>If it's a fit, we'll outline next steps—no pressure, no sales dungeon.</li>
+          </ol>
+          <div class="contact-human">
+            <picture>
+              <source srcset="/assets/images/jess-walcott.webp" type="image/webp">
+              <img src="/assets/images/jess-walcott.png" alt="Jess Walcott, founder of JL Solutions—you'll talk to a real person, not a sales team" width="80" height="80" loading="lazy">
+            </picture>
+            <p class="blurb mb-0"><strong>You'll talk to Jess, not a sales dungeon.</strong> Real person, real conversation, no runaround.</p>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <p class="mb-1">Email: <a href="mailto:info@jlsolutions.io" style="color: #0078d4;">info@jlsolutions.io</a></p>
+          <p class="mb-0">LinkedIn: <a href="https://www.linkedin.com/in/jess-walcott-3423aa87" style="color: #0078d4;">Jess on LinkedIn</a></p>
+        </div>
       </div>
     </div>
   </main>

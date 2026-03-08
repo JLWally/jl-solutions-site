@@ -36,12 +36,29 @@
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 16px;
-      padding: 2rem;
+      padding: 0;
       margin-bottom: 2rem;
       transition: all 0.3s;
       cursor: pointer;
       height: 100%;
       color: rgba(255, 255, 255, 0.9);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .case-study-cover {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--blue), var(--dark-blue));
+    }
+    
+    .case-study-card-body {
+      padding: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
     
     .case-study-card h3 {
@@ -136,6 +153,28 @@
       background: var(--blue);
       border-color: var(--blue);
     }
+    
+    .btn-case-study {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--yellow);
+      color: var(--black);
+      border: none;
+      padding: 0.6rem 1.25rem;
+      font-weight: 600;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .btn-case-study:hover {
+      background: #e6a740;
+      transform: translateY(-2px);
+      color: var(--black);
+    }
   </style>
 </head>
 <body>
@@ -182,125 +221,137 @@
     <div class="row" id="caseStudiesGrid">
       <!-- Case Study 1 -->
       <div class="col-lg-6 case-study-item" data-industry="government">
-        <div class="case-study-card" onclick="openCaseStudy(1)">
-          <span class="industry-badge">Government</span>
-          <h3>Federal Agency Process Automation</h3>
-          <p style="color: rgba(255, 255, 255, 0.8);">Streamlined document processing and workflow automation for a major federal agency</p>
-          
-          <div class="metrics-grid">
-            <div class="metric-item">
-              <div class="metric-value">75%</div>
-              <div class="metric-label">Time Saved</div>
+        <div class="case-study-card">
+          <picture><source srcset="/assets/images/process-discover-develop-deploy.webp" type="image/webp"><img src="/assets/images/process-discover-develop-deploy.png" alt="Federal agency workflow automation: document processing and streamlined operations" class="case-study-cover" width="600" height="180" loading="lazy"></picture>
+          <div class="case-study-card-body">
+            <span class="industry-badge">Government</span>
+            <h3>Federal Agency Process Automation</h3>
+            <p style="color: rgba(255, 255, 255, 0.8);">Streamlined document processing and workflow automation for a major federal agency</p>
+            
+            <div class="metrics-grid">
+              <div class="metric-item">
+                <div class="metric-value">75%</div>
+                <div class="metric-label">Time Saved</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">$2.5M</div>
+                <div class="metric-label">Annual Savings</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">90%</div>
+                <div class="metric-label">Error Reduction</div>
+              </div>
             </div>
-            <div class="metric-item">
-              <div class="metric-value">$2.5M</div>
-              <div class="metric-label">Annual Savings</div>
+            
+            <div class="testimonial">
+              "JL Solutions transformed our operations. What used to take weeks now takes hours."
+              <br><strong>- Agency Director</strong>
             </div>
-            <div class="metric-item">
-              <div class="metric-value">90%</div>
-              <div class="metric-label">Error Reduction</div>
-            </div>
+            
+            <a href="/case-studies/federal-agency.html" class="btn-case-study">Read Full Case Study →</a>
           </div>
-          
-          <div class="testimonial">
-            "JL Solutions transformed our operations. What used to take weeks now takes hours."
-            <br><strong>- Agency Director</strong>
-          </div>
-          
-          <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Read Full Case Study →</a>
         </div>
       </div>
 
       <!-- Case Study 2 -->
       <div class="col-lg-6 case-study-item" data-industry="nonprofit">
-        <div class="case-study-card" onclick="openCaseStudy(2)">
-          <span class="industry-badge">Nonprofit</span>
-          <h3>Nonprofit Data Management System</h3>
-          <p style="color: rgba(255, 255, 255, 0.8);">Automated intake processes and donor management for a growing nonprofit organization</p>
-          
-          <div class="metrics-grid">
-            <div class="metric-item">
-              <div class="metric-value">60%</div>
-              <div class="metric-label">Process Efficiency</div>
+        <div class="case-study-card">
+          <picture><source srcset="/assets/images/eligibility_wizard_banner.webp" type="image/webp"><img src="/assets/images/eligibility_wizard_banner.png" alt="Nonprofit intake automation and donor management system" class="case-study-cover" width="600" height="180" loading="lazy"></picture>
+          <div class="case-study-card-body">
+            <span class="industry-badge">Nonprofit</span>
+            <h3>Nonprofit Data Management System</h3>
+            <p style="color: rgba(255, 255, 255, 0.8);">Automated intake processes and donor management for a growing nonprofit organization</p>
+            
+            <div class="metrics-grid">
+              <div class="metric-item">
+                <div class="metric-value">60%</div>
+                <div class="metric-label">Process Efficiency</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">3x</div>
+                <div class="metric-label">Capacity Increase</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">95%</div>
+                <div class="metric-label">Accuracy</div>
+              </div>
             </div>
-            <div class="metric-item">
-              <div class="metric-value">3x</div>
-              <div class="metric-label">Capacity Increase</div>
+            
+            <div class="testimonial">
+              "We can now serve more clients with the same team size. It's been transformative."
+              <br><strong>- Executive Director</strong>
             </div>
-            <div class="metric-item">
-              <div class="metric-value">95%</div>
-              <div class="metric-label">Accuracy</div>
-            </div>
+            
+            <a href="/case-studies/nonprofit-data-management.html" class="btn-case-study">Read Full Case Study →</a>
           </div>
-          
-          <div class="testimonial">
-            "We can now serve more clients with the same team size. It's been transformative."
-            <br><strong>- Executive Director</strong>
-          </div>
-          
-          <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Read Full Case Study →</a>
         </div>
       </div>
 
       <!-- Case Study 3 -->
       <div class="col-lg-6 case-study-item" data-industry="enterprise">
-        <div class="case-study-card" onclick="openCaseStudy(3)">
-          <span class="industry-badge">Enterprise</span>
-          <h3>Enterprise Workflow Integration</h3>
-          <p style="color: rgba(255, 255, 255, 0.8);">Connected disparate systems and automated cross-department workflows</p>
-          
-          <div class="metrics-grid">
-            <div class="metric-item">
-              <div class="metric-value">50%</div>
-              <div class="metric-label">Faster Processing</div>
+        <div class="case-study-card">
+          <picture><source srcset="/assets/images/hero-homepage.webp" type="image/webp"><img src="/assets/images/hero-homepage.png" alt="Enterprise workflow integration connecting systems and automating cross-department processes" class="case-study-cover" width="600" height="180" loading="lazy"></picture>
+          <div class="case-study-card-body">
+            <span class="industry-badge">Enterprise</span>
+            <h3>Enterprise Workflow Integration</h3>
+            <p style="color: rgba(255, 255, 255, 0.8);">Connected disparate systems and automated cross-department workflows</p>
+            
+            <div class="metrics-grid">
+              <div class="metric-item">
+                <div class="metric-value">50%</div>
+                <div class="metric-label">Faster Processing</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">$1.8M</div>
+                <div class="metric-label">Cost Reduction</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">24/7</div>
+                <div class="metric-label">Automation</div>
+              </div>
             </div>
-            <div class="metric-item">
-              <div class="metric-value">$1.8M</div>
-              <div class="metric-label">Cost Reduction</div>
+            
+            <div class="testimonial">
+              "The integration has eliminated bottlenecks and improved our entire operation."
+              <br><strong>- COO</strong>
             </div>
-            <div class="metric-item">
-              <div class="metric-value">24/7</div>
-              <div class="metric-label">Automation</div>
-            </div>
+            
+            <a href="/case-studies/enterprise-workflow.html" class="btn-case-study">Read Full Case Study →</a>
           </div>
-          
-          <div class="testimonial">
-            "The integration has eliminated bottlenecks and improved our entire operation."
-            <br><strong>- COO</strong>
-          </div>
-          
-          <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Read Full Case Study →</a>
         </div>
       </div>
 
       <!-- Case Study 4 -->
       <div class="col-lg-6 case-study-item" data-industry="small-business">
-        <div class="case-study-card" onclick="openCaseStudy(4)">
-          <span class="industry-badge">Small Business</span>
-          <h3>Small Business Operations Optimization</h3>
-          <p style="color: rgba(255, 255, 255, 0.8);">Automated administrative tasks for a growing small business</p>
-          
-          <div class="metrics-grid">
-            <div class="metric-item">
-              <div class="metric-value">40 hrs</div>
-              <div class="metric-label">Saved/Week</div>
+        <div class="case-study-card">
+          <picture><source srcset="/assets/images/fix_my_app_banner.webp" type="image/webp"><img src="/assets/images/fix_my_app_banner.png" alt="Small business operations optimization and administrative automation" class="case-study-cover" width="600" height="180" loading="lazy"></picture>
+          <div class="case-study-card-body">
+            <span class="industry-badge">Small Business</span>
+            <h3>Small Business Operations Optimization</h3>
+            <p style="color: rgba(255, 255, 255, 0.8);">Automated administrative tasks for a growing small business</p>
+            
+            <div class="metrics-grid">
+              <div class="metric-item">
+                <div class="metric-value">40 hrs</div>
+                <div class="metric-label">Saved/Week</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">$85K</div>
+                <div class="metric-label">Annual Savings</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">100%</div>
+                <div class="metric-label">ROI</div>
+              </div>
             </div>
-            <div class="metric-item">
-              <div class="metric-value">$85K</div>
-              <div class="metric-label">Annual Savings</div>
+            
+            <div class="testimonial">
+              "We got back to focusing on what we do best instead of paperwork."
+              <br><strong>- Business Owner</strong>
             </div>
-            <div class="metric-item">
-              <div class="metric-value">100%</div>
-              <div class="metric-label">ROI</div>
-            </div>
+            
+            <a href="/case-studies/small-business-optimization.html" class="btn-case-study">Read Full Case Study →</a>
           </div>
-          
-          <div class="testimonial">
-            "We got back to focusing on what we do best instead of paperwork."
-            <br><strong>- Business Owner</strong>
-          </div>
-          
-          <a href="#" style="color: var(--blue); text-decoration: none; font-weight: 600;">Read Full Case Study →</a>
         </div>
       </div>
     </div>
