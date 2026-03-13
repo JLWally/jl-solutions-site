@@ -26,8 +26,22 @@ const ensureChatbot = () => {
   document.head.appendChild(script);
 };
 
+const setActiveNav = () => {
+  const path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
+  document.querySelectorAll('.navbar .nav-link').forEach((link) => {
+    link.classList.remove('active');
+    const href = (link.getAttribute('href') || '').replace(/^\//, '').replace(/\/$/, '') || 'index.html';
+    const isHome = !href || href === 'index.html' || href === '';
+    const pathIsHome = !path || path === '/' || path === 'index.html' || path.endsWith('/index.html');
+    if (isHome && pathIsHome) link.classList.add('active');
+    else if (!isHome && path.includes(href.split('/')[0])) link.classList.add('active');
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   injectPartial("header", "/partials/header.html");
   injectPartial("footer", "/partials/footer.html");
   ensureChatbot();
+  // Set active nav after header loads (with small delay for fetch)
+  setTimeout(setActiveNav, 100);
 });
