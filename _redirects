@@ -7,3 +7,7 @@
 
 # Services: allow URL without .html
 /services/ai-intake-form    /services/ai-intake-form.html   302
+
+# Resources: clean URLs without .html
+/resources/process-documentation-template    /resources/process-documentation-template.html   302
+/resources/automation-checklist    /resources/automation-checklist.html   302

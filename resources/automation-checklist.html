@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automation Workflow Checklist - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.webp" type="image/webp">
+  <link rel="shortcut icon" href="/assets/images/jlsolutions-logo.webp" type="image/webp">
+  <style>
+    .resource-hero { background: var(--jl-dark); padding: 4rem 0; text-align: center; }
+    .resource-hero h1 { color: var(--jl-white); font-weight: 800; }
+    .resource-hero .lead { color: var(--jl-text-muted); }
+    .checklist-section { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+    .checklist-section h2 { color: var(--jl-accent); font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
+    .checklist-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; color: var(--jl-text-muted); }
+    .checklist-item input[type="checkbox"] { margin-top: 0.25rem; accent-color: var(--jl-accent); }
+    .checklist-item label { cursor: pointer; flex: 1; }
+    .checklist-item:has(input:checked) { color: var(--jl-text); text-decoration: line-through; opacity: 0.8; }
+    .print-btn { background: var(--jl-accent); color: #1a1a1a; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 8px; border: none; }
+    .print-btn:hover { background: var(--jl-accent-hover); color: #1a1a1a; }
+    @media print { .no-print { display: none !important; } .checklist-section { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark jl-theme no-print">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">
+        <img src="/assets/images/jlsolutions-logo.webp" alt="" class="jl-logo-icon" aria-hidden="true">
+        JL Solutions
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/case-studies/index.html">Case Studies</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/resources/index.html">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+        <a href="/book-consultation.html" class="btn btn-book-call">Book A Call</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="resource-hero">
+    <div class="container">
+      <a href="/resources/index.html" class="text-decoration-none text-white-50 small d-inline-block mb-2"><i class="bi bi-arrow-left me-1"></i>Back to Resource Library</a>
+      <h1 class="display-5 mb-2">Automation Workflow Checklist</h1>
+      <p class="lead">Step-by-step checklist for planning and implementing automation projects</p>
+      <button onclick="window.print()" class="btn print-btn no-print"><i class="bi bi-printer me-2"></i>Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="container my-5">
+    <div class="checklist-section">
+      <h2><i class="bi bi-1-circle me-2"></i>Discovery & Planning</h2>
+      <div class="checklist-item">
+        <input type="checkbox" id="c1">
+        <label for="c1">Identify the process to automate (start with high-volume, repetitive tasks)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c2">
+        <label for="c2">Map the current process end-to-end (inputs, steps, outputs, handoffs)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c3">
+        <label for="c3">Document pain points and bottlenecks</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c4">
+        <label for="c4">Define success metrics (time saved, error reduction, cost)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c5">
+        <label for="c5">Identify stakeholders and get buy-in</label>
+      </div>
+    </div>
+
+    <div class="checklist-section">
+      <h2><i class="bi bi-2-circle me-2"></i>Design</h2>
+      <div class="checklist-item">
+        <input type="checkbox" id="c6">
+        <label for="c6">Design the future-state workflow (what gets automated vs. manual)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c7">
+        <label for="c7">Choose tools (Power Platform, Zapier, custom, etc.)</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c8">
+        <label for="c8">Define data sources and integrations needed</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c9">
+        <label for="c9">Create error-handling and exception rules</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c10">
+        <label for="c10">Estimate ROI and timeline</label>
+      </div>
+    </div>
+
+    <div class="checklist-section">
+      <h2><i class="bi bi-3-circle me-2"></i>Build & Test</h2>
+      <div class="checklist-item">
+        <input type="checkbox" id="c11">
+        <label for="c11">Build the automation in a dev/test environment</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c12">
+        <label for="c12">Test with sample data and edge cases</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c13">
+        <label for="c13">Document the solution for your team</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c14">
+        <label for="c14">Train users on the new workflow</label>
+      </div>
+    </div>
+
+    <div class="checklist-section">
+      <h2><i class="bi bi-4-circle me-2"></i>Deploy & Optimize</h2>
+      <div class="checklist-item">
+        <input type="checkbox" id="c15">
+        <label for="c15">Deploy to production with a rollout plan</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c16">
+        <label for="c16">Monitor performance and gather feedback</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c17">
+        <label for="c17">Measure results against success metrics</label>
+      </div>
+      <div class="checklist-item">
+        <input type="checkbox" id="c18">
+        <label for="c18">Iterate and improve based on learnings</label>
+      </div>
+    </div>
+
+    <p class="text-center mt-4 no-print">
+      <a href="/book-consultation.html" class="btn btn-primary">Need help? Schedule a Free Consultation</a>
+    </p>
+  </div>
+
+  <footer class="py-5 jl-theme no-print">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>JL Solutions</h5>
+          <p class="mb-0">Automate, Streamline, Grow Your Business.</p>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled mb-0">
+            <li><a href="/services/index.html">Services</a></li>
+            <li><a href="/resources/index.html">Resources</a></li>
+            <li><a href="/book-consultation.html">Free Consultation</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Connect With Us</h5>
+          <p class="mb-0">Email: <a href="mailto:info@jlsolutions.io">info@jlsolutions.io</a></p>
+        </div>
+      </div>
+      <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0;">
+      <div class="text-center"><small>&copy; 2026 JL Solutions. All rights reserved.</small></div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

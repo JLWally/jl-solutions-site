@@ -5,31 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resource Library - JL Solutions</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="icon" href="assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.webp" type="image/webp">
+  <link rel="shortcut icon" href="/assets/images/jlsolutions-logo.webp" type="image/webp">
+  <link rel="apple-touch-icon" href="/assets/images/jlsolutions-logo.webp">
   <style>
-    :root {
-      --black: #000000;
-      --blue: #0078d4;
-      --white: #ffffff;
-      --dark-blue: #004298;
-      --yellow: #ffbd59;
-    }
-    
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--black);
-      color: var(--white);
-    }
-    
     .resource-hero {
-      background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+      background: var(--jl-dark);
       padding: 4rem 0;
       text-align: center;
       color: white;
     }
-    
+    .resource-hero h1 { color: var(--jl-white); font-weight: 800; }
+    .resource-hero .lead { color: var(--jl-text-muted); }
     .resource-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -39,51 +32,58 @@
       transition: all 0.3s;
       height: 100%;
     }
-    
     .resource-card:hover {
-      border-color: var(--blue);
+      border-color: var(--jl-accent);
       transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(255, 193, 7, 0.2);
     }
-    
     .resource-type {
       display: inline-block;
       padding: 0.25rem 0.75rem;
-      background: rgba(255, 189, 89, 0.2);
-      color: var(--yellow);
+      background: rgba(255, 193, 7, 0.2);
+      color: var(--jl-accent);
       border-radius: 20px;
       font-size: 0.85rem;
       font-weight: 600;
       margin-bottom: 1rem;
     }
-    
+    .resource-card h4 { color: var(--jl-white); font-weight: 700; }
+    .resource-card .text-muted { color: var(--jl-text-muted) !important; }
     .btn-download {
-      background: var(--yellow);
-      color: var(--black);
+      background: var(--jl-accent);
+      color: #1a1a1a;
       border: none;
       padding: 0.75rem 1.5rem;
       font-weight: 600;
       border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .btn-download:hover {
+      background: var(--jl-accent-hover);
+      transform: translateY(-2px);
     }
   </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark jl-theme">
     <div class="container">
-      <a class="navbar-brand" href="/index.html">JL Solutions</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <a class="navbar-brand" href="/index.html">
+        <img src="/assets/images/jlsolutions-logo.webp" alt="" class="jl-logo-icon" aria-hidden="true">
+        JL Solutions
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav mx-auto">
           <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
           <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
           <li class="nav-item"><a class="nav-link" href="/case-studies/index.html">Case Studies</a></li>
           <li class="nav-item"><a class="nav-link active" href="/resources/index.html" aria-current="page">Resources</a></li>
-          <li class="nav-item"><a class="nav-link" href="/book-consultation.html">Book Consultation</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
         </ul>
+        <a href="/book-consultation.html" class="btn btn-book-call">Book A Call</a>
       </div>
     </div>
   </nav>
@@ -100,52 +100,66 @@
     <div class="row">
       <div class="col-md-4 mb-4">
         <div class="resource-card">
-          <span class="resource-type">📄 Template</span>
+          <span class="resource-type"><i class="bi bi-file-earmark-text me-1"></i>Template</span>
           <h4>Automation Workflow Checklist</h4>
           <p class="text-muted">Step-by-step checklist for planning and implementing automation projects</p>
-          <button class="btn-download" onclick="downloadResource('automation-checklist')">Download</button>
+          <a href="/resources/automation-checklist.html" class="btn btn-download text-decoration-none">View &amp; Print</a>
         </div>
       </div>
       
       <div class="col-md-4 mb-4">
         <div class="resource-card">
-          <span class="resource-type">📊 Whitepaper</span>
+          <span class="resource-type"><i class="bi bi-file-earmark-bar-graph me-1"></i>Whitepaper</span>
           <h4>ROI Guide: Automation Strategies</h4>
           <p class="text-muted">Comprehensive guide to calculating ROI and planning automation initiatives</p>
-          <button class="btn-download" onclick="downloadResource('roi-guide')">Download</button>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="/insights/measuring-roi-automation.html" class="btn btn-download text-decoration-none">Read Guide</a>
+            <a href="/tools/roi-calculator.html" class="btn btn-outline-light btn-sm text-decoration-none">ROI Calculator</a>
+          </div>
         </div>
       </div>
       
       <div class="col-md-4 mb-4">
         <div class="resource-card">
-          <span class="resource-type">📋 Template</span>
+          <span class="resource-type"><i class="bi bi-clipboard-check me-1"></i>Template</span>
           <h4>Process Documentation Template</h4>
           <p class="text-muted">Template for documenting current processes before automation</p>
-          <button class="btn-download" onclick="downloadResource('process-template')">Download</button>
+          <a href="/resources/process-documentation-template.html" class="btn btn-download text-decoration-none">View &amp; Print</a>
         </div>
       </div>
     </div>
   </div>
 
-  <script>
-    function downloadResource(name) {
-      alert(`Download feature coming soon! Resource: ${name}`);
-    }
-  </script>
-
-  <footer class="bg-dark text-white py-4 mt-5">
+  <footer class="py-5 jl-theme">
     <div class="container">
       <div class="row">
-        <div class="col-md-6">
-          <p class="mb-1"><a href="/index.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Home</a> · <a href="/services/index.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Services</a> · <a href="/book-consultation.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Book Consultation</a> · <a href="/contact.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">Contact</a></p>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>JL Solutions</h5>
+          <p class="mb-0">Automate, Streamline, Grow Your Business.</p>
         </div>
-        <div class="col-md-6 text-md-end">
-          <small>&copy; 2026 JL Solutions. Built with purpose.</small>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled mb-0">
+            <li><a href="/services/index.html">Services</a></li>
+            <li><a href="/case-studies/index.html">Case Studies</a></li>
+            <li><a href="/resources/index.html">Resources</a></li>
+            <li><a href="/book-consultation.html">Free Consultation</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
         </div>
+        <div class="col-md-4">
+          <h5>Connect With Us</h5>
+          <p class="mb-0">Email: <a href="mailto:info@jlsolutions.io">info@jlsolutions.io</a></p>
+        </div>
+      </div>
+      <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0;">
+      <div class="text-center">
+        <small>&copy; 2026 JL Solutions. All rights reserved.</small>
       </div>
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>
 

@@ -31,3 +31,16 @@
   to = "/services/ai-intake-form.html"
   status = 302
   force = true
+
+# Resources: clean URLs without .html
+[[redirects]]
+  from = "/resources/process-documentation-template"
+  to = "/resources/process-documentation-template.html"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/resources/automation-checklist"
+  to = "/resources/automation-checklist.html"
+  status = 302
+  force = true

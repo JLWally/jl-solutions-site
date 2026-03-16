@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Process Documentation Template - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.webp" type="image/webp">
+  <link rel="shortcut icon" href="/assets/images/jlsolutions-logo.webp" type="image/webp">
+  <style>
+    .resource-hero { background: var(--jl-dark); padding: 4rem 0; text-align: center; }
+    .resource-hero h1 { color: var(--jl-white); font-weight: 800; }
+    .resource-hero .lead { color: var(--jl-text-muted); }
+    .template-section { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+    .template-section h2 { color: var(--jl-accent); font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
+    .template-field { margin-bottom: 1rem; }
+    .template-field label { color: var(--jl-text-muted); font-size: 0.9rem; display: block; margin-bottom: 0.25rem; }
+    .template-field .value { color: var(--jl-white); font-weight: 500; }
+    .template-field .placeholder { color: rgba(255,255,255,0.4); font-style: italic; }
+    .template-form .form-control,
+    .template-form .form-select {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: var(--jl-white);
+    }
+    .template-form .form-control::placeholder { color: rgba(255,255,255,0.5); }
+    .template-form .form-control:focus,
+    .template-form .form-select:focus {
+      background: rgba(255,255,255,0.15);
+      border-color: var(--jl-accent);
+      color: var(--jl-white);
+      box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+    }
+    .template-form .form-select option { background: var(--jl-dark); color: var(--jl-white); }
+    .step-list { list-style: none; padding-left: 0; }
+    .step-list li { padding: 0.75rem; margin-bottom: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 8px; border-left: 4px solid var(--jl-accent); color: var(--jl-text-muted); }
+    .step-row .step-num { color: var(--jl-accent); font-weight: 600; min-width: 1.5rem; }
+    .print-btn { background: var(--jl-accent); color: #1a1a1a; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 8px; border: none; }
+    .print-btn:hover { background: var(--jl-accent-hover); color: #1a1a1a; }
+    .template-section .text-muted { color: var(--jl-text-muted) !important; }
+    .btn-primary { background: var(--jl-accent); color: #1a1a1a !important; border: none; font-weight: 600; }
+    .btn-primary:hover { background: var(--jl-accent-hover); color: #1a1a1a !important; }
+    .template-form .btn-outline-light { border-color: rgba(255,255,255,0.5); color: var(--jl-white); }
+    .template-form .btn-outline-light:hover { background: rgba(255,255,255,0.1); border-color: var(--jl-accent); color: var(--jl-accent); }
+    @media print {
+      .no-print { display: none !important; }
+      .template-section { break-inside: avoid; }
+      .template-form .form-control, .template-form .form-select {
+        background: rgba(255,255,255,0.1) !important;
+        border: 1px solid rgba(255,255,255,0.3) !important;
+        color: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark jl-theme no-print">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">
+        <img src="/assets/images/jlsolutions-logo.webp" alt="" class="jl-logo-icon" aria-hidden="true">
+        JL Solutions
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="/case-studies/index.html">Case Studies</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/resources/index.html">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
+        </ul>
+        <a href="/book-consultation.html" class="btn btn-book-call">Book A Call</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="resource-hero">
+    <div class="container">
+      <a href="/resources/index.html" class="text-decoration-none text-white-50 small d-inline-block mb-2"><i class="bi bi-arrow-left me-1"></i>Back to Resource Library</a>
+      <h1 class="display-5 mb-2">Process Documentation Template</h1>
+      <p class="lead">Template for documenting current processes before automation</p>
+      <button onclick="window.print()" class="btn print-btn no-print"><i class="bi bi-printer me-2"></i>Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="container my-5 template-form">
+    <div class="template-section">
+      <h2><i class="bi bi-info-circle me-2"></i>Process Overview</h2>
+      <div class="template-field">
+        <label for="processName">Process Name</label>
+        <input type="text" class="form-control" id="processName" placeholder="e.g., Client Intake, Quote Generation, Invoice Processing">
+      </div>
+      <div class="template-field">
+        <label for="department">Department / Owner</label>
+        <input type="text" class="form-control" id="department" placeholder="Who owns this process?">
+      </div>
+      <div class="template-field">
+        <label for="trigger">Trigger (What starts this process?)</label>
+        <input type="text" class="form-control" id="trigger" placeholder="e.g., New form submission, email received, manual request">
+      </div>
+      <div class="template-field">
+        <label for="frequency">Frequency</label>
+        <select class="form-select" id="frequency">
+          <option value="">Select frequency</option>
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+          <option value="On-demand">On-demand</option>
+        </select>
+      </div>
+      <div class="template-field">
+        <label for="volume">Volume (approx. per week)</label>
+        <input type="text" class="form-control" id="volume" placeholder="Number of instances">
+      </div>
+    </div>
+
+    <div class="template-section">
+      <h2><i class="bi bi-list-ol me-2"></i>Current Steps (As-Is)</h2>
+      <p class="text-muted small mb-3">List each step in order. Include who does it, what tools are used, and any handoffs.</p>
+      <div id="stepsContainer">
+        <div class="step-row d-flex gap-2 mb-2 align-items-start">
+          <span class="step-num pt-2">1.</span>
+          <input type="text" class="form-control flex-grow-1" placeholder="Describe the action">
+          <input type="text" class="form-control" style="max-width: 200px;" placeholder="Who / Tool">
+        </div>
+        <div class="step-row d-flex gap-2 mb-2 align-items-start">
+          <span class="step-num pt-2">2.</span>
+          <input type="text" class="form-control flex-grow-1" placeholder="Describe the action">
+          <input type="text" class="form-control" style="max-width: 200px;" placeholder="Who / Tool">
+        </div>
+        <div class="step-row d-flex gap-2 mb-2 align-items-start">
+          <span class="step-num pt-2">3.</span>
+          <input type="text" class="form-control flex-grow-1" placeholder="Describe the action">
+          <input type="text" class="form-control" style="max-width: 200px;" placeholder="Who / Tool">
+        </div>
+        <div class="step-row d-flex gap-2 mb-2 align-items-start">
+          <span class="step-num pt-2">4.</span>
+          <input type="text" class="form-control flex-grow-1" placeholder="Describe the action">
+          <input type="text" class="form-control" style="max-width: 200px;" placeholder="Who / Tool">
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-light btn-sm no-print" onclick="addStep()"><i class="bi bi-plus me-1"></i>Add step</button>
+    </div>
+
+    <div class="template-section">
+      <h2><i class="bi bi-exclamation-triangle me-2"></i>Pain Points & Bottlenecks</h2>
+      <div class="template-field">
+        <label for="painPoints">Where do delays or errors occur?</label>
+        <textarea class="form-control" id="painPoints" rows="3" placeholder="List specific pain points"></textarea>
+      </div>
+      <div class="template-field">
+        <label for="manualWork">Manual work that could be automated?</label>
+        <textarea class="form-control" id="manualWork" rows="3" placeholder="Data entry, copying, routing, notifications, etc."></textarea>
+      </div>
+    </div>
+
+    <div class="template-section">
+      <h2><i class="bi bi-graph-up me-2"></i>Success Metrics</h2>
+      <div class="template-field">
+        <label for="timeCurrent">Time to complete (current)</label>
+        <input type="text" class="form-control" id="timeCurrent" placeholder="e.g., 2 hours per request">
+      </div>
+      <div class="template-field">
+        <label for="targetImprovement">Target improvement</label>
+        <input type="text" class="form-control" id="targetImprovement" placeholder="e.g., Reduce to 15 minutes, 80% automation">
+      </div>
+    </div>
+
+    <p class="text-center mt-4 no-print">
+      <a href="/book-consultation.html" class="btn btn-primary">Ready to automate? Schedule a Free Consultation</a>
+    </p>
+  </div>
+
+  <footer class="py-5 jl-theme no-print">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>JL Solutions</h5>
+          <p class="mb-0">Automate, Streamline, Grow Your Business.</p>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled mb-0">
+            <li><a href="/services/index.html">Services</a></li>
+            <li><a href="/resources/index.html">Resources</a></li>
+            <li><a href="/book-consultation.html">Free Consultation</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Connect With Us</h5>
+          <p class="mb-0">Email: <a href="mailto:info@jlsolutions.io">info@jlsolutions.io</a></p>
+        </div>
+      </div>
+      <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0;">
+      <div class="text-center"><small>&copy; 2026 JL Solutions. All rights reserved.</small></div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script>
+    function addStep() {
+      const container = document.getElementById('stepsContainer');
+      const count = container.querySelectorAll('.step-row').length + 1;
+      const row = document.createElement('div');
+      row.className = 'step-row d-flex gap-2 mb-2 align-items-start';
+      row.innerHTML = '<span class="step-num pt-2">' + count + '.</span>' +
+        '<input type="text" class="form-control flex-grow-1" placeholder="Describe the action">' +
+        '<input type="text" class="form-control" style="max-width: 200px;" placeholder="Who / Tool">';
+      container.appendChild(row);
+    }
+  </script>
+</body>
+</html>
