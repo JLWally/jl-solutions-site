@@ -31,8 +31,11 @@
 <body>
   <div class="signup-container">
     <div class="signup-card">
+      <div id="signupSimpleNotice" class="alert alert-info py-2 small" style="display:none;">
+        <strong>Internal auth mode.</strong> Contact your admin to get a username and referral code. Email <a href="mailto:info@jlsolutions.io">info@jlsolutions.io</a>.
+      </div>
       <div id="signupConfigNotice" class="alert alert-warning py-2 small" style="display:none;">
-        Sign-up not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in Netlify environment variables.
+        Sign-up not configured. <a href="/referral/setup.html">Run the setup guide</a> (Supabase schema + Netlify env vars).
       </div>
       <div class="signup-header">
         <h1>Join as Sales Agent</h1>
@@ -80,7 +83,10 @@
   <script src="/js/referral-bootstrap.js"></script>
   <script>
     window.onReferralReady = function() {
-      if (!window.JL_REFERRAL_CONFIGURED) {
+      if (window.JL_REFERRAL_SIMPLE_AUTH) {
+        document.getElementById('signupSimpleNotice').style.display = 'block';
+        document.getElementById('signupForm').style.display = 'none';
+      } else if (!window.JL_REFERRAL_CONFIGURED) {
         document.getElementById('signupConfigNotice').style.display = 'block';
       }
       document.getElementById('signupForm').addEventListener('submit', async (e) => {

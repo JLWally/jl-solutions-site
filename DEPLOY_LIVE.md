@@ -46,7 +46,7 @@ Your **feature/azure-aws-cloud-migration-page** branch (pushed to GitHub) includ
 
 ## After deploy – quick checks
 
-- **Homepage**: https://www.jlsolutions.io — nav has “Book Consultation”, CTA is “Book Free Consultation”.
+- **Homepage**: https://www.jlsolutions.io  - nav has “Book Consultation”, CTA is “Book Free Consultation”.
 - **Consultation**: https://www.jlsolutions.io/book-consultation.html
 - **Referral login**: https://www.jlsolutions.io/referral/login.html
 - **Referral signup**: https://www.jlsolutions.io/referral/signup.html

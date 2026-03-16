@@ -45,9 +45,19 @@
 
   <div class="container my-4">
     <div id="configError" class="text-center py-5" style="display:none;">
-      <p class="mb-2">Referral dashboard is not configured yet.</p>
-      <p class="small">Set <strong>SUPABASE_URL</strong> and <strong>SUPABASE_ANON_KEY</strong> in Netlify → Site configuration → Environment variables.</p>
-      <a href="/referral/login.html" class="btn btn-primary mt-3">Back to Sign In</a>
+      <p class="mb-3">Referral dashboard is not configured yet.</p>
+      <p class="small text-muted mb-3">Choose one option:</p>
+      <div class="small text-start mx-auto mb-4" style="max-width: 520px;">
+        <p class="mb-2"><strong>Option A  - Simple internal auth</strong> (no Supabase, no signup):</p>
+        <p class="mb-2">Add to Netlify env: <code>REFERRAL_USE_SIMPLE_AUTH=true</code>, <code>REFERRAL_AGENTS</code>, <code>REFERRAL_SECRET</code>. See <code>REFERRAL_SIMPLE_AUTH_SETUP.md</code>.</p>
+        <p class="mb-3"><strong>Option B  - Supabase</strong>:</p>
+        <ol class="mb-0 ps-3">
+          <li>In <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">Supabase</a> → Settings → API, copy Project URL and anon key.</li>
+          <li>In Netlify → Environment variables: <code>SUPABASE_URL</code>, <code>SUPABASE_ANON_KEY</code>.</li>
+        </ol>
+      </div>
+      <a href="/referral/setup.html" class="btn btn-primary me-2 mt-3">Supabase setup guide</a>
+      <a href="/referral/login.html" class="btn btn-outline-secondary mt-3">Back to Sign In</a>
     </div>
     <div id="loading" class="text-center py-5">Loading...</div>
     <div id="content" style="display:none;">
@@ -104,38 +114,40 @@
   <script src="/js/referral-bootstrap.js"></script>
   <script>
     window.onReferralReady = async function() {
+      const loading = document.getElementById('loading');
+      const content = document.getElementById('content');
+      const configError = document.getElementById('configError');
+
+      if (window.JL_REFERRAL_SIMPLE_AUTH) {
+        const data = await requireReferralSimpleAuth();
+        if (!data) return;
+        document.getElementById('userEmail').textContent = data.codes?.[0]?.code || 'Agent';
+
+        document.querySelector('button[onclick="referralSignOut()"]').onclick = referralSimpleSignOut;
+
+        loading.style.display = 'none';
+        content.style.display = 'block';
+        renderDashboard(data);
+        return;
+      }
+
       if (!window.JL_SUPABASE || !window.JL_SUPABASE.url || !window.JL_SUPABASE.anonKey) {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('configError').style.display = 'block';
+        loading.style.display = 'none';
+        configError.style.display = 'block';
         return;
       }
       const user = await requireReferralAuth();
       if (!user) return;
       document.getElementById('userEmail').textContent = user.email;
 
-      const loading = document.getElementById('loading');
-      const content = document.getElementById('content');
-
       try {
         const data = await referralApi('stats');
         loading.style.display = 'none';
         content.style.display = 'block';
-
-        document.getElementById('totalReferrals').textContent = data.totalReferrals || 0;
-        document.getElementById('pendingEarnings').textContent = '$' + ((data.pendingEarnings || 0) / 100).toFixed(2);
-        document.getElementById('totalEarnings').textContent = '$' + ((data.totalEarnings || 0) / 100).toFixed(2);
-
-        const codesList = document.getElementById('codesList');
-        const codes = data.codes || [];
-        codes.forEach(c => {
-          const span = document.createElement('span');
-          span.className = 'code-badge';
-          span.textContent = c.code;
-          span.title = 'Commission: ' + (c.commission_rate || 10) + '%';
-          codesList.appendChild(span);
-        });
+        renderDashboard(data);
 
         const createCodeBtn = document.getElementById('createCodeBtn');
+        const codes = data.codes || [];
         const hasSalesCode = codes.some(c => c.type === 'sales_agent' || c.commission_rate > 0);
         if (!hasSalesCode || codes.length === 0) createCodeBtn.style.display = 'inline-block';
 
@@ -152,24 +164,45 @@
           }
           createCodeBtn.disabled = false;
         };
-
-        const tbody = document.getElementById('referralsTable');
-        const referrals = data.referrals || [];
-        if (referrals.length > 0) {
-          tbody.innerHTML = referrals.map(r => `
-            <tr>
-              <td>${new Date(r.created_at).toLocaleDateString()}</td>
-              <td>${r.referred_email || '-'}</td>
-              <td>$${((r.amount_cents || 0) / 100).toFixed(2)}</td>
-              <td>$${((r.commission_cents || 0) / 100).toFixed(2)}</td>
-              <td><span class="badge bg-${r.status === 'paid' ? 'success' : 'warning'}">${r.status}</span></td>
-            </tr>
-          `).join('');
-        }
       } catch (e) {
         loading.innerHTML = '<p class="text-danger">' + (e.message || 'Failed to load data') + '</p>';
       }
     };
+
+    function renderDashboard(data) {
+      document.getElementById('totalReferrals').textContent = data.totalReferrals || 0;
+      document.getElementById('pendingEarnings').textContent = '$' + ((data.pendingEarnings || 0) / 100).toFixed(2);
+      document.getElementById('totalEarnings').textContent = '$' + ((data.totalEarnings || 0) / 100).toFixed(2);
+
+      const codesList = document.getElementById('codesList');
+      codesList.innerHTML = '';
+      const codes = data.codes || [];
+      codes.forEach(c => {
+        const span = document.createElement('span');
+        span.className = 'code-badge';
+        span.textContent = c.code;
+        span.title = 'Commission: ' + (c.commission_rate || 10) + '%';
+        codesList.appendChild(span);
+      });
+
+      if (window.JL_REFERRAL_SIMPLE_AUTH) {
+        document.getElementById('createCodeBtn').style.display = 'none';
+      }
+
+      const tbody = document.getElementById('referralsTable');
+      const referrals = data.referrals || [];
+      if (referrals.length > 0) {
+        tbody.innerHTML = referrals.map(r => `
+          <tr>
+            <td>${r.created_at ? new Date(r.created_at).toLocaleDateString() : '-'}</td>
+            <td>${r.referred_email || '-'}</td>
+            <td>$${((r.amount_cents || 0) / 100).toFixed(2)}</td>
+            <td>$${((r.commission_cents || 0) / 100).toFixed(2)}</td>
+            <td><span class="badge bg-${r.status === 'paid' ? 'success' : 'warning'}">${r.status}</span></td>
+          </tr>
+        `).join('');
+      }
+    }
   </script>
 </body>
 </html>

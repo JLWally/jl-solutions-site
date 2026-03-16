@@ -88,7 +88,7 @@
           required
         ></textarea>
         <div class="chatbot-actions">
-          <small>AI may be imperfect — verify sensitive info.</small>
+          <small>AI may be imperfect  - verify sensitive info.</small>
           <button type="submit" class="btn-chatbot-send">Send</button>
         </div>
       </form>

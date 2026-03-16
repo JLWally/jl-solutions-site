@@ -5,6 +5,13 @@
 [functions]
   node_bundler = "esbuild"
 
+# Onboarding wizard
+[[redirects]]
+  from = "/onboard"
+  to = "/onboard/"
+  status = 302
+  force = true
+
 # Sales portal: use root sales.html so it always loads
 [[redirects]]
   from = "/sales/"

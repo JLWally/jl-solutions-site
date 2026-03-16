@@ -3,12 +3,27 @@ const { createClient } = require('@supabase/supabase-js');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '2023-10-16' });
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const useSimpleAuth = process.env.REFERRAL_USE_SIMPLE_AUTH === 'true' || process.env.REFERRAL_USE_SIMPLE_AUTH === '1';
 
 function getSupabase() {
+  if (useSimpleAuth) return null;
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
   return createClient(url, key);
+}
+
+function parseAgentsCommission(envStr, code) {
+  if (!envStr) return 10;
+  const parts = envStr.split(/[,;\n]/).map((s) => s.trim()).filter(Boolean);
+  for (const part of parts) {
+    const p = part.split(':');
+    const c = (p[2] || '').trim().toUpperCase();
+    if (c === (code || '').toUpperCase()) {
+      return parseFloat(p[3]) || 10;
+    }
+  }
+  return 10;
 }
 
 exports.handler = async (event) => {
@@ -31,38 +46,48 @@ exports.handler = async (event) => {
   try {
     if (stripeEvent.type === 'checkout.session.completed') {
       const session = stripeEvent.data.object;
-
-      if (!supabase) {
-        console.warn('[stripe-webhook] Supabase not configured, skipping referral record');
-        return { statusCode: 200, body: JSON.stringify({ received: true }) };
-      }
-
       const referralCode = session.metadata?.referralCode;
       const amountTotal = session.amount_total || 0;
       const customerEmail = session.customer_details?.email || session.customer_email || '';
 
       if (referralCode && customerEmail) {
-        const { data: codeRow } = await supabase
-          .from('referral_codes')
-          .select('id, user_id, commission_rate')
-          .eq('code', referralCode.toUpperCase())
-          .eq('is_active', true)
-          .single();
-
-        if (codeRow) {
-          const commissionRate = (codeRow.commission_rate || 10) / 100;
-          const commissionCents = Math.round(amountTotal * commissionRate);
-
-          await supabase.from('referrals').insert({
-            referral_code_id: codeRow.id,
-            referrer_id: codeRow.user_id,
+        if (useSimpleAuth) {
+          const { appendReferral } = require('./referral-blob-append');
+          const rate = parseAgentsCommission(process.env.REFERRAL_AGENTS, referralCode) / 100;
+          const commissionCents = Math.round(amountTotal * rate);
+          await appendReferral({
+            code: referralCode.toUpperCase(),
             referred_email: customerEmail,
             amount_cents: amountTotal,
             commission_cents: commissionCents,
             status: 'pending',
-            stripe_session_id: session.id,
             source: 'stripe_checkout',
           });
+        } else if (supabase) {
+          const { data: codeRow } = await supabase
+            .from('referral_codes')
+            .select('id, user_id, commission_rate')
+            .eq('code', referralCode.toUpperCase())
+            .eq('is_active', true)
+            .single();
+
+          if (codeRow) {
+            const commissionRate = (codeRow.commission_rate || 10) / 100;
+            const commissionCents = Math.round(amountTotal * commissionRate);
+
+            await supabase.from('referrals').insert({
+              referral_code_id: codeRow.id,
+              referrer_id: codeRow.user_id,
+              referred_email: customerEmail,
+              amount_cents: amountTotal,
+              commission_cents: commissionCents,
+              status: 'pending',
+              stripe_session_id: session.id,
+              source: 'stripe_checkout',
+            });
+          }
+        } else {
+          console.warn('[stripe-webhook] Neither simple auth nor Supabase configured, skipping referral');
         }
       }
     }

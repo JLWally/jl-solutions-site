@@ -10,8 +10,9 @@
   <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
   <style>
     :root { --black: #000; --blue: #0078d4; --white: #fff; --dark-blue: #004298; --yellow: #D4A574; }
-    body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); }
-    .service-hero { background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%); padding: 4rem 0; text-align: center; color: white; }
+    .ai-intake-form-page { font-family: 'Inter', sans-serif; background: var(--black) !important; color: var(--white) !important; }
+    .ai-intake-form-page .service-hero { background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%); padding: 4rem 0; text-align: center; color: #fff !important; }
+    .ai-intake-form-page .service-hero h1, .ai-intake-form-page .service-hero p, .ai-intake-form-page .service-hero .lead { color: #fff !important; }
     .service-container { max-width: 900px; margin: 3rem auto; padding: 0 1rem; }
     .feature-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
     .slide-deck { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 2rem; min-height: 280px; position: relative; }
@@ -25,12 +26,25 @@
     .slide-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; }
     .slide-dots span.active { background: var(--blue); }
     .demo-form { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; }
-    .demo-form .form-control { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; }
-    .demo-form .form-control:focus { background: rgba(255,255,255,0.15); border-color: var(--blue); color: white; }
+    .demo-form .form-control,
+    .demo-form .form-select { background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2); color: #fff !important; }
+    .demo-form .form-control:focus,
+    .demo-form .form-select:focus { background: rgba(255,255,255,0.15) !important; border-color: var(--blue); color: #fff !important; box-shadow: 0 0 0 0.2rem rgba(0,120,212,0.25); }
+    .demo-form .form-control::placeholder { color: rgba(255,255,255,0.6); }
+    .demo-form .form-label { color: rgba(255,255,255,0.95); font-weight: 600; }
+    .demo-form option { background: #1a253a; color: #fff; }
+    .demo-form .btn-primary { color: #fff !important; }
+    .service-container .text-muted { color: rgba(255,255,255,0.75) !important; }
+    .service-container .feature-card h2,
+    .service-container .feature-card h3 { color: rgba(255,255,255,0.95); }
+    .service-container .feature-card p,
+    .service-container .feature-card .lead { color: rgba(255,255,255,0.9); }
+    .slide-deck p { color: rgba(255,255,255,0.9); }
     .badge-coming { background: rgba(212, 165, 116, 0.2); color: var(--yellow); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; }
+    #demoSummary { color: rgba(255,255,255,0.9); }
   </style>
 </head>
-<body>
+<body class="ai-intake-form-page">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
       <a class="navbar-brand" href="/index.html">JL Solutions</a>
@@ -54,8 +68,7 @@
   <div class="service-hero">
     <div class="container">
       <h1 class="display-4 mb-3">AI-Powered Intake Form</h1>
-      <p class="lead">Smart forms that adapt and streamline client onboarding. Demo preview below.</p>
-      <span class="badge-coming mt-2">Full slide deck &amp; interactive demo coming soon</span>
+      <p class="lead">Smart forms that adapt and streamline client onboarding. Try the demo below.</p>
     </div>
   </div>
 
@@ -65,10 +78,10 @@
       <p class="lead">Our AI intake form template helps you collect structured information from clients, reduce manual data entry, and route submissions automatically. Customize it for your workflows or use it as a starting point.</p>
     </div>
 
-    <!-- Slide-format demo (preview) -->
+    <!-- Slide-format demo -->
     <div class="feature-card">
-      <h2 class="mb-3">Demo in slide format</h2>
-      <p class="text-muted small mb-3">Preview — full deck in progress.</p>
+      <h2 class="mb-3">How it works</h2>
+      <p class="text-muted small mb-3">Step through the key concepts.</p>
       <div class="slide-deck">
         <div class="slide active" data-slide="0">
           <h3>Slide 1: Welcome</h3>
@@ -90,30 +103,44 @@
       </div>
     </div>
 
-    <!-- Interactive demo (preview) -->
+    <!-- Interactive demo -->
     <div class="feature-card">
       <h2 class="mb-3">Interactive demo</h2>
-      <p class="text-muted small mb-3">Try a simplified version — full interactive demo in progress.</p>
-      <div class="demo-form">
-        <div class="mb-3">
-          <label class="form-label">Name</label>
-          <input type="text" class="form-control" placeholder="Your name" id="demoName">
+      <p class="text-muted small mb-3">Try a simplified version with conditional fields. Select "Other" to see smart logic in action.</p>
+      <div class="demo-form" id="demoFormWrap">
+        <form id="demoForm" novalidate>
+          <div id="demoFormFields">
+            <div class="mb-3">
+              <label class="form-label" for="demoName">Name</label>
+              <input type="text" class="form-control" placeholder="Your name" id="demoName" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="demoNeed">What do you need help with?</label>
+              <select class="form-select" id="demoNeed">
+                <option value="">Select...</option>
+                <option value="intake">Client intake / onboarding</option>
+                <option value="consultation">Consultation request</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="mb-3" id="demoOtherWrap" style="display: none;">
+              <label class="form-label" for="demoOther">Please specify</label>
+              <input type="text" class="form-control" placeholder="Describe your need..." id="demoOther">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="demoDesc">Brief description</label>
+              <textarea class="form-control" rows="2" placeholder="Tell us a bit more..." id="demoDesc"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="background: var(--blue); border: none; color: #fff;">Submit</button>
+          </div>
+        </form>
+        <div id="demoThankYou" style="display: none;">
+          <p class="mb-2" style="color: var(--yellow); font-weight: 600;">Thanks for trying the demo!</p>
+          <p class="small mb-2" id="demoSummary"></p>
+          <p class="small text-muted mb-3">This is a preview. Submissions are not stored. <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a> for a real intake flow.</p>
+          <button type="button" class="btn btn-sm btn-outline-light" id="demoReset">Try again</button>
         </div>
-        <div class="mb-3">
-          <label class="form-label">What do you need help with?</label>
-          <select class="form-select form-control" id="demoNeed">
-            <option value="">Select...</option>
-            <option value="intake">Client intake / onboarding</option>
-            <option value="consultation">Consultation request</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Brief description</label>
-          <textarea class="form-control" rows="2" placeholder="Tell us a bit more..." id="demoDesc"></textarea>
-        </div>
-        <button type="button" class="btn btn-primary" id="demoSubmit" style="background: var(--blue); border: none;">Submit (preview)</button>
-        <p class="small text-muted mt-2 mb-0">This is a preview. Submissions are not stored. <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a> for a real intake flow.</p>
+        <p class="small text-muted mt-2 mb-0" id="demoDisclaimer">Submissions are not stored. <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a> for a real intake flow.</p>
       </div>
     </div>
 
@@ -160,12 +187,65 @@
       if (next) next.addEventListener('click', function() { show(idx + 1); });
       show(0);
 
-      document.getElementById('demoSubmit').addEventListener('click', function() {
-        var n = document.getElementById('demoName').value.trim();
-        var need = document.getElementById('demoNeed').value;
-        if (!n) { alert('Enter your name to try the preview.'); return; }
-        alert('Preview only — nothing is saved. For a real intake, use Book Consultation.');
-      });
+      // Conditional "Other" field
+      var demoNeed = document.getElementById('demoNeed');
+      var demoOtherWrap = document.getElementById('demoOtherWrap');
+      if (demoNeed && demoOtherWrap) {
+        demoNeed.addEventListener('change', function() {
+          demoOtherWrap.style.display = this.value === 'other' ? 'block' : 'none';
+        });
+      }
+
+      // Submit demo - use form submit so Enter key and button both work
+      var demoForm = document.getElementById('demoForm');
+      var demoFormFields = document.getElementById('demoFormFields');
+      var demoThankYou = document.getElementById('demoThankYou');
+      var demoSummary = document.getElementById('demoSummary');
+      var demoDisclaimer = document.getElementById('demoDisclaimer');
+      if (demoForm) {
+        demoForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var nameInput = document.getElementById('demoName');
+          var n = nameInput ? nameInput.value.trim() : '';
+          if (!n) {
+            if (nameInput) nameInput.focus();
+            alert('Please enter your name.');
+            return;
+          }
+          var needSelect = document.getElementById('demoNeed');
+          var needText = needSelect && needSelect.options[needSelect.selectedIndex] ? needSelect.options[needSelect.selectedIndex].text : '';
+          var otherInput = document.getElementById('demoOther');
+          var otherVal = otherInput ? otherInput.value.trim() : '';
+          var descInput = document.getElementById('demoDesc');
+          var descVal = descInput ? descInput.value.trim() : '';
+          var summary = 'Hi ' + n + '! You selected: ' + needText;
+          if (otherVal) summary += ' (' + otherVal + ')';
+          if (descVal) summary += '. Your note: ' + descVal;
+          if (demoSummary) demoSummary.textContent = summary;
+          if (demoFormFields) demoFormFields.style.display = 'none';
+          if (demoThankYou) demoThankYou.style.display = 'block';
+          if (demoDisclaimer) demoDisclaimer.style.display = 'none';
+        });
+      }
+
+      // Reset demo
+      var demoReset = document.getElementById('demoReset');
+      if (demoReset) {
+        demoReset.addEventListener('click', function() {
+          var nameEl = document.getElementById('demoName');
+          var needEl = document.getElementById('demoNeed');
+          var otherEl = document.getElementById('demoOther');
+          var descEl = document.getElementById('demoDesc');
+          if (nameEl) nameEl.value = '';
+          if (needEl) needEl.value = '';
+          if (otherEl) otherEl.value = '';
+          if (descEl) descEl.value = '';
+          if (demoOtherWrap) demoOtherWrap.style.display = 'none';
+          if (demoFormFields) demoFormFields.style.display = 'block';
+          if (demoThankYou) demoThankYou.style.display = 'none';
+          if (demoDisclaimer) demoDisclaimer.style.display = 'block';
+        });
+      }
     })();
   </script>
 </body>

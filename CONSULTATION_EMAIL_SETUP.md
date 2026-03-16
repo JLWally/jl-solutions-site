@@ -1,4 +1,4 @@
-# Consultation & Contact Forms — Sales Leads to info@jlsolutions.io
+# Consultation & Contact Forms  - Sales Leads to info@jlsolutions.io
 
 These forms are for **sales agents** and **new customers** to book consultations or get in touch. Submissions go to **info@jlsolutions.io** and appear in the **referral/sales dashboard** (when a referral code is used).
 
@@ -39,7 +39,7 @@ To enable emails, add one environment variable in Netlify.
 - **Book consultation form** → (1) email to info@jlsolutions.io, (2) confirmation to customer → thank-you page  
 - **Contact form** → same: lead to you, confirmation to customer  
 - **Onboard wizard** → same behavior  
-- **Referral dashboard** → consultations with a referral code show up for agents  
+- **Sales / referral dashboard** → Consultations with a referral code appear under the agent (requires [simple auth](../REFERRAL_SIMPLE_AUTH_SETUP.md) or Supabase)  
 
 ---
 

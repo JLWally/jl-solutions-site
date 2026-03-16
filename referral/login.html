@@ -31,7 +31,7 @@
   <div class="login-container">
     <div class="login-card">
       <div id="loginConfigNotice" class="alert alert-warning py-2 small" style="display:none;">
-        Dashboard not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in Netlify environment variables.
+        Dashboard not configured. <a href="/referral/setup.html">Run the setup guide</a> (Supabase schema + Netlify env vars).
       </div>
       <div class="login-header">
         <h1>Referral Dashboard</h1>
@@ -62,28 +62,59 @@
   <script src="/js/referral-bootstrap.js"></script>
   <script>
     window.onReferralReady = function() {
-      if (!window.JL_REFERRAL_CONFIGURED) {
-        document.getElementById('loginConfigNotice').style.display = 'block';
+      const loginConfigNotice = document.getElementById('loginConfigNotice');
+      const loginForm = document.getElementById('loginForm');
+      const emailLabel = document.querySelector('label[for="email"]');
+      const emailInput = document.getElementById('email');
+
+      if (window.JL_REFERRAL_SIMPLE_AUTH) {
+        loginConfigNotice.style.display = 'none';
+        if (emailLabel) emailLabel.textContent = 'Username';
+        if (emailInput) {
+          emailInput.type = 'text';
+          emailInput.placeholder = 'Your username';
+          emailInput.removeAttribute('required');
+          emailInput.required = true;
+        }
+      } else if (!window.JL_REFERRAL_CONFIGURED) {
+        loginConfigNotice.style.display = 'block';
       }
-      document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('submitBtn');
-      const err = document.getElementById('errorMsg');
-      err.style.display = 'none';
-      btn.disabled = true;
-      btn.textContent = 'Signing in...';
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const result = await referralSignIn(email, password);
-      if (result.error) {
-        err.textContent = result.error;
-        err.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Sign In';
-        return;
-      }
-      const returnUrl = new URLSearchParams(location.search).get('return') || '/referral-dashboard/';
-      window.location.href = returnUrl.startsWith('/') ? returnUrl : '/' + returnUrl;
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const err = document.getElementById('errorMsg');
+        err.style.display = 'none';
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+
+        if (window.JL_REFERRAL_SIMPLE_AUTH) {
+          const username = (document.getElementById('email').value || '').trim();
+          const password = document.getElementById('password').value;
+          const result = await referralSimpleSignIn(username, password);
+          if (result.error) {
+            err.textContent = result.error;
+            err.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Sign In';
+            return;
+          }
+          const returnUrl = new URLSearchParams(location.search).get('return') || '/referral-dashboard/';
+          window.location.href = returnUrl.startsWith('/') ? returnUrl : '/' + returnUrl;
+        } else {
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
+          const result = await referralSignIn(email, password);
+          if (result.error) {
+            err.textContent = result.error;
+            err.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Sign In';
+            return;
+          }
+          const returnUrl = new URLSearchParams(location.search).get('return') || '/referral-dashboard/';
+          window.location.href = returnUrl.startsWith('/') ? returnUrl : '/' + returnUrl;
+        }
       });
     };
   </script>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Referral Setup - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #0078D4; --dark: #004298; --bg: #1a1a1a; --card: #252525; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e8e8e8; padding-bottom: 3rem; }
+    .setup-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%); padding: 2rem 0; color: white; text-align: center; }
+    .setup-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; background: var(--primary); color: white; border-radius: 50%; font-weight: 700; margin-right: 0.5rem; font-size: 0.9rem; }
+    .btn-copy { background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .btn-copy:hover { background: var(--dark); color: white; }
+    #schemaBlock { font-family: monospace; font-size: 0.75rem; white-space: pre; overflow-x: auto; max-height: 280px; overflow-y: auto; background: #0d0d0d; padding: 1rem; border-radius: 8px; color: #c0c0c0; }
+    .link-out { color: #6eb3ff; }
+    .link-out:hover { color: #9cc9ff; }
+    .done { color: #6bcb77; }
+  </style>
+</head>
+<body>
+  <div class="setup-hero">
+    <div class="container">
+      <h1 class="h4 mb-0">Referral portal setup</h1>
+      <p class="mb-0 opacity-75">Sign-in, sign-up, and dashboard in a few steps</p>
+    </div>
+  </div>
+
+  <div class="container py-4">
+    <div class="setup-card" style="border-color: #6eb3ff;">
+      <h5>⚡ Simpler option: internal auth (no Supabase)</h5>
+      <p class="mb-2 small">Skip Supabase entirely. Add these Netlify env vars: <code>REFERRAL_USE_SIMPLE_AUTH=true</code>, <code>REFERRAL_AGENTS</code> (username:password:CODE per agent), <code>REFERRAL_SECRET</code>. See <strong>REFERRAL_SIMPLE_AUTH_SETUP.md</strong> in the repo.</p>
+    </div>
+
+    <div class="setup-card">
+      <h5><span class="step-num">1</span>Create a Supabase project</h5>
+      <p class="mb-2 small">If you don’t have one yet:</p>
+      <a class="link-out" href="https://supabase.com/dashboard/project/_/new" target="_blank" rel="noopener">Supabase → New project</a>
+      <p class="mb-0 mt-2 small text-muted">Pick a name, set a database password, choose a region → Create. Wait until the project is ready.</p>
+    </div>
+
+    <div class="setup-card">
+      <h5><span class="step-num">2</span>Run the database schema</h5>
+      <p class="mb-2 small">Copy the SQL below, then in Supabase open <strong>SQL Editor</strong> → New query → paste → Run.</p>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <button type="button" class="btn-copy" id="copyBtn">Copy schema to clipboard</button>
+        <span class="small text-muted" id="copyStatus"></span>
+      </div>
+      <div id="schemaBlock"></div>
+      <p class="mb-0 mt-2 small text-muted">You should see “Success. No rows returned.” This creates tables and the signup trigger.</p>
+    </div>
+
+    <div class="setup-card">
+      <h5><span class="step-num">3</span>Get your API keys</h5>
+      <p class="mb-2 small">In Supabase: <strong>Settings</strong> (gear) → <strong>API</strong>.</p>
+      <p class="mb-0 small">Copy and keep ready: <strong>Project URL</strong> and the <strong>anon public</strong> key.</p>
+    </div>
+
+    <div class="setup-card">
+      <h5><span class="step-num">4</span>Set Auth redirects</h5>
+      <p class="mb-2 small">In Supabase: <strong>Authentication</strong> → <strong>URL Configuration</strong>.</p>
+      <ul class="small mb-0 ps-3">
+        <li><strong>Site URL</strong>: your live site, e.g. <code>https://jlsolutions.io</code></li>
+        <li><strong>Redirect URLs</strong>: add <code>https://jlsolutions.io/**</code> and <code>http://localhost:8888/**</code> if you test locally</li>
+      </ul>
+    </div>
+
+    <div class="setup-card">
+      <h5><span class="step-num">5</span>Add Netlify environment variables</h5>
+      <p class="mb-2 small">In Netlify: your site → <strong>Site configuration</strong> → <strong>Environment variables</strong>.</p>
+      <p class="mb-1 small">Add two variables (all scopes):</p>
+      <ul class="small mb-0 ps-3">
+        <li><code>SUPABASE_URL</code> = your Project URL</li>
+        <li><code>SUPABASE_ANON_KEY</code> = your anon public key</li>
+      </ul>
+    </div>
+
+    <div class="setup-card">
+      <h5><span class="step-num">6</span>Redeploy</h5>
+      <p class="mb-0 small">Netlify → <strong>Deploys</strong> → <strong>Trigger deploy</strong> → Deploy site. The referral config is read from env on each request after deploy.</p>
+    </div>
+
+    <div class="setup-card">
+      <h5><span class="step-num">7</span>Test</h5>
+      <p class="mb-2 small">Sign up, then sign in:</p>
+      <a href="/referral/signup.html" class="link-out me-3">Sign up</a>
+      <a href="/referral/login.html" class="link-out me-3">Sign in</a>
+      <a href="/referral-dashboard/" class="link-out">Dashboard</a>
+      <p class="mb-0 mt-2 small text-muted">If sign-up asks to confirm email, either confirm it or turn off “Confirm email” under Authentication → Providers → Email (for testing).</p>
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="/referral/login.html" class="btn btn-primary">Go to Sign in</a>
+      <a href="/" class="btn btn-outline-secondary ms-2">Back to site</a>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var schema = `-- JL Solutions: Referral schema - run in Supabase SQL Editor
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT UNIQUE NOT NULL,
+  full_name TEXT,
+  role TEXT NOT NULL DEFAULT 'client' CHECK (role IN ('client', 'sales_agent', 'admin')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS referral_codes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  code TEXT UNIQUE NOT NULL,
+  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  type TEXT NOT NULL DEFAULT 'sales_agent' CHECK (type IN ('sales_agent', 'client')),
+  commission_rate DECIMAL(5,2) DEFAULT 10.00,
+  discount_percent DECIMAL(5,2) DEFAULT 0,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_referral_codes_code ON referral_codes(code);
+CREATE INDEX IF NOT EXISTS idx_referral_codes_user ON referral_codes(user_id);
+
+CREATE TABLE IF NOT EXISTS referrals (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  referral_code_id UUID NOT NULL REFERENCES referral_codes(id) ON DELETE CASCADE,
+  referrer_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  referred_email TEXT NOT NULL,
+  referred_user_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+  amount_cents INTEGER DEFAULT 0,
+  commission_cents INTEGER DEFAULT 0,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'paid', 'cancelled')),
+  stripe_session_id TEXT,
+  source TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_referrals_referrer ON referrals(referrer_id);
+CREATE INDEX IF NOT EXISTS idx_referrals_code ON referrals(referral_code_id);
+
+CREATE TABLE IF NOT EXISTS consultations (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT,
+  company TEXT,
+  service TEXT,
+  message TEXT,
+  challenge TEXT,
+  goals TEXT,
+  referral_code TEXT,
+  status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'scheduled', 'converted', 'closed')),
+  source TEXT DEFAULT 'website',
+  selected_datetime TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_consultations_status ON consultations(status);
+CREATE INDEX IF NOT EXISTS idx_consultations_created ON consultations(created_at DESC);
+
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE referral_codes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE consultations ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
+CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can view own referral codes" ON referral_codes;
+DROP POLICY IF EXISTS "Sales agents can insert own codes" ON referral_codes;
+CREATE POLICY "Users can view own referral codes" ON referral_codes FOR SELECT
+  USING (auth.uid() = user_id OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Sales agents can insert own codes" ON referral_codes FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Referrers can view own referrals" ON referrals;
+CREATE POLICY "Referrers can view own referrals" ON referrals FOR SELECT
+  USING (auth.uid() = referrer_id OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+DROP POLICY IF EXISTS "Admins can manage consultations" ON consultations;
+CREATE POLICY "Admins can manage consultations" ON consultations FOR ALL
+  USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, full_name, role)
+  VALUES (
+    NEW.id,
+    NEW.email,
+    COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name'),
+    COALESCE(NEW.raw_user_meta_data->>'role', 'client')
+  )
+  ON CONFLICT (id) DO NOTHING;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+`;
+
+      document.getElementById('schemaBlock').textContent = schema;
+
+      document.getElementById('copyBtn').addEventListener('click', function() {
+        var status = document.getElementById('copyStatus');
+        navigator.clipboard.writeText(schema).then(function() {
+          status.textContent = 'Copied.';
+          status.classList.add('done');
+          setTimeout(function() { status.textContent = ''; status.classList.remove('done'); }, 2000);
+        }).catch(function() {
+          status.textContent = 'Copy failed  - select the block and copy manually.';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

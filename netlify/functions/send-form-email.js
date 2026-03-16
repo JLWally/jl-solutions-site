@@ -76,7 +76,7 @@ function buildCustomerConfirmation(data) {
       <h2>Hi ${escapeHtml(name)},</h2>
       <p>Thank you for reaching out. We received your consultation request and will be in touch within 1-2 business days.</p>
       <p>In the meantime, feel free to reply to this email with any questions.</p>
-      <p>— The JL Solutions team</p>
+      <p> - The JL Solutions team</p>
       <p><em>info@jlsolutions.io</em></p>
     `,
   };
@@ -210,7 +210,7 @@ exports.handler = async (event) => {
         html: `
           <h2>Thank you for reaching out</h2>
           <p>We received your message and will get back to you within 1-2 business days.</p>
-          <p>— The JL Solutions team</p>
+          <p> - The JL Solutions team</p>
           <p><em>info@jlsolutions.io</em></p>
         `,
       };

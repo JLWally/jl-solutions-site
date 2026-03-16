@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS referral_codes (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_referral_codes_code ON referral_codes(code);
-CREATE INDEX idx_referral_codes_user ON referral_codes(user_id);
+CREATE INDEX IF NOT EXISTS idx_referral_codes_code ON referral_codes(code);
+CREATE INDEX IF NOT EXISTS idx_referral_codes_user ON referral_codes(user_id);
 
 -- Referrals (track when a code is used - sale or signup)
 CREATE TABLE IF NOT EXISTS referrals (
@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS referrals (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_referrals_referrer ON referrals(referrer_id);
-CREATE INDEX idx_referrals_code ON referrals(referral_code_id);
+CREATE INDEX IF NOT EXISTS idx_referrals_referrer ON referrals(referrer_id);
+CREATE INDEX IF NOT EXISTS idx_referrals_code ON referrals(referral_code_id);
 
 -- Free consultation form submissions
 CREATE TABLE IF NOT EXISTS consultations (
@@ -67,8 +67,8 @@ CREATE TABLE IF NOT EXISTS consultations (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_consultations_status ON consultations(status);
-CREATE INDEX idx_consultations_created ON consultations(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_consultations_status ON consultations(status);
+CREATE INDEX IF NOT EXISTS idx_consultations_created ON consultations(created_at DESC);
 
 -- Row Level Security (RLS)
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
@@ -76,22 +76,29 @@ ALTER TABLE referral_codes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE consultations ENABLE ROW LEVEL SECURITY;
 
--- Profiles: users can read/update own profile
+-- Profiles: users can read/update/insert own profile (insert for signup trigger)
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
 CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
 
 -- Referral codes: users see own codes, admins see all
+DROP POLICY IF EXISTS "Users can view own referral codes" ON referral_codes;
+DROP POLICY IF EXISTS "Sales agents can insert own codes" ON referral_codes;
 CREATE POLICY "Users can view own referral codes" ON referral_codes FOR SELECT
   USING (auth.uid() = user_id OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
-
 CREATE POLICY "Sales agents can insert own codes" ON referral_codes FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- Referrals: referrers see their referrals
+DROP POLICY IF EXISTS "Referrers can view own referrals" ON referrals;
 CREATE POLICY "Referrers can view own referrals" ON referrals FOR SELECT
   USING (auth.uid() = referrer_id OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
 
 -- Consultations: admins only (sensitive lead data)
+DROP POLICY IF EXISTS "Admins can manage consultations" ON consultations;
 CREATE POLICY "Admins can manage consultations" ON consultations FOR ALL
   USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
 
