@@ -185,9 +185,11 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark" role="navigation" aria-label="Main navigation">
+  <nav class="navbar navbar-expand-lg navbar-dark jl-theme" role="navigation" aria-label="Main navigation">
     <div class="container">
-      <a class="navbar-brand" href="/index.html">JL Solutions</a>
+      <a class="navbar-brand" href="/index.html">
+        <img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions" class="jl-logo-icon">
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -196,9 +198,14 @@
           <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
           <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
-          <li class="nav-item"><a class="nav-link active" href="/insights/index.html" aria-current="page">Insights</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="/resources/index.html" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-current="page">Resources</a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="resourcesDropdown">
+              <li><a class="dropdown-item" href="/resources/index.html">Templates &amp; Guides</a></li>
+              <li><a class="dropdown-item" href="/insights/index.html">Blogs</a></li>
+            </ul>
+          </li>
           <li class="nav-item"><a class="nav-link" href="/case-studies/index.html">Case Studies</a></li>
-          <li class="nav-item"><a class="nav-link" href="/resources/index.html">Resources</a></li>
           <li class="nav-item"><a class="nav-link" href="/book-consultation.html">Book Consultation</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
         </ul>
@@ -227,6 +234,21 @@
 
     <!-- Blog Posts - Single list, filtered by JS -->
     <div class="row" id="insights-grid">
+      <div class="col-md-6 col-lg-4 insight-card" data-tags="fix-my-app business">
+        <article class="blog-card">
+          <img src="/assets/images/fix-my-app-blog.png" alt="Is Your App Broken? JL Solutions Can Fix It." class="blog-card-image img-cover" width="400" height="200" loading="lazy">
+          <div class="blog-card-content">
+            <div class="blog-card-meta">March 16, 2026 • 8 min read</div>
+            <h3 class="blog-card-title">Is Your App Broken? JL Solutions Can Fix It.</h3>
+            <p class="blog-card-excerpt">A buggy app costs you users, revenue, and trust. JL Solutions steps in, diagnoses the issues, and gets your app back on track.</p>
+            <div>
+              <span class="blog-tag">Fix My App</span>
+              <span class="blog-tag">Business</span>
+            </div>
+            <a href="/insights/fix-my-app-smartest-investment.html" class="btn btn-primary mt-auto">Read More</a>
+          </div>
+        </article>
+      </div>
       <div class="col-md-6 col-lg-4 insight-card" data-tags="automation operations">
         <article class="blog-card">
           <picture><source srcset="/assets/images/weekend-reset-breakthrough.webp" type="image/webp"><img src="/assets/images/weekend-reset-breakthrough.png" alt="Weekend Reset: automated workflow for busy businesses" class="blog-card-image img-cover" width="400" height="200" loading="lazy"></picture>

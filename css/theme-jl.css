@@ -45,8 +45,8 @@ body {
 }
 
 .navbar.jl-theme .navbar-brand .jl-logo-icon {
-  width: 32px;
-  height: 32px;
+  height: 80px;
+  width: auto;
   object-fit: contain;
 }
 
@@ -96,6 +96,50 @@ body {
   padding: 5rem 0 6rem;
   position: relative;
   overflow: hidden;
+}
+
+/* Hero Banner - full-width image */
+.hero-section.hero-banner.jl-theme {
+  padding: 0;
+  overflow: hidden;
+}
+
+.hero-banner-image-wrap {
+  position: relative;
+  width: 100%;
+  max-height: 85vh;
+  overflow: hidden;
+}
+
+.hero-banner-img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hero-banner-cta {
+  position: absolute;
+  top: 28%;
+  left: 5%;
+  width: 180px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: transparent;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.hero-banner-cta:hover {
+  background: rgba(255, 193, 7, 0.15);
 }
 
 .hero-section.jl-theme::before {
@@ -366,6 +410,18 @@ footer.jl-theme a:hover {
 
 /* Responsive - Hero & Feature Cards */
 @media (max-width: 992px) {
+  .hero-banner-image-wrap {
+    max-height: 75vh;
+  }
+  .hero-banner-img {
+    max-height: 420px;
+  }
+  .hero-banner-cta {
+    top: 25%;
+    left: 4%;
+    width: 160px;
+    height: 46px;
+  }
   .hero-section.jl-theme .hero-headline-main,
   .hero-section.jl-theme .hero-headline-accent {
     font-size: 2.25rem;
@@ -377,6 +433,18 @@ footer.jl-theme a:hover {
 }
 
 @media (max-width: 768px) {
+  .hero-banner-image-wrap {
+    max-height: 70vh;
+  }
+  .hero-banner-img {
+    max-height: 360px;
+  }
+  .hero-banner-cta {
+    top: 22%;
+    left: 4%;
+    width: 140px;
+    height: 44px;
+  }
   .hero-section.jl-theme .hero-headline-main,
   .hero-section.jl-theme .hero-headline-accent {
     font-size: 1.85rem;

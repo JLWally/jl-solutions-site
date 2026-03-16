@@ -12,7 +12,6 @@
     :root { --black: #000000; --blue: #0078d4; --white: #ffffff; --dark-blue: #004298; --yellow: #D4A574; }
     body { font-family: 'Inter', sans-serif; background-color: var(--black); color: var(--white); }
     .case-hero { background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%); padding: 3rem 0; }
-    .case-hero img { max-width: 100%; border-radius: 12px; margin-top: 1.5rem; }
     .case-content { max-width: 720px; margin: 0 auto; padding: 3rem 0 4rem; line-height: 1.8; }
     .case-content h2 { font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; color: var(--white); }
     .case-content h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--white); }
@@ -41,7 +40,13 @@
           <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
           <li class="nav-item"><a class="nav-link" href="/services/index.html">Services</a></li>
           <li class="nav-item"><a class="nav-link active" href="/case-studies/index.html">Case Studies</a></li>
-          <li class="nav-item"><a class="nav-link" href="/resources/index.html">Resources</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/resources/index.html" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Resources</a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="resourcesDropdown">
+              <li><a class="dropdown-item" href="/resources/index.html">Templates &amp; Guides</a></li>
+              <li><a class="dropdown-item" href="/insights/index.html">Blogs</a></li>
+            </ul>
+          </li>
           <li class="nav-item"><a class="nav-link" href="/book-consultation.html">Book Consultation</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
         </ul>
@@ -60,7 +65,6 @@
         <div class="m">$1.8M <span>Cost Reduction</span></div>
         <div class="m">24/7 <span>Automation</span></div>
       </div>
-      <img src="/assets/images/hero-homepage.png" alt="Enterprise workflow integration and IT solutions" width="800" height="400" loading="eager">
     </div>
   </header>
 

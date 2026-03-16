@@ -33,8 +33,12 @@ const setActiveNav = () => {
     const href = (link.getAttribute('href') || '').replace(/^\//, '').replace(/\/$/, '') || 'index.html';
     const isHome = !href || href === 'index.html' || href === '';
     const pathIsHome = !path || path === '/' || path === 'index.html' || path.endsWith('/index.html');
+    // Resources dropdown: active when on resources or insights
+    const isResourcesNav = href === 'resources.html' || href === 'resources/index.html' || (link.closest('.dropdown') && link.getAttribute('href')?.includes('resources'));
+    const pathIsResources = path.includes('resources') || path.includes('insights');
     if (isHome && pathIsHome) link.classList.add('active');
-    else if (!isHome && path.includes(href.split('/')[0])) link.classList.add('active');
+    else if (isResourcesNav && pathIsResources) link.classList.add('active');
+    else if (!isHome && !link.closest('.dropdown') && path.includes(href.split('/')[0])) link.classList.add('active');
   });
 };
 

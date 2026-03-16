@@ -32,6 +32,13 @@
   status = 302
   force = true
 
+# Resources: hub as main entry
+[[redirects]]
+  from = "/resources"
+  to = "/resources.html"
+  status = 302
+  force = true
+
 # Resources: clean URLs without .html
 [[redirects]]
   from = "/resources/process-documentation-template"
