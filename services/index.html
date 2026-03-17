@@ -23,16 +23,19 @@
     }
     
     .core-services {
-      background: rgba(255, 193, 7, 0.08);
-      border: 2px solid var(--jl-accent);
+      background: var(--jl-surface-light);
       border-radius: 16px;
-      padding: 3rem 2rem;
+      padding: 3.5rem 2rem;
       margin: 3rem 0;
+    }
+    .core-services h2 {
+      color: #0f172a !important;
+      font-weight: 700;
     }
     
     .service-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--jl-white);
+      border: 1px solid rgba(0, 0, 0, 0.12);
       border-radius: 16px;
       padding: 2rem;
       margin-bottom: 2rem;
@@ -40,54 +43,62 @@
       height: 100%;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     }
     
     .service-card.featured {
-      background: rgba(255, 193, 7, 0.1);
-      border: 2px solid var(--jl-accent);
+      border-color: rgba(255, 193, 7, 0.6);
     }
     
     .service-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 40px rgba(255, 193, 7, 0.2);
-      border-color: var(--jl-accent);
+      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.12);
+      border-color: rgba(255, 193, 7, 0.7);
     }
     
     .service-icon {
-      font-size: 3rem;
+      font-size: 2.75rem;
       margin-bottom: 1rem;
+      color: var(--jl-accent);
     }
     
     .service-card h4 {
-      color: #fff;
+      color: #0f172a;
       font-weight: 700;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
     }
     
     .service-card p {
-      color: rgba(255, 255, 255, 0.7);
+      color: #1e293b;
       line-height: 1.7;
       flex-grow: 1;
       margin-bottom: 1.5rem;
+      font-size: 0.98rem;
     }
     
     .btn-service {
       background: var(--jl-accent);
       color: #1a1a1a;
       border: none;
-      padding: 0.75rem 1.5rem;
-      font-weight: 600;
-      border-radius: 8px;
+      padding: 0.75rem 1.6rem;
+      font-weight: 700;
+      border-radius: 10px;
       transition: all 0.3s;
       text-decoration: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       margin-top: auto;
+      font-size: 1rem;
+      box-shadow: 0 4px 20px rgba(255, 193, 7, 0.35);
     }
     
     .btn-service:hover {
       background: var(--jl-accent-hover);
       transform: translateY(-2px);
       color: #1a1a1a;
+      box-shadow: 0 8px 28px rgba(255, 193, 7, 0.45);
     }
     
     .btn-outline-service {
@@ -118,20 +129,24 @@
       text-transform: uppercase;
       margin-bottom: 1rem;
       display: inline-block;
+      letter-spacing: 0.06em;
     }
     
     /* How We Deliver Strip */
     .how-we-deliver {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--jl-surface);
       border-radius: 16px;
       padding: 2.5rem;
       margin: 3rem 0;
     }
+    .how-we-deliver h2 {
+      color: #0f172a !important;
+      font-weight: 700;
+    }
     
     .how-we-deliver .step-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--jl-white);
+      border: 1px solid rgba(0, 0, 0, 0.08);
       border-radius: 12px;
       padding: 1.5rem;
       text-align: center;
@@ -160,13 +175,13 @@
     .how-we-deliver .step-card h4 {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #fff;
+      color: #0f172a;
       margin-bottom: 0.5rem;
     }
     
     .how-we-deliver .step-card p {
       font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.7);
+      color: #4b5563;
       margin: 0;
     }
     
@@ -223,13 +238,13 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="/resources/index.html" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Resources</a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="resourcesDropdown">
-              <li><a class="dropdown-item" href="/resources/index.html">Templates &amp; Guides</a></li>
-              <li><a class="dropdown-item" href="/insights/index.html">Blogs</a></li>
+              <li><a class="dropdown-item" href="/resources/index.html">Templates &amp; Downloads</a></li>
+              <li><a class="dropdown-item" href="/insights/index.html">Insights &amp; Articles</a></li>
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
         </ul>
-        <a href="/book-consultation.html" class="btn btn-book-call">Book a Call</a>
+        <a href="/book-consultation.html" class="btn btn-book-call">Book a Free Call</a>
       </div>
     </div>
   </nav>
@@ -237,8 +252,8 @@
   <!-- Hero Section -->
   <header class="services-hero" role="banner">
     <div class="container">
-      <h1 class="display-4 mb-3">Automation That Works for Your Business  - Whatever You Do</h1>
-      <p class="lead">Every business struggles with admin, intake, and follow-ups. JL Solutions designs systems that streamline workflows, reduce missed opportunities, and let you focus on your work  - not your office.</p>
+      <h1 class="display-4 mb-3">Automation Services for Service-Based Teams</h1>
+      <p class="lead">From intake and eligibility to scheduling and follow-up, JL Solutions designs practical systems that reduce missed leads and manual admin work.</p>
     </div>
   </header>
 
@@ -292,7 +307,7 @@
               <span class="best-for-chip">Catering</span>
             </div>
             <p>Capture every lead or request automatically, pre-qualify, and route efficiently. No missed jobs, clients, or applications.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
 
@@ -307,7 +322,7 @@
               <span class="best-for-chip">Assistance programs</span>
             </div>
             <p>Custom wizards gather information, validate eligibility, and trigger approvals automatically. More clients served, less staff time.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
 
@@ -322,7 +337,7 @@
               <span class="best-for-chip">B2B services</span>
             </div>
             <p>Automated estimates, proposals, or order confirmations sent immediately. Faster turnaround, higher conversion rates.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
 
@@ -337,7 +352,7 @@
               <span class="best-for-chip">Clinics</span>
             </div>
             <p>Jobs, appointments, and events routed automatically by skills, location, and availability. Maximize staff efficiency.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
 
@@ -351,7 +366,7 @@
               <span class="best-for-chip">Sales teams</span>
             </div>
             <p>Automated reminders and follow-ups keep every potential job or client active. Close more opportunities without extra office work.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
 
@@ -365,7 +380,7 @@
               <span class="best-for-chip">Event-based</span>
             </div>
             <p>Systems scale automatically when business is busiest. Business grows without chaos or hiring new staff.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Book demo</a>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
       </div>
@@ -373,43 +388,44 @@
 
     <!-- CTA Section -->
     <div class="text-center my-5 py-5">
-      <h2>Schedule Your 15-Minute Demo</h2>
-      <p class="lead mb-4">See how your workflows can run themselves.</p>
-      <a href="/book-consultation.html" class="btn-service me-3">Schedule Your 15-Minute Demo</a>
+      <h2>Ready to see how it works?</h2>
+      <p class="lead mb-4">Book a free call and we'll walk through your workflows.</p>
+      <a href="/book-consultation.html" class="btn-service me-3">Book a Free Call</a>
       <a href="/contact.html" class="btn-outline-service">Contact Us</a>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-dark text-white py-5 mt-5" role="contentinfo">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 mb-4 mb-md-0">
-          <h5>JL Solutions</h5>
-          <p>Never miss a lead. Streamline intake. Automate your workflows.</p>
+  <footer class="jl-theme footer-home" role="contentinfo">
+    <div class="container footer__container">
+      <div class="row align-items-start footer__row">
+        <div class="col-md-4 mb-4 mb-md-0 footer__brand">
+          <h5 class="footer__heading">JL Solutions</h5>
+          <p class="footer__tagline">Automate, Streamline, Grow Your Business.</p>
         </div>
         <div class="col-md-4 mb-4 mb-md-0">
-          <h5>Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="/services/index.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">Services</a></li>
-            <li><a href="/case-studies/index.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">Case Studies</a></li>
-            <li><a href="/resources/index.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">Resources</a></li>
-            <li><a href="/book-consultation.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">Book Consultation</a></li>
-            <li><a href="/contact.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">Contact</a></li>
+          <h5 class="footer__heading">Quick Links</h5>
+          <ul class="list-unstyled footer__links mb-0">
+            <li><a href="/services/index.html">Services</a></li>
+            <li><a href="/case-studies/index.html">Case Studies</a></li>
+            <li><a href="/resources/index.html">Resources</a></li>
+            <li><a href="/book-consultation.html">Book a Free Call</a></li>
+            <li><a href="/contact.html">Contact</a></li>
           </ul>
         </div>
-        <div class="col-md-4">
-          <h5>Connect With Us</h5>
-          <p>Email: <a href="mailto:info@jlsolutions.io" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">info@jlsolutions.io</a></p>
-          <p class="mb-2 mt-2">
+        <div class="col-md-4 footer__contact">
+          <h5 class="footer__heading">Get in Touch</h5>
+          <p class="footer__email-wrap"><a href="mailto:info@jlsolutions.io" class="footer__email">info@jlsolutions.io</a></p>
+          <a href="/book-consultation.html" class="footer__cta">Book a Free Call</a>
+          <p class="mb-2 mt-3 footer__social">
             <a href="https://facebook.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-white me-2" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
             <a href="https://instagram.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
           </p>
         </div>
       </div>
-      <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0;">
-      <div class="text-center">
-        <small>&copy; 2026 JL Solutions. Built with purpose.</small>
+      <hr class="footer__divider">
+      <div class="text-center footer__copy">
+        <small>&copy; 2026 JL Solutions. All rights reserved.</small>
       </div>
     </div>
   </footer>

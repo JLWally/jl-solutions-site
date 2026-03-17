@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resource Library - JL Solutions</title>
+  <title>Resources - JL Solutions</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -17,56 +17,150 @@
   <style>
     .resource-hero {
       background: var(--jl-dark);
-      padding: 4rem 0;
-      text-align: center;
-      color: white;
+      padding: 3.5rem 0 3rem;
+      color: var(--jl-text);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.35);
     }
-    .resource-hero h1 { color: var(--jl-white); font-weight: 800; }
-    .resource-hero .lead { color: var(--jl-text-muted); }
+    .resource-hero__inner {
+      max-width: var(--section-inner-max);
+      margin: 0 auto;
+      text-align: center;
+    }
+    .resource-hero__eyebrow {
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--jl-text-dim);
+      margin-bottom: 0.5rem;
+    }
+    .resource-hero__title {
+      font-size: clamp(2.1rem, 2.6vw, 2.6rem);
+      line-height: 1.1;
+      color: var(--jl-white);
+      margin-bottom: 0.6rem;
+    }
+    .resource-hero__subtitle {
+      font-size: 1.05rem;
+      color: var(--jl-text-muted);
+      margin-bottom: 1.75rem;
+    }
+    .resource-hero__pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .resource-hero__pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 0.9rem;
+      color: var(--jl-text-muted);
+      text-decoration: none;
+    }
+    .resource-hero__pill i {
+      color: var(--jl-accent);
+    }
+
+    .resources-layout {
+      background: var(--jl-surface);
+      padding: 3rem 0 4rem;
+    }
+    .resources-layout__section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--jl-text-dark);
+      margin-bottom: 0.25rem;
+    }
+    .resources-layout__section-subtitle {
+      font-size: 0.98rem;
+      color: var(--jl-text-dark-dim);
+      margin-bottom: 1.75rem;
+    }
     .resource-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 2rem;
+      background: var(--jl-white);
+      border-radius: var(--card-radius);
+      padding: 1.75rem 1.75rem 1.6rem;
       margin-bottom: 2rem;
-      transition: all 0.3s;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.12);
       height: 100%;
+      display: flex;
+      flex-direction: column;
     }
     .resource-card:hover {
-      border-color: var(--jl-accent);
-      transform: translateY(-5px);
-      box-shadow: 0 10px 40px rgba(255, 193, 7, 0.2);
+      border-color: rgba(15, 23, 42, 0.22);
+      box-shadow: 0 18px 56px rgba(15, 23, 42, 0.16);
+      transform: translateY(-2px);
     }
     .resource-type {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
       padding: 0.25rem 0.75rem;
-      background: rgba(255, 193, 7, 0.2);
-      color: var(--jl-accent);
-      border-radius: 20px;
-      font-size: 0.85rem;
+      background: var(--jl-surface-alt);
+      color: var(--jl-text-dark-dim);
+      border-radius: 999px;
+      font-size: 0.8rem;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 0.9rem;
     }
-    .resource-card h4 { color: var(--jl-white); font-weight: 700; }
-    .resource-card .text-muted { color: var(--jl-text-muted) !important; }
+    .resource-type i {
+      color: var(--jl-accent);
+    }
+    .resource-card h4 {
+      color: var(--jl-text-dark);
+      font-weight: 600;
+      font-size: 1.15rem;
+      margin-bottom: 0.45rem;
+    }
+    .resource-card .text-muted {
+      color: var(--jl-text-dark-dim) !important;
+      font-size: 0.95rem;
+      margin-bottom: 1.1rem;
+    }
+    .resource-card__meta {
+      font-size: 0.82rem;
+      color: var(--jl-text-dark-dim);
+      margin-bottom: 0.75rem;
+    }
     .btn-download {
       background: var(--jl-accent);
       color: #1a1a1a;
       border: none;
-      padding: 0.75rem 1.5rem;
+      padding: 0.7rem 1.5rem;
       font-weight: 600;
-      border-radius: 8px;
-      transition: all 0.3s;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      transition: all 0.2s;
     }
     .btn-download:hover {
       background: var(--jl-accent-hover);
-      transform: translateY(-2px);
+      transform: translateY(-1px);
+      color: #1a1a1a;
+    }
+    .btn-secondary-link {
+      border-radius: 999px;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.9rem;
+      color: var(--jl-text-dark) !important;
+      border: 1px solid rgba(15, 23, 42, 0.35) !important;
+      background: transparent;
+    }
+    .btn-secondary-link:hover {
+      background: var(--jl-surface-alt) !important;
+      color: var(--jl-text-dark) !important;
+      border-color: rgba(15, 23, 42, 0.5) !important;
     }
   </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark jl-theme">
+  <nav class="navbar navbar-expand-lg navbar-dark jl-theme" role="navigation" aria-label="Main navigation">
     <div class="container">
       <a class="navbar-brand" href="/index.html">
         <img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions" class="jl-logo-icon">
@@ -82,87 +176,110 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="/resources/index.html" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-current="page">Resources</a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="resourcesDropdown">
-              <li><a class="dropdown-item" href="/resources/index.html">Templates &amp; Guides</a></li>
-              <li><a class="dropdown-item" href="/insights/index.html">Blogs</a></li>
+              <li><a class="dropdown-item" href="/resources/index.html">Templates &amp; Downloads</a></li>
+              <li><a class="dropdown-item" href="/insights/index.html">Insights &amp; Articles</a></li>
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
         </ul>
-        <a href="/book-consultation.html" class="btn btn-book-call">Book A Call</a>
+        <a href="/book-consultation.html" class="btn btn-book-call">Book a Free Call</a>
       </div>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <div class="resource-hero">
+  <section class="resource-hero" aria-labelledby="resources-heading">
     <div class="container">
-      <h1 class="display-4 mb-3">Resource Library</h1>
-      <p class="lead">Free templates, guides, and resources to help you get started</p>
-    </div>
-  </div>
-
-  <div class="container my-5">
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <div class="resource-card">
-          <span class="resource-type"><i class="bi bi-file-earmark-text me-1"></i>Template</span>
-          <h4>Automation Workflow Checklist</h4>
-          <p class="text-muted">Step-by-step checklist for planning and implementing automation projects</p>
-          <a href="/resources/automation-checklist.html" class="btn btn-download text-decoration-none">View &amp; Print</a>
+      <div class="resource-hero__inner">
+        <p class="resource-hero__eyebrow">Resources</p>
+        <h1 id="resources-heading" class="resource-hero__title">Resources for smoother operations.</h1>
+        <p class="resource-hero__subtitle">Templates, calculators, and practical guides that help you map processes, plan automation, and make better decisions.</p>
+        <div class="resource-hero__pill-row">
+          <a href="#templates" class="resource-hero__pill"><i class="bi bi-file-earmark-text"></i> Templates &amp; downloads</a>
+          <a href="#guides" class="resource-hero__pill"><i class="bi bi-journal-text"></i> Guides &amp; calculators</a>
+          <a href="/insights/index.html" class="resource-hero__pill"><i class="bi bi-lightbulb"></i> Insights &amp; articles</a>
         </div>
       </div>
-      
-      <div class="col-md-4 mb-4">
-        <div class="resource-card">
-          <span class="resource-type"><i class="bi bi-file-earmark-bar-graph me-1"></i>Whitepaper</span>
-          <h4>ROI Guide: Automation Strategies</h4>
-          <p class="text-muted">Comprehensive guide to calculating ROI and planning automation initiatives</p>
-          <div class="d-flex flex-wrap gap-2">
-            <a href="/insights/measuring-roi-automation.html" class="btn btn-download text-decoration-none">Read Guide</a>
-            <a href="/tools/roi-calculator.html" class="btn btn-outline-light btn-sm text-decoration-none">ROI Calculator</a>
+    </div>
+  </section>
+
+  <section class="resources-layout">
+    <div class="container">
+      <section id="templates" aria-labelledby="templates-heading" class="mb-5">
+        <h2 id="templates-heading" class="resources-layout__section-title">Templates &amp; downloads</h2>
+        <p class="resources-layout__section-subtitle">Print-friendly checklists and templates you can use with your team right away.</p>
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <article class="resource-card">
+              <span class="resource-type"><i class="bi bi-file-earmark-text"></i> Template</span>
+              <h4>Automation Workflow Checklist</h4>
+              <p class="text-muted">Step-by-step checklist for planning and implementing automation projects across your business.</p>
+              <p class="resource-card__meta">Format: PDF / printable</p>
+              <a href="/resources/automation-checklist.html" class="btn btn-download text-decoration-none mt-auto">View &amp; print</a>
+            </article>
+          </div>
+          <div class="col-md-4 mb-4">
+            <article class="resource-card">
+              <span class="resource-type"><i class="bi bi-clipboard-check"></i> Template</span>
+              <h4>Process Documentation Template</h4>
+              <p class="text-muted">A simple, structured template for capturing your current processes before you automate them.</p>
+              <p class="resource-card__meta">Format: PDF / printable</p>
+              <a href="/resources/process-documentation-template.html" class="btn btn-download text-decoration-none mt-auto">View &amp; print</a>
+            </article>
           </div>
         </div>
-      </div>
-      
-      <div class="col-md-4 mb-4">
-        <div class="resource-card">
-          <span class="resource-type"><i class="bi bi-clipboard-check me-1"></i>Template</span>
-          <h4>Process Documentation Template</h4>
-          <p class="text-muted">Template for documenting current processes before automation</p>
-          <a href="/resources/process-documentation-template.html" class="btn btn-download text-decoration-none">View &amp; Print</a>
-        </div>
-      </div>
-    </div>
-  </div>
+      </section>
 
-  <footer class="py-5 jl-theme">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 mb-4 mb-md-0">
-          <h5>JL Solutions</h5>
-          <p class="mb-0">Automate, Streamline, Grow Your Business.</p>
+      <section id="guides" aria-labelledby="guides-heading">
+        <h2 id="guides-heading" class="resources-layout__section-title">Guides &amp; calculators</h2>
+        <p class="resources-layout__section-subtitle">Deeper walkthroughs and tools that help you model impact and pick the right projects.</p>
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <article class="resource-card">
+              <span class="resource-type"><i class="bi bi-file-earmark-bar-graph"></i> Guide</span>
+              <h4>ROI Guide: Automation Strategies</h4>
+              <p class="text-muted">A practical guide to calculating ROI for automation projects so you can prioritize the work that matters most.</p>
+              <p class="resource-card__meta">Type: Article + calculator</p>
+              <div class="d-flex flex-wrap gap-2 mt-auto">
+                <a href="/insights/measuring-roi-automation.html" class="btn btn-download text-decoration-none">Read the guide</a>
+                <a href="/tools/roi-calculator.html" class="btn btn-outline-secondary btn-secondary-link text-decoration-none">Open ROI calculator</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <footer class="jl-theme footer-home" role="contentinfo">
+    <div class="container footer__container">
+      <div class="row align-items-start footer__row">
+        <div class="col-md-4 mb-4 mb-md-0 footer__brand">
+          <h5 class="footer__heading">JL Solutions</h5>
+          <p class="footer__tagline">Automate, Streamline, Grow Your Business.</p>
         </div>
         <div class="col-md-4 mb-4 mb-md-0">
-          <h5>Quick Links</h5>
-          <ul class="list-unstyled mb-0">
+          <h5 class="footer__heading">Quick Links</h5>
+          <ul class="list-unstyled footer__links mb-0">
             <li><a href="/services/index.html">Services</a></li>
             <li><a href="/case-studies/index.html">Case Studies</a></li>
             <li><a href="/resources/index.html">Resources</a></li>
-            <li><a href="/book-consultation.html">Free Consultation</a></li>
+            <li><a href="/book-consultation.html">Book a Free Call</a></li>
             <li><a href="/contact.html">Contact</a></li>
           </ul>
         </div>
-        <div class="col-md-4">
-          <h5>Connect With Us</h5>
-          <p class="mb-0">Email: <a href="mailto:info@jlsolutions.io">info@jlsolutions.io</a></p>
-          <p class="mb-2 mt-2">
+        <div class="col-md-4 footer__contact">
+          <h5 class="footer__heading">Get in Touch</h5>
+          <p class="footer__email-wrap"><a href="mailto:info@jlsolutions.io" class="footer__email">info@jlsolutions.io</a></p>
+          <a href="/book-consultation.html" class="footer__cta">Book a Free Call</a>
+          <p class="mb-2 mt-3 footer__social">
             <a href="https://facebook.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-white me-2" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
             <a href="https://instagram.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
           </p>
         </div>
       </div>
-      <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 2rem 0;">
-      <div class="text-center">
+      <hr class="footer__divider">
+      <div class="text-center footer__copy">
         <small>&copy; 2026 JL Solutions. All rights reserved.</small>
       </div>
     </div>
