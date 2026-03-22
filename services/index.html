@@ -230,6 +230,92 @@
       transform: translateY(-2px);
       color: #1a1a1a;
     }
+
+    /* Starter Offers: 2-column grid, equal-height cards per row (stretch) */
+    .starter-offers {
+      background: var(--jl-surface-light);
+      border-radius: 16px;
+      padding: 2.75rem 1.75rem 2.25rem;
+      margin: 3rem 0;
+    }
+    .starter-offers__grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+      align-items: stretch;
+    }
+    @media (min-width: 768px) {
+      .starter-offers__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .starter-offers__grid > .service-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+      padding: 1.5rem 1.75rem;
+    }
+    .starter-offers .service-card h4 {
+      margin-bottom: 0.35rem;
+    }
+    .starter-offers .service-card p {
+      flex-grow: 0;
+      margin-bottom: 0.5rem;
+    }
+    .starter-offers .service-card p.service-card__meta {
+      margin-bottom: 0.5rem;
+    }
+    .starter-offers .service-card ul {
+      flex: 1 1 auto;
+      margin-bottom: 0.75rem !important;
+      padding-left: 1.15rem;
+      font-size: 0.875rem;
+      line-height: 1.4;
+      color: var(--jl-text-dark-muted);
+    }
+    .starter-offers .service-card ul li {
+      margin-bottom: 0.2rem;
+    }
+    .starter-offers .service-card .btn-book-demo {
+      margin-top: auto;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Post-grid callouts: stand off light surface (avoid washed-out text-muted) */
+    .starter-offers__callout {
+      background: var(--jl-white);
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      border-radius: 16px;
+      padding: 1.75rem 1.75rem;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      text-align: center;
+    }
+    .starter-offers__callout h3 {
+      color: #0f172a;
+      font-weight: 700;
+      margin-bottom: 0.65rem;
+      letter-spacing: -0.02em;
+    }
+    .starter-offers__callout p {
+      color: #334155;
+      font-size: 1rem;
+      line-height: 1.65;
+      margin-bottom: 0;
+    }
+    .starter-offers__callout--cta {
+      border-top: 3px solid var(--jl-accent);
+      padding-top: 1.85rem;
+    }
+    .starter-offers__callout--cta p {
+      margin-bottom: 1.25rem;
+    }
   </style>
 </head>
 <body>
@@ -309,7 +395,7 @@
         <span class="badge-featured">OUR SERVICES</span>
         <h2 class="mb-3">Automation That Scales With You</h2>
         <p class="text-muted mb-0" style="max-width: 720px; margin: 0 auto;">
-          Start where the friction hits hardest—missed leads, slow intake, scheduling chaos, or manual follow-up.
+          Start where the friction hits hardest: missed leads, slow intake, scheduling chaos, or manual follow-up.
           Each service can stand alone or be combined into a simple end-to-end system.
         </p>
       </div>
@@ -326,7 +412,7 @@
               <span class="best-for-chip">Clinics</span>
               <span class="best-for-chip">Catering</span>
             </div>
-            <p>Capture every inquiry in one place, ask the right questions up front, and route to the right person automatically—so jobs and clients never slip through the cracks.</p>
+            <p>Capture every inquiry in one place, ask the right questions up front, and route to the right person automatically, so jobs and clients never slip through the cracks.</p>
             <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
@@ -342,7 +428,7 @@
               <span class="best-for-chip">Clinics</span>
               <span class="best-for-chip">Assistance programs</span>
             </div>
-            <p>Use guided forms to gather clean information, check basic fit, and move people to the right next step automatically—without back-and-forth or manual review.</p>
+            <p>Use guided forms to gather clean information, check basic fit, and move people to the right next step automatically, without back-and-forth or manual review.</p>
             <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
@@ -358,7 +444,7 @@
               <span class="best-for-chip">Catering</span>
               <span class="best-for-chip">B2B services</span>
             </div>
-            <p>Turn rough details into clear estimates, proposals, or order confirmations in minutes, not days—with consistent pricing and fewer manual edits.</p>
+            <p>Turn rough details into clear estimates, proposals, or order confirmations in minutes, not days, with consistent pricing and fewer manual edits.</p>
             <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
@@ -389,7 +475,7 @@
               <span class="best-for-chip">Service businesses</span>
               <span class="best-for-chip">Sales &amp; account teams</span>
             </div>
-            <p>Automated check-ins, reminders, and nurture sequences keep warm leads and past clients engaged—without adding more to-do’s to someone’s list.</p>
+            <p>Automated check-ins, reminders, and nurture sequences keep warm leads and past clients engaged, without adding more to-do’s to someone’s list.</p>
             <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
           </div>
         </div>
@@ -439,7 +525,7 @@
             <p class="service-card__eyebrow">WHEN OFF-THE-SHELF ISN’T CUTTING IT</p>
             <h4>Build My App</h4>
             <p class="mb-2">
-              We design and build custom business apps, portals, and workflow tools that fit how your team actually works—not how generic software expects you to work.
+              We design and build custom business apps, portals, and workflow tools that fit how your team actually works, not how generic software expects you to work.
             </p>
             <p class="service-card__meta">Portals · Internal systems · Workflow tools</p>
             <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
@@ -490,13 +576,101 @@
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <div class="text-center my-5 py-5">
-      <h2>Ready to fix the bottlenecks in your day‑to‑day?</h2>
-      <p class="lead mb-4">Tell us where leads, requests, or tasks are getting stuck and we’ll outline a practical automation plan for your team.</p>
-      <a href="/book-consultation.html" class="btn-service me-3">Book a Free Call</a>
-      <a href="/contact.html" class="btn-outline-service">Contact Us</a>
-    </div>
+    <!-- Starter Offers -->
+    <section class="starter-offers" aria-labelledby="starter-offers-heading">
+      <div class="container">
+        <p class="text-center text-uppercase fw-semibold mb-1" style="letter-spacing: 0.14em; font-size: 0.8rem; color: var(--jl-text-dark-muted);">
+          STARTER OFFERS
+        </p>
+        <h2 id="starter-offers-heading" class="text-center mb-3">Start with a focused win</h2>
+        <p class="text-center text-muted mb-4" style="max-width: 720px; margin: 0 auto;">
+          Not every project needs a massive rebuild. These starter offers are designed to fix one painful bottleneck fast, so you can get traction, save time, and build from there.
+        </p>
+
+        <div class="starter-offers__grid">
+          <!-- 1. Fix My App Sprint -->
+          <div class="service-card">
+            <p class="service-card__eyebrow">FASTEST FIX</p>
+            <h4>Fix My App Sprint</h4>
+            <p class="service-card__meta">Starting at $1,500</p>
+            <p>For businesses with a broken form, clunky workflow, messy logic, or frustrating internal tool that needs fast cleanup.</p>
+            <ul class="mb-0">
+              <li>workflow and UX review</li>
+              <li>top-priority fixes</li>
+              <li>form / logic cleanup</li>
+              <li>focused implementation sprint</li>
+              <li>next-steps summary</li>
+            </ul>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
+          </div>
+
+          <!-- 2. Lead Intake Starter -->
+          <div class="service-card">
+            <p class="service-card__eyebrow">MOST REQUESTED</p>
+            <h4>Lead Intake Starter</h4>
+            <p class="service-card__meta">Starting at $2,500</p>
+            <p>For teams losing inquiries across email, forms, phone calls, or manual handoff.</p>
+            <ul class="mb-0">
+              <li>intake flow mapping</li>
+              <li>smart form or guided intake setup</li>
+              <li>routing / notification logic</li>
+              <li>basic qualification rules</li>
+              <li>simple visibility into new requests</li>
+            </ul>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
+          </div>
+
+          <!-- 3. Follow-Up Starter -->
+          <div class="service-card">
+            <p class="service-card__eyebrow">EASY ROI WIN</p>
+            <h4>Follow-Up Starter</h4>
+            <p class="service-card__meta">Starting at $2,000</p>
+            <p>For businesses that know leads or clients are slipping because follow-up is inconsistent.</p>
+            <ul class="mb-0">
+              <li>reminder and follow-up workflow</li>
+              <li>basic nurture automation</li>
+              <li>lead/client status triggers</li>
+              <li>internal alerts or task creation</li>
+              <li>simple tracking setup</li>
+            </ul>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
+          </div>
+
+          <!-- 4. Scheduling Starter -->
+          <div class="service-card">
+            <p class="service-card__eyebrow">BEST FOR FIELD TEAMS</p>
+            <h4>Scheduling Starter</h4>
+            <p class="service-card__meta">Starting at $3,000</p>
+            <p>For home services, field teams, and operations-heavy businesses stuck juggling calendars and manual coordination.</p>
+            <ul class="mb-0">
+              <li>scheduling workflow review</li>
+              <li>assignment / routing logic</li>
+              <li>appointment or job rules</li>
+              <li>notifications / confirmations</li>
+              <li>handoff recommendations for growth</li>
+            </ul>
+            <a href="/book-consultation.html" class="btn-book-demo">Book a Free Call</a>
+          </div>
+        </div>
+
+        <div class="starter-offers__callout mt-4" role="region" aria-labelledby="starter-bigger-heading">
+          <h3 id="starter-bigger-heading" class="h5">Need something bigger?</h3>
+          <p>
+            Custom builds, advanced automations, and larger workflow systems are quoted after a call.
+            Most focused starter projects begin between $1,500 and $3,000 depending on scope.
+          </p>
+        </div>
+
+        <div class="starter-offers__callout starter-offers__callout--cta my-5" role="region" aria-labelledby="starter-unsure-heading">
+          <h3 id="starter-unsure-heading" class="h4">Not sure where to start?</h3>
+          <p>
+            Tell us what’s slowing your team down (missed leads, broken workflows, weak follow-up, or scheduling chaos), and we’ll point you to the fastest first step.
+          </p>
+          <a href="/book-consultation.html" class="btn-service me-md-3 mb-3 mb-md-0 d-inline-flex">Book a Free Call</a>
+          <a href="/contact.html" class="btn-outline-service d-inline-flex">Contact Us</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Footer -->
