@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Experience | JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="icon" href="assets/images/jlsolutions-logo.png" type="image/png">
+  <link rel="shortcut icon" href="assets/images/jlsolutions-logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/images/jlsolutions-logo.png">
+  <meta name="description" content="Interactive demo: how JL Solutions captures leads, qualifies with AI, and automates follow-up.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: { preflight: false },
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="/css/demo-page.css">
+</head>
+<body class="demo-landing">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="navbar navbar-expand-lg navbar-dark jl-theme demo-landing-nav" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="assets/images/jlsolutions-logo-nav.png" alt="JL Solutions" class="jl-logo-icon">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="demo.html" aria-current="page">Demo</a></li>
+          <li class="nav-item"><a class="nav-link" href="services/index.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="case-studies/index.html">Case Studies</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="resources/index.html" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Resources</a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="resourcesDropdown">
+              <li><a class="dropdown-item" href="resources/index.html">Templates &amp; Guides</a></li>
+              <li><a class="dropdown-item" href="insights/index.html">Blogs</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+        <a href="book-consultation.html" class="btn btn-book-call">Book a Free Call</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content" class="font-sans antialiased demo-page-wrap">
+    <div class="min-h-screen bg-slate-50 text-slate-900">
+      <section id="demo-page-hero" class="demo-hero scroll-mt-24 py-10 text-white sm:py-14" aria-label="Introduction">
+        <div class="demo-shell">
+          <div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-12 xl:gap-14">
+            <div class="min-w-0 lg:col-span-6 xl:col-span-5">
+              <h1 class="text-3xl font-black leading-tight drop-shadow-sm sm:text-4xl md:text-[2.75rem] md:leading-[1.1]">Capture More Leads. Close Faster.</h1>
+              <p class="demo-hero__lead mt-4 text-base leading-relaxed sm:text-lg">
+                AI that responds instantly, qualifies leads, and books appointments automatically so nothing slips through the cracks.
+              </p>
+              <p class="demo-hero__stat mt-4 text-sm font-semibold leading-snug sm:text-base">Most teams save 10 to 20 hours a week in the first month, with faster replies and more booked conversations.</p>
+              <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <a href="book-consultation.html" class="demo-btn-primary demo-btn-lg inline-flex w-full items-center justify-center rounded-xl px-7 py-3.5 text-center no-underline transition sm:w-auto">
+                  Book a Free Call
+                </a>
+                <a href="#jl-live-demo-panel" class="demo-btn-secondary inline-flex w-full items-center justify-center rounded-xl px-7 py-3.5 text-center text-sm font-semibold no-underline transition sm:w-auto sm:text-base">
+                  See live demo
+                </a>
+              </div>
+              <p class="mt-6 max-w-md text-base leading-relaxed text-slate-100/95">For home services, healthcare, nonprofits, and other service-based teams that live or die on follow-up.</p>
+            </div>
+            <div class="min-w-0 lg:col-span-6 xl:col-span-7">
+              <div class="hero-product-preview relative mx-auto max-w-lg lg:ml-auto lg:mr-0" aria-hidden="true">
+                <div class="pointer-events-none absolute -right-4 -top-6 hidden h-24 w-24 rounded-full bg-cyan-400/15 blur-2xl sm:block"></div>
+                <div class="relative rounded-2xl border border-white/20 bg-white/[0.97] p-4 text-slate-900 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.45)] sm:p-5">
+                  <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <span class="text-sm font-bold uppercase tracking-wider text-slate-400">Lead flow</span>
+                    <span class="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">Live</span>
+                  </div>
+                  <div class="mt-3 space-y-2.5 text-xs sm:text-sm">
+                    <div class="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
+                      <span class="font-medium text-slate-700">New inquiry</span>
+                      <span class="font-semibold text-teal-600">Just now</span>
+                    </div>
+                    <div class="flex justify-end">
+                      <span class="max-w-[85%] rounded-2xl bg-teal-600 px-3 py-2 text-sm font-medium leading-snug text-white shadow-sm sm:text-base">Instant reply + qualify</span>
+                    </div>
+                    <div class="rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-950 sm:text-base">Routed to owner · booking triggered</div>
+                  </div>
+                  <p class="mt-3 border-t border-slate-100 pt-3 text-center text-sm font-medium uppercase tracking-widest text-slate-500">Preview · try the full demo below</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-problem-section bg-white" aria-labelledby="demo-why-heading">
+        <div class="demo-shell py-10 sm:py-12">
+          <h2 id="demo-why-heading" class="text-center text-2xl font-bold sm:text-3xl" style="color: var(--jl-ink, #0a1628);">Why teams lose leads</h2>
+          <p class="mx-auto mt-3 max-w-2xl text-center text-base leading-relaxed text-slate-600">The gap isn’t effort: it’s speed and consistency. Here’s what breaks before automation.</p>
+          <div class="mt-10 grid gap-6 lg:grid-cols-2 lg:gap-8">
+            <div class="demo-compare-card demo-compare-card--manual rounded-2xl border border-rose-200/80 bg-rose-50/40 p-6 sm:p-8">
+              <div class="flex items-center gap-3">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-100 text-xl text-rose-600" aria-hidden="true"><i class="bi bi-x-lg"></i></span>
+                <h3 class="text-lg font-bold text-slate-900 sm:text-xl">Manual process</h3>
+              </div>
+              <ul class="demo-compare-list mt-6 space-y-3 text-base leading-relaxed text-slate-700">
+                <li>Slow follow-up</li>
+                <li>Missed leads</li>
+                <li>Inconsistent handoff</li>
+                <li>Too much admin</li>
+              </ul>
+            </div>
+            <div class="demo-compare-card demo-compare-card--auto rounded-2xl border border-teal-200/90 bg-gradient-to-br from-teal-50/90 to-cyan-50/50 p-6 shadow-sm sm:p-8">
+              <div class="flex items-center gap-3">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-600 text-xl text-white shadow-md" aria-hidden="true"><i class="bi bi-lightning-charge-fill"></i></span>
+                <h3 class="text-lg font-bold text-slate-900 sm:text-xl">With JL Solutions</h3>
+              </div>
+              <ul class="demo-compare-list mt-6 space-y-3 text-base font-medium leading-relaxed text-slate-800">
+                <li>Instant response</li>
+                <li>Auto qualification</li>
+                <li>Routed to the right person</li>
+                <li>Appointment booked automatically</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-workflow-section border-y border-slate-200 bg-slate-50" aria-labelledby="demo-workflow-heading">
+        <div class="demo-shell py-10 sm:py-12">
+          <h2 id="demo-workflow-heading" class="text-center text-xl font-bold text-slate-900 sm:text-2xl">How JL Solutions fixes it</h2>
+          <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-slate-600 sm:text-base">One continuous workflow from first touch to calendar. No sticky notes required.</p>
+          <ol class="demo-workflow-steps mx-auto mt-8 flex max-w-4xl flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-center sm:gap-3" role="list">
+            <li class="demo-workflow-step flex flex-1 flex-col rounded-xl border border-slate-200 bg-white px-4 py-3 text-center shadow-sm sm:min-w-[9rem] sm:py-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Step 1</span>
+              <span class="mt-1 text-sm font-semibold text-slate-900">Lead comes in</span>
+            </li>
+            <li class="hidden items-center justify-center text-teal-500 sm:flex" aria-hidden="true"><i class="bi bi-arrow-right text-lg"></i></li>
+            <li class="demo-workflow-step flex flex-1 flex-col rounded-xl border border-slate-200 bg-white px-4 py-3 text-center shadow-sm sm:min-w-[9rem] sm:py-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Step 2</span>
+              <span class="mt-1 text-sm font-semibold text-slate-900">AI responds</span>
+            </li>
+            <li class="hidden items-center justify-center text-teal-500 sm:flex" aria-hidden="true"><i class="bi bi-arrow-right text-lg"></i></li>
+            <li class="demo-workflow-step flex flex-1 flex-col rounded-xl border border-slate-200 bg-white px-4 py-3 text-center shadow-sm sm:min-w-[9rem] sm:py-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Step 3</span>
+              <span class="mt-1 text-sm font-semibold text-slate-900">Qualified &amp; routed</span>
+            </li>
+            <li class="hidden items-center justify-center text-teal-500 sm:flex" aria-hidden="true"><i class="bi bi-arrow-right text-lg"></i></li>
+            <li class="demo-workflow-step flex flex-1 flex-col rounded-xl border border-teal-200 bg-teal-50/80 px-4 py-3 text-center shadow-sm ring-1 ring-teal-100 sm:min-w-[9rem] sm:py-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-teal-700">Outcome</span>
+              <span class="mt-1 text-sm font-semibold text-slate-900">Booked or handed off</span>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="jl-live-demo-panel" class="demo-interactive-section scroll-mt-24 border-t border-slate-200 bg-slate-100/90 py-10 sm:py-12" aria-label="Interactive live demo">
+        <div class="demo-shell">
+          <header class="max-w-3xl">
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-teal-700">See it in action</p>
+            <h2 class="mt-2 text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">The second a lead comes in</h2>
+            <p class="mt-3 text-base leading-relaxed text-slate-600">Use the industry tabs to swap the story, then hit play to watch the same workflow run in real time.</p>
+          </header>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <p class="text-sm font-bold uppercase tracking-wider text-slate-400">1 · Capture</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900">Lead captured instantly</p>
+              <p class="mt-1 text-sm leading-relaxed text-slate-600">Form, ad, or inbox: nothing sits unread.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <p class="text-sm font-bold uppercase tracking-wider text-slate-400">2 · Qualify</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900">Qualified and routed automatically</p>
+              <p class="mt-1 text-sm leading-relaxed text-slate-600">Intent scored and sent to the right owner.</p>
+            </div>
+            <div class="rounded-xl border border-teal-100 bg-teal-50/60 p-4 shadow-sm ring-1 ring-teal-100">
+              <p class="text-sm font-bold uppercase tracking-wider text-teal-800">3 · Act</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900">Follow-up or booking triggered</p>
+              <p class="mt-1 text-sm leading-relaxed text-slate-600">SMS, email, or calendar, without you chasing.</p>
+            </div>
+          </div>
+
+          <p id="demo-industry-blurb" class="mt-8 max-w-3xl text-base font-medium leading-relaxed text-slate-800">Home services: a new estimate request hits the system, gets an instant SMS, and lands on the calendar, without anyone touching a spreadsheet.</p>
+
+          <div class="mt-5 flex flex-col gap-4 border-b border-slate-200/80 pb-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+            <div id="demo-industry-pills" class="flex flex-wrap gap-2 sm:gap-3" role="group" aria-label="Choose industry scenario"></div>
+            <button type="button" id="demo-run-btn" class="demo-btn-play inline-flex w-full items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition disabled:cursor-not-allowed sm:w-auto sm:shrink-0">
+              Play sequence
+            </button>
+          </div>
+
+          <div class="demo-mockup-label mt-8 text-center text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Interactive preview · dashboards update with your industry</div>
+          <div class="demo-panels-stage mt-4">
+            <div class="demo-hero__panels demo-panels-scaled min-w-0">
+              <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
+              <!-- Pipeline dashboard -->
+              <div class="rounded-2xl border border-slate-200 bg-white p-3 text-slate-900 shadow-xl sm:p-4 xl:rounded-3xl">
+                <div class="rounded-xl border border-slate-200 bg-white shadow-sm sm:rounded-2xl xl:rounded-3xl">
+                  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-5 sm:py-4">
+                    <div class="min-w-0">
+                      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 sm:text-sm sm:tracking-[0.22em]">AI Operations Dashboard</p>
+                      <h3 class="mt-0.5 text-base font-bold text-slate-900 sm:mt-1 sm:text-lg">Lead Pipeline Overview</h3>
+                    </div>
+                    <div class="flex shrink-0 items-center gap-2 rounded-full bg-teal-50 px-3 py-1.5 text-xs font-semibold text-teal-800">
+                      <span class="h-2 w-2 shrink-0 rounded-full bg-teal-500" aria-hidden="true"></span>
+                      Live
+                    </div>
+                  </div>
+                  <div class="flex flex-col gap-4 p-4 sm:p-5 2xl:flex-row 2xl:items-stretch 2xl:gap-5">
+                    <div class="min-w-0 flex-1 space-y-4">
+                      <div class="grid gap-3 sm:grid-cols-2">
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Lead Name</p>
+                          <p class="mt-2 text-sm font-semibold text-slate-900">Morgan Lee</p>
+                          <p class="mt-1 text-sm text-slate-600">morgan@email.com</p>
+                        </div>
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Lead Score</p>
+                          <div class="mt-2 inline-flex rounded-full bg-teal-100 px-2.5 py-1 text-xs font-semibold text-teal-800" id="demo-lead-score">High Intent</div>
+                          <p class="mt-2 text-sm text-slate-600">Source: <span id="demo-meta-source-line">Homepage Form</span></p>
+                        </div>
+                      </div>
+                      <div class="rounded-2xl border border-slate-200 p-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                          <div>
+                            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Lead Details</p>
+                            <h4 class="mt-1 text-sm font-semibold text-slate-900">Current Opportunity</h4>
+                          </div>
+                          <div class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600" id="demo-dash-industry-label">Home Services</div>
+                        </div>
+                        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                          <div class="rounded-xl bg-slate-50 p-3">
+                            <p class="text-sm text-slate-600">Service</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900" id="demo-meta-service">Estimate Request</p>
+                          </div>
+                          <div class="rounded-xl bg-slate-50 p-3">
+                            <p class="text-sm text-slate-600">Owner</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900" id="demo-meta-owner">Sales Team</p>
+                          </div>
+                          <div class="rounded-xl bg-slate-50 p-3">
+                            <p class="text-sm text-slate-600">Pipeline Value</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900" id="demo-meta-value">$3.2k</p>
+                          </div>
+                          <div class="rounded-xl bg-slate-50 p-3">
+                            <p class="text-sm text-slate-600">Status</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900" id="demo-meta-status">Automation Running</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="min-w-0">
+                          <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Workflow Status</p>
+                          <h4 class="mt-1 text-sm font-semibold text-slate-900">Execution Timeline</h4>
+                        </div>
+                        <div class="shrink-0 text-sm text-slate-600">Updated live</div>
+                      </div>
+                      <div id="demo-status-rows" class="mt-4 space-y-3" role="list" aria-label="Workflow steps"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live automation + snapshot -->
+              <div class="rounded-2xl border border-slate-200 bg-white p-3 text-slate-900 shadow-xl sm:p-4 xl:rounded-3xl">
+                <div class="rounded-xl border border-slate-200 bg-white shadow-sm sm:rounded-2xl xl:rounded-3xl">
+                  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-5 sm:py-4">
+                    <div class="min-w-0">
+                      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 sm:text-sm sm:tracking-[0.22em]">Live Automation Feed</p>
+                      <h3 class="mt-0.5 text-base font-bold text-slate-900 sm:mt-1 sm:text-lg">Customer Touchpoints</h3>
+                    </div>
+                    <div class="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600" id="demo-feed-industry-label">Home Services</div>
+                  </div>
+                  <div class="flex flex-col gap-4 p-4 sm:p-5 2xl:flex-row 2xl:items-stretch 2xl:gap-5">
+                    <div class="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Activity Stream</p>
+                      <div id="demo-live-feed" class="mt-4 min-h-[120px] space-y-3 sm:min-h-[130px]" aria-live="polite" aria-relevant="additions text"></div>
+                    </div>
+                    <div class="min-w-0 flex-1 space-y-4">
+                      <div class="rounded-2xl border border-slate-200 p-4">
+                        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Performance Snapshot</p>
+                        <div class="mt-4 grid grid-cols-2 gap-3">
+                          <div class="rounded-xl bg-slate-50 p-3">
+                            <p class="text-sm text-slate-600">Response Time</p>
+                            <p class="mt-1 text-lg font-bold text-slate-900">9 sec</p>
+                          </div>
+                          <div class="rounded-xl bg-slate-50 p-3">
+                            <p class="text-sm text-slate-600">Booked Rate</p>
+                            <p class="mt-1 text-lg font-bold text-slate-900">62%</p>
+                          </div>
+                          <div class="rounded-xl bg-slate-50 p-3">
+                            <p class="text-sm text-slate-600">Follow Up</p>
+                            <p class="mt-1 text-lg font-bold text-slate-900">Auto</p>
+                          </div>
+                          <div class="rounded-xl bg-slate-50 p-3">
+                            <p class="text-sm text-slate-600">Pipeline</p>
+                            <p class="mt-1 text-lg font-bold text-slate-900">Active</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="rounded-2xl border border-slate-200 p-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                          <div>
+                            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Recommended Outcome</p>
+                            <h4 class="mt-1 text-sm font-semibold text-slate-900">Next Best Action</h4>
+                          </div>
+                          <div class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">Priority</div>
+                        </div>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">
+                          Keep response time under 1 minute, auto qualify the lead, and route high intent requests directly to booking.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-t border-slate-200 bg-white py-10 sm:py-12" aria-labelledby="demo-results-heading">
+        <div class="demo-shell">
+          <h2 id="demo-results-heading" class="text-center text-xl font-bold text-slate-900 sm:text-2xl">What you get</h2>
+          <p class="mx-auto mt-2 max-w-xl text-center text-sm text-slate-600 sm:text-base">Outcomes your team will feel in the first few weeks, not a feature laundry list.</p>
+          <div class="mt-10 grid gap-6 md:grid-cols-3 md:gap-8">
+            <div class="demo-outcome-card demo-card-accent flex min-h-[220px] flex-col rounded-2xl border border-slate-200 bg-slate-50/50 p-8 shadow-sm">
+              <span class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-2xl text-teal-700" aria-hidden="true"><i class="bi bi-stopwatch"></i></span>
+              <h3 class="text-lg font-bold text-slate-900">Respond in seconds</h3>
+              <p class="mt-2 text-base leading-relaxed text-slate-700">&lt;1 min target · no lead left waiting on nights and weekends.</p>
+            </div>
+            <div class="demo-outcome-card demo-card-accent flex min-h-[220px] flex-col rounded-2xl border border-slate-200 bg-slate-50/50 p-8 shadow-sm">
+              <span class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-2xl text-teal-700" aria-hidden="true"><i class="bi bi-diagram-3"></i></span>
+              <h3 class="text-lg font-bold text-slate-900">Route every lead correctly</h3>
+              <p class="mt-2 text-base leading-relaxed text-slate-700">Right message, right owner, right next step, every time.</p>
+            </div>
+            <div class="demo-outcome-card demo-card-accent flex min-h-[220px] flex-col rounded-2xl border border-slate-200 bg-slate-50/50 p-8 shadow-sm">
+              <span class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-2xl text-teal-700" aria-hidden="true"><i class="bi bi-calendar-check"></i></span>
+              <h3 class="text-lg font-bold text-slate-900">Book more without more staff</h3>
+              <p class="mt-2 text-base leading-relaxed text-slate-700">More conversations on the calendar from the same lead volume.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="demo-credibility border-t border-slate-200 bg-slate-50 py-10 sm:py-12" aria-labelledby="demo-cred-heading">
+        <div class="demo-shell">
+          <h2 id="demo-cred-heading" class="sr-only">Who we work with</h2>
+          <p class="text-center text-base font-semibold text-slate-800 sm:text-lg">Built for teams where every missed call costs money</p>
+          <p class="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-slate-600 sm:text-base">Home services, healthcare, nonprofits, real estate, and other service businesses that depend on fast, consistent follow-up, not another tool to babysit.</p>
+          <ul class="demo-light-checklist mx-auto mt-8 flex max-w-3xl list-none flex-wrap justify-center gap-x-8 gap-y-3 pl-0 text-sm font-medium text-slate-700">
+            <li class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-teal-600" aria-hidden="true"></i> Industry scenarios you can preview live</li>
+            <li class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-teal-600" aria-hidden="true"></i> Setup help included</li>
+            <li class="flex items-center gap-2"><i class="bi bi-check-circle-fill text-teal-600" aria-hidden="true"></i> Works with your existing workflow</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="demo-final-cta border-t border-slate-200 bg-white py-12 sm:py-14" aria-labelledby="demo-cta-heading">
+        <div class="demo-shell max-w-3xl text-center">
+          <h2 id="demo-cta-heading" class="text-3xl font-bold leading-tight sm:text-4xl" style="color: var(--jl-ink, #0a1628);">Stop losing leads starting this week</h2>
+          <p class="mx-auto mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">Book your free call and we’ll show you exactly where leads are leaking, and what to automate first.</p>
+          <ul class="demo-light-checklist mx-auto mt-8 max-w-md list-none space-y-3 pl-0 text-left text-base text-slate-700">
+            <li class="flex gap-3"><i class="bi bi-check-lg mt-0.5 shrink-0 text-teal-600" aria-hidden="true"></i><span>No extra tools required</span></li>
+            <li class="flex gap-3"><i class="bi bi-check-lg mt-0.5 shrink-0 text-teal-600" aria-hidden="true"></i><span>Setup help included</span></li>
+            <li class="flex gap-3"><i class="bi bi-check-lg mt-0.5 shrink-0 text-teal-600" aria-hidden="true"></i><span>Built around your workflow</span></li>
+          </ul>
+          <div class="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+            <a href="book-consultation.html" class="demo-btn-primary demo-btn-lg inline-flex items-center justify-center rounded-xl px-8 py-3.5 no-underline transition">
+              Book a Free Call
+            </a>
+            <a href="#jl-live-demo-panel" class="demo-btn-secondary demo-btn-secondary--light inline-flex items-center justify-center rounded-xl px-8 py-3.5 text-sm font-semibold no-underline transition sm:text-base">
+              See live demo
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="jl-theme footer-home demo-landing-footer" role="contentinfo">
+    <div class="container footer__container">
+      <div class="row align-items-start footer__row">
+        <div class="col-md-4 mb-4 mb-md-0 footer__brand">
+          <h5 class="footer__heading">JL Solutions</h5>
+          <p class="footer__tagline">Automate, Streamline, Grow Your Business.</p>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5 class="footer__heading">Quick Links</h5>
+          <ul class="list-unstyled footer__links mb-0">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="demo.html">Demo</a></li>
+            <li><a href="services/index.html">Services</a></li>
+            <li><a href="case-studies/index.html">Case Studies</a></li>
+            <li><a href="resources/index.html">Resources</a></li>
+            <li><a href="book-consultation.html">Book a Free Call</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 footer__contact">
+          <h5 class="footer__heading">Get in Touch</h5>
+          <p class="footer__email-wrap"><a href="mailto:info@jlsolutions.io" class="footer__email">info@jlsolutions.io</a></p>
+          <a href="book-consultation.html" class="footer__cta">Book a Free Call</a>
+          <p class="mb-2 mt-3 footer__social">
+            <a href="https://facebook.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-white me-2" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+            <a href="https://instagram.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+          </p>
+        </div>
+      </div>
+      <hr class="footer__divider">
+      <div class="text-center footer__copy">
+        <small>&copy; 2026 JL Solutions. All rights reserved.</small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/demo-interactive.js"></script>
+</body>
+</html>

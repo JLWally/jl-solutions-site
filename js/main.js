@@ -38,7 +38,14 @@ const setActiveNav = () => {
     const pathIsResources = path.includes('resources') || path.includes('insights');
     if (isHome && pathIsHome) link.classList.add('active');
     else if (isResourcesNav && pathIsResources) link.classList.add('active');
-    else if (!isHome && !link.closest('.dropdown') && path.includes(href.split('/')[0])) link.classList.add('active');
+    else if (!isHome && !link.closest('.dropdown')) {
+      const firstSeg = href.split('/')[0];
+      if (path.includes(firstSeg)) link.classList.add('active');
+      else if (firstSeg.endsWith('.html')) {
+        const base = firstSeg.replace(/\.html$/, '');
+        if (base && (path === '/' + base || path.endsWith('/' + base))) link.classList.add('active');
+      }
+    }
   });
 };
 

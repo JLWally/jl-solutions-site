@@ -59,7 +59,13 @@
     .service-icon {
       font-size: 2.75rem;
       margin-bottom: 1rem;
-      color: var(--jl-accent);
+      line-height: 1;
+      color: var(--jl-brand-cyan-deep, #0b6579);
+    }
+
+    .service-icon i {
+      display: inline-block;
+      vertical-align: middle;
     }
     
     .service-card h4 {
@@ -169,9 +175,9 @@
       transition: all 0.3s;
     }
     
-    .how-we-deliver .step-card.step-discover { border-left: 4px solid var(--jl-accent); }
-    .how-we-deliver .step-card.step-develop { border-left: 4px solid var(--jl-accent-hover); }
-    .how-we-deliver .step-card.step-deploy { border-left: 4px solid var(--jl-card-icon); }
+    .how-we-deliver .step-card.step-discover { border-left: 4px solid var(--jl-brand-cyan, #5fdbf0); }
+    .how-we-deliver .step-card.step-develop { border-left: 4px solid var(--jl-accent); }
+    .how-we-deliver .step-card.step-deploy { border-left: 4px solid #0e7490; }
     
     .how-we-deliver .step-icon {
       width: 56px;
@@ -183,9 +189,9 @@
       justify-content: center;
       font-size: 1.75rem;
     }
-    .how-we-deliver .step-discover .step-icon { background: rgba(0, 200, 83, 0.2); color: #00c853; }
-    .how-we-deliver .step-develop .step-icon { background: rgba(255, 152, 0, 0.2); color: #ff9800; }
-    .how-we-deliver .step-deploy .step-icon { background: rgba(0, 120, 212, 0.2); color: #0078d4; }
+    .how-we-deliver .step-discover .step-icon { background: rgba(95, 219, 240, 0.18); color: var(--jl-brand-cyan-deep, #0b6579); }
+    .how-we-deliver .step-develop .step-icon { background: rgba(255, 193, 7, 0.2); color: #b45309; }
+    .how-we-deliver .step-deploy .step-icon { background: rgba(14, 116, 144, 0.15); color: #0e7490; }
     
     .how-we-deliver .step-card h4 {
       font-size: 1.1rem;
@@ -202,8 +208,9 @@
     
     .best-for-chip {
       display: inline-block;
-      background: rgba(0, 120, 212, 0.15);
-      color: var(--jl-accent);
+      background: rgba(95, 219, 240, 0.12);
+      color: var(--jl-brand-cyan-deep, #0b6579);
+      border: 1px solid rgba(11, 101, 121, 0.22);
       padding: 0.25rem 0.6rem;
       border-radius: 20px;
       font-size: 0.75rem;
@@ -245,6 +252,15 @@
       border-radius: 16px;
       padding: 2.75rem 1.75rem 2.25rem;
       margin: 3rem 0;
+    }
+
+    .starter-offers__eyebrow {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--jl-brand-cyan-deep, #0b6579);
+      margin-bottom: 0.65rem;
     }
     .starter-offers__grid {
       display: grid;
@@ -379,7 +395,7 @@
   </header>
 
   <!-- Main Content -->
-  <main id="main-content" role="main" class="container my-5">
+  <main id="main-content" role="main" class="container my-5 jl-main-text">
     
     <!-- How We Deliver Strip -->
     <section class="how-we-deliver" aria-labelledby="how-we-deliver-heading">
@@ -424,7 +440,7 @@
         <!-- 1. Lead & Client Intake Automation -->
         <div class="col-md-6 col-lg-4">
           <div class="service-card featured">
-            <div class="service-icon"><i class="bi bi-clipboard-list"></i></div>
+            <div class="service-icon" aria-hidden="true"><i class="bi bi-inbox-fill"></i></div>
             <p class="service-card__eyebrow">DON’T LOSE WARM LEADS</p>
             <h4>Lead &amp; client intake automation</h4>
             <div class="mb-2">
@@ -599,9 +615,7 @@
     <!-- Starter Offers -->
     <section class="starter-offers" aria-labelledby="starter-offers-heading">
       <div class="container">
-        <p class="text-center text-uppercase fw-semibold mb-1" style="letter-spacing: 0.14em; font-size: 0.8rem; color: var(--jl-text-dark-muted);">
-          STARTER OFFERS
-        </p>
+        <p class="starter-offers__eyebrow text-center">Starter offers</p>
         <h2 id="starter-offers-heading" class="text-center mb-3">Start with a focused win</h2>
         <p class="text-center text-muted mb-4" style="max-width: 720px; margin: 0 auto;">
           Not every project needs a massive rebuild. These starter offers are designed to fix one painful bottleneck fast, so you can get traction, save time, and build from there.

@@ -1,0 +1,194 @@
+/* demo.html: marketing layout, JL teal accent */
+.demo-page-wrap {
+  background-color: #f1f5f9;
+}
+
+/* Slimmer nav on demo landing (less dead space under logo) */
+body.demo-landing .demo-landing-nav {
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+body.demo-landing .demo-landing-nav .container {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+/* Consistent content width site-wide on this page */
+.demo-shell {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .demo-shell {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Deep blue-canvas hero + cyan glow */
+.demo-hero {
+  position: relative;
+  color: #fff;
+  overflow-x: clip;
+  background:
+    radial-gradient(ellipse 85% 70% at 100% -15%, rgba(95, 219, 240, 0.22), transparent 52%),
+    radial-gradient(ellipse 55% 45% at 0% 100%, rgba(4, 120, 145, 0.14), transparent 50%),
+    linear-gradient(152deg, #040a10 0%, #0c2434 38%, #071018 100%);
+}
+
+.demo-hero__panels {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Demo mockups: slightly smaller + lighter depth so section feels shorter */
+.demo-panels-stage {
+  overflow: visible;
+  padding: 0.25rem 0 1rem;
+}
+
+/* Flat mockups: no rotation (keeps UI text sharp and readable) */
+.demo-panels-scaled {
+  transform: none;
+  filter: drop-shadow(0 16px 40px rgba(15, 23, 42, 0.1));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-panels-scaled {
+    filter: drop-shadow(0 10px 24px rgba(15, 23, 42, 0.08));
+  }
+}
+
+/* Minimum readable type inside interactive mockups */
+#jl-live-demo-panel .demo-panels-scaled {
+  font-size: 15px;
+}
+
+#jl-live-demo-panel .demo-panels-scaled .text-xs {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.demo-interactive-section {
+  color: #0f172a;
+}
+
+/*
+ * Global style.css sets `li` to near-white; reset on demo main content.
+ */
+.demo-page-wrap main li {
+  color: inherit;
+}
+
+/*
+ * Global style.css sets all `li` to near-white. On light sections, that can beat
+ * inheritance. Force readable text and teal icons for closing checklist rows.
+ */
+.demo-page-wrap .demo-credibility .demo-light-checklist li,
+.demo-page-wrap .demo-final-cta .demo-light-checklist li {
+  color: #334155 !important;
+}
+
+.demo-page-wrap .demo-credibility .demo-light-checklist li .bi,
+.demo-page-wrap .demo-final-cta .demo-light-checklist li .bi {
+  color: #0d9488 !important;
+}
+
+.demo-problem-section .demo-compare-list li {
+  color: #334155;
+}
+
+.demo-hero__lead {
+  color: rgba(248, 250, 252, 0.94);
+}
+
+.demo-hero__stat {
+  color: #a5f3fc;
+}
+
+.demo-btn-lg {
+  min-height: 3rem;
+  font-size: 1rem;
+}
+
+.demo-btn-primary {
+  background: linear-gradient(180deg, #22d3ee, #06b6d4);
+  color: #042f2e !important;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+}
+
+.demo-btn-primary:hover {
+  filter: brightness(1.06);
+}
+
+.demo-btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Secondary: hero (on dark) */
+.demo-btn-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff !important;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+}
+
+.demo-btn-secondary:hover {
+  border-color: rgba(165, 243, 252, 0.55);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Secondary: light sections */
+.demo-btn-secondary--light {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a !important;
+  backdrop-filter: none;
+}
+
+.demo-btn-secondary--light:hover {
+  border-color: #5eead4;
+  background: #f0fdfa;
+}
+
+/* Tertiary: play sequence (does not compete with Book / See demo) */
+.demo-btn-play {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.demo-btn-play:hover:not(:disabled) {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.demo-btn-play:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.demo-card-accent {
+  border-color: rgba(6, 182, 212, 0.25);
+}
+
+/* Tighter footer on demo page */
+body.demo-landing .demo-landing-footer .footer__container {
+  padding-top: 1.75rem;
+  padding-bottom: 1.5rem;
+}
+
+body.demo-landing .demo-landing-footer .footer__row {
+  margin-bottom: 0;
+}
