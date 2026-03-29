@@ -85,8 +85,8 @@ exports.handler = async (event) => {
       paymentSource,
     } = body;
 
-    const priceId = process.env.STRIPE_PRICE_ID;
-    const baseUrl = (process.env.URL || 'http://localhost:8888').replace(/\/$/, '');
+    const priceId = process.env['STRIPE_PRICE_ID'];
+    const baseUrl = (process.env['URL'] || 'http://localhost:8888').replace(/\/$/, '');
 
     const sessionConfig = {
       mode: 'payment',

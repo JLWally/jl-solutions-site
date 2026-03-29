@@ -59,7 +59,7 @@ const toOpenAIMessages = (messages = []) =>
     }));
 
 const buildResponsePayload = (messages, systemPrompt) => ({
-  model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
+  model: process.env["OPENAI_MODEL"] || "gpt-4.1-mini",
   input: [
     {
       role: "system",
@@ -90,7 +90,8 @@ exports.handler = async event => {
     };
   }
 
-  if (!process.env.OPENAI_API_KEY) {
+  const openaiKey = process.env["OPENAI_API_KEY"];
+  if (!openaiKey) {
     return {
       statusCode: 500,
       headers,
@@ -111,12 +112,12 @@ exports.handler = async event => {
     }
 
     const completion = await fetch(
-      process.env.OPENAI_API_URL || "https://api.openai.com/v1/responses",
+      process.env["OPENAI_API_URL"] || "https://api.openai.com/v1/responses",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+          Authorization: `Bearer ${openaiKey}`
         },
         body: JSON.stringify(
           buildResponsePayload(messages, payload.systemPrompt)

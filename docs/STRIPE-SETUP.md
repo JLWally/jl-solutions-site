@@ -46,6 +46,10 @@ Netlify can hide variables from **Functions** if the scope is wrong.
 The signing secret is **per endpoint**: use the `whsec_…` value from the destination whose URL is exactly  
 `https://www.jlsolutions.io/.netlify/functions/stripe-webhook` — not another endpoint’s secret.
 
+### Checkout still says “Stripe is not configured” on the live site
+
+Netlify’s function bundler can treat **static** `process.env.STRIPE_SECRET_KEY` as a build-time constant (often empty). This repo reads Stripe secrets with **dynamic** `process.env[name]` lookups and skips loading `.env` from disk on Lambda so dashboard secrets are not overwritten. After pulling the latest code, **redeploy** (clear cache if needed). Ensure `STRIPE_SECRET_KEY` is still scoped to **Functions** for Production.
+
 ## 4. Optional: fixed price (`STRIPE_PRICE_ID`)
 
 `stripe-checkout.js` supports:

@@ -27,6 +27,11 @@ const STRIPE_WEBHOOK_ENV_NAMES = [
 
 let dotenvLoaded = false;
 
+/** Netlify Functions run on AWS Lambda — use platform env only; never load .env from disk or override injected secrets. */
+function isLambdaRuntime() {
+  return Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
+}
+
 function orderedCandidateRoots() {
   const list = [];
   const seen = new Set();
@@ -72,6 +77,7 @@ function findProjectRootForEnv() {
 function tryLoadDotenvFromProjectRoot() {
   if (dotenvLoaded) return;
   dotenvLoaded = true;
+  if (isLambdaRuntime()) return;
   try {
     // eslint-disable-next-line global-require
     const dotenv = require("dotenv");
@@ -79,11 +85,12 @@ function tryLoadDotenvFromProjectRoot() {
     if (!root) return;
     const envPath = path.join(root, ".env");
     const localPath = path.join(root, ".env.local");
+    // Do not use override: true — it can wipe Netlify-injected secrets if a .env exists in the bundle.
     if (fs.existsSync(envPath)) {
-      dotenv.config({ path: envPath, override: true });
+      dotenv.config({ path: envPath, override: false });
     }
     if (fs.existsSync(localPath)) {
-      dotenv.config({ path: localPath, override: true });
+      dotenv.config({ path: localPath, override: false });
     }
   } catch {
     /* dotenv missing or unreadable */
@@ -107,6 +114,7 @@ function pickEnv(names, normalize) {
   const norm = normalize || (x => x);
   for (let i = 0; i < names.length; i++) {
     const n = names[i];
+    // Bracket access so esbuild does not inline build-time (often empty) values into the bundle.
     const v = norm(process.env[n]);
     if (v) return v;
   }
@@ -141,22 +149,8 @@ function readStripeSecretFromEnvFile() {
 
 function getStripeSecretKey() {
   tryLoadDotenvFromProjectRoot();
-  // Static process.env.* reads so Netlify Functions + esbuild still resolve at runtime.
-  const staticCandidates = [
-    process.env.STRIPE_SECRET_KEY,
-    process.env.STRIPE_TEST_SECRET_KEY,
-    process.env.STRIPE_SECRET_KEY_TEST,
-    process.env.STRIPE_LIVE_SECRET_KEY,
-    process.env.STRIPE_SECRET_KEY_LIVE,
-    process.env.STRIPE_API_KEY,
-    process.env.STRIPE_PRIVATE_KEY,
-  ];
-  for (let i = 0; i < staticCandidates.length; i++) {
-    const k = normalizeStripeSecret(staticCandidates[i]);
-    if (k) return k;
-  }
   let k = pickEnv(STRIPE_SECRET_ENV_NAMES, normalizeStripeSecret);
-  if (!k) k = readStripeSecretFromEnvFile();
+  if (!k && !isLambdaRuntime()) k = readStripeSecretFromEnvFile();
   return k;
 }
 
@@ -188,7 +182,7 @@ function readStripeWebhookSecretFromEnvFile() {
 function getStripeWebhookSecret() {
   tryLoadDotenvFromProjectRoot();
   let w = pickEnv(STRIPE_WEBHOOK_ENV_NAMES, normalizeStripeSecret);
-  if (!w) w = readStripeWebhookSecretFromEnvFile();
+  if (!w && !isLambdaRuntime()) w = readStripeWebhookSecretFromEnvFile();
   return w;
 }
 
