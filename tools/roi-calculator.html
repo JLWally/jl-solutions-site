@@ -259,8 +259,31 @@
       <div class="calc-card text-center" style="background: rgba(255, 189, 89, 0.1); border-color: var(--yellow);">
         <h3 class="mb-3">Ready to Achieve These Savings?</h3>
         <p class="lead mb-4">Let's discuss how we can help you achieve these results</p>
+        <div class="text-start mx-auto mb-4" style="max-width: 440px;">
+          <h4 class="h6 mb-3 text-center" style="color: var(--yellow);">Email me these results</h4>
+          <p class="small text-white-50 mb-3 text-center">We’ll send a copy to you and notify our team.</p>
+          <form id="roiLeadForm">
+            <p class="d-none" aria-hidden="true">
+              <label>Leave empty: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
+            <div class="mb-2">
+              <label class="form-label small mb-1" for="roiLeadName">Name *</label>
+              <input type="text" class="form-control form-control-sm" id="roiLeadName" name="name" required placeholder="Your name" autocomplete="name">
+            </div>
+            <div class="mb-2">
+              <label class="form-label small mb-1" for="roiLeadEmail">Email *</label>
+              <input type="email" class="form-control form-control-sm" id="roiLeadEmail" name="email" required placeholder="you@company.com" autocomplete="email">
+            </div>
+            <div class="mb-3">
+              <label class="form-label small mb-1" for="roiLeadCompany">Company</label>
+              <input type="text" class="form-control form-control-sm" id="roiLeadCompany" name="company" placeholder="Optional" autocomplete="organization">
+            </div>
+            <button type="submit" class="btn-calculate w-100" id="roiLeadSubmit" style="padding: 0.65rem 1rem; font-size: 1rem;">Email results</button>
+          </form>
+          <p class="small mt-2 mb-0 text-success d-none" id="roiLeadThanks" role="status">Thanks — check your inbox. We’ll be in touch soon.</p>
+        </div>
         <a href="/book-consultation.html" class="btn-calculate me-3">Schedule Consultation</a>
-        <button class="btn btn-outline-light" onclick="downloadResults()">Download Results</button>
+        <button type="button" class="btn btn-outline-light" onclick="downloadResults()">Download Results</button>
       </div>
     </div>
   </div>
@@ -453,6 +476,53 @@
       a.click();
       URL.revokeObjectURL(url);
     }
+
+    function roiField(id) {
+      const el = document.getElementById(id);
+      return el ? String(el.value || '').trim() : '';
+    }
+
+    document.getElementById('roiLeadForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var form = e.target;
+      var btn = document.getElementById('roiLeadSubmit');
+      var thanks = document.getElementById('roiLeadThanks');
+      if (thanks) thanks.classList.add('d-none');
+      btn.disabled = true;
+      var prev = btn.textContent;
+      btn.textContent = 'Sending…';
+      try {
+        var params = new URLSearchParams(new FormData(form));
+        params.set('form-name', 'roi-calculator');
+        params.set('teamSize', roiField('teamSize'));
+        params.set('avgSalary', roiField('avgSalary'));
+        params.set('hoursPerWeek', roiField('hoursPerWeek'));
+        params.set('errorRate', roiField('errorRate'));
+        params.set('errorCost', roiField('errorCost'));
+        params.set('errorsPerWeek', roiField('errorsPerWeek'));
+        params.set('automationEfficiency', roiField('automationEfficiency'));
+        params.set('errorReduction', roiField('errorReduction'));
+        params.set('annualSavings', document.getElementById('annualSavings').textContent.trim());
+        params.set('timeSavings', document.getElementById('timeSavings').textContent.trim());
+        params.set('costSavings', document.getElementById('costSavings').textContent.trim());
+        params.set('errorSavings', document.getElementById('errorSavings').textContent.trim());
+        var res = await fetch(window.location.origin + '/.netlify/functions/send-form-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString(),
+          redirect: 'follow',
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (thanks) thanks.classList.remove('d-none');
+        form.reset();
+      } catch (err) {
+        alert('Could not send. Email info@jlsolutions.io or try again.');
+        if (window.console && console.error) console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prev;
+      }
+    });
   </script>
 </body>
 </html>

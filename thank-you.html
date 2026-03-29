@@ -12,7 +12,7 @@
   <main class="py-5 text-center">
     <div class="container">
       <h1 class="mb-4 text-success">Thank you</h1>
-      <p class="lead mb-4">We received your request. Our team will reach out shortly.</p>
+      <p class="lead mb-4" id="tyLead">We received your request. Our team will reach out shortly.</p>
 
       <p class="mt-4">Want to talk sooner?</p>
       <a href="https://calendly.com/jlsolutions-info/30min" target="_blank" rel="noopener noreferrer" class="btn btn-primary me-2">
@@ -28,4 +28,15 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/main.js"></script>
+<script>
+  (function () {
+    var from = new URLSearchParams(window.location.search).get('from');
+    var el = document.getElementById('tyLead');
+    if (!el || !from) return;
+    if (from === 'pay' || from === 'onboard') {
+      el.textContent =
+        'Thank you for your payment. We received it and will follow up with next steps shortly.';
+    }
+  })();
+</script>
 </html>

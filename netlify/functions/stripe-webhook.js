@@ -13,6 +13,14 @@ function getSupabase() {
   return createClient(url, key);
 }
 
+/** Service role client for consultations even when referrals use simple auth. */
+function getSupabaseConsultations() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
+}
+
 function parseAgentsCommission(envStr, code) {
   if (!envStr) return 10;
   const parts = envStr.split(/[,;\n]/).map((s) => s.trim()).filter(Boolean);
@@ -42,11 +50,13 @@ exports.handler = async (event) => {
   }
 
   const supabase = getSupabase();
+  const consultationsDb = getSupabaseConsultations();
 
   try {
     if (stripeEvent.type === 'checkout.session.completed') {
       const session = stripeEvent.data.object;
-      const referralCode = session.metadata?.referralCode;
+      const meta = session.metadata || {};
+      const referralCode = meta.referralCode;
       const amountTotal = session.amount_total || 0;
       const customerEmail = session.customer_details?.email || session.customer_email || '';
 
@@ -88,6 +98,31 @@ exports.handler = async (event) => {
           }
         } else {
           console.warn('[stripe-webhook] Neither simple auth nor Supabase configured, skipping referral');
+        }
+      }
+
+      if (consultationsDb && customerEmail) {
+        const name = (meta.customerName || '').trim() || 'Customer';
+        const amountUsd = (amountTotal / 100).toFixed(2);
+        let source = 'stripe_checkout_paid';
+        if (meta.paymentSource === 'onboard_wizard') source = 'stripe_onboard_paid';
+        else if (meta.paymentSource === 'pay_page') source = 'stripe_pay_paid';
+
+        const { error: consultErr } = await consultationsDb.from('consultations').insert({
+          name: name.slice(0, 500),
+          email: customerEmail,
+          phone: meta.phone || null,
+          company: meta.company || null,
+          service: meta.service || null,
+          challenge: meta.challenge || null,
+          goals: meta.goals || null,
+          referral_code: meta.referralCode ? String(meta.referralCode).trim().toUpperCase() : null,
+          message: `Stripe payment completed. Session ${session.id}. Total $${amountUsd}`,
+          status: 'new',
+          source,
+        });
+        if (consultErr) {
+          console.warn('[stripe-webhook] consultations insert failed:', consultErr.message || consultErr);
         }
       }
     }

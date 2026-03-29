@@ -116,13 +116,20 @@
       <div class="demo-form" id="demoFormWrap">
         <form id="demoForm" novalidate>
           <div id="demoFormFields">
+            <p class="d-none" aria-hidden="true">
+              <label>Leave empty: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
             <div class="mb-3">
-              <label class="form-label" for="demoName">Name</label>
-              <input type="text" class="form-control" placeholder="Your name" id="demoName" required>
+              <label class="form-label" for="demoName">Name *</label>
+              <input type="text" class="form-control" placeholder="Your name" id="demoName" name="name" required autocomplete="name">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="demoEmail">Email *</label>
+              <input type="email" class="form-control" placeholder="you@company.com" id="demoEmail" name="email" required autocomplete="email">
             </div>
             <div class="mb-3">
               <label class="form-label" for="demoNeed">What do you need help with?</label>
-              <select class="form-select" id="demoNeed">
+              <select class="form-select" id="demoNeed" name="demoNeed">
                 <option value="">Select...</option>
                 <option value="intake">Client intake / onboarding</option>
                 <option value="consultation">Consultation request</option>
@@ -131,22 +138,22 @@
             </div>
             <div class="mb-3" id="demoOtherWrap" style="display: none;">
               <label class="form-label" for="demoOther">Please specify</label>
-              <input type="text" class="form-control" placeholder="Describe your need..." id="demoOther">
+              <input type="text" class="form-control" placeholder="Describe your need..." id="demoOther" name="demoOther">
             </div>
             <div class="mb-3">
               <label class="form-label" for="demoDesc">Brief description</label>
-              <textarea class="form-control" rows="2" placeholder="Tell us a bit more..." id="demoDesc"></textarea>
+              <textarea class="form-control" rows="2" placeholder="Tell us a bit more..." id="demoDesc" name="demoDesc"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" style="background: var(--blue); border: none; color: #fff;">Submit</button>
+            <button type="submit" class="btn btn-primary" id="demoSubmitBtn" style="background: var(--blue); border: none; color: #fff;">Submit</button>
           </div>
         </form>
         <div id="demoThankYou" style="display: none;">
-          <p class="mb-2" style="color: var(--yellow); font-weight: 600;">Thanks for trying the demo!</p>
+          <p class="mb-2" style="color: var(--yellow); font-weight: 600;">Thanks — we received your demo submission!</p>
           <p class="small mb-2" id="demoSummary"></p>
-          <p class="small text-muted mb-3">This is a preview. Submissions are not stored. <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a> for a real intake flow.</p>
+          <p class="small text-muted mb-3">We’ll follow up by email. Want to go deeper? <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a>.</p>
           <button type="button" class="btn btn-sm btn-outline-light" id="demoReset">Try again</button>
         </div>
-        <p class="small text-muted mt-2 mb-0" id="demoDisclaimer">Submissions are not stored. <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a> for a real intake flow.</p>
+        <p class="small text-muted mt-2 mb-0" id="demoDisclaimer">Submissions go to our team (and you’ll get a short confirmation email). <a href="/book-consultation.html" style="color: var(--yellow);">Book a consultation</a> anytime.</p>
       </div>
     </div>
 
@@ -209,13 +216,20 @@
       var demoSummary = document.getElementById('demoSummary');
       var demoDisclaimer = document.getElementById('demoDisclaimer');
       if (demoForm) {
-        demoForm.addEventListener('submit', function(e) {
+        demoForm.addEventListener('submit', async function(e) {
           e.preventDefault();
           var nameInput = document.getElementById('demoName');
+          var emailInput = document.getElementById('demoEmail');
           var n = nameInput ? nameInput.value.trim() : '';
+          var em = emailInput ? emailInput.value.trim() : '';
           if (!n) {
             if (nameInput) nameInput.focus();
             alert('Please enter your name.');
+            return;
+          }
+          if (!em) {
+            if (emailInput) emailInput.focus();
+            alert('Please enter your email.');
             return;
           }
           var needSelect = document.getElementById('demoNeed');
@@ -227,10 +241,35 @@
           var summary = 'Hi ' + n + '! You selected: ' + needText;
           if (otherVal) summary += ' (' + otherVal + ')';
           if (descVal) summary += '. Your note: ' + descVal;
-          if (demoSummary) demoSummary.textContent = summary;
-          if (demoFormFields) demoFormFields.style.display = 'none';
-          if (demoThankYou) demoThankYou.style.display = 'block';
-          if (demoDisclaimer) demoDisclaimer.style.display = 'none';
+          var submitBtn = document.getElementById('demoSubmitBtn');
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending…';
+          }
+          try {
+            var params = new URLSearchParams(new FormData(demoForm));
+            params.set('form-name', 'ai-intake-demo');
+            params.set('demoNeedLabel', needText);
+            var res = await fetch(window.location.origin + '/.netlify/functions/send-form-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: params.toString(),
+              redirect: 'follow',
+            });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            if (demoSummary) demoSummary.textContent = summary;
+            if (demoFormFields) demoFormFields.style.display = 'none';
+            if (demoThankYou) demoThankYou.style.display = 'block';
+            if (demoDisclaimer) demoDisclaimer.style.display = 'none';
+          } catch (err) {
+            alert('Could not submit. Email info@jlsolutions.io or try again.');
+            if (window.console && console.error) console.error(err);
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Submit';
+            }
+          }
         });
       }
 
@@ -239,10 +278,12 @@
       if (demoReset) {
         demoReset.addEventListener('click', function() {
           var nameEl = document.getElementById('demoName');
+          var emailEl = document.getElementById('demoEmail');
           var needEl = document.getElementById('demoNeed');
           var otherEl = document.getElementById('demoOther');
           var descEl = document.getElementById('demoDesc');
           if (nameEl) nameEl.value = '';
+          if (emailEl) emailEl.value = '';
           if (needEl) needEl.value = '';
           if (otherEl) otherEl.value = '';
           if (descEl) descEl.value = '';

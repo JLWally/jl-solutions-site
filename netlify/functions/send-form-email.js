@@ -1,6 +1,7 @@
 /**
  * Sends website form submissions to info@jlsolutions.io (Resend).
- * Supported form-name values: contact, consultation, fix-my-app, newsletter.
+ * Supported form-name values: contact, consultation, fix-my-app, newsletter,
+ * roi-calculator, ai-intake-demo, onboard-payment, pay-checkout.
  *
  * Set RESEND_API_KEY in Netlify. Use FORM_FROM_EMAIL with a domain verified in Resend
  * (e.g. JL Solutions <notifications@jlsolutions.io>) for production.
@@ -15,9 +16,23 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const TO_EMAIL = 'info@jlsolutions.io';
 const FROM_EMAIL = process.env.FORM_FROM_EMAIL || 'JL Solutions Website <onboarding@resend.dev>';
 
+function getRawBody(event) {
+  if (event.body == null || event.body === '') return '';
+  const b = event.body;
+  if (event.isBase64Encoded && typeof b === 'string') {
+    try {
+      return Buffer.from(b, 'base64').toString('utf8');
+    } catch (e) {
+      console.error('[send-form-email] base64 decode failed', e.message);
+      return '';
+    }
+  }
+  return typeof b === 'string' ? b : '';
+}
+
 function parseBody(event) {
+  const body = getRawBody(event);
   const contentType = (event.headers['content-type'] || event.headers['Content-Type'] || '').toLowerCase();
-  const body = event.body || '';
   if (contentType.includes('application/x-www-form-urlencoded')) {
     return Object.fromEntries(new URLSearchParams(body));
   }
@@ -124,6 +139,138 @@ function buildConsultationEmail(data) {
   };
 }
 
+function buildRoiCalculatorEmail(data) {
+  const name = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const inputs = [
+    ['Team size', data.teamSize],
+    ['Avg hourly rate ($)', data.avgSalary],
+    ['Manual task hours/week', data.hoursPerWeek],
+    ['Error rate (%)', data.errorRate],
+    ['Cost per error ($)', data.errorCost],
+    ['Errors per week', data.errorsPerWeek],
+    ['Expected time savings (%)', data.automationEfficiency],
+    ['Expected error reduction (%)', data.errorReduction],
+  ];
+  const results = [
+    ['Annual savings (est.)', data.annualSavings],
+    ['Time saved / year', data.timeSavings],
+    ['Labor savings / year', data.costSavings],
+    ['Error cost reduction / year', data.errorSavings],
+  ];
+  const rows = (pairs) =>
+    pairs
+      .filter(([, v]) => v != null && String(v).trim() !== '')
+      .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
+      .join('');
+  return {
+    subject: `[JL Solutions ROI Calculator] ${name}`,
+    html: `
+      <h2>ROI calculator lead</h2>
+      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+      <p><strong>Company:</strong> ${escapeHtml(data.company || '(not provided)')}</p>
+      <h3>Inputs</h3>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows(inputs)}</table>
+      <h3>Results (from their session)</h3>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows(results)}</table>
+      <p><em>Sent from jlsolutions.io ROI calculator</em></p>
+    `,
+  };
+}
+
+function buildAiIntakeDemoEmail(data) {
+  const name = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const needLabel = data.demoNeedLabel || data.needLabel || data.demoNeed || '(not provided)';
+  const fields = [
+    ['Name', name],
+    ['Email', email],
+    ['Need', needLabel],
+    ['Other detail', data.demoOther],
+    ['Description', data.demoDesc],
+  ];
+  const rows = fields
+    .filter(([, v]) => v != null && String(v).trim() !== '')
+    .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
+    .join('');
+  return {
+    subject: `[JL Solutions AI Intake Demo] ${name}`,
+    html: `
+      <h2>AI intake demo submission</h2>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
+      <p><em>Sent from jlsolutions.io services/ai-intake-form demo</em></p>
+    `,
+  };
+}
+
+function buildOnboardPaymentEmail(data) {
+  const name = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const amt = data.paymentAmount != null ? String(data.paymentAmount) : '(not provided)';
+  const desc = data.paymentDescription || '(not provided)';
+  const fields = [
+    ['Name', name],
+    ['Email', email],
+    ['Company', data.company],
+    ['Phone', data.phone],
+    ['Service', data.service],
+    ['Challenges', data.challenge],
+    ['Goals', data.goals],
+    ['Referral code', data.referralCode],
+    ['Amount (USD)', amt],
+    ['Checkout description', desc],
+  ];
+  const rows = fields
+    .filter(([, v]) => v != null && String(v).trim() !== '')
+    .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
+    .join('');
+  return {
+    subject: `[JL Solutions Checkout] ${name} — $${escapeHtml(amt)}`,
+    html: `
+      <h2>Onboarding wizard — proceeding to Stripe</h2>
+      <p>They clicked <strong>Proceed to checkout</strong> with this info:</p>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
+      <p><em>Sent from jlsolutions.io /onboard/ payment step</em></p>
+    `,
+  };
+}
+
+function buildPayCheckoutEmail(data) {
+  const name = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const amt = data.paymentAmount != null ? String(data.paymentAmount) : '(not provided)';
+  const fields = [
+    ['Name', name],
+    ['Email', email],
+    ['Amount (USD)', amt],
+    ['Referral code', data.referralCode],
+  ];
+  const rows = fields
+    .filter(([, v]) => v != null && String(v).trim() !== '')
+    .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
+    .join('');
+  return {
+    subject: `[JL Solutions Pay Page] ${email} — $${escapeHtml(amt)}`,
+    html: `
+      <h2>Pay page — proceeding to Stripe</h2>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
+      <p><em>Sent from jlsolutions.io /pay/</em></p>
+    `,
+  };
+}
+
+function roiPersistMessage(data) {
+  return [
+    data.annualSavings && `Annual savings: ${data.annualSavings}`,
+    data.timeSavings && `Time savings: ${data.timeSavings}`,
+    data.costSavings && `Labor savings: ${data.costSavings}`,
+    data.errorSavings && `Error savings: ${data.errorSavings}`,
+  ]
+    .filter(Boolean)
+    .join(' | ') || 'ROI calculator submission';
+}
+
 function buildCustomerConfirmation(data) {
   const name = (data.name || 'there').trim().split(' ')[0];
   return {
@@ -173,6 +320,7 @@ async function persistToConsultationsTable(formName, data) {
     return;
   }
   if (!name && formName === 'newsletter') name = 'Newsletter subscriber';
+  if (!name && formName === 'pay-checkout') name = 'Pay page lead';
   if (!name) {
     console.warn('[send-form-email] Skipping Supabase persist: missing name');
     return;
@@ -215,6 +363,50 @@ async function persistToConsultationsTable(formName, data) {
       status: 'new',
       source: 'newsletter_insights',
     };
+  } else if (formName === 'roi-calculator') {
+    row = {
+      name,
+      email,
+      company: data.company ? String(data.company).trim() : null,
+      message: roiPersistMessage(data),
+      status: 'new',
+      source: 'roi_calculator',
+    };
+  } else if (formName === 'ai-intake-demo') {
+    const need = [data.demoNeedLabel, data.demoOther, data.demoDesc].filter((x) => x && String(x).trim()).join(' — ');
+    row = {
+      name,
+      email,
+      service: data.demoNeed ? String(data.demoNeed).trim() : 'ai-intake-demo',
+      message: need || 'AI intake demo',
+      status: 'new',
+      source: 'ai_intake_demo',
+    };
+  } else if (formName === 'onboard-payment') {
+    const ref = (data.referralCode || data.referral_code || '').trim().toUpperCase();
+    row = {
+      name,
+      email,
+      phone: data.phone ? String(data.phone).trim() : null,
+      company: data.company ? String(data.company).trim() : null,
+      service: data.service ? String(data.service).trim() : null,
+      message: `Payment intent: $${data.paymentAmount || '?'} — ${data.paymentDescription || ''}`,
+      challenge: data.challenge ? String(data.challenge) : null,
+      goals: data.goals ? String(data.goals) : null,
+      referral_code: ref || null,
+      status: 'new',
+      source: 'onboard_payment_intent',
+    };
+  } else if (formName === 'pay-checkout') {
+    const ref = (data.referralCode || data.referral_code || '').trim().toUpperCase();
+    row = {
+      name,
+      email,
+      message: `Pay page checkout: $${data.paymentAmount || '?'}${ref ? ` (ref ${ref})` : ''}`,
+      referral_code: ref || null,
+      status: 'new',
+      source: 'pay_page_intent',
+    };
   } else {
     row = {
       name,
@@ -234,7 +426,15 @@ async function persistToConsultationsTable(formName, data) {
 }
 
 exports.handler = async (event) => {
-  console.log('[send-form-email] Invoked', event.httpMethod, 'form:', event.body ? 'has body' : 'no body');
+  const rawLen = getRawBody(event).length;
+  console.log(
+    '[send-form-email] Invoked',
+    event.httpMethod,
+    'bodyLen:',
+    rawLen,
+    'base64:',
+    !!event.isBase64Encoded
+  );
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 204,
@@ -257,9 +457,11 @@ exports.handler = async (event) => {
   const data = parseBody(event);
   const formName = data['form-name'] || data.formName || 'contact';
   const botField = data['bot-field'];
-  if (botField) {
+  if (String(botField || '').trim() !== '') {
+    console.log('[send-form-email] Honeypot filled; skipping send');
     return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ success: true }) };
   }
+  console.log('[send-form-email] formName=', formName, 'keys=', Object.keys(data).join(','));
 
   await persistToConsultationsTable(formName, data);
 
@@ -292,6 +494,22 @@ exports.handler = async (event) => {
     html = built.html;
   } else if (formName === 'newsletter') {
     const built = buildNewsletterEmail(data);
+    subject = built.subject;
+    html = built.html;
+  } else if (formName === 'roi-calculator') {
+    const built = buildRoiCalculatorEmail(data);
+    subject = built.subject;
+    html = built.html;
+  } else if (formName === 'ai-intake-demo') {
+    const built = buildAiIntakeDemoEmail(data);
+    subject = built.subject;
+    html = built.html;
+  } else if (formName === 'onboard-payment') {
+    const built = buildOnboardPaymentEmail(data);
+    subject = built.subject;
+    html = built.html;
+  } else if (formName === 'pay-checkout') {
+    const built = buildPayCheckoutEmail(data);
     subject = built.subject;
     html = built.html;
   } else {
@@ -359,6 +577,7 @@ exports.handler = async (event) => {
     // 2. Send confirmation to customer (consultation, contact, fix-my-app, newsletter)
     const customerEmail = (data.email || '').trim();
     if (customerEmail) {
+      const first = escapeHtml((data.name || 'there').trim().split(' ')[0]);
       const cust =
         formName === 'consultation'
           ? buildCustomerConfirmation(data)
@@ -372,15 +591,45 @@ exports.handler = async (event) => {
           <p><em>info@jlsolutions.io</em></p>
         `,
               }
-            : {
-                subject: 'We received your message - JL Solutions',
-                html: `
+            : formName === 'onboard-payment' || formName === 'pay-checkout'
+              ? {
+                  subject: 'Next step: complete payment - JL Solutions',
+                  html: `
+          <h2>Hi ${first},</h2>
+          <p>We received your details. Complete checkout on the next screen, or return to our site to try again if something went wrong.</p>
+          <p>Reply to this email or write to <em>info@jlsolutions.io</em> anytime.</p>
+          <p> - The JL Solutions team</p>
+        `,
+                }
+              : formName === 'roi-calculator'
+                ? {
+                    subject: 'We received your ROI calculator submission - JL Solutions',
+                    html: `
+          <h2>Hi ${first},</h2>
+          <p>Thanks for using our ROI calculator. We saved your results and may follow up to help you turn estimates into a plan.</p>
+          <p> - The JL Solutions team</p>
+          <p><em>info@jlsolutions.io</em></p>
+        `,
+                  }
+                : formName === 'ai-intake-demo'
+                  ? {
+                      subject: 'Thanks for trying our AI intake demo - JL Solutions',
+                      html: `
+          <h2>Hi ${first},</h2>
+          <p>We received your demo submission. If you’d like a production-ready intake flow, we’re happy to help.</p>
+          <p> - The JL Solutions team</p>
+          <p><em>info@jlsolutions.io</em></p>
+        `,
+                    }
+                  : {
+                      subject: 'We received your message - JL Solutions',
+                      html: `
           <h2>Thank you for reaching out</h2>
           <p>We received your message and will get back to you within 1-2 business days.</p>
           <p> - The JL Solutions team</p>
           <p><em>info@jlsolutions.io</em></p>
         `,
-              };
+                    };
       const { error: err2 } = await resend.emails.send({
         from: FROM_EMAIL,
         to: [customerEmail],

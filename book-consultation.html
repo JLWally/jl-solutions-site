@@ -385,10 +385,10 @@
           </div>
           
           <!-- Booking Form -->
-          <form id="consultationForm" name="consultation" method="POST" action="/.netlify/functions/send-form-email" netlify-honeypot="bot-field">
+          <form id="consultationForm" name="consultation" method="POST" action="/.netlify/functions/send-form-email">
             <input type="hidden" name="form-name" value="consultation">
             <p class="d-none" aria-hidden="true">
-              <label>Leave empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+              <label>Leave empty: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
             </p>
             <input type="hidden" id="selectedDateTime" name="selectedDateTime">
             <input type="hidden" id="referralCodeHidden" name="referralCode">
@@ -427,7 +427,7 @@
             
             <div class="mb-3">
               <label for="referralCode" class="form-label">Referral Code <span class="text-muted">(optional)</span></label>
-              <input type="text" class="form-control" id="referralCode" name="referralCode" placeholder="e.g. AGENT-ABC123" style="text-transform:uppercase;">
+              <input type="text" class="form-control" id="referralCode" placeholder="e.g. AGENT-ABC123" style="text-transform:uppercase;" autocomplete="off">
             </div>
             
             <div class="mb-3">
@@ -684,11 +684,42 @@
       document.getElementById('referralCodeHidden').value = this.value.trim().toUpperCase();
     });
 
-    // Submissions go to send-form-email (email + Supabase consultations when env is set).
-    document.getElementById('consultationForm').addEventListener('submit', function () {
-      const hidden = document.getElementById('referralCodeHidden');
-      const refInput = document.getElementById('referralCode');
+    document.getElementById('consultationForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var hidden = document.getElementById('referralCodeHidden');
+      var refInput = document.getElementById('referralCode');
       if (refInput && refInput.value) hidden.value = refInput.value.trim().toUpperCase();
+      var form = e.target;
+      var btn = document.getElementById('submitBtn');
+      var origText = btn ? btn.textContent : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+      }
+      try {
+        var params = new URLSearchParams(new FormData(form));
+        var res = await fetch(window.location.origin + '/.netlify/functions/send-form-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString(),
+          redirect: 'follow',
+        });
+        if (res.ok || res.redirected) {
+          window.location.href = '/thank-you.html';
+          return;
+        }
+        var errBody = await res.text();
+        alert('Could not submit (HTTP ' + res.status + '). Email info@jlsolutions.io or try again.');
+        if (window.console && console.error) console.error(errBody);
+      } catch (err) {
+        alert('Network error. Email info@jlsolutions.io directly.');
+        if (window.console && console.error) console.error(err);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = origText;
+        }
+      }
     });
 
     // Pre-fill referral code from URL (?ref=)

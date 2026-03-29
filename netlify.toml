@@ -58,3 +58,24 @@
   to = "/lead-engine/"
   status = 302
   force = true
+
+# Pretty URLs: rewrite (200) so POST bodies are not lost on 301/302 to .html
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/book-consultation"
+  to = "/book-consultation.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact/"
+  to = "/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/book-consultation/"
+  to = "/book-consultation.html"
+  status = 200

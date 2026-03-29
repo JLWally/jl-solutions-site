@@ -50,12 +50,10 @@
         <p class="text-center lead mb-4">Let's start something great together.</p>
         <p class="contact-helper text-center">Typical response time: within 1 business day.</p>
 
-      <!-- Netlify Form START -->
-      <form name="contact" method="POST" netlify-honeypot="bot-field" action="/.netlify/functions/send-form-email" class="mx-auto">
+      <form id="jl-contact-form" name="contact" method="POST" action="/.netlify/functions/send-form-email" class="mx-auto">
         <input type="hidden" name="form-name" value="contact">
-        <!-- Honeypot field for bots -->
-        <p hidden>
-          <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
+        <p class="visually-hidden" aria-hidden="true">
+          <label>Leave blank: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
         </p>
 
         <div class="mb-3">
@@ -73,9 +71,8 @@
           <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
         </div>
 
-        <button type="submit" class="btn btn-cta-primary">Send Message</button>
+        <button type="submit" class="btn btn-cta-primary" id="jl-contact-submit">Send Message</button>
       </form>
-      <!-- Netlify Form END -->
 
         <div class="what-happens-next">
           <h3>What happens next</h3>
@@ -105,5 +102,48 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/main.js"></script>
+  <script>
+    (function () {
+      function formEndpoint() {
+        return window.location.origin + '/.netlify/functions/send-form-email';
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('jl-contact-form');
+        if (!form) return;
+        form.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          var btn = document.getElementById('jl-contact-submit');
+          if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+          }
+          try {
+            var params = new URLSearchParams(new FormData(form));
+            var res = await fetch(formEndpoint(), {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: params.toString(),
+              redirect: 'follow',
+            });
+            if (res.ok || res.redirected) {
+              window.location.href = '/thank-you.html';
+              return;
+            }
+            var errText = await res.text();
+            alert('Could not send your message (HTTP ' + res.status + '). Email info@jlsolutions.io or try again.');
+            if (window.console && console.error) console.error(errText);
+          } catch (err) {
+            alert('Network error. Email info@jlsolutions.io directly.');
+            if (window.console && console.error) console.error(err);
+          } finally {
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = 'Send Message';
+            }
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

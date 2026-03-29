@@ -22,14 +22,24 @@
     <div class="pay-card">
       <h2>Complete Payment</h2>
       <p class="text-muted mb-4">Enter your details and referral code (if any) to proceed to secure checkout.</p>
+      <div id="payCanceled" class="d-none mb-3 p-3 rounded small" style="background: rgba(255,193,7,0.12); border: 1px solid rgba(255,193,7,0.35); color: #fff;" role="status">
+        Checkout was canceled. Adjust the amount and try again, or <a href="/contact.html" class="text-warning">contact us</a>.
+      </div>
       <form id="payForm">
+        <p class="d-none" aria-hidden="true">
+          <label>Leave empty: <input type="text" id="payBotField" name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+        <div class="mb-3">
+          <label class="form-label">Name <span class="text-muted">(optional)</span></label>
+          <input type="text" class="form-control" id="payName" placeholder="Your name" autocomplete="name">
+        </div>
         <div class="mb-3">
           <label class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" required placeholder="you@example.com">
+          <input type="email" class="form-control" id="email" required placeholder="you@example.com" autocomplete="email">
         </div>
         <div class="mb-3">
           <label class="form-label">Referral Code <span class="text-muted">(optional)</span></label>
-          <input type="text" class="form-control" id="referralCode" placeholder="e.g. AGENT-ABC123" style="text-transform:uppercase;">
+          <input type="text" class="form-control" id="referralCode" placeholder="e.g. AGENT-ABC123" style="text-transform:uppercase;" autocomplete="off">
         </div>
         <div class="mb-4">
           <label class="form-label">Amount (USD)</label>
@@ -49,27 +59,57 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     (function() {
-      var ref = new URLSearchParams(window.location.search).get('ref');
+      var q = new URLSearchParams(window.location.search);
+      var ref = q.get('ref');
       if (ref) document.getElementById('referralCode').value = ref.toUpperCase();
+      if (q.get('canceled') === '1') {
+        var banner = document.getElementById('payCanceled');
+        if (banner) banner.classList.remove('d-none');
+      }
     })();
     document.getElementById('payForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
+      const base = window.location.origin;
       btn.disabled = true;
       btn.textContent = 'Redirecting...';
       const email = document.getElementById('email').value.trim();
+      const payName = document.getElementById('payName');
+      const name = payName ? payName.value.trim() : '';
       const referralCode = document.getElementById('referralCode').value.trim().toUpperCase() || undefined;
       const amount = parseFloat(document.getElementById('amount').value) || 99;
+      const bot = document.getElementById('payBotField');
+      const botVal = bot ? bot.value : '';
 
       try {
-        const res = await fetch('/.netlify/functions/stripe-checkout', {
+        const notify = new URLSearchParams();
+        notify.set('form-name', 'pay-checkout');
+        notify.set('bot-field', botVal);
+        notify.set('email', email);
+        notify.set('paymentAmount', String(amount));
+        if (name) notify.set('name', name);
+        if (referralCode) notify.set('referralCode', referralCode);
+
+        const notifyRes = await fetch(base + '/.netlify/functions/send-form-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: notify.toString(),
+          redirect: 'follow',
+        });
+        if (!notifyRes.ok) throw new Error('Could not notify team (HTTP ' + notifyRes.status + ')');
+
+        const res = await fetch(base + '/.netlify/functions/stripe-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             amount,
             customerEmail: email,
+            customerName: name || undefined,
             referralCode,
             description: 'JL Solutions Service',
+            paymentSource: 'pay_page',
+            successUrl: base + '/thank-you.html?session_id={CHECKOUT_SESSION_ID}&from=pay',
+            cancelUrl: base + '/pay/?canceled=1',
           }),
         });
         const data = await res.json();

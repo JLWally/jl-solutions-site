@@ -33,25 +33,55 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { amount, currency = 'usd', referralCode, customerEmail, successUrl, cancelUrl, description } = JSON.parse(event.body || '{}');
+    const body = JSON.parse(event.body || '{}');
+    const {
+      amount,
+      currency = 'usd',
+      referralCode,
+      customerEmail,
+      successUrl,
+      cancelUrl,
+      description,
+      customerName,
+      company,
+      phone,
+      service,
+      challenge,
+      goals,
+      paymentSource,
+    } = body;
 
     const priceId = process.env.STRIPE_PRICE_ID;
-    const baseUrl = process.env.URL || 'http://localhost:8888';
+    const baseUrl = (process.env.URL || 'http://localhost:8888').replace(/\/$/, '');
 
     const sessionConfig = {
       payment_method_types: ['card'],
       mode: 'payment',
       success_url: successUrl || `${baseUrl}/thank-you.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${baseUrl}/book-consultation.html`,
+      cancel_url: cancelUrl || `${baseUrl}/pay/?canceled=1`,
       metadata: {},
     };
 
+    function setMeta(key, val) {
+      if (val == null || val === '') return;
+      const s = String(val).trim();
+      if (!s) return;
+      sessionConfig.metadata[key] = s.length > 500 ? `${s.slice(0, 499)}…` : s;
+    }
+
     if (referralCode) {
-      sessionConfig.metadata.referralCode = referralCode;
+      sessionConfig.metadata.referralCode = String(referralCode).trim().toUpperCase();
     }
     if (customerEmail) {
       sessionConfig.customer_email = customerEmail;
     }
+    setMeta('customerName', customerName);
+    setMeta('company', company);
+    setMeta('phone', phone);
+    setMeta('service', service);
+    setMeta('challenge', challenge);
+    setMeta('goals', goals);
+    setMeta('paymentSource', paymentSource || 'pay_page');
 
     if (priceId && !amount) {
       sessionConfig.mode = 'payment';

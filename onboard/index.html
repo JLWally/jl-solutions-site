@@ -61,6 +61,9 @@
   <div class="wizard-container">
     <div class="step-progress" id="stepProgress"></div>
     <div class="wizard-card">
+      <div id="checkoutCanceled" class="d-none mb-3 p-3 rounded small" style="background: rgba(255,193,7,0.12); border: 1px solid rgba(255,193,7,0.35); color: #fff;" role="status">
+        Checkout was canceled. Adjust the amount on the next step and try again, or <a href="/contact.html" class="text-warning">contact us</a>.
+      </div>
       <form id="wizardForm">
         <!-- Step 1: Who are you? -->
         <div class="wizard-step active" data-step="1">
@@ -419,29 +422,65 @@
 
       function submitPayment() {
         var btn = document.getElementById('btnPay');
+        var base = window.location.origin;
         btn.disabled = true;
         btn.textContent = 'Redirecting...';
         var data = getFormData();
         var amount = parseFloat(document.getElementById('amount').value) || 99;
         var desc = document.getElementById('paymentDesc').value.trim() || 'JL Solutions Service';
 
-        fetch('/.netlify/functions/stripe-checkout', {
+        var notify = new URLSearchParams();
+        notify.set('form-name', 'onboard-payment');
+        notify.set('bot-field', '');
+        notify.set('name', data.name);
+        notify.set('email', data.email);
+        notify.set('company', data.company || '');
+        notify.set('phone', data.phone || '');
+        notify.set('service', data.service || '');
+        notify.set('challenge', data.challenge || '');
+        notify.set('goals', data.goals || '');
+        notify.set('referralCode', data.referralCode || '');
+        notify.set('paymentAmount', String(amount));
+        notify.set('paymentDescription', desc);
+
+        fetch(base + '/.netlify/functions/send-form-email', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: amount,
-            customerEmail: data.email,
-            referralCode: data.referralCode,
-            description: desc
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: notify.toString(),
+          redirect: 'follow',
+        })
+          .catch(function() { /* still open Stripe */ })
+          .then(function() {
+            return fetch(base + '/.netlify/functions/stripe-checkout', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                amount: amount,
+                customerEmail: data.email,
+                customerName: data.name,
+                company: data.company || undefined,
+                phone: data.phone || undefined,
+                service: data.service || undefined,
+                challenge: data.challenge || undefined,
+                goals: data.goals || undefined,
+                referralCode: data.referralCode || undefined,
+                description: desc,
+                paymentSource: 'onboard_wizard',
+                successUrl: base + '/thank-you.html?session_id={CHECKOUT_SESSION_ID}&from=onboard',
+                cancelUrl: base + '/onboard/?canceled=1',
+              }),
+            });
           })
-        }).then(function(r) { return r.json(); }).then(function(d) {
-          if (d.url) window.location.href = d.url;
-          else throw new Error(d.error || 'Checkout failed');
-        }).catch(function(err) {
-          alert(err.message || 'Something went wrong. Please try again.');
-          btn.disabled = false;
-          btn.textContent = 'Proceed to checkout';
-        });
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            if (d.url) window.location.href = d.url;
+            else throw new Error(d.error || 'Checkout failed');
+          })
+          .catch(function(err) {
+            alert(err.message || 'Something went wrong. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Proceed to checkout';
+          });
       }
 
       document.addEventListener('DOMContentLoaded', function() {
@@ -455,8 +494,13 @@
         });
         renderProgress();
 
-        var ref = new URLSearchParams(window.location.search).get('ref');
+        var q = new URLSearchParams(window.location.search);
+        var ref = q.get('ref');
         if (ref) document.getElementById('referralCode').value = ref.toUpperCase();
+        if (q.get('canceled') === '1') {
+          var cxl = document.getElementById('checkoutCanceled');
+          if (cxl) cxl.classList.remove('d-none');
+        }
       });
 
       return { next: next, prev: prev, submitConsultation: submitConsultation, submitPayment: submitPayment };
