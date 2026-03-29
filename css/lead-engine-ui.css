@@ -1,0 +1,23 @@
+/* Lead engine + operator login (dark UI). Load after style.css. */
+.lead-engine-surface .btn-outline-light {
+  color: #f8fafc !important;
+  border-color: rgba(248, 250, 252, 0.92) !important;
+  font-weight: 600;
+}
+.lead-engine-surface .btn-outline-light:hover,
+.lead-engine-surface .btn-outline-light:focus-visible {
+  color: #0f172a !important;
+  background-color: #f8fafc !important;
+  border-color: #f8fafc !important;
+}
+.lead-engine-surface .btn-outline-secondary {
+  color: #e2e8f0 !important;
+  border-color: #94a3b8 !important;
+  font-weight: 600;
+}
+.lead-engine-surface .btn-outline-secondary:hover,
+.lead-engine-surface .btn-outline-secondary:focus-visible {
+  color: #0f172a !important;
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+}

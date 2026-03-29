@@ -25,8 +25,9 @@ h1, h2, h3, h4, h5, p, small, li {
   color: rgba(255, 255, 255, 0.95);
 }
 
-/* Allow buttons to override text color */
-.btn, button, .btn-primary, .btn-secondary, .btn-success, .btn-outline, .btn-light {
+/* Let solid buttons follow theme; do not force inherit on Bootstrap outline variants (dark pages need their own text/border colors). */
+.btn:not([class*='btn-outline']),
+button:not([class*='btn-outline']) {
   color: inherit;
 }
 

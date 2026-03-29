@@ -2,7 +2,13 @@
  * Sends contact and consultation form submissions to info@jlsolutions.io.
  * Set RESEND_API_KEY in Netlify env. From address must be verified in Resend
  * (e.g. use onboarding@resend.dev for testing or verify jlsolutions.io).
+ *
+ * When SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY are set, also inserts a row into
+ * public.consultations so you can review submissions in Supabase (Table Editor).
+ * This is separate from lead_engine_leads (operator / n8n pipeline).
  */
+const { createClient } = require('@supabase/supabase-js');
+
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const TO_EMAIL = 'info@jlsolutions.io';
 const FROM_EMAIL = process.env.FORM_FROM_EMAIL || 'JL Solutions Website <onboarding@resend.dev>';
@@ -91,6 +97,67 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
+function getServiceSupabase() {
+  const url = (process.env.SUPABASE_URL || '').trim();
+  const key = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+  if (!url || !key || !/^https?:\/\//i.test(url)) return null;
+  try {
+    return createClient(url, key);
+  } catch (e) {
+    console.error('[send-form-email] Supabase client init failed:', e.message);
+    return null;
+  }
+}
+
+/**
+ * Best-effort mirror into consultations (service role bypasses RLS). Does not block email.
+ */
+async function persistToConsultationsTable(formName, data) {
+  const supabase = getServiceSupabase();
+  if (!supabase) return;
+
+  const name = (data.name || '').trim();
+  const email = (data.email || '').trim();
+  if (!name || !email) {
+    console.warn('[send-form-email] Skipping Supabase persist: missing name or email');
+    return;
+  }
+
+  let row;
+  if (formName === 'consultation') {
+    const ref = (data.referralCode || data.referral_code || '').trim().toUpperCase();
+    row = {
+      name,
+      email,
+      phone: data.phone ? String(data.phone).trim() : null,
+      company: data.company ? String(data.company).trim() : null,
+      service: data.service ? String(data.service).trim() : null,
+      message: data.challenge ? String(data.challenge) : '',
+      challenge: data.challenge ? String(data.challenge) : null,
+      goals: data.goals ? String(data.goals) : null,
+      referral_code: ref || null,
+      selected_datetime: data.selectedDateTime ? String(data.selectedDateTime) : null,
+      status: 'new',
+      source: 'book_consultation',
+    };
+  } else {
+    row = {
+      name,
+      email,
+      message: data.message ? String(data.message) : '',
+      status: 'new',
+      source: 'contact_page',
+    };
+  }
+
+  const { error } = await supabase.from('consultations').insert(row);
+  if (error) {
+    console.error('[send-form-email] consultations insert failed:', error.message || error);
+  } else {
+    console.log('[send-form-email] Stored submission in consultations (source=%s)', row.source);
+  }
+}
+
 exports.handler = async (event) => {
   console.log('[send-form-email] Invoked', event.httpMethod, 'form:', event.body ? 'has body' : 'no body');
   if (event.httpMethod === 'OPTIONS') {
@@ -118,6 +185,8 @@ exports.handler = async (event) => {
   if (botField) {
     return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ success: true }) };
   }
+
+  await persistToConsultationsTable(formName, data);
 
   let subject, html;
   if (formName === 'consultation') {

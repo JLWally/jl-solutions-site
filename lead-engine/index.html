@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lead engine - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/lead-engine-ui.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <style>
+    body { background: #121212; color: #e8e8e8; min-height: 100vh; }
+    .card-dark { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; }
+    .table-dark-ish { --bs-table-bg: #1a1a1a; --bs-table-color: #e8e8e8; }
+    .table-dark-ish th { color: #9ca3af; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
+    .lead-history-row td { background: #0d0d0d !important; border-color: rgba(255,255,255,0.08) !important; }
+    .list-summary-bar { font-size: 0.8rem; color: #b0b0b0; line-height: 1.5; }
+    .audit-fail-banner { color: #fecaca; font-weight: 600; }
+    .text-muted { color: #b9bec8 !important; }
+    .text-secondary { color: #c6ccd6 !important; }
+    .form-label { color: #d6dbe4 !important; }
+    .form-check-label { color: #d6dbe4 !important; }
+    .form-control,
+    .form-select {
+      color: #e8e8e8 !important;
+      background-color: #111827 !important;
+      border-color: #4b5563 !important;
+    }
+    .form-control:focus,
+    .form-select:focus {
+      color: #f3f4f6 !important;
+      background-color: #111827 !important;
+      border-color: #7c9cff !important;
+      box-shadow: 0 0 0 0.2rem rgba(124, 156, 255, 0.25) !important;
+    }
+    .form-control::placeholder { color: #9aa3b2; opacity: 1; }
+    .form-select option { background: #1a1a1a; color: #e8e8e8; }
+    /* Table density: keep row height sane */
+    #leadsTableWrap {
+      max-height: max(16rem, calc(100vh - 12.5rem));
+      overflow: auto;
+    }
+    #leadsTableWrap .table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: #1a1a1a;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    #leadsTableWrap .table td { vertical-align: top; }
+    .le-audit-col, .le-score-col, .le-outreach-col {
+      min-width: 11rem;
+      max-width: 28rem;
+      word-break: normal;
+      overflow-wrap: break-word;
+    }
+    /* Cap cell height so one row doesn’t span the viewport; scroll inside cell */
+    .le-cell-clip {
+      max-height: 5.25rem;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      line-height: 1.35;
+      padding-right: 0.2rem;
+    }
+    .le-actions-col {
+      width: 8.75rem;
+      min-width: 8rem;
+      max-width: 10rem;
+    }
+    .le-pipeline-hint {
+      color: #fcd34d;
+      font-size: 0.68rem;
+      line-height: 1.3;
+      max-height: 3rem;
+      overflow-y: auto;
+      margin-bottom: 0.28rem;
+    }
+    .lead-actions-stack .btn {
+      width: 100%;
+      font-size: 0.72rem;
+      padding: 0.28rem 0.4rem;
+      line-height: 1.2;
+      margin-bottom: 0.28rem;
+    }
+    .lead-actions-stack .btn:last-child { margin-bottom: 0; }
+    details.le-panel > summary {
+      cursor: pointer;
+      color: #cbd5e1;
+      font-weight: 600;
+      list-style: none;
+    }
+    details.le-panel > summary::-webkit-details-marker { display: none; }
+    details.le-panel > summary::before { content: '▸ '; color: #94a3b8; }
+    details.le-panel[open] > summary::before { content: '▾ '; }
+    .batch-toolbar-secondary .btn { font-size: 0.72rem; padding: 0.25rem 0.45rem; }
+    .le-page-tight { padding-top: 0.65rem !important; padding-bottom: 0.65rem !important; }
+    .le-main-compact .card-dark { padding: 0.75rem 0.9rem; }
+    .le-main-compact .le-panel.card-dark { padding: 0.55rem 0.75rem; }
+    .navbar.le-nav-tight { padding-top: 0.35rem; padding-bottom: 0.35rem; }
+  </style>
+</head>
+<body class="lead-engine-surface">
+  <nav class="navbar navbar-dark bg-dark le-nav-tight">
+    <div class="container-fluid px-3 px-md-4">
+      <a class="navbar-brand" href="/"><img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions" class="jl-logo-icon"></a>
+      <button type="button" class="btn btn-outline-light btn-sm" id="logout" style="display:none;">Sign out</button>
+    </div>
+  </nav>
+  <div class="container-fluid px-3 px-md-4 py-2 le-page-tight">
+    <div id="loading" class="text-muted">Loading…</div>
+    <div id="gate" style="display:none;">
+      <h1 class="h4 mb-2">Lead engine</h1>
+      <p class="text-muted" id="gateMsg"></p>
+      <a class="btn btn-primary" href="/lead-engine/login.html?return=%2Flead-engine%2F">Sign in</a>
+    </div>
+    <div id="ok" class="le-main-compact" style="display:none;">
+      <h1 class="h5 mb-0">Lead engine</h1>
+      <p class="text-muted small mb-2">Signed in as <span id="who" class="text-light"></span> · internal only</p>
+
+      <details class="card card-dark p-3 mb-2 le-panel">
+        <summary class="mb-0">Connection &amp; feature status</summary>
+        <pre id="statusJson" class="text-light small mb-0 mt-2" style="white-space: pre-wrap;"></pre>
+      </details>
+      <details class="card card-dark p-3 mb-2 le-panel">
+        <summary class="mb-0">Recent activity</summary>
+        <div id="activitySummary" class="small text-muted mb-2 mt-2">Loading…</div>
+        <div id="activityRecent" class="small text-light"></div>
+      </details>
+
+      <div class="row g-2">
+        <div class="col-lg-5">
+          <div class="card card-dark p-3">
+            <h2 class="h6 text-secondary mb-2">Add lead (manual)</h2>
+            <form id="ingestForm">
+              <div class="mb-2">
+                <label class="form-label small" for="company_name">Company name</label>
+                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="company_name" required autocomplete="organization" />
+              </div>
+              <div class="mb-2">
+                <label class="form-label small" for="website_url">Website URL</label>
+                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="website_url" required placeholder="https:// or example.com" />
+              </div>
+              <div class="mb-2">
+                <label class="form-label small" for="contact_email">Contact email (optional)</label>
+                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="contact_email" type="email" autocomplete="off" />
+              </div>
+              <div class="mb-2">
+                <label class="form-label small" for="idempotency_key">Idempotency key (optional)</label>
+                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="idempotency_key" autocomplete="off" />
+              </div>
+              <p id="ingestErr" class="text-danger small" style="display:none;"></p>
+              <p id="ingestOk" class="text-success small" style="display:none;"></p>
+              <button type="submit" class="btn btn-primary btn-sm" id="ingestBtn">Save lead</button>
+            </form>
+          </div>
+          <div class="card card-dark p-3 mt-2">
+            <h2 class="h6 text-secondary mb-2">Import leads (CSV)</h2>
+            <p class="small text-muted mb-2">Headers: <code>company_name,website_url,contact_email,source,idempotency_key</code>. Required: <code>company_name</code>, <code>website_url</code>.</p>
+            <div class="mb-2">
+              <input class="form-control form-control-sm bg-dark text-light border-secondary" id="importCsvFile" type="file" accept=".csv,text/csv" />
+            </div>
+            <div class="d-flex gap-2 flex-wrap mb-2">
+              <button type="button" class="btn btn-outline-light btn-sm" id="importPreviewBtn">Preview CSV</button>
+              <button type="button" class="btn btn-success btn-sm" id="importCommitBtn" disabled>Import ready rows</button>
+            </div>
+            <p id="importErr" class="text-danger small" style="display:none;"></p>
+            <p id="importOk" class="text-success small" style="display:none;"></p>
+            <div id="importSummary" class="small text-muted mb-2" style="display:none;"></div>
+            <div class="table-responsive" id="importPreviewWrap" style="display:none; max-height: 240px;">
+              <table class="table table-sm table-dark-ish mb-0">
+                <thead>
+                  <tr>
+                    <th>Row</th>
+                    <th>Status</th>
+                    <th>Company</th>
+                    <th>Website</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="importPreviewBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card card-dark p-3">
+            <h2 class="h6 text-secondary mb-2">Leads</h2>
+            <p class="small text-muted mb-2 mb-lg-1"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
+            <div class="row g-2 mb-2">
+              <div class="col-6 col-md-3">
+                <label class="form-label small mb-0" for="filterStatus">Lead status</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterStatus">
+                  <option value="">All</option>
+                  <option value="new">new</option>
+                  <option value="analyzed">analyzed</option>
+                  <option value="review">review</option>
+                  <option value="archived">archived</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label small mb-0" for="filterOffer">Recommended offer</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterOffer">
+                  <option value="">Any</option>
+                  <option value="Website Redesign">Website Redesign</option>
+                  <option value="Fix My App">Fix My App</option>
+                  <option value="AI Intake Form Setup">AI Intake Form Setup</option>
+                  <option value="Scheduling &amp; Resource Routing">Scheduling &amp; Resource Routing</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-2">
+                <label class="form-label small mb-0" for="filterOutreach">Outreach</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterOutreach">
+                  <option value="">Any</option>
+                  <option value="draft">has draft</option>
+                  <option value="approved">has approved</option>
+                  <option value="sent">has sent</option>
+                  <option value="cancelled">has cancelled</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-2">
+                <label class="form-label small mb-0" for="filterReviewQueue">Review queue</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterReviewQueue">
+                  <option value="">Any</option>
+                  <option value="needs_review">Needs review (latest is draft)</option>
+                  <option value="has_draft">Has draft version(s)</option>
+                  <option value="latest_draft">Latest outreach is draft</option>
+                  <option value="latest_approved">Latest outreach is approved</option>
+                  <option value="multiple_drafts">Multiple draft versions</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-2">
+                <label class="form-label small mb-0" for="filterNeedsAttention">Needs attention</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterNeedsAttention">
+                  <option value="">Any</option>
+                  <option value="send">Send recovery (stuck / unfinalized)</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-2">
+                <label class="form-label small mb-0" for="filterOptedOut">Opt-out</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterOptedOut">
+                  <option value="">All</option>
+                  <option value="false">Not opted out</option>
+                  <option value="true">Opted out</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-2">
+                <label class="form-label small mb-0" for="filterSuppressed">Suppression</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterSuppressed">
+                  <option value="">All</option>
+                  <option value="false">Not suppressed (global)</option>
+                  <option value="true">Suppressed (global email)</option>
+                </select>
+              </div>
+              <div class="col-6 col-md-2">
+                <label class="form-label small mb-0" for="filterPageSize">Page size</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterPageSize">
+                  <option value="10">10</option>
+                  <option value="25" selected>25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small mb-0" for="filterSearch">Search (company / URL)</label>
+                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="filterSearch" placeholder="company or URL" />
+              </div>
+              <div class="col-md-6 d-flex align-items-end gap-2 flex-wrap">
+                <button type="button" class="btn btn-outline-light btn-sm" id="reloadList">Refresh</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="pagePrev" disabled>Prev page</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="pageNext" disabled>Next page</button>
+              </div>
+            </div>
+            <div class="row g-2 mb-2 align-items-center">
+              <div class="col-12 d-flex flex-wrap align-items-center gap-2">
+                <div class="form-check me-1 mb-0">
+                  <input class="form-check-input" type="checkbox" id="selectVisible" />
+                  <label class="form-check-label small" for="selectVisible">Select visible</label>
+                </div>
+                <button type="button" class="btn btn-outline-info btn-sm" id="batchAnalyzeBtn" disabled>Batch Analyze</button>
+                <button type="button" class="btn btn-outline-warning btn-sm" id="batchScoreBtn" disabled>Batch Score</button>
+                <button type="button" class="btn btn-outline-success btn-sm" id="batchDraftBtn" disabled>Batch Draft</button>
+                <span class="small text-secondary fw-semibold ms-2" id="batchMeta">Selected 0</span>
+              </div>
+              <div class="col-12 d-flex flex-wrap gap-2 batch-toolbar-secondary">
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="batchAnalyzeRetryBtn" disabled>Retry analyze</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="batchScoreRetryBtn" disabled>Retry score</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="batchDraftRetryBtn" disabled>Retry draft</button>
+              </div>
+            </div>
+            <div id="batchProgress" class="small text-muted mb-2" style="display:none;"></div>
+            <div class="table-responsive mb-2" id="batchResultsWrap" style="display:none; max-height: 220px;">
+              <table class="table table-sm table-dark-ish mb-0">
+                <thead>
+                  <tr>
+                    <th>Lead</th>
+                    <th>Outcome</th>
+                    <th>Code</th>
+                  </tr>
+                </thead>
+                <tbody id="batchResultsBody"></tbody>
+              </table>
+            </div>
+            <div id="listSummary" class="list-summary-bar mb-2 p-2 rounded border border-secondary" style="display:none;"></div>
+            <p id="listErr" class="text-danger small" style="display:none; white-space: pre-wrap; word-break: break-word;"></p>
+            <div class="table-responsive" id="leadsTableWrap">
+              <table class="table table-sm table-dark-ish table-hover mb-0 w-100">
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Created</th>
+                    <th>Company</th>
+                    <th>URL</th>
+                    <th>Status</th>
+                    <th>CRM sync</th>
+                    <th>Latest audit</th>
+                    <th>AI fit</th>
+                    <th>Outreach</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="leadsBody">
+                  <tr><td colspan="10" class="text-muted small">No data</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function show(id) {
+      ['loading', 'gate', 'ok'].forEach(function (x) {
+        document.getElementById(x).style.display = x === id ? 'block' : 'none';
+      });
+    }
+
+    async function api(path, opts) {
+      var o = opts || {};
+      var res = await fetch('/.netlify/functions/' + path, {
+        credentials: 'include',
+        headers: o.headers || {},
+        method: o.method || 'GET',
+        body: o.body,
+      });
+      var data = await res.json().catch(function () { return {}; });
+      return { res: res, data: data };
+    }
+
+    var leadListPage = 1;
+    var leadListPageSize = 25;
+    var leadHistoryCache = {};
+    var selectedLeadIds = new Set();
+    var currentListRows = [];
+    var importCsvText = '';
+    var importPreviewReadyCount = 0;
+    var latestActivityData = null;
+    var BATCH_CHUNK_SIZE = 10;
+    var lastBatchFailedByAction = {
+      'lead-engine-batch-analyze': [],
+      'lead-engine-batch-score': [],
+      'lead-engine-batch-draft': [],
+    };
+    /** Draft text for History "Copy email" — never put full body in HTML attributes (truncation / parse bugs). */
+    var draftClipboardByKey = Object.create(null);
+
+    function formatDraftEmailClip(subject, body) {
+      var subj = String(subject || '').trim() || '(no subject)';
+      return 'Subject: ' + subj + '\n\n' + String(body || '');
+    }
+
+    async function copyTextWithFallback(text) {
+      var t = String(text || '');
+      if (!t) return false;
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        try {
+          await navigator.clipboard.writeText(t);
+          return true;
+        } catch (_e) {
+          /* use execCommand fallback below */
+        }
+      }
+      var ta = document.createElement('textarea');
+      ta.value = t;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      var ok = false;
+      try {
+        ok = document.execCommand('copy');
+      } catch (_e2) {
+        ok = false;
+      }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    /** Align with server ~15m stale window; client uses 16m so Send is enabled after lock expires. */
+    function isClientStaleSendLock(iso) {
+      if (!iso) return true;
+      var t = new Date(iso).getTime();
+      if (!Number.isFinite(t)) return true;
+      return Date.now() - t > 16 * 60 * 1000;
+    }
+
+    function buildListQuery(resetPage) {
+      if (resetPage) leadListPage = 1;
+      leadListPageSize = parseInt(document.getElementById('filterPageSize').value, 10) || 25;
+      var q = new URLSearchParams();
+      var st = document.getElementById('filterStatus').value;
+      if (st) q.set('status', st);
+      var offer = document.getElementById('filterOffer').value;
+      if (offer) q.set('recommendedOffer', offer);
+      var os = document.getElementById('filterOutreach').value;
+      if (os) q.set('outreachStatus', os);
+      var rq = document.getElementById('filterReviewQueue').value;
+      if (rq) q.set('reviewQueue', rq);
+      var oo = document.getElementById('filterOptedOut').value;
+      if (oo === 'true' || oo === 'false') q.set('optedOut', oo);
+      var sg = document.getElementById('filterSuppressed').value;
+      if (sg === 'true' || sg === 'false') q.set('suppressed', sg);
+      var search = document.getElementById('filterSearch').value.trim();
+      if (search) q.set('search', search);
+      var natt = document.getElementById('filterNeedsAttention').value;
+      if (natt === 'send') q.set('needsAttention', 'send');
+      q.set('page', String(leadListPage));
+      q.set('pageSize', String(leadListPageSize));
+      q.set('includeLatestAnalysis', '1');
+      q.set('includeLatestOutreach', '1');
+      q.set('includeSummary', '1');
+      return q;
+    }
+
+    function renderListSummary(sum, d) {
+      var el = document.getElementById('listSummary');
+      var metaLine = '';
+      if (d) {
+        metaLine =
+          '<div class="mt-2 pt-2 border-top border-secondary small fw-semibold text-secondary">' +
+          'Page ' +
+          (d.page || 1) +
+          ' / ' +
+          (d.totalPages || 0) +
+          ' · ' +
+          (d.total != null ? d.total : 0) +
+          ' matches · page size ' +
+          (d.pageSize || leadListPageSize) +
+          '</div>';
+      }
+      if (!sum) {
+        el.style.display = metaLine ? 'block' : 'none';
+        el.innerHTML = metaLine || '';
+        return;
+      }
+      el.style.display = 'block';
+      var b = sum.byLeadStatus || {};
+      var fl = sum.flags || {};
+      var pl = sum.pipeline;
+      var parts = [];
+      parts.push('<strong class="text-light">Matching:</strong> ' + (sum.totalMatching != null ? sum.totalMatching : d.total) + ' leads');
+      parts.push('new ' + (b.new || 0) + ' · analyzed ' + (b.analyzed || 0) + ' · review ' + (b.review || 0) + ' · archived ' + (b.archived || 0));
+      parts.push(
+        'opted out (lead) ' +
+          (fl.optedOut || 0) +
+          ' · suppressed (global) ' +
+          (fl.globallySuppressed || 0) +
+          ' · no contact email ' +
+          (fl.missingContactEmail || 0)
+      );
+      if (pl) {
+        parts.push(
+          'scored ' +
+            pl.scoredLeads +
+            ' · draft ' +
+            pl.withDraft +
+            ' · approved ' +
+            pl.withApproved +
+            ' · sent ' +
+            pl.withSent +
+            ' · failed audit runs (in cohort) ' +
+            pl.failedAnalysisRuns +
+            ' · <span class="text-warning">send needs attention ' +
+            (pl.needsSendRecovery != null ? pl.needsSendRecovery : 0) +
+            '</span>'
+        );
+      }
+      if (sum.pipelineNote) parts.push('<span class="text-warning">' + escapeHtml(sum.pipelineNote) + '</span>');
+      el.innerHTML = '<div>' + parts.join(' &nbsp;|&nbsp; ') + '</div>' + metaLine;
+    }
+
+    function renderActivitySummary(d) {
+      var summaryEl = document.getElementById('activitySummary');
+      var recentEl = document.getElementById('activityRecent');
+      if (!d || !d.summary) {
+        summaryEl.textContent = 'No activity available.';
+        recentEl.innerHTML = '';
+        return;
+      }
+      latestActivityData = d;
+      var op = d.summary.operational || {};
+      summaryEl.innerHTML =
+        'Recent sends ' +
+        (op.recentSends || 0) +
+        ' · approvals ' +
+        (op.recentApprovals || 0) +
+        ' · reconciliations ' +
+        (op.recentReconciliations || 0) +
+        ' · CRM sync failures ' +
+        (op.recentCrmSyncFailures || 0);
+      var recent = d.recent || [];
+      if (!recent.length) {
+        recentEl.innerHTML = '<span class="text-muted">No events logged yet.</span>';
+        return;
+      }
+      recentEl.innerHTML =
+        '<ul class="mb-0 ps-3">' +
+        recent
+          .slice(0, 8)
+          .map(function (r) {
+            return (
+              '<li>' +
+              escapeHtml((r.created_at || '').slice(0, 19)) +
+              ' · ' +
+              escapeHtml(r.event_type || '') +
+              (r.actor ? ' · ' + escapeHtml(r.actor) : '') +
+              (r.message ? ' · ' + escapeHtml(String(r.message).slice(0, 90)) : '') +
+              '</li>'
+            );
+          })
+          .join('') +
+        '</ul>';
+    }
+
+    async function loadActivitySummary() {
+      var out = await api('lead-engine-activity-summary?limit=200');
+      if (!out.res.ok) {
+        var amsg = out.data.error || 'Failed to load activity.';
+        if (out.data.details) amsg += ' ' + out.data.details;
+        document.getElementById('activitySummary').textContent = amsg;
+        document.getElementById('activityRecent').innerHTML = '';
+        return;
+      }
+      renderActivitySummary(out.data);
+    }
+
+    function formatHistoryDetail(d) {
+      var leadId = d && d.lead && d.lead.id ? String(d.lead.id) : '';
+      if (leadId) {
+        var pref = leadId + ':';
+        Object.keys(draftClipboardByKey).forEach(function (k) {
+          if (k.indexOf(pref) === 0) delete draftClipboardByKey[k];
+        });
+      }
+      var leadOptedOut = !!(d && d.lead && d.lead.email_opted_out === true);
+      var globalSuppressed = !!(d && d.lead && d.lead.global_email_suppressed === true);
+      var c = d.counts || {};
+      var bits = [];
+      bits.push(
+        '<div class="mb-2">' +
+          (leadOptedOut ? '<span class="badge bg-danger me-1">Opted out (lead)</span>' : '') +
+          (globalSuppressed ? '<span class="badge bg-warning text-dark">Suppressed (global email)</span>' : '') +
+          (!leadOptedOut && !globalSuppressed ? '<span class="text-muted">No opt-out/suppression flags.</span>' : '') +
+          '</div>'
+      );
+      bits.push(
+        '<div class="mb-2"><strong class="text-info">Totals</strong> · audits ' +
+          (c.analysisRuns || 0) +
+          ' · AI scores ' +
+          (c.aiScoreRuns || 0) +
+          ' · outreach rows ' +
+          (c.outreachRows || 0) +
+          ' · failed runs in window ' +
+          (c.failedAuditsInRecent || 0) +
+          '</div>'
+      );
+      if (d && d.lead) {
+        var crmBits = [];
+        crmBits.push('status ' + escapeHtml(d.lead.sync_status || 'not_synced'));
+        if (d.lead.crm_source) crmBits.push('source ' + escapeHtml(d.lead.crm_source));
+        if (d.lead.external_crm_id) crmBits.push('id ' + escapeHtml(String(d.lead.external_crm_id)));
+        if (d.lead.last_synced_at) crmBits.push('last ' + escapeHtml(String(d.lead.last_synced_at).slice(0, 19)));
+        if (d.lead.sync_error) crmBits.push('<span class="text-danger">error: ' + escapeHtml(String(d.lead.sync_error).slice(0, 120)) + '</span>');
+        bits.push('<div class="mb-2"><strong class="text-info">CRM</strong> · ' + crmBits.join(' · ') + '</div>');
+      }
+      function listAudits(a) {
+        if (!a || !a.length) return '<p class="text-muted mb-1">No audits.</p>';
+        return (
+          '<ul class="mb-2 ps-3">' +
+          a
+            .map(function (x) {
+              var ok = x.success ? 'ok' : '<span class="text-warning">FAIL</span>';
+              return (
+                '<li>' +
+                ok +
+                ' · ' +
+                escapeHtml((x.created_at || '').slice(0, 19)) +
+                (x.summary && x.summary.page_title ? ' · ' + escapeHtml(String(x.summary.page_title).slice(0, 40)) : '') +
+                '</li>'
+              );
+            })
+            .join('') +
+          '</ul>'
+        );
+      }
+      function listScores(s) {
+        if (!s || !s.length) return '<p class="text-muted mb-1">No AI scores.</p>';
+        return (
+          '<ul class="mb-2 ps-3">' +
+          s
+            .map(function (x) {
+              return (
+                '<li>' +
+                (x.fit_score != null ? x.fit_score + '/100' : '—') +
+                ' · ' +
+                escapeHtml(x.recommended_offer || '') +
+                ' · ' +
+                escapeHtml((x.created_at || '').slice(0, 19)) +
+                '</li>'
+              );
+            })
+            .join('') +
+          '</ul>'
+        );
+      }
+      function listOut(o) {
+        if (!o || !o.length) return '<p class="text-muted mb-1">No outreach rows.</p>';
+        var latestRow = o[0] || null;
+        var latestDraft = o.find(function (r) { return r.status === 'draft'; }) || null;
+        var latestApproved = o.find(function (r) { return r.status === 'approved'; }) || null;
+        function previewText(s, max) {
+          var t = String(s || '').replace(/\s+/g, ' ').trim();
+          if (!t) return '';
+          return t.length > max ? t.slice(0, max) + '…' : t;
+        }
+        return (
+          '<ul class="mb-0 ps-3">' +
+          o
+            .map(function (x) {
+              var badges = '';
+              if (latestRow && x.id === latestRow.id) badges += '<span class="badge bg-info text-dark me-1">latest row</span>';
+              if (latestDraft && x.id === latestDraft.id) badges += '<span class="badge bg-secondary me-1">latest draft</span>';
+              if (latestApproved && x.id === latestApproved.id) badges += '<span class="badge bg-warning text-dark me-1">latest approved</span>';
+              var bodyPreview = previewText(x.draft_body, 180);
+              var reviewActions = '';
+              if (leadId && x.status === 'draft') {
+                if (latestRow && x.id === latestRow.id) {
+                  reviewActions +=
+                    '<button type="button" class="btn btn-outline-primary btn-sm approve-latest-draft me-1 mt-1" data-lead-id="' +
+                    escapeAttr(leadId) +
+                    '" data-outreach-id="' +
+                    escapeAttr(x.id) +
+                    '">Approve latest</button>';
+                } else {
+                  reviewActions +=
+                    '<span class="small text-warning d-block mt-1">Older draft version (newer outreach row exists)</span>';
+                }
+                reviewActions +=
+                  '<button type="button" class="btn btn-outline-success btn-sm regenerate-from-history me-1 mt-1" data-lead-id="' +
+                  escapeAttr(leadId) +
+                  '">Regenerate latest draft</button>';
+                var clipKey = leadId + ':' + x.id;
+                draftClipboardByKey[clipKey] = formatDraftEmailClip(x.draft_subject, x.draft_body);
+                reviewActions +=
+                  '<button type="button" class="btn btn-outline-light btn-sm copy-draft-btn mt-1" data-copy-key="' +
+                  escapeAttr(clipKey) +
+                  '">Copy email</button>';
+              }
+              var recovery = '';
+              if (leadId && x.status === 'approved') {
+                var lockBadge = x.send_started_at
+                  ? '<span class="text-info small me-1">send lock</span>'
+                  : '';
+                recovery =
+                  '<div class="mt-1">' +
+                  lockBadge +
+                  '<button type="button" class="btn btn-outline-success btn-sm reconcile-mark-sent me-1" data-lead-id="' +
+                  escapeAttr(leadId) +
+                  '" data-outreach-id="' +
+                  escapeAttr(x.id) +
+                  '">Mark sent</button>';
+                if (x.send_started_at) {
+                  recovery +=
+                    '<button type="button" class="btn btn-outline-warning btn-sm reconcile-release-lock" data-lead-id="' +
+                    escapeAttr(leadId) +
+                    '" data-outreach-id="' +
+                    escapeAttr(x.id) +
+                    '">Release lock</button>';
+                }
+                recovery +=
+                  '<button type="button" class="btn btn-outline-danger btn-sm reconcile-mark-failed mt-1 d-block" data-lead-id="' +
+                  escapeAttr(leadId) +
+                  '" data-outreach-id="' +
+                  escapeAttr(x.id) +
+                  '">Mark failed (cancel row)</button>';
+                recovery += '</div>';
+              }
+              return (
+                '<li class="mb-2 pb-1 border-bottom border-secondary border-opacity-25">' +
+                badges +
+                '<div>' +
+                escapeHtml(x.status || '') +
+                ' · ' +
+                escapeHtml((x.draft_subject || '').slice(0, 50)) +
+                ' · ' +
+                escapeHtml((x.created_at || '').slice(0, 19)) +
+                '</div>' +
+                (bodyPreview
+                  ? '<div class="small text-secondary mt-1">' + escapeHtml(bodyPreview) + '</div>'
+                  : '<div class="small text-muted mt-1">(no draft body)</div>') +
+                reviewActions +
+                recovery +
+                '</li>'
+              );
+            })
+            .join('') +
+          '</ul>'
+        );
+      }
+      function listEvents(evts) {
+        if (!evts || !evts.length) return '<p class="text-muted mb-1">No audit events.</p>';
+        return (
+          '<ul class="mb-0 ps-3">' +
+          evts
+            .map(function (x) {
+              return (
+                '<li>' +
+                escapeHtml((x.created_at || '').slice(0, 19)) +
+                ' · ' +
+                escapeHtml(x.event_type || '') +
+                (x.actor ? ' · ' + escapeHtml(x.actor) : '') +
+                (x.message ? ' · ' + escapeHtml(String(x.message).slice(0, 80)) : '') +
+                '</li>'
+              );
+            })
+            .join('') +
+          '</ul>'
+        );
+      }
+      bits.push('<div class="row g-2"><div class="col-md-4"><strong>Audits (recent)</strong>' + listAudits(d.audits) + '</div>');
+      bits.push('<div class="col-md-4"><strong>AI scores (recent)</strong>' + listScores(d.scores) + '</div>');
+      bits.push('<div class="col-md-4"><strong>Outreach (recent)</strong>' + listOut(d.outreach) + '</div></div>');
+      bits.push('<div class="mt-2"><strong>Audit events (recent)</strong>' + listEvents(d.events) + '</div>');
+      return bits.join('');
+    }
+
+    function renderImportPreview(data) {
+      var summaryEl = document.getElementById('importSummary');
+      var wrapEl = document.getElementById('importPreviewWrap');
+      var bodyEl = document.getElementById('importPreviewBody');
+      var commitBtn = document.getElementById('importCommitBtn');
+      var c = (data && data.counts) || { total: 0, ready: 0, duplicate: 0, invalid: 0 };
+      importPreviewReadyCount = c.ready || 0;
+      summaryEl.style.display = 'block';
+      summaryEl.innerHTML =
+        'Rows: ' +
+        c.total +
+        ' · <span class="text-success">ready ' +
+        c.ready +
+        '</span> · <span class="text-warning">duplicate ' +
+        c.duplicate +
+        '</span> · <span class="text-danger">invalid ' +
+        c.invalid +
+        '</span>';
+      var rows = (data && data.rows) || [];
+      if (!rows.length) {
+        wrapEl.style.display = 'none';
+        commitBtn.disabled = true;
+        return;
+      }
+      wrapEl.style.display = 'block';
+      bodyEl.innerHTML = rows
+        .map(function (r) {
+          var badge = r.status === 'ready'
+            ? '<span class="badge bg-success">ready</span>'
+            : r.status === 'duplicate'
+              ? '<span class="badge bg-warning text-dark">duplicate</span>'
+              : '<span class="badge bg-danger">invalid</span>';
+          var n = r.normalized || {};
+          var notes = '';
+          if (r.status === 'duplicate') notes = r.reason || 'duplicate';
+          if (r.status === 'invalid') notes = (r.errors || []).join('; ');
+          return (
+            '<tr><td class="small">' +
+            escapeHtml(String(r.rowNumber || '')) +
+            '</td><td>' +
+            badge +
+            '</td><td class="small">' +
+            escapeHtml(n.company_name || '') +
+            '</td><td class="small">' +
+            escapeHtml(n.website_url || '') +
+            '</td><td class="small">' +
+            escapeHtml(notes) +
+            '</td></tr>'
+          );
+        })
+        .join('');
+      commitBtn.disabled = importPreviewReadyCount <= 0;
+    }
+
+    function analyzeEligible(row) {
+      return !!((row && row.website_url || '').trim());
+    }
+
+    function scoreEligible(row) {
+      return !!(row && row.latest_analysis && row.latest_analysis.summary && row.latest_analysis.summary.success === true);
+    }
+
+    function draftEligible(row) {
+      return !!(
+        row &&
+        row.latest_analysis &&
+        row.latest_analysis.summary &&
+        row.latest_analysis.summary.success === true &&
+        row.latest_analysis.scoring &&
+        row.latest_analysis.scoring.ai_score_id
+      );
+    }
+
+    function updateBatchActionState() {
+      var selected = currentListRows.filter(function (r) { return selectedLeadIds.has(r.id); });
+      var analyzeEligibleCount = selected.filter(analyzeEligible).length;
+      var scoreEligibleCount = selected.filter(scoreEligible).length;
+      var draftEligibleCount = selected.filter(draftEligible).length;
+      document.getElementById('batchAnalyzeBtn').disabled = analyzeEligibleCount === 0;
+      document.getElementById('batchScoreBtn').disabled = scoreEligibleCount === 0;
+      document.getElementById('batchDraftBtn').disabled = draftEligibleCount === 0;
+      document.getElementById('batchAnalyzeRetryBtn').disabled =
+        !(lastBatchFailedByAction['lead-engine-batch-analyze'] || []).length;
+      document.getElementById('batchScoreRetryBtn').disabled =
+        !(lastBatchFailedByAction['lead-engine-batch-score'] || []).length;
+      document.getElementById('batchDraftRetryBtn').disabled =
+        !(lastBatchFailedByAction['lead-engine-batch-draft'] || []).length;
+      var meta = document.getElementById('batchMeta');
+      meta.textContent =
+        'Selected ' +
+        selected.length +
+        ' · analyze-eligible ' +
+        analyzeEligibleCount +
+        ' · score-eligible ' +
+        scoreEligibleCount +
+        ' · draft-eligible ' +
+        draftEligibleCount;
+    }
+
+    function chunkLeadIds(ids, size) {
+      var chunks = [];
+      for (var i = 0; i < ids.length; i += size) {
+        chunks.push(ids.slice(i, i + size));
+      }
+      return chunks;
+    }
+
+    function renderBatchResultsTable(results) {
+      var wrap = document.getElementById('batchResultsWrap');
+      var body = document.getElementById('batchResultsBody');
+      if (!results || !results.length) {
+        wrap.style.display = 'none';
+        return;
+      }
+      wrap.style.display = 'block';
+      body.innerHTML = results.slice(-40).map(function (r) {
+        var badge = r.outcome === 'succeeded'
+          ? '<span class="badge bg-success">succeeded</span>'
+          : r.outcome === 'skipped'
+            ? '<span class="badge bg-warning text-dark">skipped</span>'
+            : '<span class="badge bg-danger">failed</span>';
+        return (
+          '<tr><td class="small">' +
+          escapeHtml(String(r.leadId || '').slice(0, 12)) +
+          '</td><td>' +
+          badge +
+          '</td><td class="small">' +
+          escapeHtml(r.code || '') +
+          '</td></tr>'
+        );
+      }).join('');
+    }
+
+    function setBatchProgressText(text) {
+      var el = document.getElementById('batchProgress');
+      if (!text) {
+        el.style.display = 'none';
+        el.textContent = '';
+        return;
+      }
+      el.style.display = 'block';
+      el.textContent = text;
+    }
+
+    async function loadList(resetPage) {
+      leadHistoryCache = {};
+      var q = buildListQuery(!!resetPage);
+      var path = 'lead-engine-list' + (q.toString() ? '?' + q.toString() : '');
+      document.getElementById('listErr').style.display = 'none';
+      var out = await api(path);
+      if (!out.res.ok) {
+        var lerr = out.data.error || out.data.errors || 'List failed';
+        if (out.data.details) lerr += ' — ' + out.data.details;
+        document.getElementById('listErr').textContent = lerr;
+        document.getElementById('listErr').style.display = 'block';
+        document.getElementById('listSummary').style.display = 'none';
+        document.getElementById('leadsBody').innerHTML =
+          '<tr><td colspan="10" class="text-muted small">Could not load rows. See error above.</td></tr>';
+        return;
+      }
+      var d = out.data;
+      var tp = d.totalPages || 0;
+      if ((d.leads || []).length === 0 && (d.total || 0) > 0 && leadListPage > 1) {
+        leadListPage = 1;
+        loadList(false);
+        return;
+      }
+      renderListSummary(d.summary, d);
+      document.getElementById('pagePrev').disabled = leadListPage <= 1;
+      document.getElementById('pageNext').disabled = tp === 0 || leadListPage >= tp;
+
+      var tbody = document.getElementById('leadsBody');
+      var rows = d.leads || [];
+      currentListRows = rows;
+      if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-muted small">No leads match these filters</td></tr>';
+      } else {
+        tbody.innerHTML = rows
+          .map(function (r) {
+            var dt = r.created_at ? new Date(r.created_at).toLocaleString() : '—';
+            var url = r.website_url || '';
+            var urlShort = url.length > 36 ? url.slice(0, 34) + '…' : url;
+            var la = r.latest_analysis;
+            var sumCell = '<div class="le-cell-clip">' + formatSummaryCell(la) + '</div>';
+            var scoreCell = '<div class="le-cell-clip">' + formatScoringCell(la) + '</div>';
+            var o = getOutreachSummary(r);
+            var outreachCell = '<div class="le-cell-clip">' + formatOutreachColumn(r, o) + '</div>';
+            var crmCell = '<div class="le-cell-clip">' + formatCrmSyncCell(r) + '</div>';
+            var auditOk = la && la.summary && la.summary.success === true;
+            var canScore = auditOk;
+            var hasAiScore = la && la.scoring && (la.scoring.ai_score_id || la.scoring.source === 'legacy_analysis_row');
+            var canDraft = auditOk && hasAiScore;
+            var ce = (r.contact_email || '').trim();
+            var analyzeBtn = '<button type="button" class="btn btn-outline-info btn-sm analyze-btn" data-lead-id="' + escapeAttr(r.id) + '">Analyze</button>';
+            var scoreBtn = canScore
+              ? '<button type="button" class="btn btn-outline-warning btn-sm score-btn" data-lead-id="' + escapeAttr(r.id) + '">Score</button>'
+              : '';
+            var draftBtn = canDraft
+              ? '<button type="button" class="btn btn-outline-success btn-sm draft-btn" data-lead-id="' + escapeAttr(r.id) + '">Draft</button>'
+              : '';
+            var latestIsDraft = o.latest && o.latest.status === 'draft' && o.latest_draft && o.latest.id === o.latest_draft.id;
+            var approveBtn = latestIsDraft
+              ? '<button type="button" class="btn btn-outline-primary btn-sm approve-btn" data-lead-id="' + escapeAttr(r.id) + '" data-outreach-id="' + escapeAttr(o.latest_draft.id) + '">Approve</button>'
+              : '';
+            var apr = o.latest_approved;
+            var activeSendLock = apr && apr.send_started_at && !isClientStaleSendLock(apr.send_started_at);
+            var canSend = apr && ce && !r.email_opted_out && !r.global_email_suppressed && !activeSendLock;
+            var sendHint = r.email_opted_out
+              ? 'Send blocked: opted out (lead)'
+              : r.global_email_suppressed
+                ? 'Send blocked: suppressed (global email)'
+              : !ce
+                ? 'Send blocked: add contact email on lead'
+                : !apr
+                  ? 'Send blocked: need Apr outreach row'
+                  : activeSendLock
+                    ? 'Send in progress — open History to mark sent / release lock if stuck'
+                    : '';
+            var sendBtn = canSend
+              ? '<button type="button" class="btn btn-outline-danger btn-sm send-btn" data-lead-id="' + escapeAttr(r.id) + '" data-outreach-id="' + escapeAttr(apr.id) + '">Send</button>'
+              : '';
+            var pipelineHints = [];
+            if (!canScore) pipelineHints.push('Run Analyze to enable Score');
+            else if (!hasAiScore) pipelineHints.push('Run Score to enable Draft');
+            else if (!o.latest_draft) pipelineHints.push('Run Draft to enable Approve');
+            else if (!latestIsDraft) pipelineHints.push('Approve: open History (newer outreach row)');
+            if (!canSend && sendHint) pipelineHints.push(sendHint);
+            var hintLine = pipelineHints.join(' · ');
+            var hintHtml = pipelineHints.length
+              ? '<div class="le-pipeline-hint" title="' +
+                escapeAttr(hintLine) +
+                '">' +
+                escapeHtml(hintLine.length > 120 ? hintLine.slice(0, 118) + '…' : hintLine) +
+                '</div>'
+              : '';
+            var sel = selectedLeadIds.has(r.id) ? ' checked' : '';
+            var selBox =
+              '<input class="form-check-input row-select-box" type="checkbox" data-lead-id="' +
+              escapeAttr(r.id) +
+              '"' +
+              sel +
+              '>';
+            var reviewLatestBtn = o.latest_draft
+              ? '<button type="button" class="btn btn-outline-info btn-sm review-latest-btn" data-lead-id="' +
+                escapeAttr(r.id) +
+                '">Review</button>'
+              : '';
+            var histBtn =
+              '<button type="button" class="btn btn-outline-secondary btn-sm history-btn" data-lead-id="' +
+              escapeAttr(r.id) +
+              '">History</button>';
+            var syncBtn = '<button type="button" class="btn btn-outline-light btn-sm sync-crm-btn" data-lead-id="' + escapeAttr(r.id) + '">CRM</button>';
+            var actionsStack =
+              '<div class="lead-actions-stack">' +
+              analyzeBtn +
+              scoreBtn +
+              draftBtn +
+              reviewLatestBtn +
+              histBtn +
+              approveBtn +
+              sendBtn +
+              hintHtml +
+              syncBtn +
+              '</div>';
+            var mainRow =
+              '<tr data-lead-row="' +
+              escapeAttr(r.id) +
+              '"><td class="small text-nowrap">' +
+              selBox +
+              '</td><td class="small text-nowrap">' +
+              escapeHtml(dt) +
+              '</td><td class="small">' +
+              escapeHtml(r.company_name || '') +
+              '</td><td class="small"><a class="link-info" href="' +
+              escapeAttr(url) +
+              '" target="_blank" rel="noopener">' +
+              escapeHtml(urlShort) +
+              '</a></td><td><span class="badge bg-secondary">' +
+              escapeHtml(r.status || '') +
+              '</span></td><td class="small">' +
+              crmCell +
+              '</td><td class="small le-audit-col">' +
+              sumCell +
+              '</td><td class="small le-score-col">' +
+              scoreCell +
+              '</td><td class="small le-outreach-col">' +
+              outreachCell +
+              '</td><td class="le-actions-col">' +
+              actionsStack +
+              '</td></tr>';
+            var histRow =
+              '<tr class="lead-history-row d-none" data-history-for="' +
+              escapeAttr(r.id) +
+              '"><td colspan="10" class="small text-light p-3"><div class="history-inner text-muted">Loading…</div></td></tr>';
+            return mainRow + histRow;
+          })
+          .join('');
+      }
+      document.getElementById('selectVisible').checked = rows.length > 0 && rows.every(function (r) { return selectedLeadIds.has(r.id); });
+      updateBatchActionState();
+      loadActivitySummary();
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+    function escapeAttr(s) {
+      return escapeHtml(s).replace(/'/g, '&#39;');
+    }
+
+    function getOutreachSummary(r) {
+      if (r.outreach) return r.outreach;
+      var lo = r.latest_outreach;
+      if (!lo) return { latest_draft: null, latest_approved: null, latest_sent: null };
+      var o = { latest_draft: null, latest_approved: null, latest_sent: null };
+      if (lo.status === 'draft') o.latest_draft = lo;
+      else if (lo.status === 'approved') o.latest_approved = lo;
+      else if (lo.status === 'sent') o.latest_sent = lo;
+      return o;
+    }
+
+    function formatOutreachColumn(r, o) {
+      o = o || getOutreachSummary(r);
+      function sub(label, row, badgeClass) {
+        if (!row) {
+          return '<div class="mb-1"><span class="badge ' + badgeClass + '">' + label + '</span> <span class="text-muted small">—</span></div>';
+        }
+        var subj = (row.draft_subject || '(no subject)').slice(0, 34);
+        var more = (row.draft_subject || '').length > 34 ? '…' : '';
+        return '<div class="mb-1"><span class="badge ' + badgeClass + '">' + label + '</span> <span class="small">' + escapeHtml(subj + more) + '</span></div>';
+      }
+      var bits = '';
+      bits += sub('Gen', o.latest_draft, 'bg-secondary');
+      if (o.latest_draft) {
+        bits +=
+          '<div class="small text-muted mb-1">created ' +
+          escapeHtml(String(o.latest_draft.created_at || '').slice(0, 10)) +
+          '</div>';
+      }
+      bits += sub('Apr', o.latest_approved, 'bg-warning text-dark');
+      if (o.latest_approved && o.latest_approved.send_started_at) {
+        if (!isClientStaleSendLock(o.latest_approved.send_started_at)) {
+          bits += '<div class="small text-info mb-0" title="Send may be in progress">Apr: locked</div>';
+        } else {
+          bits +=
+            '<div class="small text-warning mb-0" title="Release or mark sent in History">Apr: stale lock</div>';
+        }
+      }
+      bits += sub('Sent', o.latest_sent, 'bg-success');
+      if (o.has_multiple_drafts) {
+        bits +=
+          '<div class="small text-warning mb-0">Multiple drafts: ' +
+          escapeHtml(String(o.draft_rows_count || 0)) +
+          ' versions (latest shown)</div>';
+      } else if ((o.draft_rows_count || 0) > 0) {
+        bits +=
+          '<div class="small text-muted mb-0">Draft versions: ' +
+          escapeHtml(String(o.draft_rows_count || 0)) +
+          '</div>';
+      }
+      if (r.email_opted_out) bits += '<div class="small text-danger mb-0">Opted out (lead)</div>';
+      if (r.global_email_suppressed) bits += '<div class="small text-warning mb-0">Suppressed (global email)</div>';
+      if (!(r.contact_email || '').trim()) bits += '<div class="small text-warning mb-0">No contact email</div>';
+      if (o.latest_sent) bits += '<div class="small text-success mb-0">Already sent</div>';
+      if (r.outreach && r.outreach.send_recovery) {
+        var sr = r.outreach.send_recovery;
+        if (sr.active_lock) {
+          bits +=
+            '<div class="small text-danger mb-0 fw-semibold">Needs attention: send in flight / not finalized</div>';
+        } else if (sr.stale_lock) {
+          bits +=
+            '<div class="small text-warning mb-0 fw-semibold">Needs attention: stale lock — reconcile in History</div>';
+        }
+      }
+      return bits || '<span class="text-muted">—</span>';
+    }
+
+    function formatCrmSyncCell(r) {
+      var st = r.sync_status || 'not_synced';
+      var badge = st === 'synced'
+        ? '<span class="badge bg-success">synced</span>'
+        : st === 'failed'
+          ? '<span class="badge bg-danger">sync failed</span>'
+          : '<span class="badge bg-secondary">not synced</span>';
+      var bits = [badge];
+      if (r.last_synced_at) bits.push('<div class="small text-muted">' + escapeHtml(String(r.last_synced_at).slice(0, 19)) + '</div>');
+      if (r.crm_source) bits.push('<div class="small text-info">' + escapeHtml(r.crm_source) + '</div>');
+      if (r.sync_error) bits.push('<div class="small text-danger">' + escapeHtml(String(r.sync_error).slice(0, 80)) + '</div>');
+      return bits.join('');
+    }
+
+    function formatScoringCell(latestAnalysis) {
+      if (!latestAnalysis || !latestAnalysis.summary) {
+        return '<span class="text-muted">No audit data</span>';
+      }
+      if (latestAnalysis.summary.success === false) {
+        return '<span class="audit-fail-banner">Audit failed — score unavailable</span>';
+      }
+      if (!latestAnalysis.scoring) {
+        return '<span class="text-warning">Not scored yet — run Score</span>';
+      }
+      var s = latestAnalysis.scoring;
+      var ppRaw = s.pain_points;
+      var ppList = Array.isArray(ppRaw)
+        ? ppRaw
+        : ppRaw != null && String(ppRaw).trim()
+          ? [String(ppRaw).trim()]
+          : [];
+      var pp = ppList
+        .slice(0, 4)
+        .map(function (p) {
+          return String(p || '').trim();
+        })
+        .filter(Boolean)
+        .join('; ');
+      if (pp.length > 140) pp = pp.slice(0, 138) + '…';
+
+      var offer = s.recommended_offer ? String(s.recommended_offer).trim() : '';
+      var offerShow = offer.length > 48 ? offer.slice(0, 46) + '…' : offer;
+      var angle = s.outreach_angle ? String(s.outreach_angle).trim() : '';
+      var angleShow = angle.length > 48 ? angle.slice(0, 46) + '…' : angle;
+
+      var bits = [];
+      if (s.fit_score != null) {
+        bits.push('<span class="fw-semibold">' + escapeHtml(String(s.fit_score)) + '</span>/100');
+      }
+      if (s.confidence) bits.push(escapeHtml(String(s.confidence)));
+      if (offer) {
+        bits.push(
+          '<span class="text-info" title="' + escapeAttr(offer) + '">' + escapeHtml(offerShow) + '</span>'
+        );
+      }
+      if (pp) {
+        bits.push('<span class="text-secondary small" title="' + escapeAttr(pp) + '">' + escapeHtml(pp) + '</span>');
+      }
+      if (angle) {
+        bits.push(
+          '<span class="small fst-italic" title="' + escapeAttr(angle) + '">' + escapeHtml(angleShow) + '</span>'
+        );
+      }
+      return bits.join(' · ');
+    }
+
+    function formatSummaryCell(latestAnalysis) {
+      if (!latestAnalysis || !latestAnalysis.summary) {
+        return '<span class="text-muted">No audit yet — run Analyze</span>';
+      }
+      var s = latestAnalysis.summary;
+      if (!s.success && s.failure) {
+        var msg = s.failure.message || s.failure.type || 'Failed';
+        return (
+          '<div><span class="badge bg-danger mb-1">AUDIT FAILED</span></div><span class="audit-fail-banner">' +
+          escapeHtml(msg.slice(0, 100)) +
+          '</span>'
+        );
+      }
+      var bits = [];
+      if (s.page_title) bits.push(escapeHtml(s.page_title.slice(0, 36)) + (s.page_title.length > 36 ? '…' : ''));
+      bits.push((s.pages_fetched || 0) + ' pg');
+      if (s.booking_detected) bits.push('<span class="text-info">booking</span>');
+      var hints = s.ux_hints || [];
+      var nh = hints.length;
+      if (nh) {
+        var previewParts = hints
+          .slice(0, 10)
+          .map(function (h) {
+            return String(h || '').trim();
+          })
+          .filter(Boolean);
+        var joined = previewParts.join('; ');
+        var hintTitle = joined.length > 240 ? joined.slice(0, 237) + '…' : joined;
+        if (nh > previewParts.length) {
+          hintTitle += (hintTitle ? ' ' : '') + '(+' + (nh - previewParts.length) + ' more)';
+        }
+        bits.push('<span title="' + escapeAttr(hintTitle || 'UX hints') + '">UX hints: ' + nh + '</span>');
+      }
+      return bits.join(' · ');
+    }
+
+    async function init() {
+      var st = await api('lead-engine-status');
+      document.getElementById('loading').style.display = 'none';
+      if (st.res.status === 403) {
+        show('gate');
+        document.getElementById('gateMsg').textContent = st.data.error || 'Lead engine is disabled.';
+        return;
+      }
+      if (st.res.status === 503) {
+        show('gate');
+        document.getElementById('gateMsg').textContent = st.data.error || 'Lead engine is not configured.';
+        return;
+      }
+      if (st.res.status === 401) {
+        show('gate');
+        document.getElementById('gateMsg').textContent = 'Sign in with an operator account to continue.';
+        return;
+      }
+      if (!st.res.ok) {
+        show('gate');
+        document.getElementById('gateMsg').textContent = st.data.error || 'Unexpected error';
+        return;
+      }
+      show('ok');
+      document.getElementById('who').textContent = st.data.username || '';
+      document.getElementById('statusJson').textContent = JSON.stringify(st.data, null, 2);
+
+      document.getElementById('logout').style.display = 'inline-block';
+      document.getElementById('logout').onclick = async function () {
+        await api('lead-engine-auth', { method: 'DELETE' });
+        window.location.reload();
+      };
+
+      document.getElementById('reloadList').onclick = function () {
+        loadList(false);
+      };
+      document.getElementById('filterStatus').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterOffer').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterOutreach').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterReviewQueue').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterOptedOut').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterSuppressed').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterNeedsAttention').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterPageSize').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterSearch').onkeydown = function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          loadList(true);
+        }
+      };
+      document.getElementById('pagePrev').onclick = function () {
+        if (leadListPage > 1) {
+          leadListPage -= 1;
+          loadList(false);
+        }
+      };
+      document.getElementById('pageNext').onclick = function () {
+        leadListPage += 1;
+        loadList(false);
+      };
+
+      document.getElementById('leadsTableWrap').addEventListener('click', async function (ev) {
+        var copyBtn = ev.target.closest('.copy-draft-btn');
+        if (copyBtn) {
+          var ckey = copyBtn.getAttribute('data-copy-key') || '';
+          var txt = ckey ? draftClipboardByKey[ckey] : '';
+          if (!txt) {
+            window.alert('Nothing to copy. Expand History again to refresh this row.');
+            return;
+          }
+          var copied = await copyTextWithFallback(txt);
+          window.alert(
+            copied
+              ? 'Copied subject + body to the clipboard.'
+              : 'Copy failed. Use https or localhost, or copy from the draft preview text.'
+          );
+          return;
+        }
+
+        var regenBtn = ev.target.closest('.regenerate-from-history');
+        if (regenBtn) {
+          var glid = regenBtn.getAttribute('data-lead-id');
+          if (!glid) return;
+          regenBtn.disabled = true;
+          var gout = await api('lead-engine-draft', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadId: glid, channel: 'email' }),
+          });
+          regenBtn.disabled = false;
+          if (!gout.res.ok) {
+            window.alert(gout.data.error || 'Regenerate draft failed');
+            return;
+          }
+          delete leadHistoryCache[glid];
+          loadList(false);
+          return;
+        }
+
+        var approveLatestBtn = ev.target.closest('.approve-latest-draft');
+        if (approveLatestBtn) {
+          var alid = approveLatestBtn.getAttribute('data-lead-id');
+          var aoid = approveLatestBtn.getAttribute('data-outreach-id');
+          if (!alid || !aoid) return;
+          approveLatestBtn.disabled = true;
+          var aout = await api('lead-engine-approve', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadId: alid, outreachId: aoid }),
+          });
+          approveLatestBtn.disabled = false;
+          if (!aout.res.ok) {
+            window.alert(aout.data.error || 'Approve latest draft failed');
+            return;
+          }
+          delete leadHistoryCache[alid];
+          loadList(false);
+          return;
+        }
+
+        var reviewLatestBtn = ev.target.closest('.review-latest-btn');
+        if (reviewLatestBtn) {
+          var rlid = reviewLatestBtn.getAttribute('data-lead-id');
+          if (!rlid) return;
+          var hb = document.querySelector('.history-btn[data-lead-id="' + rlid + '"]');
+          if (hb) hb.click();
+          return;
+        }
+
+        var selBox = ev.target.closest('.row-select-box');
+        if (selBox) {
+          var sid = selBox.getAttribute('data-lead-id');
+          if (sid) {
+            if (selBox.checked) selectedLeadIds.add(sid);
+            else selectedLeadIds.delete(sid);
+            updateBatchActionState();
+          }
+          return;
+        }
+        var recM = ev.target.closest('.reconcile-mark-sent');
+        var recR = ev.target.closest('.reconcile-release-lock');
+        var recF = ev.target.closest('.reconcile-mark-failed');
+        if (recM || recR || recF) {
+          var rbtn = recM || recR || recF;
+          var rhid = rbtn.getAttribute('data-lead-id');
+          var roid = rbtn.getAttribute('data-outreach-id');
+          if (!rhid || !roid) return;
+          var raction = recM ? 'mark_sent' : recR ? 'release_send_lock' : 'mark_failed';
+          if (
+            raction === 'release_send_lock' &&
+            !window.confirm(
+              'Release send lock only if Resend did NOT deliver. If the message was sent, releasing and sending again may duplicate the email. Continue?'
+            )
+          ) {
+            return;
+          }
+          if (
+            raction === 'mark_failed' &&
+            !window.confirm(
+              'Mark failed permanently sets this outreach to cancelled. You will need a new draft and approval to send. Continue?'
+            )
+          ) {
+            return;
+          }
+          rbtn.disabled = true;
+          var rbody = { leadId: rhid, outreachId: roid, action: raction };
+          if (raction === 'mark_failed') rbody.acknowledgeMarkFailed = true;
+          var rout = await api('lead-engine-reconcile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(rbody),
+          });
+          rbtn.disabled = false;
+          if (!rout.res.ok) {
+            window.alert(rout.data.error || 'Recovery action failed');
+            return;
+          }
+          if (rout.data.warning) window.alert(rout.data.warning);
+          delete leadHistoryCache[rhid];
+          var rHistTr = document.querySelector('tr.lead-history-row[data-history-for="' + rhid + '"]');
+          if (rHistTr && !rHistTr.classList.contains('d-none')) {
+            var rInner = rHistTr.querySelector('.history-inner');
+            rInner.textContent = 'Loading…';
+            var rhout = await api('lead-engine-lead-detail?leadId=' + encodeURIComponent(rhid));
+            if (rhout.res.ok) {
+              leadHistoryCache[rhid] = rhout.data;
+              rInner.innerHTML = formatHistoryDetail(rhout.data);
+            } else {
+              rInner.innerHTML =
+                '<span class="text-danger">' + escapeHtml(rhout.data.error || 'Refresh failed') + '</span>';
+            }
+          }
+          loadList(false);
+          return;
+        }
+
+        var historyBtn = ev.target.closest('.history-btn');
+        if (historyBtn) {
+          var hlid = historyBtn.getAttribute('data-lead-id');
+          if (!hlid) return;
+          var histTr = document.querySelector('tr.lead-history-row[data-history-for="' + hlid + '"]');
+          if (!histTr) return;
+          var inner = histTr.querySelector('.history-inner');
+          var opening = histTr.classList.contains('d-none');
+          if (!opening) {
+            histTr.classList.add('d-none');
+            return;
+          }
+          histTr.classList.remove('d-none');
+          if (leadHistoryCache[hlid]) {
+            inner.innerHTML = formatHistoryDetail(leadHistoryCache[hlid]);
+            return;
+          }
+          inner.textContent = 'Loading…';
+          var hout = await api('lead-engine-lead-detail?leadId=' + encodeURIComponent(hlid));
+          if (!hout.res.ok) {
+            inner.innerHTML =
+              '<span class="text-danger">' + escapeHtml(hout.data.error || 'Failed to load history') + '</span>';
+            return;
+          }
+          leadHistoryCache[hlid] = hout.data;
+          inner.innerHTML = formatHistoryDetail(hout.data);
+          return;
+        }
+
+        var analyzeBtn = ev.target.closest('.analyze-btn');
+        var scoreBtn = ev.target.closest('.score-btn');
+        var draftBtn = ev.target.closest('.draft-btn');
+        var approveBtn = ev.target.closest('.approve-btn');
+        var sendBtn = ev.target.closest('.send-btn');
+        var syncCrmBtn = ev.target.closest('.sync-crm-btn');
+        var btn = analyzeBtn || scoreBtn || draftBtn || approveBtn || sendBtn || syncCrmBtn;
+        if (!btn) return;
+        var leadId = btn.getAttribute('data-lead-id');
+        if (!leadId) return;
+        var label = analyzeBtn
+          ? 'Analyze'
+          : scoreBtn
+            ? 'Score'
+            : draftBtn
+              ? 'Draft'
+              : approveBtn
+                ? 'Approve'
+                : sendBtn
+                  ? 'Send'
+                  : 'Sync CRM';
+        btn.disabled = true;
+        try {
+          var fn = analyzeBtn
+            ? 'lead-engine-analyze'
+            : scoreBtn
+              ? 'lead-engine-score'
+              : draftBtn
+                ? 'lead-engine-draft'
+                : approveBtn
+                  ? 'lead-engine-approve'
+                  : sendBtn
+                    ? 'lead-engine-send'
+                    : 'lead-engine-sync-crm';
+          var payload = { leadId: leadId };
+          if (draftBtn) payload.channel = 'email';
+          if (approveBtn || sendBtn) {
+            var oid = btn.getAttribute('data-outreach-id');
+            if (oid) payload.outreachId = oid;
+          }
+          var out = await api(fn, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          if (!out.res.ok) {
+            var msg = out.data.error || (out.data.errors && out.data.errors.join('; ')) || label + ' failed';
+            if (out.data.details) msg += '\n' + out.data.details;
+            if (sendBtn && out.data.code === 'SEND_IN_PROGRESS') {
+              msg += '\n\nAnother send may be running; refresh in a moment.';
+            }
+            if (sendBtn && out.data.code === 'RECONCILE_REQUIRED') {
+              msg += '\n\n' + (out.data.hint || 'Reconcile in Supabase + Resend dashboard.');
+              if (out.data.resendMessageId) msg += '\nResend message id: ' + out.data.resendMessageId;
+              msg +=
+                '\n\nOpen History for this lead: use Mark sent if Resend delivered, or Release lock only if it did not.';
+            }
+            window.alert(msg);
+            return;
+          }
+          if (sendBtn && out.data.idempotentReplay) {
+            window.alert(out.data.message || 'Already sent — no duplicate email.');
+          }
+          if (syncCrmBtn) {
+            var crmMsg = out.data.action === 'created' ? 'CRM record created.' : 'CRM record updated.';
+            if (out.data.externalCrmId) crmMsg += '\nCRM ID: ' + out.data.externalCrmId;
+            window.alert(crmMsg);
+          }
+          loadList(false);
+        } catch (err) {
+          window.alert(label + ' failed: ' + String((err && err.message) || err || 'network error'));
+        } finally {
+          btn.disabled = false;
+        }
+      });
+
+      document.getElementById('ingestForm').onsubmit = async function (e) {
+        e.preventDefault();
+        var errEl = document.getElementById('ingestErr');
+        var okEl = document.getElementById('ingestOk');
+        var btn = document.getElementById('ingestBtn');
+        errEl.style.display = 'none';
+        okEl.style.display = 'none';
+        btn.disabled = true;
+        var payload = {
+          company_name: document.getElementById('company_name').value,
+          website_url: document.getElementById('website_url').value,
+          contact_email: document.getElementById('contact_email').value || undefined,
+          source: 'manual',
+        };
+        var idem = document.getElementById('idempotency_key').value.trim();
+        if (idem) payload.idempotency_key = idem;
+        var out = await api('lead-engine-ingest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        btn.disabled = false;
+        if (!out.res.ok) {
+          var msg = out.data.error || 'Request failed';
+          if (out.data.errors && out.data.errors.length) msg = out.data.errors.join('; ');
+          if (out.data.details) msg += ' — ' + out.data.details;
+          errEl.textContent = msg;
+          errEl.style.display = 'block';
+          return;
+        }
+        var note = 'Saved.';
+        if (out.data.idempotentReplay) note = 'Existing lead (same idempotency key).';
+        if (out.data.duplicateReplay) note = 'Existing lead (same company + URL within 30 days).';
+        okEl.textContent = note;
+        okEl.style.display = 'block';
+        document.getElementById('ingestForm').reset();
+        loadList(true);
+      };
+
+      document.getElementById('selectVisible').onchange = function () {
+        var checked = !!document.getElementById('selectVisible').checked;
+        currentListRows.forEach(function (r) {
+          if (checked) selectedLeadIds.add(r.id);
+          else selectedLeadIds.delete(r.id);
+        });
+        document.querySelectorAll('.row-select-box').forEach(function (el) {
+          el.checked = checked;
+        });
+        updateBatchActionState();
+      };
+
+      async function runBatchChunked(fnName, leadIds) {
+        var ids = (leadIds || []).slice();
+        if (!ids.length) {
+          window.alert('No eligible selected leads for this batch action.');
+          return;
+        }
+        var chunks = chunkLeadIds(ids, BATCH_CHUNK_SIZE);
+        var aggregate = {
+          total: ids.length,
+          processed: 0,
+          succeeded: 0,
+          skipped: 0,
+          failed: 0,
+          results: [],
+        };
+
+        renderBatchResultsTable([]);
+        setBatchProgressText('Running ' + fnName + ' in ' + chunks.length + ' chunks...');
+        for (var i = 0; i < chunks.length; i += 1) {
+          var chunk = chunks[i];
+          setBatchProgressText(
+            'Running chunk ' +
+              (i + 1) +
+              '/' +
+              chunks.length +
+              ' · processed ' +
+              aggregate.processed +
+              '/' +
+              aggregate.total +
+              ' · succeeded ' +
+              aggregate.succeeded +
+              ' · skipped ' +
+              aggregate.skipped +
+              ' · failed ' +
+              aggregate.failed
+          );
+          var out = await api(fnName, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(
+              fnName === 'lead-engine-batch-draft'
+                ? { leadIds: chunk, channel: 'email' }
+                : { leadIds: chunk }
+            ),
+          });
+
+          if (!out.res.ok) {
+            var chunkMsg = out.data.error || 'Chunk request failed';
+            if (out.data.errors && out.data.errors.length) chunkMsg += ': ' + out.data.errors.join('; ');
+            for (var c = 0; c < chunk.length; c += 1) {
+              aggregate.results.push({
+                leadId: chunk[c],
+                outcome: 'failed',
+                code: 'CHUNK_REQUEST_FAILED',
+                message: chunkMsg,
+              });
+            }
+            aggregate.processed += chunk.length;
+            aggregate.failed += chunk.length;
+            renderBatchResultsTable(aggregate.results);
+            continue;
+          }
+
+          var rs = out.data.results || [];
+          for (var r = 0; r < rs.length; r += 1) {
+            var row = rs[r];
+            aggregate.results.push(row);
+            aggregate.processed += 1;
+            if (row.outcome === 'succeeded') aggregate.succeeded += 1;
+            else if (row.outcome === 'skipped') aggregate.skipped += 1;
+            else aggregate.failed += 1;
+          }
+          renderBatchResultsTable(aggregate.results);
+        }
+
+        var failedIds = aggregate.results
+          .filter(function (r) { return r.outcome === 'failed'; })
+          .map(function (r) { return r.leadId; });
+        lastBatchFailedByAction[fnName] = Array.from(new Set(failedIds));
+        updateBatchActionState();
+
+        setBatchProgressText(
+          'Done · processed ' +
+            aggregate.processed +
+            '/' +
+            aggregate.total +
+            ' · succeeded ' +
+            aggregate.succeeded +
+            ' · skipped ' +
+            aggregate.skipped +
+            ' · failed ' +
+            aggregate.failed
+        );
+      }
+
+      document.getElementById('batchAnalyzeBtn').onclick = async function () {
+        var ids = currentListRows
+          .filter(function (r) { return selectedLeadIds.has(r.id) && analyzeEligible(r); })
+          .map(function (r) { return r.id; });
+        await runBatchChunked('lead-engine-batch-analyze', ids);
+        loadList(false);
+      };
+      document.getElementById('batchScoreBtn').onclick = async function () {
+        var ids = currentListRows
+          .filter(function (r) { return selectedLeadIds.has(r.id) && scoreEligible(r); })
+          .map(function (r) { return r.id; });
+        await runBatchChunked('lead-engine-batch-score', ids);
+        loadList(false);
+      };
+      document.getElementById('batchDraftBtn').onclick = async function () {
+        var ids = currentListRows
+          .filter(function (r) { return selectedLeadIds.has(r.id) && draftEligible(r); })
+          .map(function (r) { return r.id; });
+        await runBatchChunked('lead-engine-batch-draft', ids);
+        loadList(false);
+      };
+      document.getElementById('batchAnalyzeRetryBtn').onclick = async function () {
+        await runBatchChunked('lead-engine-batch-analyze', lastBatchFailedByAction['lead-engine-batch-analyze'] || []);
+        loadList(false);
+      };
+      document.getElementById('batchScoreRetryBtn').onclick = async function () {
+        await runBatchChunked('lead-engine-batch-score', lastBatchFailedByAction['lead-engine-batch-score'] || []);
+        loadList(false);
+      };
+      document.getElementById('batchDraftRetryBtn').onclick = async function () {
+        await runBatchChunked('lead-engine-batch-draft', lastBatchFailedByAction['lead-engine-batch-draft'] || []);
+        loadList(false);
+      };
+
+      document.getElementById('importPreviewBtn').onclick = async function () {
+        var errEl = document.getElementById('importErr');
+        var okEl = document.getElementById('importOk');
+        errEl.style.display = 'none';
+        okEl.style.display = 'none';
+        var fileInput = document.getElementById('importCsvFile');
+        var file = fileInput.files && fileInput.files[0];
+        if (!file) {
+          errEl.textContent = 'Choose a CSV file first.';
+          errEl.style.display = 'block';
+          return;
+        }
+        var btn = document.getElementById('importPreviewBtn');
+        btn.disabled = true;
+        importCsvText = await file.text();
+        var out = await api('lead-engine-import-preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ csvText: importCsvText }),
+        });
+        btn.disabled = false;
+        if (!out.res.ok) {
+          document.getElementById('importSummary').style.display = 'none';
+          document.getElementById('importPreviewWrap').style.display = 'none';
+          document.getElementById('importCommitBtn').disabled = true;
+          errEl.textContent = out.data.error || 'Preview failed';
+          errEl.style.display = 'block';
+          return;
+        }
+        renderImportPreview(out.data);
+      };
+
+      document.getElementById('importCommitBtn').onclick = async function () {
+        var errEl = document.getElementById('importErr');
+        var okEl = document.getElementById('importOk');
+        errEl.style.display = 'none';
+        okEl.style.display = 'none';
+        if (!importCsvText || importPreviewReadyCount <= 0) {
+          errEl.textContent = 'Preview CSV first; at least one row must be ready.';
+          errEl.style.display = 'block';
+          return;
+        }
+        if (!window.confirm('Import ready rows now? Invalid/duplicate rows will be skipped.')) {
+          return;
+        }
+        var btn = document.getElementById('importCommitBtn');
+        btn.disabled = true;
+        var out = await api('lead-engine-import-commit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ csvText: importCsvText, confirm: true }),
+        });
+        btn.disabled = false;
+        if (!out.res.ok) {
+          errEl.textContent = out.data.error || 'Import commit failed';
+          errEl.style.display = 'block';
+          return;
+        }
+        var c = out.data.counts || {};
+        okEl.textContent =
+          'Import done: inserted ' +
+          (c.inserted || 0) +
+          ', duplicate ' +
+          (c.duplicate || 0) +
+          ', invalid ' +
+          (c.invalid || 0) +
+          '.';
+        okEl.style.display = 'block';
+        loadList(true);
+      };
+
+      loadList(true);
+      loadActivitySummary();
+    }
+    init();
+  </script>
+</body>
+</html>

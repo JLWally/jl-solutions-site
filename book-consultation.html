@@ -224,6 +224,25 @@
       color: #1a1a1a;
     }
 
+    .btn-book:disabled,
+    .btn-book[disabled] {
+      opacity: 1;
+      cursor: not-allowed;
+      background: #e2e8f0;
+      color: #475569;
+      box-shadow: none;
+      transform: none;
+      border: 1px solid #cbd5e1;
+    }
+
+    .book-consultation-bottom-cta {
+      border-top: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .book-consultation-bottom-cta .btn-cta-primary {
+      border: 2px solid #0f172a;
+    }
+
     .benefit-item {
       padding: 0.85rem 0.9rem;
       background: var(--jl-surface);
@@ -407,8 +426,9 @@
               <textarea class="form-control" id="goals" name="goals" rows="3" placeholder="What would success look like for your organization?"></textarea>
             </div>
             
-            <button type="submit" class="btn btn-book w-100" id="submitBtn" disabled>
-              Book a Free Call
+            <p class="small text-muted mb-2" id="slotHint" role="status">Select an available time above — then you can submit.</p>
+            <button type="submit" class="btn btn-book w-100" id="submitBtn" disabled aria-describedby="slotHint">
+              Select a time to book
             </button>
             <p class="text-center mt-3 mb-0 small consultation-note">Prefer a guided experience? <a href="/onboard/">Use the Get Started wizard</a>.</p>
           </form>
@@ -455,11 +475,11 @@
   </div>
 
   <!-- CTA -->
-  <section class="cta-section-home">
+  <section class="cta-section-home book-consultation-bottom-cta" aria-label="Scroll to booking form">
     <div class="container text-center">
       <h2 class="cta-section-home__title">Ready to see what’s possible?</h2>
       <p class="cta-section-home__text">Book a free call and we’ll show you where better systems could remove bottlenecks in your day-to-day work.</p>
-      <a href="book-consultation.html" class="btn-cta-primary">Book a Free Call <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+      <a href="#consultationForm" class="btn-cta-primary">Book a Free Call <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
     </div>
   </section>
   </main>
@@ -503,11 +523,32 @@
   <script>
     let selectedTimeSlot = null;
     let currentDate = new Date();
+
+    function startOfLocalDay(d) {
+      const x = new Date(d);
+      x.setHours(0, 0, 0, 0);
+      return x;
+    }
+
+    function resetSlotSelection() {
+      selectedTimeSlot = null;
+      document.querySelectorAll('.time-slot.selected').forEach((el) => el.classList.remove('selected'));
+      const hidden = document.getElementById('selectedDateTime');
+      if (hidden) hidden.value = '';
+      const btn = document.getElementById('submitBtn');
+      const hint = document.getElementById('slotHint');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Select a time to book';
+      }
+      if (hint) hint.textContent = 'Select an available time above — then you can submit.';
+    }
     
     // Generate time slots for the week
     function generateTimeSlots() {
       const container = document.getElementById('timeSlots');
       const currentWeekText = document.getElementById('currentWeek');
+      resetSlotSelection();
       
       // Format current week display
       const weekStart = new Date(currentDate);
@@ -525,13 +566,15 @@
         '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
       ];
       
+      const todayStart = startOfLocalDay(new Date());
+      
       // Generate slots for the next 7 days
       for (let i = 0; i < 7; i++) {
         const date = new Date(weekStart);
         date.setDate(weekStart.getDate() + i);
         
-        // Skip past dates
-        if (date < new Date()) continue;
+        // Skip calendar days before today (compare by date, not time-of-day)
+        if (startOfLocalDay(date) < todayStart) continue;
         
         // Skip weekends (Saturday = 6, Sunday = 0)
         if (date.getDay() === 0 || date.getDay() === 6) continue;
@@ -564,6 +607,15 @@
         dayContainer.appendChild(slotsContainer);
         container.appendChild(dayContainer);
       }
+
+      if (!container.children.length) {
+        const empty = document.createElement('p');
+        empty.className = 'text-muted mb-0';
+        empty.id = 'timeSlotsEmpty';
+        empty.textContent =
+          'No weekday slots this week. Use “Next →” to see the following week, or email us from the Contact page.';
+        container.appendChild(empty);
+      }
     }
     
     function selectTimeSlot(element, date, time) {
@@ -580,8 +632,11 @@
       const dateTimeString = `${formatDate(date)} at ${time}`;
       document.getElementById('selectedDateTime').value = dateTimeString;
       
-      // Enable submit button
-      document.getElementById('submitBtn').disabled = false;
+      const btn = document.getElementById('submitBtn');
+      const hint = document.getElementById('slotHint');
+      btn.disabled = false;
+      btn.textContent = 'Book a Free Call';
+      if (hint) hint.textContent = 'Time selected. Complete the form and submit.';
     }
     
     function formatDate(date) {
@@ -608,31 +663,11 @@
       document.getElementById('referralCodeHidden').value = this.value.trim().toUpperCase();
     });
 
-    // Submit to Supabase consultation API if available (optional backend)
-    document.getElementById('consultationForm').addEventListener('submit', async function(e) {
+    // Submissions go to send-form-email (email + Supabase consultations when env is set).
+    document.getElementById('consultationForm').addEventListener('submit', function () {
       const hidden = document.getElementById('referralCodeHidden');
       const refInput = document.getElementById('referralCode');
       if (refInput && refInput.value) hidden.value = refInput.value.trim().toUpperCase();
-
-      if (window.supabaseClient && window.fetch) {
-        try {
-          await fetch('/.netlify/functions/consultation', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name: document.getElementById('name').value,
-              email: document.getElementById('email').value,
-              company: document.getElementById('company').value || undefined,
-              phone: document.getElementById('phone').value || undefined,
-              service: document.getElementById('service').value || undefined,
-              challenge: document.getElementById('challenge').value,
-              goals: document.getElementById('goals').value || undefined,
-              referralCode: refInput?.value?.trim().toUpperCase() || undefined,
-              selectedDateTime: document.getElementById('selectedDateTime').value || undefined,
-            }),
-          });
-        } catch (_) { /* Netlify form will still submit */ }
-      }
     });
 
     // Pre-fill referral code from URL (?ref=)

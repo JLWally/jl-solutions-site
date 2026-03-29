@@ -51,3 +51,10 @@
   to = "/resources/automation-checklist.html"
   status = 302
   force = true
+
+# Internal lead engine (static UI)
+[[redirects]]
+  from = "/lead-engine"
+  to = "/lead-engine/"
+  status = 302
+  force = true

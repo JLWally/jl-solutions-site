@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "netlify dev",
     "start": "serve -l 3000",
-    "images:webp": "node scripts/convert-to-webp.js"
+    "images:webp": "node scripts/convert-to-webp.js",
+    "test": "node --test netlify/functions/lib/*.test.js"
   },
   "dependencies": {
     "@netlify/blobs": "^6.5.0",
     "@supabase/supabase-js": "^2.45.0",
+    "node-html-parser": "^6.1.13",
     "resend": "^4.0.0",
     "stripe": "^14.7.0"
   },

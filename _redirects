@@ -14,3 +14,5 @@
 # Resources: clean URLs without .html
 /resources/process-documentation-template    /resources/process-documentation-template.html   302
 /resources/automation-checklist    /resources/automation-checklist.html   302
+
+/lead-engine    /lead-engine/    302
