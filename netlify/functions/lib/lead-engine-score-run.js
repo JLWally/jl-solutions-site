@@ -4,13 +4,14 @@ const {
   buildScoreSystemPrompt,
   buildScoreUserContent,
 } = require('./lead-engine-score-prompt');
-const { parseAndValidateScoreModelText } = require('./lead-engine-score-output');
+const { parseAndValidateScoreModelTextWithFixedOffer } = require('./lead-engine-score-output');
+const { computeDeterministicOfferSelection } = require('./lead-engine-offer-deterministic');
 const { completeLeadScoreModel } = require('./lead-engine-openai-score');
 const { pickNewestSuccessfulAnalysisRow } = require('./lead-engine-analysis-pick');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lead-engine-audit-log');
 
 const LEAD_SELECT = 'id, company_name, website_url, source, status';
-const SCORE_MODEL_VERSION_SUFFIX = 'jl-lead-score-v1';
+const SCORE_MODEL_VERSION_SUFFIX = 'jl-lead-score-v2-deterministic-offer';
 
 async function runScoreForLead(supabase, leadId, actor) {
   const { data: lead, error: leadErr } = await supabase
@@ -46,8 +47,9 @@ async function runScoreForLead(supabase, leadId, actor) {
     };
   }
 
-  const systemPrompt = buildScoreSystemPrompt();
-  const userContent = buildScoreUserContent(lead, analysisRow.signals);
+  const deterministic = computeDeterministicOfferSelection(lead, analysisRow.signals);
+  const systemPrompt = buildScoreSystemPrompt(deterministic);
+  const userContent = buildScoreUserContent(lead, analysisRow.signals, deterministic);
   let rawText;
   let usedModel;
   try {
@@ -67,7 +69,7 @@ async function runScoreForLead(supabase, leadId, actor) {
     return { ok: false, statusCode: 502, code: 'EMPTY_MODEL_RESPONSE', error: 'Empty response from model' };
   }
 
-  const parsed = parseAndValidateScoreModelText(rawText);
+  const parsed = parseAndValidateScoreModelTextWithFixedOffer(rawText, deterministic.selected_offer);
   if (!parsed.ok) {
     return {
       ok: false,
@@ -78,11 +80,20 @@ async function runScoreForLead(supabase, leadId, actor) {
     };
   }
 
+  const offerFinal = deterministic.selected_offer;
+
   const scoresPayload = {
     fit_score: parsed.value.fit_score,
     confidence: parsed.value.confidence,
     pain_points: parsed.value.pain_points,
     outreach_angle: parsed.value.outreach_angle,
+    offer_rationale: parsed.value.offer_rationale || null,
+    selected_offer: offerFinal,
+    offer_scores: deterministic.offer_scores,
+    top_supporting_signals: deterministic.top_supporting_signals,
+    draft_angle: deterministic.draft_angle,
+    is_hvac_niche: deterministic.is_hvac,
+    fix_my_app_eligible: deterministic.fix_my_app_eligible,
   };
   const modelVersion = `${usedModel}|${SCORE_MODEL_VERSION_SUFFIX}`;
 
@@ -92,7 +103,7 @@ async function runScoreForLead(supabase, leadId, actor) {
       lead_id: leadId,
       analysis_id: analysisRow.id,
       scores: scoresPayload,
-      recommended_offer: parsed.value.recommended_offer,
+      recommended_offer: offerFinal,
       model_version: modelVersion,
     })
     .select('id')
@@ -127,7 +138,7 @@ async function runScoreForLead(supabase, leadId, actor) {
       analysisId: analysisRow.id,
       aiScoreId: inserted.id,
       scores: scoresPayload,
-      recommended_offer: parsed.value.recommended_offer,
+      recommended_offer: offerFinal,
       model_version: modelVersion,
     },
   };

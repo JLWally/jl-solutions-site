@@ -14,6 +14,8 @@ test('buildDraftSystemPrompt requires JSON keys', () => {
   assert.ok(p.includes('follow_up_body'));
   assert.ok(p.includes('linkedin_dm_draft'));
   assert.ok(p.includes('private analytics'));
+  assert.ok(p.includes('selected_offer'));
+  assert.ok(p.includes('top_supporting_signals'));
 });
 
 test('buildDraftUserContent embeds ai_score', () => {
@@ -21,11 +23,20 @@ test('buildDraftUserContent embeds ai_score', () => {
   const signals = { success: true, audit_version: 1 };
   const ai = {
     id: 'ai-1',
-    scores: { fit_score: 50, confidence: 'low', pain_points: [], outreach_angle: 'a' },
+    scores: {
+      fit_score: 50,
+      confidence: 'low',
+      pain_points: [],
+      outreach_angle: 'a',
+      selected_offer: 'Fix My App',
+      top_supporting_signals: ['Broken portal flow'],
+      draft_angle: 'Fix the app',
+    },
     recommended_offer: 'Fix My App',
     model_version: 'm',
   };
   const j = JSON.parse(buildDraftUserContent(lead, signals, ai));
   assert.equal(j.ai_score.recommended_offer, 'Fix My App');
+  assert.equal(j.ai_score.selected_offer, 'Fix My App');
   assert.equal(j.ai_score.ai_score_id, 'ai-1');
 });

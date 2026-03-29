@@ -24,10 +24,20 @@ test('shapeScoreListItem', () => {
     analysis_id: 'x',
     created_at: 't',
     recommended_offer: 'Fix My App',
-    scores: { fit_score: 50, confidence: 'low' },
+    scores: {
+      fit_score: 50,
+      confidence: 'low',
+      selected_offer: 'Fix My App',
+      offer_scores: { 'Fix My App': { total: 9, reasons: [] } },
+      top_supporting_signals: ['a'],
+      draft_angle: 'Fix flows',
+    },
   });
   assert.equal(r.fit_score, 50);
   assert.equal(r.recommended_offer, 'Fix My App');
+  assert.equal(r.selected_offer, 'Fix My App');
+  assert.ok(r.offer_scores);
+  assert.equal(r.top_supporting_signals.length, 1);
 });
 
 test('shapeOutreachListItem truncates subject', () => {

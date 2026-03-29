@@ -199,14 +199,12 @@
 
   /* Chatbot */
   .chatbot-toggle {
-    width: 56px;
-    height: 56px;
     bottom: 1rem;
     right: 1rem;
   }
 
   .chatbot-window {
-    bottom: 5rem;
+    bottom: 5.25rem;
     right: 1rem;
     left: 1rem;
     width: auto;

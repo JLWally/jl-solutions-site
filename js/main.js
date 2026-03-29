@@ -18,7 +18,7 @@ const injectPartial = (id, path) => {
 };
 
 const ensureChatbot = () => {
-  if (document.querySelector('script[data-jl-chatbot]')) return;
+  if (document.querySelector('script[data-jl-chatbot], script[src*="chatbot.js"]')) return;
   const script = document.createElement("script");
   script.src = "/js/chatbot.js";
   script.defer = true;

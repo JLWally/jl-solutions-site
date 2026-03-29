@@ -58,12 +58,19 @@ function buildContactEmail(data) {
   const name = data.name || '(not provided)';
   const email = data.email || '(not provided)';
   const message = data.message || '(not provided)';
+  const inquiryRaw = data.inquiry_type || data.inquiryType || '';
+  const inquiry = String(inquiryRaw).trim();
+  const inquiryLine =
+    inquiry !== ''
+      ? `<p><strong>Inquiry type:</strong> ${escapeHtml(inquiry)}</p>`
+      : '';
   return {
     subject: `[JL Solutions Contact] From ${name}`,
     html: `
       <h2>New contact form submission</h2>
       <p><strong>Name:</strong> ${escapeHtml(name)}</p>
       <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+      ${inquiryLine}
       <p><strong>Message:</strong></p>
       <pre>${escapeHtml(message)}</pre>
       <p><em>Sent from jlsolutions.io contact form</em></p>
@@ -408,10 +415,13 @@ async function persistToConsultationsTable(formName, data) {
       source: 'pay_page_intent',
     };
   } else {
+    const it = String(data.inquiry_type || data.inquiryType || '').trim();
+    const core = data.message ? String(data.message) : '';
+    const message = it ? `[${it}] ${core}`.trim() : core;
     row = {
       name,
       email,
-      message: data.message ? String(data.message) : '',
+      message,
       status: 'new',
       source: 'contact_page',
     };

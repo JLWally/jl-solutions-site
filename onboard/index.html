@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/jl-payment-form.css">
   <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
   <style>
     :root { --black: #000; --blue: #0078d4; --white: #fff; --dark-blue: #004298; --yellow: #D4A574; }
@@ -54,45 +55,32 @@
   <div class="wizard-hero">
     <div class="container">
       <h1 class="h3 mb-1">Get Started</h1>
-      <p class="mb-0 opacity-75 small">Your path to AI-powered solutions  - consultation or payment in minutes</p>
+      <p class="mb-0 opacity-75 small">Start here — book a free call or pay for a service in a few steps</p>
     </div>
   </div>
 
   <div class="wizard-container">
     <div class="step-progress" id="stepProgress"></div>
     <div class="wizard-card">
-      <div id="checkoutCanceled" class="d-none mb-3 p-3 rounded small" style="background: rgba(255,193,7,0.12); border: 1px solid rgba(255,193,7,0.35); color: #fff;" role="status">
-        Checkout was canceled. Adjust the amount on the next step and try again, or <a href="/contact.html" class="text-warning">contact us</a>.
+      <div id="checkoutCanceled" class="jl-payment-cancel-alert d-none mb-3" role="region" aria-label="Checkout notice">
+        Checkout was canceled. Adjust the amount and try again, or <a href="/contact.html">contact us</a>.
       </div>
       <form id="wizardForm">
-        <!-- Step 1: Who are you? -->
+        <!-- Step 1: What do you need? -->
         <div class="wizard-step active" data-step="1">
-          <h2 class="mb-4">Who are you?</h2>
-          <button type="button" class="path-btn" data-choice="client">
-            <h5>👤 I'm a potential client</h5>
-            <small>I need consultation, automation, or a custom solution</small>
-          </button>
-          <button type="button" class="path-btn" data-choice="agent">
-            <h5>🤝 I'm a sales agent / partner</h5>
-            <small>I want to refer clients and earn commission</small>
-          </button>
-        </div>
-
-        <!-- Step 2: What do you need? -->
-        <div class="wizard-step" data-step="2">
           <h2 class="mb-4">What do you need?</h2>
           <button type="button" class="path-btn" data-choice="consultation">
             <h5>📞 Free consultation</h5>
-            <small>Discuss your needs and get a tailored plan  - no obligation</small>
+            <small>Book a call on our calendar — we’ll confirm by email</small>
           </button>
           <button type="button" class="path-btn" data-choice="payment">
             <h5>💳 Ready to pay</h5>
-            <small>Purchase a service or package now</small>
+            <small>Pay a deposit or invoice with secure Stripe checkout</small>
           </button>
         </div>
 
-        <!-- Step 3: Contact -->
-        <div class="wizard-step" data-step="3">
+        <!-- Step 2: Contact -->
+        <div class="wizard-step" data-step="2">
           <h2 class="mb-4">Your contact info</h2>
           <div class="mb-3">
             <label class="form-label">Full Name *</label>
@@ -116,8 +104,8 @@
           </div>
         </div>
 
-        <!-- Step 4: Needs -->
-        <div class="wizard-step" data-step="4">
+        <!-- Step 3: Needs -->
+        <div class="wizard-step" data-step="3">
           <h2 class="mb-4">Tell us more</h2>
           <div class="mb-3">
             <label class="form-label">Service of interest *</label>
@@ -146,8 +134,8 @@
           </div>
         </div>
 
-        <!-- Step 5: Referral -->
-        <div class="wizard-step" data-step="5">
+        <!-- Step 4: Referral -->
+        <div class="wizard-step" data-step="4">
           <h2 class="mb-4">Referral code</h2>
           <p class="small mb-3 opacity-75">If a sales agent or partner gave you a code, enter it here. Otherwise skip.</p>
           <div class="mb-4">
@@ -157,41 +145,42 @@
             <button type="button" class="btn btn-wizard-outline" onclick="wizard.prev()">Back</button>
             <div class="d-flex gap-2 align-items-center">
               <button type="button" class="btn btn-link text-white-50 px-0 small" onclick="wizard.next()">Skip</button>
-              <button type="button" class="btn btn-wizard" onclick="wizard.next()">Next</button>
+              <button type="button" class="btn btn-wizard" id="btnOnboardReferralNext" onclick="wizard.next()">Continue</button>
             </div>
           </div>
         </div>
 
-        <!-- Step 6a: Schedule (consultation path) -->
-        <div class="wizard-step" data-step="6a">
-          <h2 class="mb-4">Pick a time</h2>
-          <p class="small mb-3 opacity-75">Select a preferred slot. We'll confirm via email.</p>
-          <div id="timeSlots" class="mb-4"></div>
-          <p class="small text-warning mb-3 d-none" id="timeRequired">Please select a time slot.</p>
-          <div class="d-flex flex-column gap-2">
-            <div class="d-flex justify-content-between gap-2">
-              <button type="button" class="btn btn-wizard-outline" onclick="wizard.prev()">Back</button>
-              <button type="button" class="btn btn-wizard" id="btnBookConsult" onclick="wizard.submitConsultation()">Book consultation</button>
-            </div>
-            <p class="text-center mb-0"><a href="/book-consultation.html" data-full-calendar class="text-white-50 small text-decoration-none">Or pick from full calendar →</a></p>
-          </div>
-        </div>
-
-        <!-- Step 6b: Payment -->
+        <!-- Payment (after intake + referral) — same fields / styling as /pay/ -->
         <div class="wizard-step" data-step="6b">
-          <h2 class="mb-4">Complete payment</h2>
-          <p class="small mb-3 opacity-75">Choose an amount or enter a custom value. You'll be redirected to secure checkout.</p>
-          <div class="mb-3">
-            <label class="form-label">Amount (USD)</label>
-            <input type="number" class="form-control" id="amount" value="99" min="1" step="0.01" placeholder="99.00">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Description (optional)</label>
-            <input type="text" class="form-control" id="paymentDesc" placeholder="e.g. Consultation package">
-          </div>
-          <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-wizard-outline" onclick="wizard.prev()">Back</button>
-            <button type="button" class="btn btn-wizard" id="btnPay" onclick="wizard.submitPayment()">Proceed to checkout</button>
+          <div class="jl-payment-card text-start">
+            <h2 class="jl-payment-title mb-0">Complete payment</h2>
+            <p class="jl-payment-lead">Enter your email and amount. You’ll complete card details on Stripe’s secure page. JL Solutions never stores your card number.</p>
+            <p class="visually-hidden" aria-hidden="true">
+              <label>Leave empty: <input type="text" id="onboardPayBot" name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
+            <div class="mb-3">
+              <label class="form-label" for="onboardPayName">Name <span class="jl-payment-optional-hint">(optional)</span></label>
+              <input type="text" class="form-control" id="onboardPayName" placeholder="Your name" autocomplete="name">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="onboardPayEmail">Email <span class="text-danger" aria-hidden="true">*</span></label>
+              <input type="email" class="form-control" id="onboardPayEmail" required placeholder="you@example.com" autocomplete="email" aria-required="true">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="onboardPayReferral">Referral code <span class="jl-payment-optional-hint">(optional)</span></label>
+              <input type="text" class="form-control text-uppercase" id="onboardPayReferral" placeholder="e.g. AGENT-ABC123" autocomplete="off" style="text-transform: uppercase;">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="onboardPayDesc">What you’re paying for <span class="jl-payment-optional-hint">(optional)</span></label>
+              <input type="text" class="form-control" id="onboardPayDesc" placeholder="e.g. Deposit, invoice #123" autocomplete="off">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="onboardPayAmount">Amount (USD) <span class="text-danger" aria-hidden="true">*</span></label>
+              <input type="number" class="form-control" id="onboardPayAmount" value="99" min="1" step="0.01" required placeholder="99.00" inputmode="decimal" aria-required="true">
+            </div>
+            <button type="button" class="btn btn-wizard-outline mb-3" onclick="wizard.prev()">Back</button>
+            <button type="button" class="btn-jl-payment-submit" id="btnPay" onclick="wizard.submitPayment()">Proceed to secure checkout</button>
+            <p class="jl-payment-footnote mb-0">Questions? <a href="/book-consultation.html">Book a free call</a> or <a href="/contact.html">contact</a>.</p>
           </div>
         </div>
       </form>
@@ -233,138 +222,67 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jl-stripe-pay.js"></script>
   <script>
     const wizard = (function() {
       var step = 1;
-      var path = {}; // { who: 'client'|'agent', need: 'consultation'|'payment' }
-      var totalSteps = 5;
-      var currentPathSteps = [1, 2, 3, 4, 5];
+      var path = { need: null };
 
-      function getStepEl(n) { return document.querySelector('.wizard-step[data-step="' + n + '"]'); }
+      function getStepEl(n) {
+        return document.querySelector('.wizard-step[data-step="' + n + '"]');
+      }
+
       function getNextStep() {
-        if (path.who === 'agent') return null;
-        if (step === 1) return 2;
-        if (step === 2) return path.need ? 3 : null;
+        if (step === 1) return path.need ? 2 : null;
+        if (step === 2) return 3;
         if (step === 3) return 4;
-        if (step === 4) return 5;
-        if (step === 5) return path.need === 'consultation' ? '6a' : '6b';
+        if (step === 4) return path.need === 'payment' ? '6b' : null;
         return null;
       }
+
       function getPrevStep() {
         if (step === 2) return 1;
         if (step === 3) return 2;
         if (step === 4) return 3;
-        if (step === 5) return 4;
-        if (step === '6a' || step === '6b') return 5;
+        if (step === '6b') return 4;
         return null;
       }
 
       function renderProgress() {
         var container = document.getElementById('stepProgress');
-        var steps = path.who === 'client' && path.need
-          ? (path.need === 'consultation' ? [1,2,3,4,5,'6a'] : [1,2,3,4,5,'6b'])
-          : (step >= 2 ? [1,2] : [1,2]);
-        var currentIdx = steps.indexOf(String(step));
+        var steps =
+          path.need === 'payment' ? [1, 2, 3, 4, '6b'] : [1, 2, 3, 4];
+        var currentIdx = steps.indexOf(step);
         if (currentIdx < 0) currentIdx = steps.length - 1;
-        container.innerHTML = steps.map(function(s, i) {
-          var c = 'step-dot';
-          if (i < currentIdx) c += ' done';
-          else if (i === currentIdx) c += ' current';
-          return '<span class="' + c + '" aria-hidden="true"></span>';
-        }).join('');
+        container.innerHTML = steps
+          .map(function(s, i) {
+            var c = 'step-dot';
+            if (i < currentIdx) c += ' done';
+            else if (i === currentIdx) c += ' current';
+            return '<span class="' + c + '" aria-hidden="true"></span>';
+          })
+          .join('');
       }
 
       function showStep(s) {
-        document.querySelectorAll('.wizard-step').forEach(function(el) { el.classList.remove('active'); });
+        document.querySelectorAll('.wizard-step').forEach(function(el) {
+          el.classList.remove('active');
+        });
         var el = getStepEl(s);
         if (el) el.classList.add('active');
         step = s;
         renderProgress();
-
-        if (s === '6a') {
-          window._selectedDateTime = null;
-          generateTimeSlots();
+        if (s === '6b') {
+          var n = document.getElementById('name');
+          var e = document.getElementById('email');
+          var r = document.getElementById('referralCode');
+          var pn = document.getElementById('onboardPayName');
+          var pe = document.getElementById('onboardPayEmail');
+          var pr = document.getElementById('onboardPayReferral');
+          if (pn && n) pn.value = n.value.trim();
+          if (pe && e) pe.value = e.value.trim();
+          if (pr && r) pr.value = r.value.trim().toUpperCase();
         }
-      }
-
-      function generateTimeSlots() {
-        var container = document.getElementById('timeSlots');
-        container.innerHTML = '';
-        var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        var times = [
-          { label: '9:00 AM', h: 9 },
-          { label: '10:00 AM', h: 10 },
-          { label: '11:00 AM', h: 11 },
-          { label: '2:00 PM', h: 14 },
-          { label: '3:00 PM', h: 15 },
-          { label: '4:00 PM', h: 16 }
-        ];
-        var now = new Date();
-        var todayStr = now.toDateString();
-        var currentHour = now.getHours() + (now.getMinutes() / 60);
-        for (var i = 0; i < 14; i++) {
-          var day = new Date(now);
-          day.setDate(now.getDate() + i);
-          if (day.getDay() === 0 || day.getDay() === 6) continue;
-          var isToday = day.toDateString() === todayStr;
-          times.forEach(function(t) {
-            if (isToday && t.h <= currentHour) return;
-            var dayStr = dayNames[day.getDay()];
-            var dateStr = (day.getMonth() + 1) + '/' + day.getDate();
-            var val = dayStr + ' ' + dateStr + ' ' + t.label;
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'time-slot';
-            btn.textContent = val;
-            btn.dataset.datetime = val;
-            btn.onclick = slotClick;
-            container.appendChild(btn);
-          });
-        }
-        var fullCal = document.querySelector('[data-full-calendar]');
-        if (fullCal) {
-          var ref = (document.getElementById('referralCode') || {}).value;
-          ref = (ref || '').trim().toUpperCase();
-          fullCal.href = ref ? '/book-consultation.html?ref=' + encodeURIComponent(ref) : '/book-consultation.html';
-        }
-      }
-      function slotClick() {
-        var req = document.getElementById('timeRequired');
-        if (req) req.classList.add('d-none');
-        document.querySelectorAll('#timeSlots .time-slot').forEach(function(b) { b.classList.remove('selected'); });
-        this.classList.add('selected');
-        window._selectedDateTime = this.dataset.datetime;
-      }
-
-      function next() {
-        if (step === 1) {
-          var sel = document.querySelector('.path-btn.selected[data-choice]');
-          if (!sel) return;
-          path.who = sel.dataset.choice;
-          if (path.who === 'agent') {
-            window.location.href = '/referral/signup.html?from=onboard';
-            return;
-          }
-        }
-        if (step === 2) {
-          var sel = document.querySelector('.path-btn.selected[data-choice]');
-          if (!sel) return;
-          path.need = sel.dataset.choice;
-        }
-        if (step === 3 || step === 4) {
-          var form = document.getElementById('wizardForm');
-          var inputs = getStepEl(step).querySelectorAll('input, select, textarea');
-          for (var i = 0; i < inputs.length; i++) {
-            if (inputs[i].required && !inputs[i].value.trim()) return;
-          }
-        }
-        var nextS = getNextStep();
-        if (nextS) showStep(nextS);
-      }
-
-      function prev() {
-        var prevS = getPrevStep();
-        if (prevS) showStep(prevS);
       }
 
       function getFormData() {
@@ -376,24 +294,33 @@
           service: document.getElementById('service').value,
           challenge: document.getElementById('challenge').value.trim(),
           goals: document.getElementById('goals').value.trim(),
-          referralCode: document.getElementById('referralCode').value.trim().toUpperCase() || undefined,
-          selectedDateTime: window._selectedDateTime || ''
+          referralCode:
+            document.getElementById('referralCode').value.trim().toUpperCase() ||
+            undefined
         };
       }
 
-      function submitConsultation() {
-        if (!window._selectedDateTime) {
-          var req = document.getElementById('timeRequired');
-          if (req) {
-            req.classList.remove('d-none');
-            req.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-          return;
-        }
-        var btn = document.getElementById('btnBookConsult');
-        btn.disabled = true;
-        btn.textContent = 'Booking...';
+      function buildBookConsultationUrl(data) {
+        var q = new URLSearchParams();
+        if (data.referralCode) q.set('ref', data.referralCode);
+        if (data.name) q.set('name', data.name);
+        if (data.email) q.set('email', data.email);
+        if (data.company) q.set('company', data.company);
+        if (data.phone) q.set('phone', data.phone);
+        q.set('from', 'onboard');
+        return '/book-consultation.html?' + q.toString();
+      }
+
+      function finishConsultationRedirect() {
         var data = getFormData();
+        var row = document.querySelector('.wizard-step[data-step="4"]');
+        if (row) {
+          row.querySelectorAll('button').forEach(function(b) {
+            b.disabled = true;
+          });
+        }
+        var primary = document.getElementById('btnOnboardReferralNext');
+        if (primary) primary.textContent = 'Opening calendar…';
         var params = new URLSearchParams();
         params.append('form-name', 'consultation');
         params.append('name', data.name);
@@ -404,83 +331,115 @@
         params.append('challenge', data.challenge);
         params.append('goals', data.goals);
         params.append('referralCode', data.referralCode || '');
-        params.append('selectedDateTime', data.selectedDateTime);
+        params.append(
+          'selectedDateTime',
+          'Completing time on Book a free call page (from /onboard/)'
+        );
 
         fetch('/.netlify/functions/send-form-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: params.toString()
-        }).then(function(r) {
-          if (r.redirected) window.location.href = r.url;
-          else window.location.href = '/thank-you.html';
-        }).catch(function() {
-          alert('Something went wrong. Please try again or email info@jlsolutions.io.');
-          btn.disabled = false;
-          btn.textContent = 'Book consultation';
-        });
+        })
+          .catch(function() {})
+          .finally(function() {
+            window.location.href = buildBookConsultationUrl(data);
+          });
+      }
+
+      function next() {
+        if (step === 1) {
+          var sel = document.querySelector('.path-btn.selected[data-choice]');
+          if (!sel) return;
+          path.need = sel.dataset.choice;
+        }
+        if (step === 2 || step === 3) {
+          var inputs = getStepEl(step).querySelectorAll(
+            'input, select, textarea'
+          );
+          for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].required && !inputs[i].value.trim()) return;
+          }
+        }
+        if (step === 4 && path.need === 'consultation') {
+          finishConsultationRedirect();
+          return;
+        }
+        var nextS = getNextStep();
+        if (nextS) showStep(nextS);
+      }
+
+      function prev() {
+        var prevS = getPrevStep();
+        if (prevS) showStep(prevS);
       }
 
       function submitPayment() {
+        var emailEl = document.getElementById('onboardPayEmail');
+        var amountEl = document.getElementById('onboardPayAmount');
+        if (emailEl && !emailEl.checkValidity()) {
+          emailEl.reportValidity();
+          return;
+        }
+        if (amountEl && !amountEl.checkValidity()) {
+          amountEl.reportValidity();
+          return;
+        }
+
         var btn = document.getElementById('btnPay');
         var base = window.location.origin;
-        btn.disabled = true;
-        btn.textContent = 'Redirecting...';
         var data = getFormData();
-        var amount = parseFloat(document.getElementById('amount').value) || 99;
-        var desc = document.getElementById('paymentDesc').value.trim() || 'JL Solutions Service';
+        var payName = document.getElementById('onboardPayName');
+        var payEmail = document.getElementById('onboardPayEmail');
+        var payRef = document.getElementById('onboardPayReferral');
+        var payDesc = document.getElementById('onboardPayDesc');
+        var bot = document.getElementById('onboardPayBot');
+
+        var nameOnCard = (payName && payName.value.trim()) || data.name;
+        var email = (payEmail && payEmail.value.trim()) || data.email;
+        var referralCode =
+          (payRef && payRef.value.trim().toUpperCase()) || data.referralCode || undefined;
+        var amount = parseFloat(amountEl && amountEl.value) || 99;
+        var desc =
+          (payDesc && payDesc.value.trim()) || 'JL Solutions Service';
+        var botVal = bot ? bot.value : '';
 
         var notify = new URLSearchParams();
         notify.set('form-name', 'onboard-payment');
-        notify.set('bot-field', '');
-        notify.set('name', data.name);
-        notify.set('email', data.email);
+        notify.set('bot-field', botVal);
+        notify.set('name', nameOnCard || data.name);
+        notify.set('email', email);
         notify.set('company', data.company || '');
         notify.set('phone', data.phone || '');
         notify.set('service', data.service || '');
         notify.set('challenge', data.challenge || '');
         notify.set('goals', data.goals || '');
-        notify.set('referralCode', data.referralCode || '');
+        notify.set('referralCode', referralCode || '');
         notify.set('paymentAmount', String(amount));
         notify.set('paymentDescription', desc);
 
-        fetch(base + '/.netlify/functions/send-form-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: notify.toString(),
-          redirect: 'follow',
-        })
-          .catch(function() { /* still open Stripe */ })
-          .then(function() {
-            return fetch(base + '/.netlify/functions/stripe-checkout', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                amount: amount,
-                customerEmail: data.email,
-                customerName: data.name,
-                company: data.company || undefined,
-                phone: data.phone || undefined,
-                service: data.service || undefined,
-                challenge: data.challenge || undefined,
-                goals: data.goals || undefined,
-                referralCode: data.referralCode || undefined,
-                description: desc,
-                paymentSource: 'onboard_wizard',
-                successUrl: base + '/thank-you.html?session_id={CHECKOUT_SESSION_ID}&from=onboard',
-                cancelUrl: base + '/onboard/?canceled=1',
-              }),
-            });
-          })
-          .then(function(r) { return r.json(); })
-          .then(function(d) {
-            if (d.url) window.location.href = d.url;
-            else throw new Error(d.error || 'Checkout failed');
-          })
-          .catch(function(err) {
-            alert(err.message || 'Something went wrong. Please try again.');
-            btn.disabled = false;
-            btn.textContent = 'Proceed to checkout';
-          });
+        window.jlStripePay.run({
+          baseUrl: base,
+          button: btn,
+          submitLabel: 'Proceed to secure checkout',
+          redirectingLabel: 'Redirecting…',
+          notifyParams: notify,
+          stripePayload: {
+            amount: amount,
+            customerEmail: email,
+            customerName: nameOnCard || undefined,
+            company: data.company || undefined,
+            phone: data.phone || undefined,
+            service: data.service || undefined,
+            challenge: data.challenge || undefined,
+            goals: data.goals || undefined,
+            referralCode: referralCode || undefined,
+            description: desc,
+            paymentSource: 'onboard_wizard',
+            successUrl: base + '/thank-you.html?session_id={CHECKOUT_SESSION_ID}&from=onboard',
+            cancelUrl: base + '/onboard/?canceled=1',
+          },
+        });
       }
 
       document.addEventListener('DOMContentLoaded', function() {
@@ -503,8 +462,9 @@
         }
       });
 
-      return { next: next, prev: prev, submitConsultation: submitConsultation, submitPayment: submitPayment };
+      return { next: next, prev: prev, submitPayment: submitPayment };
     })();
   </script>
+  <script src="/js/chatbot.js" defer></script>
 </body>
 </html>

@@ -1,8 +1,12 @@
 const Stripe = require('stripe');
 const { createClient } = require('@supabase/supabase-js');
+const { getStripeSecretKey, getStripeWebhookSecret } = require('./lib/stripe-env');
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '2023-10-16' });
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+function getStripe() {
+  const key = getStripeSecretKey();
+  if (!key) return null;
+  return new Stripe(key);
+}
 const useSimpleAuth = process.env.REFERRAL_USE_SIMPLE_AUTH === 'true' || process.env.REFERRAL_USE_SIMPLE_AUTH === '1';
 
 function getSupabase() {
@@ -37,6 +41,13 @@ function parseAgentsCommission(envStr, code) {
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method not allowed' };
+  }
+
+  const stripe = getStripe();
+  const webhookSecret = getStripeWebhookSecret();
+  if (!stripe || !webhookSecret) {
+    console.error('[stripe-webhook] Missing STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET');
+    return { statusCode: 500, body: JSON.stringify({ error: 'Stripe webhook not configured' }) };
   }
 
   const sig = event.headers['stripe-signature'] || event.headers['Stripe-Signature'];

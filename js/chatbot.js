@@ -3,15 +3,53 @@
     endpoint:
       document.currentScript?.dataset?.endpoint ||
       "/.netlify/functions/chatbot",
-    brand: "JL Copilot",
-    subtitle: "Ask how we can help.",
-    placeholder: "Ask about services, timelines, pricing…",
+    brand: "JL Guide",
+    subtitle: "Ask anything—we'll point you to the right next step.",
+    placeholder: "Services, pricing, booking, payment…",
     quickPrompts: [
-      "What solutions do you build?",
-      "How do I start a project?",
-      "Can you help with AI integrations?"
+      "What do you actually build for businesses?",
+      "I want to book a free call",
+      "I need to pay a deposit or invoice"
+    ],
+    ctaLinks: [
+      { label: "Book a free call", href: "/book-consultation.html" },
+      { label: "Pay / checkout", href: "/pay/" },
+      { label: "Contact", href: "/contact.html" }
     ],
     maxTurnsSaved: 12
+  };
+
+  const escapeHtml = s =>
+    String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  const SAFE_PATH = /^\/[a-zA-Z0-9/_\-.]+$/;
+
+  const renderAssistantHtml = text => {
+    if (!text) return "";
+    const parts = [];
+    let last = 0;
+    const re = /\[([^\]]+)\]\((\/[^)\s]+)\)/g;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      parts.push(escapeHtml(text.slice(last, m.index)));
+      const href = m[2];
+      if (SAFE_PATH.test(href)) {
+        parts.push(
+          `<a href="${escapeHtml(href)}" class="chatbot-inline-link">${escapeHtml(
+            m[1]
+          )}</a>`
+        );
+      } else {
+        parts.push(escapeHtml(m[0]));
+      }
+      last = m.index + m[0].length;
+    }
+    parts.push(escapeHtml(text.slice(last)));
+    return parts.join("").replace(/\n/g, "<br>");
   };
 
   const STORAGE_KEY = "jlSolutionsChatHistory";
@@ -59,24 +97,34 @@
 
     const toggle = createElement("button", "chatbot-toggle", {
       id: "jl-chatbot-toggle",
-      "aria-label": "Open AI chat"
+      type: "button",
+      "aria-label": "Open JL Guide chat",
+      "aria-expanded": "false",
+      "aria-controls": "jl-chatbot-window",
+      "aria-haspopup": "dialog"
     });
-    toggle.innerHTML = `<span>💬</span>`;
+    toggle.innerHTML = `<span aria-hidden="true">💬</span>`;
 
     const windowEl = createElement("section", "chatbot-window", {
       id: "jl-chatbot-window",
+      role: "dialog",
+      "aria-labelledby": "jl-chatbot-dialog-title",
+      "aria-hidden": "true",
       "aria-live": "polite"
     });
 
     windowEl.innerHTML = `
       <header class="chatbot-header">
         <div>
-          <strong>${CONFIG.brand}</strong>
+          <strong id="jl-chatbot-dialog-title">${CONFIG.brand}</strong>
           <p>${CONFIG.subtitle}</p>
         </div>
-        <button class="chatbot-close" aria-label="Close chat">✕</button>
+        <button type="button" class="chatbot-close" aria-label="Close chat">✕</button>
       </header>
-      <div class="chatbot-messages" id="jl-chatbot-messages"></div>
+      <div class="chatbot-messages-scroll" id="jl-chatbot-messages-scroll">
+        <div class="chatbot-messages-list" id="jl-chatbot-messages"></div>
+      </div>
+      <div class="chatbot-cta-row" id="jl-chatbot-cta" role="navigation" aria-label="Quick actions"></div>
       <div class="chatbot-quick" id="jl-chatbot-quick"></div>
       <form class="chatbot-form" id="jl-chatbot-form">
         <textarea
@@ -88,7 +136,7 @@
           required
         ></textarea>
         <div class="chatbot-actions">
-          <small>AI may be imperfect  - verify sensitive info.</small>
+          <small>AI may be imperfect—verify sensitive details before you act.</small>
           <button type="submit" class="btn-chatbot-send">Send</button>
         </div>
       </form>
@@ -97,7 +145,9 @@
     document.body.appendChild(windowEl);
     document.body.appendChild(toggle);
 
+    const messagesScrollEl = windowEl.querySelector("#jl-chatbot-messages-scroll");
     const messagesEl = windowEl.querySelector("#jl-chatbot-messages");
+    const ctaEl = windowEl.querySelector("#jl-chatbot-cta");
     const quickEl = windowEl.querySelector("#jl-chatbot-quick");
     const form = windowEl.querySelector("#jl-chatbot-form");
     const input = windowEl.querySelector("#jl-chatbot-input");
@@ -108,13 +158,21 @@
       state.history.forEach(({ role, content, error }) => {
         const bubble = createElement(
           "div",
-          `chatbot-message ${role === "user" ? "user" : "assistant"}`
+          `chatbot-message ${role === "user" ? "user" : "assistant"}${
+            role === "assistant" && !error ? " chatbot-message--rich" : ""
+          }`
         );
-        bubble.textContent = content;
+        if (role === "assistant" && !error) {
+          bubble.innerHTML = renderAssistantHtml(content);
+        } else {
+          bubble.textContent = content;
+        }
         if (error) bubble.classList.add("error");
         messagesEl.appendChild(bubble);
       });
-      messagesEl.scrollTop = messagesEl.scrollHeight;
+      if (messagesScrollEl) {
+        messagesScrollEl.scrollTop = messagesScrollEl.scrollHeight;
+      }
     };
 
     const addMessage = (role, content, options = {}) => {
@@ -170,19 +228,37 @@
       sendPrompt(text);
     });
 
-    toggle.addEventListener("click", () => {
-      state.isOpen = !state.isOpen;
-      windowEl.classList.toggle("open", state.isOpen);
-      toggle.classList.toggle("open", state.isOpen);
-      if (state.isOpen) {
+    const setChatOpen = open => {
+      state.isOpen = open;
+      windowEl.classList.toggle("open", open);
+      toggle.classList.toggle("open", open);
+      windowEl.setAttribute("aria-hidden", open ? "false" : "true");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute(
+        "aria-label",
+        open ? "Close JL Guide chat" : "Open JL Guide chat"
+      );
+      if (open) {
         input.focus();
+      } else {
+        toggle.focus();
       }
+    };
+
+    toggle.addEventListener("click", () => {
+      setChatOpen(!state.isOpen);
     });
 
     closeBtn.addEventListener("click", () => {
-      state.isOpen = false;
-      windowEl.classList.remove("open");
-      toggle.classList.remove("open");
+      setChatOpen(false);
+    });
+
+    CONFIG.ctaLinks.forEach(({ label, href }) => {
+      const a = createElement("a", "chatbot-cta-link", {
+        href
+      });
+      a.textContent = label;
+      ctaEl.appendChild(a);
     });
 
     CONFIG.quickPrompts.forEach(prompt => {
@@ -197,7 +273,16 @@
     renderHistory();
   };
 
-  document.addEventListener("DOMContentLoaded", createUI, { once: true });
+  // main.js injects this script after DOMContentLoaded; listeners would never run otherwise.
+  const bootChatbot = () => {
+    if (document.getElementById("jl-chatbot-toggle")) return;
+    createUI();
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootChatbot, { once: true });
+  } else {
+    bootChatbot();
+  }
 })();
 
 

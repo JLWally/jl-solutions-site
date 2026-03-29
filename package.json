@@ -11,9 +11,10 @@
   "dependencies": {
     "@netlify/blobs": "^6.5.0",
     "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5",
     "node-html-parser": "^6.1.13",
     "resend": "^4.0.0",
-    "stripe": "^14.7.0"
+    "stripe": "^17.7.0"
   },
   "devDependencies": {
     "netlify-cli": "^17.0.0",

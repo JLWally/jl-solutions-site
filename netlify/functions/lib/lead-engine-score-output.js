@@ -81,10 +81,16 @@ function validateScoreOutput(obj) {
   const angle = String(obj.outreach_angle == null ? '' : obj.outreach_angle).trim();
   if (!angle) errors.push('outreach_angle is required');
 
-  const offer = normalizeOffer(obj.recommended_offer);
-  if (!offer) {
-    errors.push(`recommended_offer must be one of: ${ALLOWED_OFFERS.join(', ')}`);
+  const rawOffer = obj.recommended_offer;
+  const offerTrim = rawOffer == null ? '' : String(rawOffer).trim();
+  let offer = normalizeOffer(rawOffer);
+  if (offerTrim && !offer) {
+    errors.push(`recommended_offer must be one of: ${ALLOWED_OFFERS.join(', ')} (or omit)`);
   }
+
+  const rationale = String(obj.offer_rationale == null ? '' : obj.offer_rationale).trim();
+  if (!rationale) errors.push('offer_rationale is required (2–4 sentences explaining the pre-selected offer)');
+  if (rationale.length > 2000) errors.push('offer_rationale is too long');
 
   if (errors.length) return { ok: false, errors };
 
@@ -96,6 +102,7 @@ function validateScoreOutput(obj) {
       pain_points: painClean,
       outreach_angle: angle,
       recommended_offer: offer,
+      offer_rationale: rationale,
     },
   };
 }
@@ -113,6 +120,21 @@ function parseAndValidateScoreModelText(text) {
   return validateScoreOutput(parsed);
 }
 
+/**
+ * Parse model JSON, then force recommended_offer to the deterministic winner before validation
+ * (avoids failing the whole score on a mismatched echo).
+ */
+function parseAndValidateScoreModelTextWithFixedOffer(text, selectedOffer) {
+  let parsed;
+  try {
+    parsed = parseScoreModelJsonText(text);
+  } catch (e) {
+    return { ok: false, errors: [`Invalid JSON from model: ${e.message || 'parse error'}`] };
+  }
+  if (selectedOffer) parsed.recommended_offer = selectedOffer;
+  return validateScoreOutput(parsed);
+}
+
 module.exports = {
   stripMarkdownFence,
   parseScoreModelJsonText,
@@ -120,5 +142,6 @@ module.exports = {
   normalizeOffer,
   validateScoreOutput,
   parseAndValidateScoreModelText,
+  parseAndValidateScoreModelTextWithFixedOffer,
   CONFIDENCE_SET,
 };

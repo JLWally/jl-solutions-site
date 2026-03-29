@@ -145,20 +145,20 @@ footer[role="contentinfo"] {
   display: block;
 }
 
-/* Modal/Dialog Accessibility */
-[role="dialog"],
+/* Modal/Dialog Accessibility (exclude on-page JL Guide widget; it manages its own layout) */
+[role="dialog"]:not(.chatbot-window),
 [role="alertdialog"] {
   position: fixed;
   z-index: 10000;
 }
 
-[role="dialog"]:focus {
+[role="dialog"]:not(.chatbot-window):focus {
   outline: none;
 }
 
-/* Live Region for Dynamic Content */
-[role="status"],
-[role="alert"] {
+/* Visually hidden live regions only — do not target every status/alert on the site */
+.sr-live-region[role="status"],
+.sr-live-region[role="alert"] {
   position: absolute;
   left: -10000px;
   width: 1px;
@@ -166,8 +166,8 @@ footer[role="contentinfo"] {
   overflow: hidden;
 }
 
-[role="status"]:focus,
-[role="alert"]:focus {
+.sr-live-region[role="status"]:focus,
+.sr-live-region[role="alert"]:focus {
   position: static;
   width: auto;
   height: auto;

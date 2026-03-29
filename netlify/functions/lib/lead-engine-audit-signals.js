@@ -27,6 +27,8 @@ const CHAT_SNIPPETS = [
   'usemessages',
   'olark',
   'purechat',
+  /** First-party or static-marked assistants (substring match on full HTML). */
+  'chatbot.js',
 ];
 
 const SOCIAL_PATTERNS = [

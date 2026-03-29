@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact | JL Solutions</title>
+  <meta name="description" content="Structured contact intake for JL Solutions: choose your topic, then send a message. AI assistant (JL Guide) on every page for quick questions. Typical reply within one business day.">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
@@ -11,6 +12,14 @@
   <style>
     .contact-wrapper { max-width: 900px; margin: 0 auto; }
     .contact-helper { font-size: 0.95rem; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+    .contact-step {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .contact-step h2 { font-size: 1.15rem; margin-bottom: 1rem; color: rgba(255,255,255,0.95); }
     .what-happens-next {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
@@ -36,6 +45,15 @@
       object-fit: cover;
     }
     .contact-human .blurb { font-size: 1rem; color: rgba(255,255,255,0.9); }
+    .contact-book-hint {
+      background: rgba(255, 193, 7, 0.12);
+      border: 1px solid rgba(255, 193, 7, 0.35);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      color: rgba(255,255,255,0.95);
+    }
+    .contact-book-hint a { color: #FFC107; font-weight: 600; }
   </style>
   <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
@@ -48,7 +66,7 @@
       <div class="contact-wrapper">
         <h1 class="text-center mb-2">Contact Us</h1>
         <p class="text-center lead mb-4">Let's start something great together.</p>
-        <p class="contact-helper text-center">Typical response time: within 1 business day.</p>
+        <p class="contact-helper text-center">Two quick steps: what you need, then your details. Typical response time: within 1 business day. For instant pointers, use <strong>JL Guide</strong> (chat icon, lower right).</p>
 
       <form id="jl-contact-form" name="contact" method="POST" action="/.netlify/functions/send-form-email" class="mx-auto">
         <input type="hidden" name="form-name" value="contact">
@@ -56,22 +74,50 @@
           <label>Leave blank: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
         </p>
 
-        <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name" name="name" required>
+        <div class="contact-step" id="contactStep1">
+          <h2 class="h5">Step 1 — What can we help with?</h2>
+          <p class="small text-white-50 mb-3">This routes your message so the right follow-up happens faster.</p>
+          <div class="mb-3">
+            <label class="form-label" for="inquiry_type">Topic *</label>
+            <select class="form-select" id="inquiry_type" name="inquiry_type" required>
+              <option value="">Select one…</option>
+              <option value="General question">General question</option>
+              <option value="Book a consultation">Book a consultation</option>
+              <option value="Automation / intake / scheduling project">Automation / intake / scheduling project</option>
+              <option value="Partnership or media">Partnership or media</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-cta-primary" id="contactStepNext">Continue</button>
         </div>
 
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
+        <div class="contact-step d-none" id="contactStep2" aria-hidden="true">
+          <h2 class="h5">Step 2 — Your details</h2>
+          <button type="button" class="btn btn-link text-white-50 px-0 mb-3" id="contactStepBack">← Change topic</button>
 
-        <div class="mb-3">
-          <label for="message" class="form-label">Message</label>
-          <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-        </div>
+          <div class="contact-book-hint d-none" id="bookCallHint" role="status">
+            <strong>Fastest for a call:</strong> pick a time on our calendar —
+            <a href="/book-consultation.html">Book a free call</a>.
+            You can still send a note below and we’ll follow up by email.
+          </div>
 
-        <button type="submit" class="btn btn-cta-primary" id="jl-contact-submit">Send Message</button>
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required autocomplete="name">
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required autocomplete="email">
+          </div>
+
+          <div class="mb-3">
+            <label for="message" class="form-label">Message</label>
+            <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Context, goals, or questions — we’ll confirm by email after you send."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-cta-primary" id="jl-contact-submit">Send message</button>
+        </div>
       </form>
 
         <div class="what-happens-next">
@@ -101,6 +147,7 @@
   <div id="footer"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/chatbot.js" defer data-jl-chatbot="true"></script>
   <script src="/js/main.js"></script>
   <script>
     (function () {
@@ -108,9 +155,48 @@
         return window.location.origin + '/.netlify/functions/send-form-email';
       }
       document.addEventListener('DOMContentLoaded', function () {
+        var step1 = document.getElementById('contactStep1');
+        var step2 = document.getElementById('contactStep2');
+        var nextBtn = document.getElementById('contactStepNext');
+        var backBtn = document.getElementById('contactStepBack');
+        var inquiry = document.getElementById('inquiry_type');
+        var bookHint = document.getElementById('bookCallHint');
         var form = document.getElementById('jl-contact-form');
+
+        if (nextBtn && step1 && step2 && inquiry) {
+          nextBtn.addEventListener('click', function () {
+            if (!inquiry.value) {
+              inquiry.focus();
+              inquiry.reportValidity();
+              return;
+            }
+            step1.classList.add('d-none');
+            step2.classList.remove('d-none');
+            step2.setAttribute('aria-hidden', 'false');
+            if (bookHint) {
+              var showBook = inquiry.value === 'Book a consultation';
+              bookHint.classList.toggle('d-none', !showBook);
+            }
+            var nameEl = document.getElementById('name');
+            if (nameEl) nameEl.focus();
+          });
+        }
+        if (backBtn && step1 && step2) {
+          backBtn.addEventListener('click', function () {
+            step2.classList.add('d-none');
+            step2.setAttribute('aria-hidden', 'true');
+            step1.classList.remove('d-none');
+            if (bookHint) bookHint.classList.add('d-none');
+          });
+        }
+
         if (!form) return;
         form.addEventListener('submit', async function (e) {
+          if (step2 && step2.classList.contains('d-none')) {
+            e.preventDefault();
+            if (nextBtn) nextBtn.click();
+            return;
+          }
           e.preventDefault();
           var btn = document.getElementById('jl-contact-submit');
           if (btn) {
@@ -138,7 +224,7 @@
           } finally {
             if (btn) {
               btn.disabled = false;
-              btn.textContent = 'Send Message';
+              btn.textContent = 'Send message';
             }
           }
         });

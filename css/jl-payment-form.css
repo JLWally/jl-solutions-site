@@ -1,0 +1,133 @@
+/**
+ * Shared JL payment form (used by /pay/ and onboard wizard payment step).
+ */
+.jl-payment-card {
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--jl-surface-light, #fafbfc);
+  color: var(--jl-text-dark, #1a1a1a);
+  border-radius: var(--card-radius, 16px);
+  padding: 2rem 1.75rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 24px 60px rgba(10, 22, 40, 0.35);
+}
+
+.jl-payment-card h1,
+.jl-payment-card .jl-payment-title {
+  font-size: clamp(1.5rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  color: var(--jl-ink, #0a1628);
+  margin-bottom: 0.5rem;
+}
+
+.jl-payment-card .jl-payment-lead {
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  font-size: 1rem;
+  line-height: 1.55;
+  margin-bottom: 1.5rem;
+}
+
+.jl-payment-card .form-label {
+  font-weight: 600;
+  color: var(--jl-ink, #0a1628);
+}
+
+.jl-payment-card .form-control {
+  background: var(--jl-white, #fff);
+  border: 2px solid rgba(15, 23, 42, 0.12);
+  color: var(--jl-text-dark, #1a1a1a);
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+}
+
+.jl-payment-card .form-control:focus {
+  border-color: var(--jl-brand-cyan-deep, #0b6579);
+  box-shadow: 0 0 0 3px rgba(11, 101, 121, 0.2);
+}
+
+.jl-payment-card .jl-payment-optional-hint {
+  font-weight: 500;
+  color: var(--jl-text-dark-dim, #6b7280);
+}
+
+.jl-payment-cancel-alert {
+  background: #fff8e6;
+  border: 2px solid rgba(180, 120, 0, 0.45);
+  color: #5c4100;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.jl-payment-cancel-alert a {
+  color: #0b6579;
+  font-weight: 700;
+}
+
+.jl-payment-cancel-alert a:hover {
+  color: var(--jl-ink, #0a1628);
+}
+
+.btn-jl-payment-submit {
+  min-height: 3rem;
+  background: var(--jl-accent, #ffc107);
+  color: var(--jl-text-dark, #1a1a1a);
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  width: 100%;
+}
+
+.btn-jl-payment-submit:hover {
+  background: var(--jl-accent-hover, #ffd54f);
+  color: var(--jl-text-dark, #1a1a1a);
+}
+
+.btn-jl-payment-submit:focus-visible {
+  outline: 3px solid var(--jl-brand-cyan-deep, #0b6579);
+  outline-offset: 2px;
+}
+
+.btn-jl-payment-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.jl-payment-footnote {
+  font-size: 0.875rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  line-height: 1.45;
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+}
+
+.jl-payment-footnote a {
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-weight: 600;
+}
+
+.jl-payment-footnote a:hover {
+  color: var(--jl-ink, #0a1628);
+}
+
+.jl-payment-back {
+  margin-top: 1.25rem;
+  font-size: 0.9375rem;
+}
+
+.jl-payment-back a {
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-weight: 600;
+}
+
+.jl-payment-back a:hover {
+  color: var(--jl-ink, #0a1628);
+}
+
+/* Wizard: light card inside dark wizard shell */
+.wizard-card .jl-payment-card {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}

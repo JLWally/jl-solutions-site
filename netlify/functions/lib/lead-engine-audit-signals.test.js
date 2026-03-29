@@ -52,6 +52,12 @@ test('extractPageSignals captures title meta h1 forms ctas booking', () => {
   assert.ok(s.social_links.includes('facebook'));
 });
 
+test('extractPageSignals flags first-party chatbot.js in HTML', () => {
+  const html = `<!DOCTYPE html><html><head><title>T</title></head><body><h1>H</h1><script src="/js/chatbot.js" defer></script></body></html>`;
+  const s = extractPageSignals(html, 'https://jl.example/');
+  assert.ok(s.chat_widget_hints.includes('chatbot.js'));
+});
+
 test('extractCtas respects max and skips hash links', () => {
   const root = parse(
     '<a href="#x">Skip</a><a href="/a">Real A</a><a href="/b">Real B</a>',

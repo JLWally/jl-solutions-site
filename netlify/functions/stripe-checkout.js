@@ -1,7 +1,28 @@
 const Stripe = require('stripe');
 const { createClient } = require('@supabase/supabase-js');
+const { getStripeSecretKey } = require('./lib/stripe-env');
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '2023-10-16' });
+function stripeKeyConfigError(key) {
+  if (!key) return null;
+  if (key.startsWith('pk_')) {
+    return 'Publishable key in STRIPE_SECRET_KEY. Use the Secret key (sk_test_… or sk_live_…) from Developers → API keys.';
+  }
+  if (key.startsWith('rk_')) {
+    return 'Restricted keys cannot create Checkout sessions. Use a standard secret key (sk_…).';
+  }
+  if (!key.startsWith('sk_')) {
+    return 'STRIPE_SECRET_KEY should start with sk_test_ or sk_live_. Check for typos or extra characters.';
+  }
+  return null;
+}
+
+function getStripe() {
+  const key = getStripeSecretKey();
+  if (!key) return null;
+  const cfgErr = stripeKeyConfigError(key);
+  if (cfgErr) return { configError: cfgErr };
+  return new Stripe(key);
+}
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -24,13 +45,25 @@ exports.handler = async (event) => {
     return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
-  if (!process.env.STRIPE_SECRET_KEY) {
+  const stripeOrErr = getStripe();
+  if (!stripeOrErr) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Stripe is not configured' }),
+      body: JSON.stringify({
+        error:
+          'Stripe is not configured. Set STRIPE_SECRET_KEY in Netlify (or .env for netlify dev). Alternate names: STRIPE_TEST_SECRET_KEY, STRIPE_LIVE_SECRET_KEY.',
+      }),
     };
   }
+  if (stripeOrErr.configError) {
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: stripeOrErr.configError }),
+    };
+  }
+  const stripe = stripeOrErr;
 
   try {
     const body = JSON.parse(event.body || '{}');
@@ -117,10 +150,15 @@ exports.handler = async (event) => {
     };
   } catch (err) {
     console.error('[stripe-checkout]', err);
+    let msg = err.message || 'Checkout failed';
+    if (/Invalid API Key|No API key provided|api_key_expired/i.test(msg)) {
+      msg =
+        'Stripe rejected the secret key. In Dashboard (Test mode) open Developers → API keys, reveal a fresh Secret key, set STRIPE_SECRET_KEY in project-root .env with no spaces, then restart netlify dev.';
+    }
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: err.message || 'Checkout failed' }),
+      body: JSON.stringify({ error: msg }),
     };
   }
 };
