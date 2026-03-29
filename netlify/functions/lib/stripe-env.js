@@ -141,6 +141,20 @@ function readStripeSecretFromEnvFile() {
 
 function getStripeSecretKey() {
   tryLoadDotenvFromProjectRoot();
+  // Static process.env.* reads so Netlify Functions + esbuild still resolve at runtime.
+  const staticCandidates = [
+    process.env.STRIPE_SECRET_KEY,
+    process.env.STRIPE_TEST_SECRET_KEY,
+    process.env.STRIPE_SECRET_KEY_TEST,
+    process.env.STRIPE_LIVE_SECRET_KEY,
+    process.env.STRIPE_SECRET_KEY_LIVE,
+    process.env.STRIPE_API_KEY,
+    process.env.STRIPE_PRIVATE_KEY,
+  ];
+  for (let i = 0; i < staticCandidates.length; i++) {
+    const k = normalizeStripeSecret(staticCandidates[i]);
+    if (k) return k;
+  }
   let k = pickEnv(STRIPE_SECRET_ENV_NAMES, normalizeStripeSecret);
   if (!k) k = readStripeSecretFromEnvFile();
   return k;

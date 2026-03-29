@@ -53,11 +53,12 @@
           body: JSON.stringify(opts.stripePayload),
         });
 
+        var raw = await res.text();
         var data = {};
         try {
-          data = await res.json();
+          data = raw ? JSON.parse(raw) : {};
         } catch (_) {
-          /* ignore */
+          data = {};
         }
 
         if (data.url) {
@@ -65,7 +66,12 @@
           return;
         }
 
-        throw new Error(data.error || 'Checkout failed');
+        var errMsg =
+          data.error ||
+          (res.status >= 400
+            ? 'Checkout failed (HTTP ' + res.status + ')' + (raw && raw.length < 400 ? ': ' + raw : '')
+            : 'Checkout failed');
+        throw new Error(errMsg);
       } catch (err) {
         if (button) {
           button.disabled = false;

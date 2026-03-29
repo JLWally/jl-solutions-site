@@ -1,5 +1,4 @@
 const Stripe = require('stripe');
-const { createClient } = require('@supabase/supabase-js');
 const { getStripeSecretKey } = require('./lib/stripe-env');
 
 function stripeKeyConfigError(key) {
@@ -30,13 +29,6 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-function getSupabase() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
-  return createClient(url, key);
-}
-
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers };
@@ -66,7 +58,16 @@ exports.handler = async (event) => {
   const stripe = stripeOrErr;
 
   try {
-    const body = JSON.parse(event.body || '{}');
+    let body;
+    try {
+      body = JSON.parse(event.body || '{}');
+    } catch {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Invalid JSON body' }),
+      };
+    }
     const {
       amount,
       currency = 'usd',
@@ -88,8 +89,8 @@ exports.handler = async (event) => {
     const baseUrl = (process.env.URL || 'http://localhost:8888').replace(/\/$/, '');
 
     const sessionConfig = {
-      payment_method_types: ['card'],
       mode: 'payment',
+      automatic_payment_methods: { enabled: true },
       success_url: successUrl || `${baseUrl}/thank-you.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl || `${baseUrl}/pay/?canceled=1`,
       metadata: {},
@@ -150,10 +151,13 @@ exports.handler = async (event) => {
     };
   } catch (err) {
     console.error('[stripe-checkout]', err);
-    let msg = err.message || 'Checkout failed';
+    let msg =
+      (err.raw && err.raw.message) ||
+      err.message ||
+      'Checkout failed';
     if (/Invalid API Key|No API key provided|api_key_expired/i.test(msg)) {
       msg =
-        'Stripe rejected the secret key. In Dashboard (Test mode) open Developers → API keys, reveal a fresh Secret key, set STRIPE_SECRET_KEY in project-root .env with no spaces, then restart netlify dev.';
+        'Stripe rejected STRIPE_SECRET_KEY. In Dashboard (match Test/Live to your keys), copy the Secret key, set it in Netlify for Production with Functions scope, redeploy. For local dev use project-root .env and restart netlify dev.';
     }
     return {
       statusCode: 500,
