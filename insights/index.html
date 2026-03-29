@@ -288,15 +288,17 @@
       <section class="newsletter-signup" aria-labelledby="newsletter-heading">
         <h2 id="newsletter-heading">Stay updated</h2>
         <p class="lead mb-4">Get short, practical emails on automation, intake, and operations. No spam.</p>
-        <form class="d-flex gap-2 justify-content-center flex-wrap" onsubmit="subscribeNewsletter(event); return false;">
+        <form class="d-flex gap-2 justify-content-center flex-wrap" id="insightsNewsletterForm" onsubmit="subscribeNewsletter(event); return false;">
           <input
             type="email"
+            name="email"
             class="form-control"
             placeholder="Enter your email"
             required
             style="max-width: 300px;"
-            aria-label="Email address">
-          <button type="submit" class="btn btn-cta-primary">Subscribe</button>
+            aria-label="Email address"
+            autocomplete="email">
+          <button type="submit" class="btn btn-cta-primary" id="insightsNewsletterBtn">Subscribe</button>
         </form>
       </section>
     </div>
@@ -340,11 +342,41 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/live-chat.js"></script>
   <script>
-    function subscribeNewsletter(event) {
+    async function subscribeNewsletter(event) {
       event.preventDefault();
-      const email = event.target.querySelector('input[type="email"]').value;
-      alert('Thank you for subscribing! You\'ll receive our latest insights via email.');
-      event.target.reset();
+      const form = event.target;
+      const input = form.querySelector('input[type="email"]');
+      const email = (input && input.value) ? input.value.trim() : '';
+      if (!email) return;
+      const btn = document.getElementById('insightsNewsletterBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '…';
+      }
+      try {
+        const params = new URLSearchParams();
+        params.append('form-name', 'newsletter');
+        params.append('email', email);
+        const res = await fetch('/.netlify/functions/send-form-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString(),
+        });
+        if (res.ok || res.redirected) {
+          alert('Thanks! You\'re subscribed — check your inbox for a quick confirmation.');
+          form.reset();
+        } else {
+          const data = await res.json().catch(function () { return {}; });
+          alert(data.error || 'Something went wrong. Email us at info@jlsolutions.io.');
+        }
+      } catch (_e) {
+        alert('Network error. Email info@jlsolutions.io to join the list.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Subscribe';
+        }
+      }
     }
     
     document.querySelectorAll('.filter-btn').forEach(btn => {

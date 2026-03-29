@@ -1,7 +1,9 @@
 /**
- * Sends contact and consultation form submissions to info@jlsolutions.io.
- * Set RESEND_API_KEY in Netlify env. From address must be verified in Resend
- * (e.g. use onboarding@resend.dev for testing or verify jlsolutions.io).
+ * Sends website form submissions to info@jlsolutions.io (Resend).
+ * Supported form-name values: contact, consultation, fix-my-app, newsletter.
+ *
+ * Set RESEND_API_KEY in Netlify. Use FORM_FROM_EMAIL with a domain verified in Resend
+ * (e.g. JL Solutions <notifications@jlsolutions.io>) for production.
  *
  * When SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY are set, also inserts a row into
  * public.consultations so you can review submissions in Supabase (Table Editor).
@@ -14,7 +16,7 @@ const TO_EMAIL = 'info@jlsolutions.io';
 const FROM_EMAIL = process.env.FORM_FROM_EMAIL || 'JL Solutions Website <onboarding@resend.dev>';
 
 function parseBody(event) {
-  const contentType = event.headers['content-type'] || '';
+  const contentType = (event.headers['content-type'] || event.headers['Content-Type'] || '').toLowerCase();
   const body = event.body || '';
   if (contentType.includes('application/x-www-form-urlencoded')) {
     return Object.fromEntries(new URLSearchParams(body));
@@ -24,6 +26,14 @@ function parseBody(event) {
       return JSON.parse(body);
     } catch (_) {
       return {};
+    }
+  }
+  // Some proxies omit Content-Type on form POST; body is still urlencoded.
+  if (body && typeof body === 'string' && body.includes('=') && !body.trim().startsWith('{')) {
+    try {
+      return Object.fromEntries(new URLSearchParams(body));
+    } catch (_) {
+      /* fall through */
     }
   }
   return {};
@@ -42,6 +52,46 @@ function buildContactEmail(data) {
       <p><strong>Message:</strong></p>
       <pre>${escapeHtml(message)}</pre>
       <p><em>Sent from jlsolutions.io contact form</em></p>
+    `,
+  };
+}
+
+function buildFixMyAppEmail(data) {
+  const name = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const fields = [
+    ['Name', name],
+    ['Email', email],
+    ['Company', data.company],
+    ['App or Website URL', data.url],
+    ["What's broken", data.issue],
+    ['Built with', data.tech],
+    ['Access', data.access],
+    ['Urgency', data.urgency],
+    ['Automation bundle interest', data.bundle],
+  ];
+  const rows = fields
+    .filter(([, v]) => v != null && String(v).trim() !== '')
+    .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
+    .join('');
+  return {
+    subject: `[JL Solutions Fix My App] ${name}`,
+    html: `
+      <h2>New Fix My App request</h2>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
+      <p><em>Sent from jlsolutions.io services/fix-my-app</em></p>
+    `,
+  };
+}
+
+function buildNewsletterEmail(data) {
+  const email = data.email || '(not provided)';
+  return {
+    subject: `[JL Solutions Newsletter] Signup: ${email}`,
+    html: `
+      <h2>Insights / newsletter signup</h2>
+      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+      <p><em>Sent from jlsolutions.io insights page</em></p>
     `,
   };
 }
@@ -116,10 +166,15 @@ async function persistToConsultationsTable(formName, data) {
   const supabase = getServiceSupabase();
   if (!supabase) return;
 
-  const name = (data.name || '').trim();
   const email = (data.email || '').trim();
-  if (!name || !email) {
-    console.warn('[send-form-email] Skipping Supabase persist: missing name or email');
+  let name = (data.name || '').trim();
+  if (!email) {
+    console.warn('[send-form-email] Skipping Supabase persist: missing email');
+    return;
+  }
+  if (!name && formName === 'newsletter') name = 'Newsletter subscriber';
+  if (!name) {
+    console.warn('[send-form-email] Skipping Supabase persist: missing name');
     return;
   }
 
@@ -139,6 +194,26 @@ async function persistToConsultationsTable(formName, data) {
       selected_datetime: data.selectedDateTime ? String(data.selectedDateTime) : null,
       status: 'new',
       source: 'book_consultation',
+    };
+  } else if (formName === 'fix-my-app') {
+    const issue = data.issue ? String(data.issue).trim() : '';
+    row = {
+      name,
+      email,
+      company: data.company ? String(data.company).trim() : null,
+      service: 'fix-my-app',
+      message: issue,
+      challenge: issue || null,
+      status: 'new',
+      source: 'fix_my_app',
+    };
+  } else if (formName === 'newsletter') {
+    row = {
+      name,
+      email,
+      message: 'Insights index newsletter form',
+      status: 'new',
+      source: 'newsletter_insights',
     };
   } else {
     row = {
@@ -211,6 +286,14 @@ exports.handler = async (event) => {
         console.error('[send-form-email] Failed to append consultation referral:', e);
       }
     }
+  } else if (formName === 'fix-my-app') {
+    const built = buildFixMyAppEmail(data);
+    subject = built.subject;
+    html = built.html;
+  } else if (formName === 'newsletter') {
+    const built = buildNewsletterEmail(data);
+    subject = built.subject;
+    html = built.html;
   } else {
     const built = buildContactEmail(data);
     subject = built.subject;
@@ -257,7 +340,7 @@ exports.handler = async (event) => {
     });
 
     if (err1) {
-      console.error('[send-form-email] Resend error:', JSON.stringify(err1));
+      console.error('[send-form-email] Resend error (to info@):', JSON.stringify(err1));
       try {
         const { getStore } = require('@netlify/blobs');
         const store = getStore('consultation-leads');
@@ -271,18 +354,33 @@ exports.handler = async (event) => {
       return redirectSuccess();
     }
 
-    // 2. Send confirmation to customer (consultation and contact forms)
+    console.log('[send-form-email] Delivered to', TO_EMAIL, 'form=', formName);
+
+    // 2. Send confirmation to customer (consultation, contact, fix-my-app, newsletter)
     const customerEmail = (data.email || '').trim();
     if (customerEmail) {
-      const cust = formName === 'consultation' ? buildCustomerConfirmation(data) : {
-        subject: 'We received your message - JL Solutions',
-        html: `
+      const cust =
+        formName === 'consultation'
+          ? buildCustomerConfirmation(data)
+          : formName === 'newsletter'
+            ? {
+                subject: "You're on the list - JL Solutions",
+                html: `
+          <h2>Thanks for subscribing</h2>
+          <p>We’ll send occasional, practical notes on automation and operations.</p>
+          <p> - The JL Solutions team</p>
+          <p><em>info@jlsolutions.io</em></p>
+        `,
+              }
+            : {
+                subject: 'We received your message - JL Solutions',
+                html: `
           <h2>Thank you for reaching out</h2>
           <p>We received your message and will get back to you within 1-2 business days.</p>
           <p> - The JL Solutions team</p>
           <p><em>info@jlsolutions.io</em></p>
         `,
-      };
+              };
       const { error: err2 } = await resend.emails.send({
         from: FROM_EMAIL,
         to: [customerEmail],
