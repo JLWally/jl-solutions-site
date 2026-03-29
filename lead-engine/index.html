@@ -1237,12 +1237,15 @@
       document.getElementById('loading').style.display = 'none';
       if (st.res.status === 403) {
         show('gate');
-        document.getElementById('gateMsg').textContent = st.data.error || 'Lead engine is disabled.';
+        document.getElementById('gateMsg').textContent =
+          (st.data.error || 'Lead engine is disabled.') +
+          (st.data.details ? ' ' + st.data.details : '');
         return;
       }
       if (st.res.status === 503) {
         show('gate');
-        document.getElementById('gateMsg').textContent = st.data.error || 'Lead engine is not configured.';
+        document.getElementById('gateMsg').textContent =
+          (st.data.error || 'Lead engine is not configured.') + (st.data.details ? ' ' + st.data.details : '');
         return;
       }
       if (st.res.status === 401) {

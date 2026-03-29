@@ -35,7 +35,11 @@ function guardLeadEngineRequest(event, options) {
       response: {
         statusCode: 403,
         headers,
-        body: JSON.stringify({ error: 'Lead engine is disabled' }),
+        body: JSON.stringify({
+          error: 'Lead engine is disabled',
+          details:
+            'In Netlify: Site configuration → Environment variables → add LEAD_ENGINE_ENABLED=true (and redeploy). Also set LEAD_ENGINE_OPERATORS and LEAD_ENGINE_SECRET for sign-in.',
+        }),
       },
     };
   }

@@ -69,7 +69,8 @@
         });
         const data = await res.json().catch(function () { return {}; });
         if (!res.ok) {
-          err.textContent = data.error || 'Sign in failed';
+          err.textContent =
+            (data.error || 'Sign in failed') + (data.details ? ' ' + data.details : '');
           err.style.display = 'block';
           return;
         }
