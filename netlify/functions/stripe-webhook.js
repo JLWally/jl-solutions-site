@@ -45,9 +45,27 @@ exports.handler = async (event) => {
 
   const stripe = getStripe();
   const webhookSecret = getStripeWebhookSecret();
-  if (!stripe || !webhookSecret) {
-    console.error('[stripe-webhook] Missing STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET');
-    return { statusCode: 500, body: JSON.stringify({ error: 'Stripe webhook not configured' }) };
+  if (!stripe) {
+    console.error('[stripe-webhook] Missing STRIPE_SECRET_KEY (or alternate) in this function environment');
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        error:
+          'Webhook handler needs STRIPE_SECRET_KEY. In Netlify → Environment variables, add it for Production and enable scope “Functions” (not Build-only), then redeploy.',
+      }),
+    };
+  }
+  if (!webhookSecret) {
+    console.error('[stripe-webhook] Missing STRIPE_WEBHOOK_SECRET');
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        error:
+          'Webhook handler needs STRIPE_WEBHOOK_SECRET (whsec_… from this exact Stripe endpoint). In Netlify set the variable for Production with Functions scope, then redeploy.',
+      }),
+    };
   }
 
   const sig = event.headers['stripe-signature'] || event.headers['Stripe-Signature'];

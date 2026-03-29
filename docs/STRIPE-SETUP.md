@@ -33,6 +33,19 @@ If you keep separate variables (e.g. `STRIPE_TEST_SECRET_KEY` and `STRIPE_LIVE_S
 
 Without `STRIPE_WEBHOOK_SECRET`, Stripe cannot verify webhook calls and the function will return 400.
 
+### Netlify: “webhook not configured” after setting variables
+
+Netlify can hide variables from **Functions** if the scope is wrong.
+
+1. Open **Site configuration → Environment variables**.
+2. For **`STRIPE_SECRET_KEY`** and **`STRIPE_WEBHOOK_SECRET`**, edit each variable and ensure:
+   - **Deploy context** includes **Production** (and any context you use for `www.jlsolutions.io`).
+   - **Scopes** include **Functions** (and usually **Builds**). If a variable is **Build-only**, serverless functions never see it and the webhook responds as if nothing is configured.
+3. **Save**, then trigger **Deploys → Clear cache and deploy site** so every function bundle picks up the new env.
+
+The signing secret is **per endpoint**: use the `whsec_…` value from the destination whose URL is exactly  
+`https://www.jlsolutions.io/.netlify/functions/stripe-webhook` — not another endpoint’s secret.
+
 ## 4. Optional: fixed price (`STRIPE_PRICE_ID`)
 
 `stripe-checkout.js` supports:

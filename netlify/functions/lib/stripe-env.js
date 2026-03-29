@@ -19,6 +19,7 @@ const STRIPE_SECRET_ENV_NAMES = [
 
 const STRIPE_WEBHOOK_ENV_NAMES = [
   "STRIPE_WEBHOOK_SECRET",
+  "STRIPE_WEBHOOK_SIGNING_SECRET",
   "STRIPE_WEBHOOK_SECRET_TEST",
   "STRIPE_TEST_WEBHOOK_SECRET",
   "STRIPE_LIVE_WEBHOOK_SECRET"
@@ -145,9 +146,36 @@ function getStripeSecretKey() {
   return k;
 }
 
+/**
+ * Fallback: STRIPE_WEBHOOK_SECRET= from project .env (local / stripe listen).
+ */
+function readStripeWebhookSecretFromEnvFile() {
+  const root = findProjectRootForEnv();
+  if (!root) return "";
+  const envPath = path.join(root, ".env");
+  if (!fs.existsSync(envPath)) return "";
+  let text = fs.readFileSync(envPath, "utf8").replace(/^\uFEFF/, "");
+  const lines = text.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line || line.startsWith("#")) continue;
+    const m = line.match(
+      /^\s*(?:export\s+)?STRIPE_WEBHOOK_SECRET\s*=\s*(.*)$/i
+    );
+    if (!m) continue;
+    let v = m[1].trim();
+    const hash = v.indexOf(" #");
+    if (hash !== -1) v = v.slice(0, hash).trim();
+    return normalizeStripeSecret(v);
+  }
+  return "";
+}
+
 function getStripeWebhookSecret() {
   tryLoadDotenvFromProjectRoot();
-  return pickEnv(STRIPE_WEBHOOK_ENV_NAMES, normalizeStripeSecret);
+  let w = pickEnv(STRIPE_WEBHOOK_ENV_NAMES, normalizeStripeSecret);
+  if (!w) w = readStripeWebhookSecretFromEnvFile();
+  return w;
 }
 
 module.exports = {
