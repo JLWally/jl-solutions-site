@@ -2,9 +2,10 @@
  * OpenAI Responses call for outreach draft (Slice E).
  */
 const { postResponses, extractResponsesOutputText } = require('./lead-engine-openai-responses');
+const { getOpenAiModel } = require('./openai-model');
 
 async function completeDraftModel({ systemPrompt, userContent }) {
-  const model = process.env.OPENAI_MODEL || 'gpt-4.1-mini';
+  const model = getOpenAiModel();
   const data = await postResponses({
     model,
     input: [

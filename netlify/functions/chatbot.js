@@ -58,8 +58,10 @@ const toOpenAIMessages = (messages = []) =>
       content: entry.content
     }));
 
+const { getOpenAiModel } = require("./lib/openai-model");
+
 const buildResponsePayload = (messages, systemPrompt) => ({
-  model: process.env["OPENAI_MODEL"] || "gpt-4.1-mini",
+  model: getOpenAiModel(),
   input: [
     {
       role: "system",

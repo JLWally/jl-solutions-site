@@ -2,9 +2,10 @@
  * OpenAI Responses call for lead scoring (Slice D).
  */
 const { postResponses, extractResponsesOutputText } = require('./lead-engine-openai-responses');
+const { getOpenAiModel } = require('./openai-model');
 
 async function completeLeadScoreModel({ systemPrompt, userContent }) {
-  const model = process.env.OPENAI_MODEL || 'gpt-4.1-mini';
+  const model = getOpenAiModel();
   const data = await postResponses({
     model,
     input: [
