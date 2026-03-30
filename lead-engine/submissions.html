@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lead engine submissions - JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/lead-engine-ui.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+  <style>
+    body { background: #121212; color: #e8e8e8; min-height: 100vh; }
+    .card-dark { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; }
+    .table-dark-ish { --bs-table-bg: #1a1a1a; --bs-table-color: #e8e8e8; }
+    .text-muted { color: #b9bec8 !important; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/lead-engine/"><img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions" class="jl-logo-icon"></a>
+      <a class="btn btn-outline-light btn-sm" href="/lead-engine/">Back to lead engine</a>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <div id="loading" class="text-muted">Loading submissions...</div>
+    <div id="gate" style="display:none;">
+      <h1 class="h4 mb-2">Form submissions</h1>
+      <p class="text-muted mb-3">Sign in as a lead engine operator to view submissions.</p>
+      <a class="btn btn-primary" href="/lead-engine/login.html?return=%2Flead-engine%2Fsubmissions.html">Sign in</a>
+    </div>
+    <div id="ok" style="display:none;">
+      <h1 class="h4 mb-2">Recent form submissions</h1>
+      <p class="text-muted">Data source: Supabase consultations + Blob fallback stream.</p>
+      <div class="row g-2 mb-3">
+        <div class="col-sm-4 col-md-3">
+          <input id="filterEmail" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Filter by email">
+        </div>
+        <div class="col-sm-4 col-md-3">
+          <input id="filterSource" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Filter by source">
+        </div>
+        <div class="col-sm-4 col-md-2">
+          <button id="reloadBtn" class="btn btn-primary btn-sm w-100">Reload</button>
+        </div>
+      </div>
+      <div class="card card-dark p-3 mb-3">
+        <pre id="diag" class="small text-light mb-0" style="white-space:pre-wrap;"></pre>
+      </div>
+      <div class="card card-dark p-3">
+        <div class="table-responsive" style="max-height: 70vh;">
+          <table class="table table-sm table-dark-ish mb-0">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Source</th>
+                <th>Service</th>
+                <th>Referral</th>
+                <th>Provider</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let allRows = [];
+    function esc(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+    function rowHtml(r) {
+      return '<tr>' +
+        '<td>' + esc(r.created_at ? new Date(r.created_at).toLocaleString() : '-') + '</td>' +
+        '<td>' + esc(r.name || '-') + '</td>' +
+        '<td>' + esc(r.email || '-') + '</td>' +
+        '<td>' + esc(r.source || '-') + '</td>' +
+        '<td>' + esc(r.service || '-') + '</td>' +
+        '<td>' + esc(r.referral_code || '-') + '</td>' +
+        '<td>' + esc(r.provider || '-') + '</td>' +
+      '</tr>';
+    }
+    function applyFilters() {
+      const email = document.getElementById('filterEmail').value.trim().toLowerCase();
+      const source = document.getElementById('filterSource').value.trim().toLowerCase();
+      const rows = allRows.filter((r) => {
+        const e = String(r.email || '').toLowerCase();
+        const s = String(r.source || '').toLowerCase();
+        return (!email || e.includes(email)) && (!source || s.includes(source));
+      });
+      const tbody = document.getElementById('rows');
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">No submissions match filters.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = rows.map(rowHtml).join('');
+    }
+    async function loadRows() {
+      const loading = document.getElementById('loading');
+      const gate = document.getElementById('gate');
+      const ok = document.getElementById('ok');
+      loading.style.display = 'block';
+      gate.style.display = 'none';
+      ok.style.display = 'none';
+      try {
+        const res = await fetch('/.netlify/functions/lead-engine-form-submissions?limit=400', { credentials: 'include' });
+        if (res.status === 401) {
+          loading.style.display = 'none';
+          gate.style.display = 'block';
+          return;
+        }
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to load submissions');
+        allRows = data.submissions || [];
+        document.getElementById('diag').textContent = JSON.stringify(data.diagnostics || {}, null, 2);
+        loading.style.display = 'none';
+        ok.style.display = 'block';
+        applyFilters();
+      } catch (e) {
+        loading.innerHTML = '<span class="text-danger">' + esc(e.message || 'Failed to load submissions') + '</span>';
+      }
+    }
+    document.getElementById('reloadBtn').addEventListener('click', loadRows);
+    document.getElementById('filterEmail').addEventListener('input', applyFilters);
+    document.getElementById('filterSource').addEventListener('input', applyFilters);
+    loadRows();
+  </script>
+</body>
+</html>
+
