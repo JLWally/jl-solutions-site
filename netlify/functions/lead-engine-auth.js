@@ -14,7 +14,7 @@ const { withCors } = require('./lib/lead-engine-guard');
 
 function allowDevQuickLogin(event, body) {
   if (!body || body.devQuickLogin !== true) return false;
-  if (String(process.env.CONTEXT || '').toLowerCase() === 'dev') return true;
+  if (String(process.env["CONTEXT"] || '').toLowerCase() === 'dev') return true;
   const host = String(event.headers.host || event.headers.Host || '').toLowerCase();
   if (host.startsWith('localhost:') || host === 'localhost') return true;
   if (host.startsWith('127.0.0.1:') || host === '127.0.0.1') return true;

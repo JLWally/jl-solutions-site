@@ -4,9 +4,9 @@
  */
 function getLeadEnginePublicSiteUrl() {
   const raw =
-    process.env.LEAD_ENGINE_PUBLIC_SITE_URL ||
-    process.env.URL ||
-    process.env.DEPLOY_PRIME_URL ||
+    process.env["LEAD_ENGINE_PUBLIC_SITE_URL"] ||
+    process.env["URL"] ||
+    process.env["DEPLOY_PRIME_URL"] ||
     '';
   return String(raw).replace(/\/+$/, '');
 }

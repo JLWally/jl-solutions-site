@@ -67,8 +67,8 @@ const DEFAULT_REPLY_TO = 'info@jlsolutions.io';
  */
 function getLeadEngineOutreachFromEmail() {
   return (
-    process.env.LEAD_ENGINE_OUTREACH_FROM_EMAIL ||
-    process.env.FORM_FROM_EMAIL ||
+    process.env["LEAD_ENGINE_OUTREACH_FROM_EMAIL"] ||
+    process.env["FORM_FROM_EMAIL"] ||
     'JL Solutions <onboarding@resend.dev>'
   );
 }

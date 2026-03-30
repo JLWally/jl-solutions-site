@@ -11,12 +11,13 @@ function isTruthyEnv(v) {
   return TRUE_VALUES.has(String(v).trim().toLowerCase());
 }
 
+/** Bracket access avoids Netlify/esbuild inlining empty build-time values for secrets and flags. */
 function isLeadEngineEnabled() {
-  return isTruthyEnv(process.env.LEAD_ENGINE_ENABLED);
+  return isTruthyEnv(process.env["LEAD_ENGINE_ENABLED"]);
 }
 
 function isLeadEngineOpenAiAllowed() {
-  return isTruthyEnv(process.env.LEAD_ENGINE_ALLOW_OPENAI);
+  return isTruthyEnv(process.env["LEAD_ENGINE_ALLOW_OPENAI"]);
 }
 
 function parseLeadEngineOperators(envStr) {
@@ -38,11 +39,11 @@ function parseLeadEngineOperators(envStr) {
 }
 
 function getLeadEngineOperators() {
-  return parseLeadEngineOperators(process.env.LEAD_ENGINE_OPERATORS || '');
+  return parseLeadEngineOperators(process.env["LEAD_ENGINE_OPERATORS"] || '');
 }
 
 function getLeadEngineSecret() {
-  const s = process.env.LEAD_ENGINE_SECRET;
+  const s = process.env["LEAD_ENGINE_SECRET"];
   return s == null ? '' : String(s).trim();
 }
 
@@ -57,7 +58,7 @@ function isLeadEngineAuthConfigured() {
  * Set LEAD_ENGINE_PSI_EXTENDED=true to also run PSI on same-origin contact + primary service URLs.
  */
 function isLeadEnginePsiExtended() {
-  return isTruthyEnv(process.env.LEAD_ENGINE_PSI_EXTENDED);
+  return isTruthyEnv(process.env["LEAD_ENGINE_PSI_EXTENDED"]);
 }
 
 module.exports = {

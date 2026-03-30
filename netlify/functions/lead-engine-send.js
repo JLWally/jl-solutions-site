@@ -43,7 +43,7 @@ exports.handler = async (event) => {
     return g.response;
   }
 
-  if (!process.env.RESEND_API_KEY) {
+  if (!process.env["RESEND_API_KEY"]) {
     return {
       statusCode: 503,
       headers,
@@ -53,7 +53,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const physicalAddress = (process.env.LEAD_ENGINE_PHYSICAL_ADDRESS || '').trim();
+  const physicalAddress = (process.env["LEAD_ENGINE_PHYSICAL_ADDRESS"] || '').trim();
   if (!physicalAddress) {
     return {
       statusCode: 503,
