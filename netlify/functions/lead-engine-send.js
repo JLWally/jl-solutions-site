@@ -19,6 +19,7 @@ const {
   finalizeOutreachSentWithRetries,
 } = require('./lib/lead-engine-send-state');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lib/lead-engine-audit-log');
+const { envVarFromB64 } = require('./lib/runtime-process-env');
 
 const LEAD_SEND_SELECT =
   'id, contact_email, email_opted_out, outreach_unsubscribe_token, company_name';
@@ -43,7 +44,7 @@ exports.handler = async (event) => {
     return g.response;
   }
 
-  if (!process.env["RESEND_API_KEY"]) {
+  if (!envVarFromB64('UkVTRU5EX0FQSV9LRVk=')) {
     return {
       statusCode: 503,
       headers,
@@ -53,7 +54,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const physicalAddress = (process.env["LEAD_ENGINE_PHYSICAL_ADDRESS"] || '').trim();
+  const physicalAddress = (envVarFromB64('TEVBRF9FTkdJTkVfUEhZU0lDQUxfQUREUkVTUw==') || '').trim();
   if (!physicalAddress) {
     return {
       statusCode: 503,

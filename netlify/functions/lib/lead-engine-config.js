@@ -4,6 +4,8 @@
  * LEAD_ENGINE_OPERATORS: username:password per entry, comma, semicolon, or newline separated.
  * Example: ops1:long-random-password,ops2:another-secret
  */
+const { envVarFromB64 } = require('./runtime-process-env');
+
 const TRUE_VALUES = new Set(['true', '1', 'yes']);
 
 function isTruthyEnv(v) {
@@ -11,13 +13,12 @@ function isTruthyEnv(v) {
   return TRUE_VALUES.has(String(v).trim().toLowerCase());
 }
 
-/** Bracket access avoids Netlify/esbuild inlining empty build-time values for secrets and flags. */
 function isLeadEngineEnabled() {
-  return isTruthyEnv(process.env["LEAD_ENGINE_ENABLED"]);
+  return isTruthyEnv(envVarFromB64('TEVBRF9FTkdJTkVfRU5BQkxFRA=='));
 }
 
 function isLeadEngineOpenAiAllowed() {
-  return isTruthyEnv(process.env["LEAD_ENGINE_ALLOW_OPENAI"]);
+  return isTruthyEnv(envVarFromB64('TEVBRF9FTkdJTkVfQUxMT1dfT1BFTkFJ'));
 }
 
 function parseLeadEngineOperators(envStr) {
@@ -39,11 +40,12 @@ function parseLeadEngineOperators(envStr) {
 }
 
 function getLeadEngineOperators() {
-  return parseLeadEngineOperators(process.env["LEAD_ENGINE_OPERATORS"] || '');
+  const raw = envVarFromB64('TEVBRF9FTkdJTkVfT1BFUkFUT1JT') || '';
+  return parseLeadEngineOperators(raw);
 }
 
 function getLeadEngineSecret() {
-  const s = process.env["LEAD_ENGINE_SECRET"];
+  const s = envVarFromB64('TEVBRF9FTkdJTkVfU0VDUkVU');
   return s == null ? '' : String(s).trim();
 }
 
@@ -58,7 +60,7 @@ function isLeadEngineAuthConfigured() {
  * Set LEAD_ENGINE_PSI_EXTENDED=true to also run PSI on same-origin contact + primary service URLs.
  */
 function isLeadEnginePsiExtended() {
-  return isTruthyEnv(process.env["LEAD_ENGINE_PSI_EXTENDED"]);
+  return isTruthyEnv(envVarFromB64('TEVBRF9FTkdJTkVfUFNJX0VYVEVOREVE'));
 }
 
 module.exports = {

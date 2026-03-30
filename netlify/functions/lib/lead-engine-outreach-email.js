@@ -62,13 +62,15 @@ ${footer}
 
 const DEFAULT_REPLY_TO = 'info@jlsolutions.io';
 
+const { envVarFromB64 } = require('./runtime-process-env');
+
 /**
  * From address: same cascade as website forms where possible.
  */
 function getLeadEngineOutreachFromEmail() {
   return (
-    process.env["LEAD_ENGINE_OUTREACH_FROM_EMAIL"] ||
-    process.env["FORM_FROM_EMAIL"] ||
+    envVarFromB64('TEVBRF9FTkdJTkVfT1VUUkVBQ0hfRlJPTV9FTUFJTA==') ||
+    envVarFromB64('Rk9STV9GUk9NX0VNQUlM') ||
     'JL Solutions <onboarding@resend.dev>'
   );
 }
