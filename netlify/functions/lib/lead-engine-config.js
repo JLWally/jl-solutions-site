@@ -13,8 +13,35 @@ function isTruthyEnv(v) {
   return TRUE_VALUES.has(String(v).trim().toLowerCase());
 }
 
+/**
+ * Parsed ENABLE flag, or null when unset/blank so callers can fall back.
+ * Strips wrapping quotes (common when copying into Netlify).
+ */
+function parsedLeadEngineEnabledFlag(raw) {
+  if (raw == null || raw === '') return null;
+  let t = String(raw).trim();
+  if (
+    (t.startsWith('"') && t.endsWith('"')) ||
+    (t.startsWith("'") && t.endsWith("'"))
+  ) {
+    t = t.slice(1, -1).trim();
+  }
+  const lower = t.toLowerCase();
+  if (['false', '0', 'no', 'off'].includes(lower)) return false;
+  if (['true', '1', 'yes', 'on'].includes(lower)) return true;
+  return null;
+}
+
+/**
+ * Enabled when LEAD_ENGINE_ENABLED is truthy, or when it is missing but auth env
+ * is fully configured (operators + secret). Explicit false always disables.
+ */
 function isLeadEngineEnabled() {
-  return isTruthyEnv(envVarFromB64('TEVBRF9FTkdJTkVfRU5BQkxFRA=='));
+  const raw = envVarFromB64('TEVBRF9FTkdJTkVfRU5BQkxFRA==');
+  const decision = parsedLeadEngineEnabledFlag(raw);
+  if (decision === false) return false;
+  if (decision === true) return true;
+  return isLeadEngineAuthConfigured();
 }
 
 function isLeadEngineOpenAiAllowed() {
