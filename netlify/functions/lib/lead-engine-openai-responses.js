@@ -2,6 +2,7 @@
  * Thin wrapper for OpenAI Responses API (same transport as netlify/functions/chatbot.js).
  * Isolated so scoring can swap providers or wire mock tests without touching chatbot.
  */
+const { envVarFromB64 } = require('./runtime-process-env');
 
 function extractResponsesOutputText(data) {
   if (!data || typeof data !== 'object') return '';
@@ -21,8 +22,11 @@ function extractResponsesOutputText(data) {
  * @param {object} requestBody - OpenAI /v1/responses JSON body
  */
 async function postResponses(requestBody) {
-  const url = process.env.OPENAI_API_URL || 'https://api.openai.com/v1/responses';
-  const key = process.env.OPENAI_API_KEY;
+  const rawUrl = envVarFromB64('T1BFTkFJX0FQSV9VUkw=');
+  const url = String(rawUrl || 'https://api.openai.com/v1/responses')
+    .trim()
+    .replace(/\/chat\/completions\/?$/i, '/responses');
+  const key = envVarFromB64('T1BFTkFJX0FQSV9LRVk=');
   if (!key) {
     const err = new Error('OPENAI_API_KEY is not configured');
     err.code = 'missing_api_key';

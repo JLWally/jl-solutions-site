@@ -142,7 +142,20 @@ exports.handler = async (event) => {
       }];
     }
 
-    const session = await stripe.checkout.sessions.create(sessionConfig);
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create(sessionConfig);
+    } catch (err) {
+      const msg = (err && ((err.raw && err.raw.message) || err.message) || "").toLowerCase();
+      if (msg.includes("unknown parameter") && msg.includes("automatic_payment_methods")) {
+        const fallbackConfig = { ...sessionConfig };
+        delete fallbackConfig.automatic_payment_methods;
+        fallbackConfig.payment_method_types = ["card"];
+        session = await stripe.checkout.sessions.create(fallbackConfig);
+      } else {
+        throw err;
+      }
+    }
 
     return {
       statusCode: 200,

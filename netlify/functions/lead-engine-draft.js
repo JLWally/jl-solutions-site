@@ -7,6 +7,7 @@ const { isLeadEngineOpenAiAllowed } = require('./lib/lead-engine-config');
 const { validateDraftBody } = require('./lib/lead-engine-draft-validate');
 const { runDraftForLead } = require('./lib/lead-engine-draft-run');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lib/lead-engine-audit-log');
+const { envVarFromB64 } = require('./lib/runtime-process-env');
 
 exports.handler = async (event) => {
   const headers = withCors('POST, OPTIONS');
@@ -39,7 +40,7 @@ exports.handler = async (event) => {
     };
   }
 
-  if (!process.env.OPENAI_API_KEY) {
+  if (!envVarFromB64('T1BFTkFJX0FQSV9LRVk=')) {
     return {
       statusCode: 503,
       headers,

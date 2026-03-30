@@ -198,11 +198,21 @@
           body: JSON.stringify({ messages: state.history })
         });
 
-        if (!res.ok) {
-          throw new Error(`Status ${res.status}`);
+        const raw = await res.text();
+        let payload = {};
+        try {
+          payload = raw ? JSON.parse(raw) : {};
+        } catch {
+          payload = {};
         }
-
-        const payload = await res.json();
+        if (!res.ok) {
+          const detail =
+            payload.details ||
+            payload.error ||
+            (raw ? raw.slice(0, 220) : "") ||
+            `Status ${res.status}`;
+          throw new Error(detail);
+        }
         const reply =
           payload.reply ||
           payload.message ||

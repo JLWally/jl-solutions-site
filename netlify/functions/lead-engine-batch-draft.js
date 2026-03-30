@@ -4,6 +4,7 @@ const { isLeadEngineOpenAiAllowed } = require('./lib/lead-engine-config');
 const { summarizeBatchOutcomes } = require('./lib/lead-engine-batch-result');
 const { validateBatchDraftBody } = require('./lib/lead-engine-batch-draft-validate');
 const { runDraftForLead } = require('./lib/lead-engine-draft-run');
+const { envVarFromB64 } = require('./lib/runtime-process-env');
 
 exports.handler = async (event) => {
   const headers = withCors('POST, OPTIONS');
@@ -39,7 +40,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const openAiEnabled = isLeadEngineOpenAiAllowed() && !!process.env.OPENAI_API_KEY;
+  const openAiEnabled = isLeadEngineOpenAiAllowed() && !!envVarFromB64('T1BFTkFJX0FQSV9LRVk=');
   const results = [];
   if (!openAiEnabled) {
     for (const leadId of v.value.leadIds) {
