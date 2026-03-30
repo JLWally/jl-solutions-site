@@ -11,10 +11,20 @@
  * This is separate from lead_engine_leads (operator / n8n pipeline).
  */
 const { createClient } = require('@supabase/supabase-js');
+const { envVarFromB64 } = require('./lib/runtime-process-env');
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const TO_EMAIL = 'info@jlsolutions.io';
-const FROM_EMAIL = process.env.FORM_FROM_EMAIL || 'JL Solutions Website <onboarding@resend.dev>';
+
+function getRuntimeEnv() {
+  return {
+    resendApiKey: envVarFromB64('UkVTRU5EX0FQSV9LRVk=') || '',
+    formFromEmail:
+      envVarFromB64('Rk9STV9GUk9NX0VNQUlM') || 'JL Solutions Website <onboarding@resend.dev>',
+    supabaseUrl: envVarFromB64('U1VQQUJBU0VfVVJM') || '',
+    supabaseServiceRoleKey: envVarFromB64('U1VQQUJBU0VfU0VSVklDRV9ST0xFX0tFWQ==') || '',
+    referralUseSimpleAuth: envVarFromB64('UkVGRVJSQUxfVVNFX1NJTVBMRV9BVVRI') || '',
+  };
+}
 
 function getRawBody(event) {
   if (event.body == null || event.body === '') return '';
@@ -302,8 +312,9 @@ function escapeHtml(s) {
 }
 
 function getServiceSupabase() {
-  const url = (process.env.SUPABASE_URL || '').trim();
-  const key = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+  const env = getRuntimeEnv();
+  const url = String(env.supabaseUrl || '').trim();
+  const key = String(env.supabaseServiceRoleKey || '').trim();
   if (!url || !key || !/^https?:\/\//i.test(url)) return null;
   try {
     return createClient(url, key);
@@ -435,6 +446,31 @@ async function persistToConsultationsTable(formName, data) {
   }
 }
 
+async function appendSubmissionAudit(formName, data, extra = {}) {
+  try {
+    const { getStore } = require('@netlify/blobs');
+    const store = getStore('consultation-leads');
+    const raw = await store.get('all', { type: 'json' });
+    const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
+    list.push({
+      _storedAt: new Date().toISOString(),
+      _formName: formName,
+      name: data.name || '',
+      email: data.email || '',
+      referralCode: data.referralCode || data.referral_code || '',
+      service: data.service || '',
+      source: data.source || formName,
+      paymentAmount: data.paymentAmount || '',
+      message: data.message || data.challenge || data.issue || data.demoDesc || '',
+      ...extra,
+    });
+    if (list.length > 1000) list.splice(0, list.length - 1000);
+    await store.setJSON('all', list);
+  } catch (e) {
+    console.error('[send-form-email] audit append failed:', e.message || e);
+  }
+}
+
 exports.handler = async (event) => {
   const rawLen = getRawBody(event).length;
   console.log(
@@ -473,6 +509,7 @@ exports.handler = async (event) => {
   }
   console.log('[send-form-email] formName=', formName, 'keys=', Object.keys(data).join(','));
 
+  await appendSubmissionAudit(formName, data);
   await persistToConsultationsTable(formName, data);
 
   let subject, html;
@@ -481,7 +518,10 @@ exports.handler = async (event) => {
     subject = built.subject;
     html = built.html;
 
-    const useSimpleAuth = process.env.REFERRAL_USE_SIMPLE_AUTH === 'true' || process.env.REFERRAL_USE_SIMPLE_AUTH === '1';
+    const env = getRuntimeEnv();
+    const useSimpleAuth =
+      String(env.referralUseSimpleAuth).toLowerCase() === 'true' ||
+      String(env.referralUseSimpleAuth) === '1';
     const refCode = (data.referralCode || data.referral_code || '').trim().toUpperCase();
     if (useSimpleAuth && refCode && data.email) {
       try {
@@ -534,19 +574,11 @@ exports.handler = async (event) => {
     body: '',
   });
 
-  if (!RESEND_API_KEY) {
+  const env = getRuntimeEnv();
+  if (!env.resendApiKey) {
     console.error('[send-form-email] RESEND_API_KEY not set. Add it in Netlify: Site configuration → Environment variables → RESEND_API_KEY = your Resend key. Storing in Blobs as fallback.');
     try {
-      const { getStore } = require('@netlify/blobs');
-      const store = getStore('consultation-leads');
-      const raw = await store.get('fallback', { type: 'json' });
-      const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
-      list.push({
-        ...data,
-        _storedAt: new Date().toISOString(),
-        _formName: formName,
-      });
-      await store.setJSON('fallback', list);
+      await appendSubmissionAudit(formName, data, { _fallbackReason: 'missing_resend_api_key' });
     } catch (e) {
       console.error('[send-form-email] Blob fallback failed:', e);
     }
@@ -555,12 +587,12 @@ exports.handler = async (event) => {
 
   try {
     const Resend = require('resend');
-    const resend = new Resend(RESEND_API_KEY);
+    const resend = new Resend(env.resendApiKey);
 
     console.log('[send-form-email] Sending to', TO_EMAIL, 'subject:', subject);
     // 1. Send lead to info@jlsolutions.io
     const { error: err1 } = await resend.emails.send({
-      from: FROM_EMAIL,
+      from: env.formFromEmail,
       to: [TO_EMAIL],
       subject,
       html,
@@ -569,16 +601,7 @@ exports.handler = async (event) => {
 
     if (err1) {
       console.error('[send-form-email] Resend error (to info@):', JSON.stringify(err1));
-      try {
-        const { getStore } = require('@netlify/blobs');
-        const store = getStore('consultation-leads');
-        const raw = await store.get('fallback', { type: 'json' });
-        const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
-        list.push({ ...data, _storedAt: new Date().toISOString(), _formName: formName, _resendError: err1.message });
-        await store.setJSON('fallback', list);
-      } catch (e) {
-        console.error('[send-form-email] Blob fallback failed:', e);
-      }
+      await appendSubmissionAudit(formName, data, { _fallbackReason: 'resend_to_info_failed', _resendError: err1.message });
       return redirectSuccess();
     }
 
@@ -641,7 +664,7 @@ exports.handler = async (event) => {
         `,
                     };
       const { error: err2 } = await resend.emails.send({
-        from: FROM_EMAIL,
+        from: env.formFromEmail,
         to: [customerEmail],
         subject: cust.subject,
         html: cust.html,
@@ -653,16 +676,7 @@ exports.handler = async (event) => {
     }
   } catch (err) {
     console.error('[send-form-email]', err);
-    try {
-      const { getStore } = require('@netlify/blobs');
-      const store = getStore('consultation-leads');
-      const raw = await store.get('fallback', { type: 'json' });
-      const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
-      list.push({ ...data, _storedAt: new Date().toISOString(), _formName: formName, _error: err.message });
-      await store.setJSON('fallback', list);
-    } catch (e) {
-      console.error('[send-form-email] Blob fallback failed:', e);
-    }
+    await appendSubmissionAudit(formName, data, { _fallbackReason: 'send_form_email_exception', _error: err.message });
     return redirectSuccess();
   }
 

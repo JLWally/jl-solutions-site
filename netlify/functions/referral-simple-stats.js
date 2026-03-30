@@ -4,6 +4,7 @@
  */
 const crypto = require('crypto');
 const { getStore } = require('@netlify/blobs');
+const { envVarFromB64 } = require('./lib/runtime-process-env');
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -30,7 +31,7 @@ function getSession(event) {
   const cookie = event.headers.cookie || event.headers.Cookie || '';
   const match = cookie.match(/referral_session=([^;]+)/);
   const token = match ? match[1].trim() : '';
-  const secret = process.env.REFERRAL_SECRET || '';
+  const secret = envVarFromB64('UkVGRVJSQUxfU0VDUkVU') || '';
   return verifySession(token, secret);
 }
 
@@ -75,6 +76,24 @@ exports.handler = async (event) => {
       source: r.source || 'unknown',
     }));
 
+    const leadsStore = getStore('consultation-leads');
+    const leadsRaw = await leadsStore.get('all', { type: 'json' });
+    const leadsList = leadsRaw == null ? [] : (Array.isArray(leadsRaw) ? leadsRaw : []);
+    const leadSubmissions = leadsList
+      .filter((l) => (String(l.referralCode || '').trim().toUpperCase() === session.code))
+      .slice(-100)
+      .reverse()
+      .map((l) => ({
+        created_at: l._storedAt || null,
+        name: l.name || '',
+        email: l.email || '',
+        service: l.service || '',
+        referral_code: l.referralCode || '',
+        source: l.source || l._formName || '',
+        status: 'new',
+        message: l.message || '',
+      }));
+
     return {
       statusCode: 200,
       headers,
@@ -84,6 +103,8 @@ exports.handler = async (event) => {
         pendingEarnings,
         totalReferrals: myRefs.length,
         codes: [{ code: session.code, commission_rate: session.commissionRate || 10 }],
+        leadSubmissions,
+        totalLeadSubmissions: leadSubmissions.length,
       }),
     };
   } catch (e) {
