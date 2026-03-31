@@ -277,6 +277,7 @@
               <div class="col-md-6 d-flex align-items-end gap-2 flex-wrap le-filter-actions">
                 <button type="button" class="btn btn-outline-light btn-sm" id="reloadList">Refresh</button>
                 <button type="button" class="btn btn-outline-warning btn-sm" id="clearFilters">Clear filters</button>
+                <button type="button" class="btn btn-outline-success btn-sm" id="downloadCsvBtn">Download CSV</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm" id="pagePrev" disabled>Prev page</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm" id="pageNext" disabled>Next page</button>
               </div>
@@ -457,6 +458,55 @@
       document.getElementById('filterSearch').value = '';
       document.getElementById('filterPageSize').value = '25';
       loadList(true);
+    }
+
+    function csvEscape(v) {
+      var s = v == null ? '' : String(v);
+      if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+      return s;
+    }
+
+    function leadRowToCsvRecord(r) {
+      var la = r && r.latest_analysis ? r.latest_analysis : {};
+      var scoring = la && la.scoring ? la.scoring : {};
+      return {
+        id: r.id || '',
+        created_at: r.created_at || '',
+        company_name: r.company_name || '',
+        website_url: r.website_url || '',
+        contact_email: r.contact_email || '',
+        status: r.status || '',
+        crm_sync_status: r.sync_status || 'not_synced',
+        recommended_offer: scoring.recommended_offer || '',
+        fit_score: scoring.fit_score != null ? scoring.fit_score : '',
+        confidence: scoring.confidence || '',
+        email_opted_out: r.email_opted_out === true ? 'true' : 'false',
+        globally_suppressed: r.global_email_suppressed === true ? 'true' : 'false',
+      };
+    }
+
+    function downloadCurrentLeadsCsv() {
+      var rows = currentListRows || [];
+      if (!rows.length) {
+        window.alert('No leads to export on this page.');
+        return;
+      }
+      var records = rows.map(leadRowToCsvRecord);
+      var headers = Object.keys(records[0]);
+      var lines = [headers.join(',')];
+      records.forEach(function (rec) {
+        lines.push(headers.map(function (h) { return csvEscape(rec[h]); }).join(','));
+      });
+      var csv = lines.join('\n');
+      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      var a = document.createElement('a');
+      var ts = new Date().toISOString().replace(/[:.]/g, '-');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'lead-engine-leads-page-' + ts + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
     }
 
     function renderListSummary(sum, d) {
@@ -1295,6 +1345,9 @@
       };
       document.getElementById('clearFilters').onclick = function () {
         clearListFilters();
+      };
+      document.getElementById('downloadCsvBtn').onclick = function () {
+        downloadCurrentLeadsCsv();
       };
       document.getElementById('filterStatus').onchange = function () {
         loadList(true);
