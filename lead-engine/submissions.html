@@ -13,6 +13,9 @@
     .card-dark { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; }
     .table-dark-ish { --bs-table-bg: #1a1a1a; --bs-table-color: #e8e8e8; }
     .text-muted { color: #b9bec8 !important; }
+    .submissions-table-wrap { max-height: 70vh; overflow: auto; }
+    .submissions-table-wrap thead th { position: sticky; top: 0; background: #1a1a1a; z-index: 2; }
+    .msg-clip { max-width: 22rem; max-height: 3.6rem; overflow: auto; line-height: 1.25; white-space: normal; }
   </style>
 </head>
 <body>
@@ -31,7 +34,10 @@
       <a class="btn btn-primary" href="/lead-engine/login.html?return=%2Flead-engine%2Fsubmissions.html">Sign in</a>
     </div>
     <div id="ok" style="display:none;">
-      <h1 class="h4 mb-2">Recent form submissions</h1>
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-1">
+        <h1 class="h4 mb-0">Recent form submissions</h1>
+        <span id="countBadge" class="badge bg-primary">0 records</span>
+      </div>
       <p class="text-muted">Data source: Supabase consultations + Blob fallback stream.</p>
       <div class="row g-2 mb-3">
         <div class="col-sm-4 col-md-3">
@@ -48,7 +54,7 @@
         <pre id="diag" class="small text-light mb-0" style="white-space:pre-wrap;"></pre>
       </div>
       <div class="card card-dark p-3">
-        <div class="table-responsive" style="max-height: 70vh;">
+        <div class="table-responsive submissions-table-wrap">
           <table class="table table-sm table-dark-ish mb-0">
             <thead>
               <tr>
@@ -59,6 +65,7 @@
                 <th>Service</th>
                 <th>Referral</th>
                 <th>Provider</th>
+                <th>Message preview</th>
               </tr>
             </thead>
             <tbody id="rows"></tbody>
@@ -86,6 +93,7 @@
         '<td>' + esc(r.service || '-') + '</td>' +
         '<td>' + esc(r.referral_code || '-') + '</td>' +
         '<td>' + esc(r.provider || '-') + '</td>' +
+        '<td><div class="msg-clip">' + esc(r.message || '-') + '</div></td>' +
       '</tr>';
     }
     function applyFilters() {
@@ -98,7 +106,7 @@
       });
       const tbody = document.getElementById('rows');
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">No submissions match filters.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No submissions match filters.</td></tr>';
         return;
       }
       tbody.innerHTML = rows.map(rowHtml).join('');
@@ -120,6 +128,7 @@
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to load submissions');
         allRows = data.submissions || [];
+        document.getElementById('countBadge').textContent = allRows.length + ' records';
         document.getElementById('diag').textContent = JSON.stringify(data.diagnostics || {}, null, 2);
         loading.style.display = 'none';
         ok.style.display = 'block';

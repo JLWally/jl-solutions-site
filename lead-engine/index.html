@@ -97,6 +97,11 @@
     .le-main-compact .card-dark { padding: 0.75rem 0.9rem; }
     .le-main-compact .le-panel.card-dark { padding: 0.55rem 0.75rem; }
     .navbar.le-nav-tight { padding-top: 0.35rem; padding-bottom: 0.35rem; }
+    .le-filter-actions .btn { min-width: 6.4rem; }
+    @media (max-width: 767.98px) {
+      #leadsTableWrap { max-height: calc(100vh - 15rem); }
+      .le-filter-actions .btn { flex: 1 1 auto; }
+    }
   </style>
 </head>
 <body class="lead-engine-surface">
@@ -269,8 +274,9 @@
                 <label class="form-label small mb-0" for="filterSearch">Search (company / URL)</label>
                 <input class="form-control form-control-sm bg-dark text-light border-secondary" id="filterSearch" placeholder="company or URL" />
               </div>
-              <div class="col-md-6 d-flex align-items-end gap-2 flex-wrap">
+              <div class="col-md-6 d-flex align-items-end gap-2 flex-wrap le-filter-actions">
                 <button type="button" class="btn btn-outline-light btn-sm" id="reloadList">Refresh</button>
+                <button type="button" class="btn btn-outline-warning btn-sm" id="clearFilters">Clear filters</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm" id="pagePrev" disabled>Prev page</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm" id="pageNext" disabled>Next page</button>
               </div>
@@ -438,6 +444,19 @@
       q.set('includeLatestOutreach', '1');
       q.set('includeSummary', '1');
       return q;
+    }
+
+    function clearListFilters() {
+      document.getElementById('filterStatus').value = '';
+      document.getElementById('filterOffer').value = '';
+      document.getElementById('filterOutreach').value = '';
+      document.getElementById('filterReviewQueue').value = '';
+      document.getElementById('filterNeedsAttention').value = '';
+      document.getElementById('filterOptedOut').value = '';
+      document.getElementById('filterSuppressed').value = '';
+      document.getElementById('filterSearch').value = '';
+      document.getElementById('filterPageSize').value = '25';
+      loadList(true);
     }
 
     function renderListSummary(sum, d) {
@@ -1273,6 +1292,9 @@
 
       document.getElementById('reloadList').onclick = function () {
         loadList(false);
+      };
+      document.getElementById('clearFilters').onclick = function () {
+        clearListFilters();
       };
       document.getElementById('filterStatus').onchange = function () {
         loadList(true);
