@@ -46,8 +46,9 @@ function buildOutreachEmailHtml(opts) {
   }
   const addr = opts.physicalAddress && String(opts.physicalAddress).trim();
   if (addr) {
+    // CAN-SPAM requires a postal address on commercial mail; keep it present but low-emphasis.
     footer += `
-      <p style="font-size:12px;color:#666;margin:12px 0 0 0;">
+      <p style="font-size:10px;line-height:1.35;color:#a8a8a8;margin:14px 0 0 0;">
         ${escapeHtml(addr)}
       </p>`;
   }
