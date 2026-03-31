@@ -199,16 +199,18 @@
 
   /* Chatbot */
   .chatbot-toggle {
-    bottom: 1rem;
-    right: 1rem;
+    bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    right: max(1rem, env(safe-area-inset-right, 0px));
   }
 
   .chatbot-window {
-    bottom: 5.25rem;
-    right: 1rem;
-    left: 1rem;
+    bottom: calc(4.25rem + max(0px, env(safe-area-inset-bottom, 0px)));
+    right: max(1rem, env(safe-area-inset-right, 0px));
+    left: max(1rem, env(safe-area-inset-left, 0px));
     width: auto;
     max-width: calc(100% - 2rem);
+    max-height: min(36rem, calc(100vh - 6rem));
+    max-height: min(36rem, calc(100dvh - 5.75rem - max(0px, env(safe-area-inset-bottom, 0px))));
   }
 }
 

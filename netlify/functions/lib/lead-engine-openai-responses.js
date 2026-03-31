@@ -6,6 +6,29 @@ const { envVarFromB64 } = require('./runtime-process-env');
 
 function extractResponsesOutputText(data) {
   if (!data || typeof data !== 'object') return '';
+  if (Array.isArray(data.output)) {
+    const chunks = [];
+    for (const block of data.output) {
+      if (!block || typeof block !== 'object') continue;
+      const parts = block.content;
+      if (!Array.isArray(parts)) continue;
+      for (const part of parts) {
+        if (!part || typeof part !== 'object') continue;
+        if (typeof part.text === 'string' && part.text.length) {
+          chunks.push(part.text);
+          continue;
+        }
+        if (
+          (part.type === 'output_text' || part.type === 'input_text') &&
+          typeof part.text === 'string' &&
+          part.text.length
+        ) {
+          chunks.push(part.text);
+        }
+      }
+    }
+    if (chunks.length) return chunks.join('');
+  }
   const out0 = data.output && data.output[0];
   const content = out0 && out0.content;
   if (Array.isArray(content) && content[0]) {

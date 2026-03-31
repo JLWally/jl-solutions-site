@@ -4,142 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact | JL Solutions</title>
-  <meta name="description" content="Structured contact intake for JL Solutions: choose your topic, then send a message. AI assistant (JL Guide) on every page for quick questions. Typical reply within one business day.">
+  <meta name="description" content="Contact JL Solutions: send a message and we will reply within one business day. Book a call, ask about automation, or get in touch.">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/theme-jl.css">
-  <style>
-    .contact-wrapper { max-width: 900px; margin: 0 auto; }
-    .contact-helper { font-size: 0.95rem; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
-    .contact-step {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 16px;
-      padding: 1.75rem;
-      margin-bottom: 1.5rem;
-    }
-    .contact-step h2 { font-size: 1.15rem; margin-bottom: 1rem; color: rgba(255,255,255,0.95); }
-    .what-happens-next {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 2rem;
-      margin-top: 3rem;
-    }
-    .what-happens-next h3 { font-size: 1.25rem; margin-bottom: 1rem; }
-    .what-happens-next ol { padding-left: 1.25rem; margin: 0; color: rgba(255,255,255,0.85); }
-    .what-happens-next li { margin-bottom: 0.5rem; }
-    .contact-human {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    .contact-human img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .contact-human .blurb { font-size: 1rem; color: rgba(255,255,255,0.9); }
-    .contact-book-hint {
-      background: rgba(255, 193, 7, 0.12);
-      border: 1px solid rgba(255, 193, 7, 0.35);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.25rem;
-      color: rgba(255,255,255,0.95);
-    }
-    .contact-book-hint a { color: #FFC107; font-weight: 600; }
-  </style>
+  <link rel="stylesheet" href="/css/jl-payment-form.css">
+  <link rel="stylesheet" href="/css/jl-contact-form.css">
   <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <div id="header"></div>
 
-  <main class="py-5">
-    <div class="container">
-      <div class="contact-wrapper">
-        <h1 class="text-center mb-2">Contact Us</h1>
-        <p class="text-center lead mb-4">Let's start something great together.</p>
-        <p class="contact-helper text-center">Two quick steps: what you need, then your details. Typical response time: within 1 business day. For instant pointers, use <strong>JL Guide</strong> (chat icon, lower right).</p>
+  <main id="main-content" class="jl-contact-page">
+    <div class="container py-4">
+      <div class="jl-contact-intro text-center mb-4">
+        <h1 class="h2 text-white fw-bold mb-2">Contact</h1>
+        <p class="text-white-50 mb-0">Send a note and we will reply within one business day. Prefer chat? Use <strong class="text-white">Concierge Daemon</strong> (lower right).</p>
+      </div>
 
-      <form id="jl-contact-form" name="contact" method="POST" action="/.netlify/functions/send-form-email" class="mx-auto">
-        <input type="hidden" name="form-name" value="contact">
-        <p class="visually-hidden" aria-hidden="true">
-          <label>Leave blank: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
+      <div class="jl-contact-card-wrap">
+        <div class="jl-payment-card">
+          <h2 class="jl-payment-title h5 mb-1">Message us</h2>
+          <p class="jl-payment-lead small mb-4">Pick a topic so your message reaches the right inbox.</p>
+
+          <form id="jl-contact-form" name="contact" method="POST" action="/.netlify/functions/send-form-email">
+            <input type="hidden" name="form-name" value="contact">
+            <p class="visually-hidden" aria-hidden="true">
+              <label>Leave blank: <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
+
+            <div class="mb-3">
+              <label class="form-label" for="inquiry_type">Topic <span class="text-danger">*</span></label>
+              <select class="form-select" id="inquiry_type" name="inquiry_type" required>
+                <option value="">Select a topic</option>
+                <option value="General question">General question</option>
+                <option value="Book a consultation">Book a consultation</option>
+                <option value="Automation / intake / scheduling project">Automation, intake, or scheduling</option>
+                <option value="Partnership or media">Partnership or media</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="jl-contact-book-hint d-none mb-3" id="bookCallHint" role="status">
+              <strong>Need a time on the calendar?</strong>
+              <a href="/book-consultation.html">Book a free call</a> (fastest). You can still send a message here and we will follow up by email.
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="name">Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="name" name="name" required autocomplete="name">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="email">Email <span class="text-danger">*</span></label>
+              <input type="email" class="form-control" id="email" name="email" required autocomplete="email">
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label" for="message">Message <span class="text-danger">*</span></label>
+              <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Brief context and how we can help. We will confirm by email."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-jl-payment-submit w-100" id="jl-contact-submit">Send message</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="jl-contact-foot text-center">
+        <p class="mb-2"><strong class="text-white">What happens next:</strong> we read every message, reply within one business day, and suggest a short call if it is a fit. No pressure.</p>
+        <p class="mb-1">
+          <a href="mailto:info@jlsolutions.io">info@jlsolutions.io</a>
+          <span class="text-white-50 mx-2">·</span>
+          <a href="https://www.linkedin.com/in/jess-walcott-3423aa87">LinkedIn</a>
         </p>
-
-        <div class="contact-step" id="contactStep1">
-          <h2 class="h5">Step 1 — What can we help with?</h2>
-          <p class="small text-white-50 mb-3">This routes your message so the right follow-up happens faster.</p>
-          <div class="mb-3">
-            <label class="form-label" for="inquiry_type">Topic *</label>
-            <select class="form-select" id="inquiry_type" name="inquiry_type" required>
-              <option value="">Select one…</option>
-              <option value="General question">General question</option>
-              <option value="Book a consultation">Book a consultation</option>
-              <option value="Automation / intake / scheduling project">Automation / intake / scheduling project</option>
-              <option value="Partnership or media">Partnership or media</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <button type="button" class="btn btn-cta-primary" id="contactStepNext">Continue</button>
-        </div>
-
-        <div class="contact-step d-none" id="contactStep2" aria-hidden="true">
-          <h2 class="h5">Step 2 — Your details</h2>
-          <button type="button" class="btn btn-link text-white-50 px-0 mb-3" id="contactStepBack">← Change topic</button>
-
-          <div class="contact-book-hint d-none" id="bookCallHint" role="status">
-            <strong>Fastest for a call:</strong> pick a time on our calendar —
-            <a href="/book-consultation.html">Book a free call</a>.
-            You can still send a note below and we’ll follow up by email.
-          </div>
-
-          <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" required autocomplete="name">
-          </div>
-
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" required autocomplete="email">
-          </div>
-
-          <div class="mb-3">
-            <label for="message" class="form-label">Message</label>
-            <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Context, goals, or questions — we’ll confirm by email after you send."></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-cta-primary" id="jl-contact-submit">Send message</button>
-        </div>
-      </form>
-
-        <div class="what-happens-next">
-          <h3>What happens next</h3>
-          <ol>
-            <li>We'll reply within 1 business day (usually sooner).</li>
-            <li>We'll schedule a quick 15-minute call to understand your needs.</li>
-            <li>If it's a fit, we'll outline next steps -no pressure, no sales dungeon.</li>
-          </ol>
-          <div class="contact-human">
-            <picture>
-              <source srcset="/assets/images/jess-walcott.webp" type="image/webp">
-              <img src="/assets/images/jess-walcott.png" alt="Jess Walcott, founder of JL Solutions -you'll talk to a real person, not a sales team" width="80" height="80" loading="lazy">
-            </picture>
-            <p class="blurb mb-0"><strong>You'll talk to Jess, not a sales dungeon.</strong> Real person, real conversation, no runaround.</p>
-          </div>
-        </div>
-
-        <div class="text-center mt-4">
-          <p class="mb-1">Email: <a href="mailto:info@jlsolutions.io" style="color: #FFC107;">info@jlsolutions.io</a></p>
-          <p class="mb-0">LinkedIn: <a href="https://www.linkedin.com/in/jess-walcott-3423aa87" style="color: #FFC107;">Jess on LinkedIn</a></p>
-        </div>
       </div>
     </div>
   </main>
@@ -155,48 +94,20 @@
         return window.location.origin + '/.netlify/functions/send-form-email';
       }
       document.addEventListener('DOMContentLoaded', function () {
-        var step1 = document.getElementById('contactStep1');
-        var step2 = document.getElementById('contactStep2');
-        var nextBtn = document.getElementById('contactStepNext');
-        var backBtn = document.getElementById('contactStepBack');
         var inquiry = document.getElementById('inquiry_type');
         var bookHint = document.getElementById('bookCallHint');
         var form = document.getElementById('jl-contact-form');
 
-        if (nextBtn && step1 && step2 && inquiry) {
-          nextBtn.addEventListener('click', function () {
-            if (!inquiry.value) {
-              inquiry.focus();
-              inquiry.reportValidity();
-              return;
-            }
-            step1.classList.add('d-none');
-            step2.classList.remove('d-none');
-            step2.setAttribute('aria-hidden', 'false');
-            if (bookHint) {
-              var showBook = inquiry.value === 'Book a consultation';
-              bookHint.classList.toggle('d-none', !showBook);
-            }
-            var nameEl = document.getElementById('name');
-            if (nameEl) nameEl.focus();
-          });
-        }
-        if (backBtn && step1 && step2) {
-          backBtn.addEventListener('click', function () {
-            step2.classList.add('d-none');
-            step2.setAttribute('aria-hidden', 'true');
-            step1.classList.remove('d-none');
-            if (bookHint) bookHint.classList.add('d-none');
-          });
+        if (inquiry && bookHint) {
+          function syncBookHint() {
+            bookHint.classList.toggle('d-none', inquiry.value !== 'Book a consultation');
+          }
+          inquiry.addEventListener('change', syncBookHint);
+          syncBookHint();
         }
 
         if (!form) return;
         form.addEventListener('submit', async function (e) {
-          if (step2 && step2.classList.contains('d-none')) {
-            e.preventDefault();
-            if (nextBtn) nextBtn.click();
-            return;
-          }
           e.preventDefault();
           var btn = document.getElementById('jl-contact-submit');
           if (btn) {

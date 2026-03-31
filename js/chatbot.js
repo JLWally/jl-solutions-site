@@ -3,9 +3,9 @@
     endpoint:
       document.currentScript?.dataset?.endpoint ||
       "/.netlify/functions/chatbot",
-    brand: "JL Guide",
-    subtitle: "Ask anything—we'll point you to the right next step.",
-    placeholder: "Services, pricing, booking, payment…",
+    brand: "Concierge Daemon",
+    subtitle: "Ask anything. We route you to the right next step.",
+    placeholder: "Services, pricing, booking, payment...",
     quickPrompts: [
       "What do you actually build for businesses?",
       "I want to book a free call",
@@ -98,7 +98,7 @@
     const toggle = createElement("button", "chatbot-toggle", {
       id: "jl-chatbot-toggle",
       type: "button",
-      "aria-label": "Open JL Guide chat",
+      "aria-label": "Open Concierge Daemon chat",
       "aria-expanded": "false",
       "aria-controls": "jl-chatbot-window",
       "aria-haspopup": "dialog"
@@ -136,7 +136,7 @@
           required
         ></textarea>
         <div class="chatbot-actions">
-          <small>AI may be imperfect—verify sensitive details before you act.</small>
+          <small>AI may be imperfect. Verify sensitive details before you act.</small>
           <button type="submit" class="btn-chatbot-send">Send</button>
         </div>
       </form>
@@ -187,6 +187,20 @@
       form.classList.toggle("sending", loading);
     };
 
+    const messagesForApi = () =>
+      state.history
+        .filter(
+          entry =>
+            entry &&
+            (entry.role === "user" || entry.role === "assistant") &&
+            typeof entry.content === "string" &&
+            entry.content.trim()
+        )
+        .map(entry => ({
+          role: entry.role === "assistant" ? "assistant" : "user",
+          content: entry.content.trim()
+        }));
+
     const sendPrompt = async text => {
       if (!text || state.isSending) return;
       addMessage("user", text);
@@ -195,7 +209,7 @@
         const res = await fetch(CONFIG.endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: state.history })
+          body: JSON.stringify({ messages: messagesForApi() })
         });
 
         const raw = await res.text();
@@ -246,7 +260,7 @@
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       toggle.setAttribute(
         "aria-label",
-        open ? "Close JL Guide chat" : "Open JL Guide chat"
+        open ? "Close Concierge Daemon chat" : "Open Concierge Daemon chat"
       );
       if (open) {
         input.focus();
@@ -276,7 +290,11 @@
         type: "button"
       });
       chip.textContent = prompt;
-      chip.addEventListener("click", () => sendPrompt(prompt));
+      chip.addEventListener("click", e => {
+        e.preventDefault();
+        e.stopPropagation();
+        sendPrompt(prompt);
+      });
       quickEl.appendChild(chip);
     });
 

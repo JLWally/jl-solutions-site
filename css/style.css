@@ -158,11 +158,11 @@ blockquote {
   color: #1a1a1a;
 }
 
-/* JL Guide chat — JL branding, readable contrast, keyboard/touch friendly */
+/* Concierge Daemon chat: JL branding, readable contrast, keyboard/touch friendly */
 .chatbot-toggle {
   position: fixed;
-  bottom: 1.25rem;
-  right: 1.25rem;
+  bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  right: max(1.25rem, env(safe-area-inset-right, 0px));
   width: 3.25rem;
   height: 3.25rem;
   min-width: 3.25rem;
@@ -201,10 +201,11 @@ blockquote {
 
 .chatbot-window {
   position: fixed;
-  bottom: 5.75rem;
-  right: 1.25rem;
+  bottom: calc(4.25rem + max(0px, env(safe-area-inset-bottom, 0px)));
+  right: max(1.25rem, env(safe-area-inset-right, 0px));
   width: min(22rem, calc(100vw - 2rem));
-  max-height: min(32rem, calc(100vh - 7rem));
+  max-height: min(36rem, calc(100vh - 6.5rem));
+  max-height: min(36rem, calc(100dvh - max(0.75rem, env(safe-area-inset-top, 0px)) - 5.5rem - max(0px, env(safe-area-inset-bottom, 0px))));
   background: var(--jl-dark-alt, #132a3d);
   border-radius: var(--card-radius, 16px);
   box-shadow: 0 20px 50px rgba(10, 22, 40, 0.65);
@@ -398,6 +399,9 @@ blockquote {
   font-weight: 600;
   cursor: pointer;
   line-height: 1.3;
+  touch-action: manipulation;
+  position: relative;
+  z-index: 1;
 }
 
 .chatbot-chip:hover {
@@ -414,7 +418,7 @@ blockquote {
 .chatbot-form {
   flex: 0 0 auto;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.75rem 1rem 1rem;
+  padding: 0.75rem 1rem max(1rem, calc(0.65rem + env(safe-area-inset-bottom, 0px)));
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -487,15 +491,16 @@ blockquote {
 
 @media (max-width: 600px) {
   .chatbot-window {
-    right: 1rem;
-    left: 1rem;
+    right: max(1rem, env(safe-area-inset-right, 0px));
+    left: max(1rem, env(safe-area-inset-left, 0px));
     width: auto;
-    max-height: min(70vh, 28rem);
+    max-height: min(36rem, calc(100vh - 6rem));
+    max-height: min(36rem, calc(100dvh - 5.75rem - max(0px, env(safe-area-inset-bottom, 0px))));
   }
 
   .chatbot-toggle {
-    right: 1rem;
-    bottom: 1rem;
+    right: max(1rem, env(safe-area-inset-right, 0px));
+    bottom: max(1rem, env(safe-area-inset-bottom, 0px));
   }
 }
 

@@ -145,7 +145,7 @@ footer[role="contentinfo"] {
   display: block;
 }
 
-/* Modal/Dialog Accessibility (exclude on-page JL Guide widget; it manages its own layout) */
+/* Modal/Dialog Accessibility (exclude on-site Concierge Daemon widget; it manages its own layout) */
 [role="dialog"]:not(.chatbot-window),
 [role="alertdialog"] {
   position: fixed;

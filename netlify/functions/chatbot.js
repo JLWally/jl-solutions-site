@@ -1,12 +1,18 @@
+const {
+  postResponses,
+  extractResponsesOutputText
+} = require("./lib/lead-engine-openai-responses");
+const { getOpenAiModel } = require("./lib/openai-model");
+
 const SITE_KNOWLEDGE = `
 ## About JL Solutions
 - Tagline: "Automate. Streamline. Grow Your Business."
 - They help businesses capture leads 24/7, pre-qualify clients, automate scheduling and follow-ups, and turn data into useful reporting.
 - Common client types: clinics/health, contractors and field services, catering and events, nonprofits, government-related work, and growing SMBs.
-- Tech angle: strong with Microsoft stack when relevant—Power Platform, Azure, integrations, and practical AI for intake and workflows (do not promise specific products until scope is known).
+- Tech angle: strong with Microsoft stack when relevant (Power Platform, Azure, integrations, and practical AI for intake and workflows). Do not promise specific products until scope is known.
 
 ## Key pages (use markdown links in replies, e.g. [Book a free call](/book-consultation.html))
-- Primary conversion — free strategy/discovery call: /book-consultation.html
+- Primary conversion (free strategy/discovery call): /book-consultation.html
 - Secure payment / deposit / invoice checkout (Stripe): /pay/
 - General questions and project inquiries: /contact.html
 - Service overview and deep links: /services/index.html
@@ -27,19 +33,20 @@ const SITE_KNOWLEDGE = `
 ## Pricing and timelines
 - Pricing is scoped per project; do not quote dollar amounts or timelines you were not given in this chat.
 - It is OK to say that investment depends on complexity, integrations, and volume, and that a free call clarifies scope and options.
-- FAQ on the site mentions that work often starts within a few weeks after consultation and agreement—treat that as general guidance, not a guarantee.
+- FAQ on the site mentions that work often starts within a few weeks after consultation and agreement. Treat that as general guidance, not a guarantee.
 
 ## Contact
 - Email: info@jlsolutions.io
 `.trim();
 
 const DEFAULT_SYSTEM_PROMPT = `
-You are JL Guide, the on-site assistant for JL Solutions (jlsolutions.io). Your job is to:
+You are Concierge Daemon, the on-site assistant for JL Solutions (jlsolutions.io). Your job is to:
 1) Answer questions accurately using the knowledge below.
 2) Gently guide visitors toward a clear next step: usually [Book a free call](/book-consultation.html), or [Complete payment](/pay/) if they were sent to pay a deposit/invoice, or [Contact us](/contact.html) for detailed written questions.
 
 Rules:
-- Be warm, concise, and practical (2–5 short paragraphs max unless they ask for a list).
+- Be warm, concise, and practical (2 to 5 short paragraphs max unless they ask for a list).
+- Do not use em dashes or en dashes as punctuation in your replies. Prefer commas, periods, or short sentences instead.
 - End most replies with one suggested next step and a markdown link from the list below (same-origin paths only, format: [label](/path)).
 - If they are ready to buy or pay, point them to [Complete payment](/pay/) and mention they will use Stripe; they can enter amount and optional referral code if they have one.
 - If they are exploring fit, prioritize [Book a free call](/book-consultation.html).
@@ -50,16 +57,19 @@ Rules:
 ${SITE_KNOWLEDGE}
 `.trim();
 
-const toOpenAIMessages = (messages = []) =>
+const sanitizeClientMessages = (messages = []) =>
   messages
-    .filter(entry => entry?.role && entry?.content)
+    .filter(
+      entry =>
+        entry &&
+        (entry.role === "user" || entry.role === "assistant") &&
+        typeof entry.content === "string" &&
+        entry.content.trim()
+    )
     .map(entry => ({
       role: entry.role === "assistant" ? "assistant" : "user",
-      content: entry.content
+      content: entry.content.trim()
     }));
-
-const { getOpenAiModel } = require("./lib/openai-model");
-const { envVarFromB64 } = require("./lib/runtime-process-env");
 
 const buildResponsePayload = (messages, systemPrompt) => ({
   model: getOpenAiModel(),
@@ -68,7 +78,7 @@ const buildResponsePayload = (messages, systemPrompt) => ({
       role: "system",
       content: systemPrompt || DEFAULT_SYSTEM_PROMPT
     },
-    ...toOpenAIMessages(messages)
+    ...messages
   ],
   temperature: 0.35,
   max_output_tokens: 520
@@ -93,20 +103,12 @@ exports.handler = async event => {
     };
   }
 
-  const openaiKey = process.env["OPENAI_API_KEY"];
-  if (!openaiKey) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: "Missing OPENAI_API_KEY" })
-    };
-  }
-
   try {
     const payload = JSON.parse(event.body || "{}");
     const messages = Array.isArray(payload.messages) ? payload.messages : [];
+    const sanitized = sanitizeClientMessages(messages);
 
-    if (!messages.length) {
+    if (!sanitized.length) {
       return {
         statusCode: 400,
         headers,
@@ -114,36 +116,12 @@ exports.handler = async event => {
       };
     }
 
-    const openAiUrl = String(
-      envVarFromB64("T1BFTkFJX0FQSV9VUkw=") || "https://api.openai.com/v1/responses"
-    )
-      .trim()
-      .replace(/\/chat\/completions\/?$/i, "/responses");
-    const completion = await fetch(
-      openAiUrl,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${openaiKey}`
-        },
-        body: JSON.stringify(
-          buildResponsePayload(messages, payload.systemPrompt)
-        )
-      }
+    const data = await postResponses(
+      buildResponsePayload(sanitized, payload.systemPrompt)
     );
-
-    if (!completion.ok) {
-      const details = await completion.text();
-      throw new Error(`OpenAI error ${completion.status}: ${details}`);
-    }
-
-    const data = await completion.json();
     const reply =
-      data?.output?.[0]?.content?.[0]?.text ||
-      data?.output?.[0]?.content ||
-      data?.choices?.[0]?.message?.content ||
-      "I’m here to help if you’d like to try again.";
+      extractResponsesOutputText(data) ||
+      "I am here to help if you would like to try again.";
 
     return {
       statusCode: 200,
@@ -156,11 +134,22 @@ exports.handler = async event => {
     };
   } catch (error) {
     console.error("[chatbot]", error);
+    const code = error && error.code;
+    if (code === "missing_api_key") {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: "AI assistant is not configured. Set OPENAI_API_KEY for Netlify Functions.",
+          details: error.message
+        })
+      };
+    }
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: "Unable to reach JL Copilot right now. Please try again.",
+        error: "The assistant hit a snag. Please try again in a moment.",
         details: error.message
       })
     };
