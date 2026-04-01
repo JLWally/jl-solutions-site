@@ -44,11 +44,11 @@
 }
 
 .jl-services-hero__lead {
-  font-size: clamp(1rem, 2.8vw, 1.125rem);
-  color: rgba(255, 255, 255, 0.94);
-  max-width: 40rem;
+  font-size: clamp(1.0625rem, 2.5vw, 1.1875rem);
+  color: #ffffff;
+  max-width: min(40rem, 92vw);
   margin: 0 auto 1.35rem;
-  line-height: 1.55;
+  line-height: 1.65;
 }
 
 .jl-services-hero__actions {
@@ -104,9 +104,9 @@
 }
 
 .jl-featured-offers__sub {
-  color: #1e293b;
-  font-size: 1rem;
-  line-height: 1.55;
+  color: #0f172a;
+  font-size: 1.0625rem;
+  line-height: 1.65;
   margin: 0;
 }
 
@@ -144,8 +144,8 @@
 
 /* Productized offer cards — /services featured four */
 .jl-service-product-card {
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  padding: 1.2rem 1.15rem;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  padding: 1.35rem 1.25rem;
   border-radius: 14px;
   background: #fff;
   box-shadow: 0 6px 22px rgba(10, 22, 40, 0.06);
@@ -161,25 +161,25 @@
 }
 
 .jl-service-product-card__title {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: var(--jl-ink, #0a1628);
+  color: #0a1628;
   margin: 0 0 0.5rem;
-  line-height: 1.22;
+  line-height: 1.28;
   letter-spacing: -0.02em;
 }
 
 .jl-service-product-card__outcome {
-  font-size: 0.9375rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.55;
   color: #0f172a;
   margin: 0 0 0.75rem;
   flex: 1 1 auto;
 }
 
 .jl-service-product-card__bestfor {
-  font-size: 0.8125rem;
-  line-height: 1.45;
+  font-size: 0.875rem;
+  line-height: 1.5;
   color: #0f172a;
   margin: 0 0 0.65rem;
   font-weight: 600;
@@ -187,19 +187,20 @@
 
 .jl-service-product-card__bestfor-label {
   display: block;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: #064e63;
-  margin-bottom: 0.2rem;
+  color: #033948;
+  margin-bottom: 0.25rem;
 }
 
 .jl-service-product-card__muted {
-  font-size: 0.8125rem;
-  color: #334155;
+  font-size: 0.875rem;
+  color: #1e293b;
   margin: -0.2rem 0 0.45rem;
   font-style: italic;
+  line-height: 1.5;
 }
 
 .jl-service-product-card__price {
@@ -211,11 +212,11 @@
 }
 
 .jl-service-product-card__price-fixed {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: #064e63;
+  color: #033948;
   margin-left: 0.2rem;
   vertical-align: middle;
 }
@@ -236,10 +237,11 @@
 
 .jl-service-product-card__secondary {
   text-align: center;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 700;
-  color: #064e63;
-  text-decoration: none;
+  color: #033948;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   padding: 0.35rem;
 }
 
@@ -630,11 +632,11 @@
 
 .jl-custom-solutions__sub {
   text-align: center;
-  color: #334155;
+  color: #1e293b;
   max-width: 36rem;
   margin: 0 auto 1.5rem;
-  font-size: 0.95rem;
-  line-height: 1.55;
+  font-size: 1.0625rem;
+  line-height: 1.65;
 }
 
 .jl-custom-list {
@@ -790,10 +792,10 @@
 }
 
 .jl-services-hiw__step p {
-  font-size: 0.875rem;
-  color: #334155;
+  font-size: 0.9375rem;
+  color: #1e293b;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 /* Bottom CTA band */
@@ -812,11 +814,11 @@
 }
 
 .jl-services-cta p {
-  color: rgba(255, 255, 255, 0.92);
-  max-width: 32rem;
+  color: #ffffff;
+  max-width: min(32rem, 92vw);
   margin: 0 auto 1.25rem;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 1.0625rem;
+  line-height: 1.6;
 }
 
 .jl-services-cta__row {

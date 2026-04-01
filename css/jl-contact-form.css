@@ -89,6 +89,27 @@
   max-width: none;
 }
 
+/* Onboarding: high-contrast intro + form hints (avoid Bootstrap text-white-50 / small) */
+.jl-welcome-purchase .jl-contact-intro .text-white-50,
+.jl-welcome-purchase #jl-pp-intro-default {
+  color: rgba(255, 255, 255, 0.94) !important;
+  font-size: 1rem !important;
+  line-height: 1.55 !important;
+}
+
+.jl-welcome-purchase .jl-kickoff-reassurance.text-white-50,
+.jl-welcome-purchase .jl-kickoff-reassurance.small {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: 1rem !important;
+  line-height: 1.55 !important;
+}
+
+.jl-welcome-purchase .jl-payment-card .jl-payment-lead.small {
+  font-size: 1rem !important;
+  color: #1e293b !important;
+  line-height: 1.55 !important;
+}
+
 .jl-intake-section {
   margin-bottom: 1.75rem;
   padding-bottom: 1.5rem;
@@ -102,12 +123,13 @@
 }
 
 .jl-intake-section__title {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--jl-brand-cyan-deep, #0b6579);
+  color: #033948;
   margin-bottom: 1rem;
+  line-height: 1.35;
 }
 
 .jl-intake-panel.d-none {
@@ -119,14 +141,21 @@
   max-width: 36rem;
 }
 
+.jl-welcome-purchase #jl-pp-headline {
+  font-size: clamp(1.35rem, 4.5vw, 1.85rem) !important;
+  line-height: 1.25;
+  color: #ffffff !important;
+}
+
 .jl-kickoff-service-meta {
   max-width: 32rem;
 }
 
 .jl-kickoff-payment-confirm {
-  font-size: 1.05rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.55;
+  color: #ffffff !important;
 }
 
 .jl-kickoff-timeline-badge {
@@ -144,11 +173,11 @@
 }
 
 .jl-kickoff-timeline-badge__label {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .jl-kickoff-timeline-badge__value {
@@ -243,9 +272,9 @@
 .jl-kickoff-next__step-title {
   display: block;
   font-weight: 600;
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.95);
-  line-height: 1.45;
+  font-size: 1.0625rem;
+  color: #ffffff;
+  line-height: 1.5;
 }
 
 .jl-kickoff-next__step-body {
@@ -314,8 +343,8 @@ body.jl-gs-overlay-open {
 }
 
 .jl-gs-stripe-overlay__sub {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.45;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.55;
   margin: 0;
 }
