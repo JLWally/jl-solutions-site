@@ -17,11 +17,12 @@
 
 .jl-services-hero__eyebrow {
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--jl-brand-cyan, #5fdbf0);
+  color: #7ee8fc;
   margin-bottom: 0.75rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .jl-services-hero__title {
@@ -29,6 +30,7 @@
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
+  color: #ffffff;
   max-width: min(22rem, 100%);
   margin-left: auto;
   margin-right: auto;
@@ -43,7 +45,7 @@
 
 .jl-services-hero__lead {
   font-size: clamp(1rem, 2.8vw, 1.125rem);
-  color: var(--jl-text-muted, rgba(255, 255, 255, 0.82));
+  color: rgba(255, 255, 255, 0.94);
   max-width: 40rem;
   margin: 0 auto 1.35rem;
   line-height: 1.55;
@@ -61,11 +63,14 @@
   font-weight: 700;
   padding: 0.5rem 1.25rem;
   border-width: 2px;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.85);
 }
 
 .jl-services-hero__btn-outline:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 /* Featured offers */
@@ -86,7 +91,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--jl-brand-cyan-deep, #0b6579);
+  color: #064e63;
   margin-bottom: 0.35rem;
   text-align: center;
 }
@@ -99,7 +104,7 @@
 }
 
 .jl-featured-offers__sub {
-  color: var(--jl-text-dark-muted, #4a4a4a);
+  color: #1e293b;
   font-size: 1rem;
   line-height: 1.55;
   margin: 0;
@@ -167,7 +172,7 @@
 .jl-service-product-card__outcome {
   font-size: 0.9375rem;
   line-height: 1.5;
-  color: #1e293b;
+  color: #0f172a;
   margin: 0 0 0.75rem;
   flex: 1 1 auto;
 }
@@ -182,17 +187,17 @@
 
 .jl-service-product-card__bestfor-label {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.6875rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--jl-brand-cyan-deep, #0b6579);
+  color: #064e63;
   margin-bottom: 0.2rem;
 }
 
 .jl-service-product-card__muted {
-  font-size: 0.78rem;
-  color: var(--jl-text-dark-muted, #4a4a4a);
+  font-size: 0.8125rem;
+  color: #334155;
   margin: -0.2rem 0 0.45rem;
   font-style: italic;
 }
@@ -210,7 +215,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: var(--jl-brand-cyan-deep, #0b6579);
+  color: #064e63;
   margin-left: 0.2rem;
   vertical-align: middle;
 }
@@ -233,14 +238,14 @@
   text-align: center;
   font-size: 0.875rem;
   font-weight: 700;
-  color: var(--jl-brand-cyan-deep, #0b6579);
+  color: #064e63;
   text-decoration: none;
   padding: 0.35rem;
 }
 
 .jl-service-product-card__secondary:hover {
   text-decoration: underline;
-  color: var(--jl-ink, #0a1628);
+  color: #0a1628;
 }
 
 @media (min-width: 576px) {
@@ -625,7 +630,7 @@
 
 .jl-custom-solutions__sub {
   text-align: center;
-  color: var(--jl-text-dark-muted, #4a4a4a);
+  color: #334155;
   max-width: 36rem;
   margin: 0 auto 1.5rem;
   font-size: 0.95rem;
@@ -648,17 +653,25 @@
 }
 
 .jl-custom-list a {
-  color: var(--jl-brand-cyan-deep, #0b6579);
-  text-decoration: none;
+  color: #064e63;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .jl-custom-list a:hover {
-  text-decoration: underline;
+  color: #0a1628;
 }
 
 .jl-featured-offers__sub a {
-  color: var(--jl-brand-cyan-deep, #0b6579);
-  font-weight: 600;
+  color: #064e63;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.jl-featured-offers__sub a:hover {
+  color: #0a1628;
 }
 
 .jl-custom-grid {
@@ -706,7 +719,7 @@
 
 .jl-custom-card p {
   font-size: 0.8125rem;
-  color: var(--jl-text-dark-muted, #4a4a4a);
+  color: #334155;
   margin: 0;
   line-height: 1.45;
 }
@@ -714,7 +727,7 @@
 .jl-custom-card__more {
   font-size: 0.78rem;
   font-weight: 700;
-  color: var(--jl-brand-cyan-deep, #0b6579);
+  color: #064e63;
   margin-top: 0.5rem;
 }
 
@@ -778,7 +791,7 @@
 
 .jl-services-hiw__step p {
   font-size: 0.875rem;
-  color: var(--jl-text-dark-muted, #4a4a4a);
+  color: #334155;
   margin: 0;
   line-height: 1.5;
 }
@@ -795,10 +808,11 @@
   font-size: clamp(1.35rem, 3.5vw, 1.65rem);
   font-weight: 800;
   margin-bottom: 0.5rem;
+  color: #ffffff;
 }
 
 .jl-services-cta p {
-  color: var(--jl-text-muted, rgba(255, 255, 255, 0.82));
+  color: rgba(255, 255, 255, 0.92);
   max-width: 32rem;
   margin: 0 auto 1.25rem;
   font-size: 0.95rem;
