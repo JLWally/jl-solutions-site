@@ -18,11 +18,12 @@ const SITE_KNOWLEDGE = `
 - Upload-and-extract document demo: /services/document-extraction-demo.html
 - AI-style intake example you can submit: /services/ai-intake-form.html
 - ROI / savings estimator: /tools/roi-calculator.html
-- Buying a featured package from the site: visitors complete a short intake on [Get started](/get-started) with a service query (examples: ?service=ai-intake, ?service=fix-app, ?service=lead-engine, ?service=scheduling), then continue to Stripe checkout. Legacy \`?product=\` still works.
-- Invoices, deposits, and custom amounts JL already confirmed: JL sends a secure Stripe link by email when it is time to pay, or they can [Send a message](/contact.html). Do not give ad hoc payment URLs.
+- Buying a featured package from the site: visitors choose a service on [Get started](/get-started) with a service query (examples: ?service=ai-intake, ?service=fix-app, ?service=lead-engine, ?service=scheduling), complete the short pre-checkout intake, then continue to Stripe checkout. After payment, post-purchase details are completed on [Onboarding](/onboarding) (Stripe success URL should land there). Legacy \`?product=\` still works.
+- Invoices, deposits, strategy sessions, and custom amounts JL already confirmed: [Secure manual payment](/internal-pay/) when they have an approved amount, or JL sends a Stripe link by email. They can also [Send a message](/contact.html). Do not invent payment URLs.
 
 ## Key pages (use markdown links in replies)
-- Get started (intake then checkout for packages): /getstarted?service=ai-intake (or fix-app, lead-engine, scheduling). Legacy ?product= still works.
+- Get started (pre-checkout intake then checkout for packages): /get-started?service=ai-intake (or fix-app, lead-engine, scheduling). Legacy /getstarted and ?product= still work.
+- Post-purchase intake after package checkout: /onboarding (often with ?service=…)
 - Book a Free Call (optional, for personalized scope or when they are unsure what fits): /book-consultation.html
 - Contact (written questions): /contact.html
 - Services overview: /services/index.html

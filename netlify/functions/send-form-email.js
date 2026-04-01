@@ -198,7 +198,7 @@ function buildPackageKickoffEmail(data) {
     html += `<p style="margin-top:1em;"><strong>Timeline acknowledgment:</strong> ${escapeHtml(ack)}</p>`;
   }
 
-  html += `<p style="margin-top:1.25em;color:#555;"><em>From /get-started</em></p>`;
+  html += `<p style="margin-top:1.25em;color:#555;"><em>From /onboarding (post-purchase)</em></p>`;
 
   return {
     subject: `[JL Solutions] Package intake — ${contactName} (${pkg})`,

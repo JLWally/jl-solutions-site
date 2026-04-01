@@ -1,5 +1,5 @@
 /**
- * /get-started — guided wizard + post-purchase intake (?postPurchase=1).
+ * /get-started — public pre-checkout guided flow only. Post-purchase intake: /onboarding
  */
 (function () {
   'use strict';
@@ -13,14 +13,14 @@
       outcome: 'We focus on the highest-impact fixes so you stop losing leads to broken UX.',
       benefits: [
         'Workflow and UX audit on your live site',
-        'Up to 3 targeted fixes (forms, mobile, speed)',
+        'Up to 3 targeted fixes (forms, mobile, conversion)',
+        'Mobile and form improvements where they matter most',
         '7 days of post-launch support',
+        'Clear handoff so your team knows what changed',
       ],
       price: '$1,500',
       timeline: '2–5 days to first deliverables',
       confidence: 'One new customer can often pay for this setup.',
-      sumNextCheckout: 'Secure Stripe checkout for the Fix My App Sprint.',
-      sumNextQuote: 'We’ll email a scoped quote for your build.',
     },
     'ai-intake': {
       id: 'ai-intake',
@@ -29,15 +29,15 @@
       recTitle: 'AI Intake Form Setup',
       outcome: 'A branded intake flow that qualifies leads and routes them to the right place.',
       benefits: [
-        'Custom intake with smart branching',
-        'Routing, notifications, and confirmations',
-        'Dashboard or captured data handoff',
+        'Custom branded intake with smart branching',
+        'Lead routing, notifications, and confirmations',
+        'Dashboard or sheet-ready data capture',
+        'Confirmation messaging aligned to your brand',
+        'Faster follow-up because leads arrive pre-qualified',
       ],
       price: '$2,500',
       timeline: '3–7 days after kickoff',
       confidence: 'One new customer can often pay for this setup.',
-      sumNextCheckout: 'Secure Stripe checkout for AI Intake setup.',
-      sumNextQuote: 'We’ll follow up with a custom scope and quote.',
     },
     scheduling: {
       id: 'scheduling',
@@ -46,15 +46,15 @@
       recTitle: 'Scheduling & Routing Setup',
       outcome: 'Customers book in fewer clicks; your team spends less time coordinating.',
       benefits: [
-        'Booking flow aligned to how you work',
-        'Confirmations and reminders configured',
+        'Online booking aligned to your services and availability',
+        'Automated confirmations and reminders',
         'Basic routing and assignment logic',
+        'Admin view so you can track what’s booked',
+        'Less back-and-forth between customers and staff',
       ],
       price: '$3,000',
       timeline: '3–7 days after kickoff',
       confidence: 'One new customer can often pay for this setup.',
-      sumNextCheckout: 'Secure Stripe checkout for scheduling setup.',
-      sumNextQuote: 'We’ll reply with a tailored quote for multi-location or complex routing.',
     },
     'lead-engine': {
       id: 'lead-engine',
@@ -63,42 +63,15 @@
       recTitle: 'Lead Generation Engine',
       outcome: 'A repeatable way to surface fit accounts and speed up first-touch outreach.',
       benefits: [
-        'Lead sourcing and scoring workflow',
-        'Draft outreach aligned to your offer',
-        'CRM- or sheet-ready structure',
+        'Targeted lead sourcing workflow setup',
+        'Lead scoring and qualification logic',
+        'Outreach draft generation aligned to your offer',
+        'CRM- or sheet-ready tracking structure',
+        'Operating notes so your team can run the system',
       ],
       price: '$3,500',
       timeline: '5–10 days after kickoff',
       confidence: 'One new customer can often pay for this setup.',
-      sumNextCheckout: 'Secure Stripe checkout for the Lead Generation Engine.',
-      sumNextQuote: 'We’ll propose a custom program for broader outbound or ads.',
-    },
-  };
-
-  var POST_SERVICE_CONFIG = {
-    'ai-intake': {
-      panel: 'ai',
-      packageValue: 'AI Intake Form',
-      headlineName: 'AI Intake',
-      timeline: '3–7 days',
-    },
-    'fix-app': {
-      panel: 'fix',
-      packageValue: 'Fix My App',
-      headlineName: 'Fix My App',
-      timeline: '2–5 days',
-    },
-    scheduling: {
-      panel: 'scheduling',
-      packageValue: 'Scheduling Setup',
-      headlineName: 'Scheduling',
-      timeline: '3–7 days',
-    },
-    'lead-engine': {
-      panel: 'lead',
-      packageValue: 'Lead Generation Engine',
-      headlineName: 'Lead Engine',
-      timeline: '5–10 days',
     },
   };
 
@@ -132,223 +105,6 @@
     };
     if (map[p]) return map[p];
     return '';
-  }
-
-  function resolvePostPurchaseSlug(params) {
-    var s = normalizeParam(params.get('service'));
-    if (POST_SERVICE_CONFIG[s]) return s;
-    var legacy = params.get('package');
-    if (legacy === 'fix') return 'fix-app';
-    if (legacy === 'ai') return 'ai-intake';
-    if (legacy === 'scheduling') return 'scheduling';
-    if (legacy === 'lead') return 'lead-engine';
-    return '';
-  }
-
-  function intakePanelKey(packageValue) {
-    var map = {
-      'Fix My App': 'fix',
-      'AI Intake Form': 'ai',
-      'Scheduling Setup': 'scheduling',
-      'Lead Generation Engine': 'lead',
-    };
-    return map[packageValue] || '';
-  }
-
-  function syncIntakePanels() {
-    var sel = document.getElementById('kp_package');
-    var v = sel ? sel.value : '';
-    var key = intakePanelKey(v);
-    document.querySelectorAll('[data-intake-panel]').forEach(function (el) {
-      el.classList.toggle('d-none', el.getAttribute('data-intake-panel') !== key);
-    });
-    var hint = document.getElementById('intake-panel-hint');
-    if (hint) hint.classList.toggle('d-none', key !== '');
-  }
-
-  function setPackageLock(locked, packageValue) {
-    var sel = document.getElementById('kp_package');
-    var hidden = document.getElementById('kp_package_name_locked');
-    var note = document.getElementById('jl-package-locked-note');
-    if (!sel || !hidden) return;
-    if (locked && packageValue) {
-      sel.value = packageValue;
-      sel.setAttribute('disabled', 'disabled');
-      sel.removeAttribute('name');
-      hidden.value = packageValue;
-      hidden.removeAttribute('disabled');
-      hidden.setAttribute('name', 'package_name');
-      if (note) note.classList.remove('d-none');
-    } else {
-      sel.removeAttribute('disabled');
-      sel.setAttribute('name', 'package_name');
-      hidden.value = '';
-      hidden.setAttribute('disabled', 'disabled');
-      hidden.removeAttribute('name');
-      if (note) note.classList.add('d-none');
-    }
-  }
-
-  function applyPostPurchaseSlug(slug) {
-    var cfg = slug ? POST_SERVICE_CONFIG[slug] : null;
-    var headlineEl = document.getElementById('jl-pp-headline');
-    var meta = document.getElementById('jl-pp-service-meta');
-    var introDefault = document.getElementById('jl-pp-intro-default');
-    var timelineVal = document.getElementById('jl-pp-timeline-val');
-    var slugInput = document.getElementById('kp_purchase_service_slug');
-    var timelineLabel = document.getElementById('kp_timeline_label');
-
-    if (!cfg) {
-      if (headlineEl) headlineEl.textContent = 'You’re in. Let’s get started.';
-      if (meta) meta.classList.add('d-none');
-      if (introDefault) introDefault.classList.remove('d-none');
-      if (slugInput) slugInput.value = '';
-      setPackageLock(false, '');
-      if (timelineLabel) {
-        timelineLabel.textContent = 'I understand kickoff timing for my package.';
-      }
-      syncIntakePanels();
-      return;
-    }
-
-    if (headlineEl) headlineEl.textContent = 'You’re in. Let’s get your ' + cfg.headlineName + ' started.';
-    if (meta) meta.classList.remove('d-none');
-    if (introDefault) introDefault.classList.add('d-none');
-    if (timelineVal) timelineVal.textContent = cfg.timeline;
-    if (slugInput) slugInput.value = slug;
-    setPackageLock(true, cfg.packageValue);
-    if (timelineLabel) {
-      timelineLabel.textContent =
-        'I understand delivery typically follows a ' + cfg.timeline + ' window once this intake is confirmed.';
-    }
-    syncIntakePanels();
-  }
-
-  function validatePostPurchaseFields() {
-    var sel = document.getElementById('kp_package');
-    var key = intakePanelKey(sel ? sel.value : '');
-    if (key === 'lead') {
-      var t = document.getElementById('kp_lead_target');
-      var o = document.getElementById('kp_lead_outreach');
-      if (!t || !String(t.value || '').trim()) {
-        window.alert('Please describe your target market.');
-        if (t) t.focus();
-        return false;
-      }
-      if (!o || !String(o.value || '').trim()) {
-        window.alert('Please describe outreach to automate.');
-        if (o) o.focus();
-        return false;
-      }
-    }
-    if (key === 'ai' && document.getElementById('kp_purchase_service_slug') && document.getElementById('kp_purchase_service_slug').value === 'ai-intake') {
-      var q = document.getElementById('kp_ai_questions');
-      if (q && !String(q.value || '').trim()) {
-        window.alert('Please add lead questions.');
-        q.focus();
-        return false;
-      }
-    }
-    if (key === 'fix' && document.getElementById('kp_purchase_service_slug') && document.getElementById('kp_purchase_service_slug').value === 'fix-app') {
-      var iss = document.getElementById('kp_fix_issues');
-      var pages = document.getElementById('kp_fix_pages');
-      if (!iss || !String(iss.value || '').trim()) {
-        window.alert('Please describe issues.');
-        if (iss) iss.focus();
-        return false;
-      }
-      if (!pages || !String(pages.value || '').trim()) {
-        window.alert('Please add pages or flows.');
-        if (pages) pages.focus();
-        return false;
-      }
-    }
-    if (key === 'scheduling' && document.getElementById('kp_purchase_service_slug') && document.getElementById('kp_purchase_service_slug').value === 'scheduling') {
-      var svcs = document.getElementById('kp_sched_services');
-      var av = document.getElementById('kp_sched_avail');
-      if (!svcs || !String(svcs.value || '').trim()) {
-        window.alert('Please describe what to book.');
-        if (svcs) svcs.focus();
-        return false;
-      }
-      if (!av || !String(av.value || '').trim()) {
-        window.alert('Please share availability.');
-        if (av) av.focus();
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function initPostPurchase(params) {
-    var wizard = document.getElementById('jl-start-wizard');
-    var pp = document.getElementById('jl-post-purchase-flow');
-    var sticky = document.getElementById('jl-start-sticky');
-    if (wizard) wizard.classList.add('d-none');
-    if (sticky) sticky.classList.remove('is-visible');
-    document.body.classList.remove('jl-start-has-sticky');
-    if (pp) pp.classList.remove('d-none');
-
-    var slug = resolvePostPurchaseSlug(params);
-    applyPostPurchaseSlug(slug);
-
-    var pkgSel = document.getElementById('kp_package');
-    if (pkgSel && !slug) {
-      var q = params.get('package');
-      if (q === 'fix') pkgSel.value = 'Fix My App';
-      else if (q === 'ai') pkgSel.value = 'AI Intake Form';
-      else if (q === 'scheduling') pkgSel.value = 'Scheduling Setup';
-      else if (q === 'lead') pkgSel.value = 'Lead Generation Engine';
-      syncIntakePanels();
-    }
-
-    if (pkgSel) {
-      pkgSel.addEventListener('change', function () {
-        if (document.getElementById('kp_purchase_service_slug') && document.getElementById('kp_purchase_service_slug').value) return;
-        syncIntakePanels();
-      });
-    }
-
-    var form = document.getElementById('jl-package-kickoff-form');
-    var btn = document.getElementById('jl-package-kickoff-submit');
-    var success = document.getElementById('jl-welcome-success');
-    var wrap = document.getElementById('kickoff-form-wrap');
-    if (!form || !btn) return;
-
-    form.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      if (!validatePostPurchaseFields()) return;
-      btn.disabled = true;
-      var prev = btn.textContent;
-      btn.textContent = 'Sending…';
-      try {
-        var body = new URLSearchParams(new FormData(form));
-        var res = await fetch(formEndpoint(), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: body.toString(),
-          redirect: 'manual',
-        });
-        if (res.status === 302 || res.status === 303 || res.status === 200) {
-          form.reset();
-          if (wrap) wrap.classList.add('d-none');
-          document.querySelectorAll('.jl-kickoff-next-wrap').forEach(function (el) {
-            el.classList.add('d-none');
-          });
-          var intro = document.getElementById('jl-pp-intro');
-          if (intro) intro.classList.add('d-none');
-          if (success) success.classList.remove('d-none');
-          success.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          return;
-        }
-        window.alert('Could not send. Email info@jlsolutions.io.');
-      } catch (err) {
-        window.alert('Network error.');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = prev;
-      }
-    });
   }
 
   /* ---------- Wizard ---------- */
@@ -394,8 +150,6 @@
     var reassure = document.getElementById('jl-start-reassure');
     var secondary = document.querySelector('#jl-start-cta-block .jl-start-secondary');
     var stickyBtn = document.getElementById('jl-sticky-btn');
-    var sumPrice = document.getElementById('jl-sum-price');
-    var sumNext = document.getElementById('jl-sum-next');
     if (!primary) return;
     if (mode === 'quote') {
       primary.textContent = 'Request a custom quote';
@@ -403,28 +157,18 @@
       if (secondary) secondary.textContent = 'Book a Free Call';
       if (secondary) secondary.setAttribute('href', '/book-consultation');
       if (stickyBtn) stickyBtn.textContent = 'Request quote';
-      if (sumPrice) sumPrice.textContent = 'Custom quote likely';
     } else if (mode === 'call') {
       primary.textContent = 'Book a Free Call';
       if (reassure) reassure.classList.add('d-none');
       if (secondary) secondary.textContent = 'Need a quote instead? Contact us';
       if (secondary) secondary.setAttribute('href', '/contact.html');
       if (stickyBtn) stickyBtn.textContent = 'Book call';
-      if (sumPrice) sumPrice.textContent = 'Custom build likely';
     } else {
-      primary.textContent = 'Continue to secure checkout';
+      primary.textContent = 'Continue to Secure Checkout';
       if (reassure) reassure.classList.remove('d-none');
-      if (secondary) secondary.textContent = 'Prefer to talk first? Book a Free Call';
+      if (secondary) secondary.textContent = 'Book a Free Call';
       if (secondary) secondary.setAttribute('href', '/book-consultation');
       if (stickyBtn) stickyBtn.textContent = 'Continue';
-      if (sumPrice && svc) sumPrice.textContent = svc.price;
-    }
-    if (sumNext && svc) {
-      sumNext.textContent = mode === 'quote'
-        ? svc.sumNextQuote
-        : mode === 'call'
-          ? 'Book a quick call so we can scope this correctly before build.'
-          : svc.sumNextCheckout;
     }
   }
 
@@ -508,16 +252,11 @@
 
     showPanel(document.getElementById('jl-start-recommend'), true);
     showPanel(document.getElementById('jl-start-intake'), false);
-    showPanel(document.getElementById('jl-start-summary'), false);
     showPanel(document.getElementById('jl-start-cta-block'), false);
 
     document.querySelectorAll('.jl-start-intake-panel').forEach(function (p) {
       p.classList.toggle('is-visible', p.getAttribute('data-panel') === id);
     });
-
-    document.getElementById('jl-sum-service').textContent = svc.recTitle;
-    document.getElementById('jl-sum-timeline').textContent = svc.timeline;
-    document.getElementById('jl-sum-price').textContent = svc.price;
 
     var custom = document.getElementById('jl_gs_custom_scope');
     updateCTA(custom && custom.checked ? 'quote' : 'checkout', svc);
@@ -586,7 +325,6 @@
         return;
       }
       showPanel(document.getElementById('jl-start-intake'), true);
-      showPanel(document.getElementById('jl-start-summary'), true);
       showPanel(document.getElementById('jl-start-cta-block'), true);
       intakeReady = true;
       updateSteps(3);
@@ -779,11 +517,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    var params = new URLSearchParams(window.location.search);
-    if (params.get('postPurchase') === '1' || params.get('afterPayment') === '1') {
-      initPostPurchase(params);
-    } else {
-      initWizard(params);
-    }
+    initWizard(new URLSearchParams(window.location.search));
   });
 })();

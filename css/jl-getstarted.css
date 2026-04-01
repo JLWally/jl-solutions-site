@@ -28,6 +28,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 1rem;
   padding: 0.65rem 1rem;
   background: rgba(10, 22, 40, 0.92);
@@ -64,6 +65,11 @@
 .jl-start-header__cta:hover {
   background: var(--jl-accent, #ffc107);
   color: var(--jl-ink, #0a1628);
+}
+
+.jl-start-header__secondary:hover {
+  opacity: 1 !important;
+  text-decoration: underline;
 }
 
 /* --- Hero --- */
@@ -242,7 +248,10 @@
 
 .jl-start-card.is-selected {
   border-color: var(--jl-brand-cyan-deep, #0b6579);
-  box-shadow: 0 0 0 3px rgba(11, 101, 121, 0.2);
+  box-shadow:
+    0 0 0 3px rgba(11, 101, 121, 0.28),
+    0 14px 36px rgba(10, 22, 40, 0.14);
+  background: linear-gradient(165deg, #ffffff 0%, #f4f8fb 100%);
 }
 
 .jl-start-card__title {
@@ -250,7 +259,7 @@
   font-weight: 800;
   margin: 0 0 0.25rem;
   letter-spacing: -0.02em;
-  color: #081223;
+  color: #050a12;
 }
 
 .jl-start-card__outcome {
@@ -529,16 +538,8 @@
     margin-top: 0;
   }
 
-  #jl-start-summary,
   #jl-start-cta-block {
     grid-column: 2;
-  }
-
-  #jl-start-summary {
-    margin-top: 0;
-  }
-
-  #jl-start-cta-block {
     margin-top: 0;
     position: sticky;
     top: 5rem;
@@ -599,16 +600,4 @@
   font-size: 0.75rem;
 }
 
-/* Post-purchase flow (unchanged semantics) */
-#jl-post-purchase-flow .jl-contact-intro {
-  max-width: 36rem;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-
-#jl-post-purchase-flow .jl-contact-card-wrap {
-  max-width: 44rem;
-  margin-left: auto;
-  margin-right: auto;
-}
+/* Post-purchase intake lives on /onboarding — shared .jl-welcome-purchase styles in jl-contact-form.css */

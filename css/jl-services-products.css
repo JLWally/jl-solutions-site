@@ -37,7 +37,7 @@
 
 @media (min-width: 576px) {
   .jl-services-hero__title {
-    max-width: min(36rem, 100%);
+    max-width: min(44rem, 100%);
   }
 }
 
@@ -76,7 +76,7 @@
 
 .jl-featured-offers__head {
   text-align: center;
-  max-width: 40rem;
+  max-width: 52rem;
   margin: 0 auto 2rem;
   padding: 0 1rem;
 }
@@ -122,11 +122,140 @@
 
 @media (min-width: 1200px) {
   .jl-product-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem;
+    max-width: 68rem;
+    margin: 0 auto;
   }
 }
 
-/* Featured offers: service-card (scoped .btn-primary / .btn-secondary ≠ Bootstrap) */
+@media (min-width: 1440px) {
+  .jl-product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: none;
+    gap: 1.5rem;
+  }
+}
+
+/* Productized offer cards — /services featured four */
+.jl-service-product-card {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  padding: 1.2rem 1.15rem;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 22px rgba(10, 22, 40, 0.06);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.jl-service-product-card:hover {
+  border-color: rgba(11, 101, 121, 0.32);
+  box-shadow: 0 12px 36px rgba(10, 22, 40, 0.1);
+}
+
+.jl-service-product-card__title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin: 0 0 0.5rem;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+.jl-service-product-card__outcome {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #1e293b;
+  margin: 0 0 0.75rem;
+  flex: 1 1 auto;
+}
+
+.jl-service-product-card__bestfor {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #0f172a;
+  margin: 0 0 0.65rem;
+  font-weight: 600;
+}
+
+.jl-service-product-card__bestfor-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  margin-bottom: 0.2rem;
+}
+
+.jl-service-product-card__muted {
+  font-size: 0.78rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  margin: -0.2rem 0 0.45rem;
+  font-style: italic;
+}
+
+.jl-service-product-card__price {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0a1628;
+  margin: 0.15rem 0 0.85rem;
+  letter-spacing: -0.02em;
+}
+
+.jl-service-product-card__price-fixed {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  margin-left: 0.2rem;
+  vertical-align: middle;
+}
+
+.jl-service-product-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.25rem;
+}
+
+.jl-service-product-card__actions .btn.jl-theme {
+  font-weight: 800;
+  border-radius: 10px;
+  padding: 0.58rem 1rem;
+}
+
+.jl-service-product-card__secondary {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  text-decoration: none;
+  padding: 0.35rem;
+}
+
+.jl-service-product-card__secondary:hover {
+  text-decoration: underline;
+  color: var(--jl-ink, #0a1628);
+}
+
+@media (min-width: 576px) {
+  .jl-service-product-card__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .jl-service-product-card__actions .btn.jl-theme {
+    width: auto;
+  }
+}
+
+/* Legacy service-card (other pages may still reference) */
 .service-card {
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 24px;
@@ -137,6 +266,7 @@
   flex-direction: column;
   height: 100%;
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  min-height: 100%;
 }
 
 .service-card:hover {
@@ -209,7 +339,7 @@
   flex-direction: column;
   gap: 0.65rem;
   margin-top: auto;
-  padding-top: 0.25rem;
+  padding-top: 0.75rem;
 }
 
 .service-card .buttons a.btn-primary {
@@ -251,18 +381,9 @@
 }
 
 @media (min-width: 576px) {
-  .service-card .buttons {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .service-card .buttons a.btn-primary {
-    width: auto;
-  }
-
+  .service-card .buttons a.btn-primary,
   .service-card .buttons a.btn-secondary {
-    margin-left: 10px;
+    width: 100%;
   }
 }
 

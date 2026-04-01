@@ -1,6 +1,6 @@
 /**
  * Central Stripe Payment Link URLs (product slug → checkout).
- * Used by /get-started after intake; keep in sync with Stripe Dashboard.
+ * Used by /get-started after pre-checkout intake; keep in sync with Stripe Dashboard. Success URL → /onboarding
  */
 (function (global) {
   'use strict';

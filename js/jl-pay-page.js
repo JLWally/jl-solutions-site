@@ -318,7 +318,7 @@
       billingAddressCollection: 'auto',
       paymentSource: 'pay_page',
       successUrl: base + '/thank-you.html?from=checkout&session_id={CHECKOUT_SESSION_ID}',
-      cancelUrl: base + '/get-started',
+      cancelUrl: base + '/internal-pay/',
       description: summary,
       referralCode: s.referralCode || undefined,
     };

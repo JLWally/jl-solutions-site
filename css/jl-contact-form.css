@@ -114,7 +114,7 @@
   display: none !important;
 }
 
-/* /get-started — service-specific kickoff */
+/* Post-purchase kickoff (/onboarding) */
 .jl-kickoff-intro-max {
   max-width: 36rem;
 }

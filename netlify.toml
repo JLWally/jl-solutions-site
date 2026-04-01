@@ -80,7 +80,7 @@
   to = "/book-consultation.html"
   status = 200
 
-# After Stripe: canonical intake page (set Payment Link success URL to /get-started)
+# Pre-checkout guided flow
 [[redirects]]
   from = "/get-started"
   to = "/get-started.html"
@@ -89,6 +89,17 @@
 [[redirects]]
   from = "/get-started/"
   to = "/get-started.html"
+  status = 200
+
+# Post-purchase intake (set Stripe Payment Link success URL to /onboarding?service=…)
+[[redirects]]
+  from = "/onboarding"
+  to = "/onboarding/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/onboarding/"
+  to = "/onboarding/index.html"
   status = 200
 
 # No-hyphen alias (query string preserved) — use /get-started in links when possible
@@ -104,37 +115,29 @@
   status = 301
   force = true
 
-# Legacy welcome URL → /get-started (preserves query string e.g. ?package=ai)
+# Legacy welcome URL → post-purchase onboarding
 [[redirects]]
   from = "/services/welcome-after-purchase"
-  to = "/get-started"
+  to = "/onboarding"
   status = 301
   force = true
 
 [[redirects]]
   from = "/services/welcome-after-purchase.html"
-  to = "/get-started"
+  to = "/onboarding"
   status = 301
   force = true
 
-# Checkout starts at /get-started (intake → Stripe Payment Link). Block standalone payment UIs.
+# Manual / invoice payments only (not productized package checkout)
 [[redirects]]
   from = "/internal-pay"
-  to = "/get-started"
-  status = 302
-  force = true
+  to = "/internal-pay/index.html"
+  status = 200
 
 [[redirects]]
   from = "/internal-pay/"
-  to = "/get-started"
-  status = 302
-  force = true
-
-[[redirects]]
-  from = "/internal-pay/index.html"
-  to = "/get-started"
-  status = 302
-  force = true
+  to = "/internal-pay/index.html"
+  status = 200
 
 # Legacy site paths → get started (query string preserved by Netlify)
 [[redirects]]
