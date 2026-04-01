@@ -309,6 +309,13 @@
   margin-top: 1rem;
   border: 1px solid rgba(15, 23, 42, 0.1);
   box-shadow: 0 12px 40px rgba(10, 22, 40, 0.06);
+  /* Default ink for any unclassed text; global style.css forces li to white otherwise */
+  color: #0f172a;
+}
+
+/* Beat style.css `li { color: white }` (0,0,1) — recommendation bullets & CTA checklist were invisible */
+.jl-start-panel li {
+  color: #0f172a;
 }
 
 .jl-start-panel .jl-start-section-helper {
@@ -491,6 +498,11 @@
   transition: background 0.2s, transform 0.1s;
 }
 
+/* Beat style.css `button:not([class*='btn-outline']) { color: inherit }` (inherits body white on yellow) */
+.jl-start-page button.jl-start-primary {
+  color: #0a1628;
+}
+
 .jl-start-primary:hover:not(:disabled) {
   background: var(--jl-accent-hover, #ffd54f);
 }
@@ -622,6 +634,10 @@
   border: none;
   background: var(--jl-accent, #ffc107);
   color: var(--jl-ink, #0a1628);
+}
+
+.jl-start-page button.jl-start-sticky__btn {
+  color: #0a1628;
 }
 
 /* Footer */
