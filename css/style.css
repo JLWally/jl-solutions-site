@@ -158,7 +158,7 @@ blockquote {
   color: #1a1a1a;
 }
 
-/* Concierge Daemon chat: JL branding, readable contrast, keyboard/touch friendly */
+/* Wattson chat: JL branding, readable contrast, keyboard/touch friendly */
 .chatbot-toggle {
   position: fixed;
   bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
@@ -291,11 +291,22 @@ blockquote {
   box-sizing: border-box;
 }
 
+.chatbot-panel-label {
+  margin: 0;
+  padding: 0.5rem 1rem 0.15rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  background: var(--jl-ink, #0a1628);
+}
+
 .chatbot-message {
   padding: 0.65rem 0.85rem;
   border-radius: 12px;
-  font-size: 0.9375rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.55;
   white-space: pre-line;
   max-width: 100%;
 }
@@ -325,6 +336,11 @@ blockquote {
 .chatbot-message--rich {
   white-space: normal;
   word-break: break-word;
+}
+
+.chatbot-welcome {
+  border-left: 3px solid var(--jl-accent, #ffc107);
+  background: rgba(30, 58, 79, 0.95);
 }
 
 .chatbot-inline-link {
@@ -359,8 +375,8 @@ blockquote {
   align-items: center;
   justify-content: center;
   min-height: 2.75rem;
-  padding: 0.4rem 0.85rem;
-  font-size: 0.8125rem;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.875rem;
   font-weight: 700;
   border-radius: 999px;
   background: rgba(255, 193, 7, 0.14);
@@ -395,7 +411,7 @@ blockquote {
   border-radius: 999px;
   padding: 0.5rem 0.95rem;
   min-height: 2.75rem;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   line-height: 1.3;

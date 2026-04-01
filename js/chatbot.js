@@ -3,18 +3,21 @@
     endpoint:
       document.currentScript?.dataset?.endpoint ||
       "/.netlify/functions/chatbot",
-    brand: "Concierge Daemon",
-    subtitle: "Ask anything. We route you to the right next step.",
-    placeholder: "Services, pricing, booking, payment...",
+    brand: "Wattson",
+    subtitle: "JL Solutions assistant. Ask a question or pick a next step below.",
+    /** Shown when there is no chat history yet (not saved to storage). */
+    welcomeMarkdown:
+      "Hi, I am Wattson. I can explain what JL Solutions does, help you [book a free strategy call](/book-consultation.html), or point you to [pay an invoice](/pay/) or [send a message](/contact.html). What would you like to do?",
+    placeholder: "Ask about services, pricing, or your situation...",
     quickPrompts: [
-      "What do you actually build for businesses?",
+      "What does JL Solutions help businesses with?",
       "I want to book a free call",
       "I need to pay a deposit or invoice"
     ],
     ctaLinks: [
       { label: "Book a free call", href: "/book-consultation.html" },
-      { label: "Pay / checkout", href: "/pay/" },
-      { label: "Contact", href: "/contact.html" }
+      { label: "Send a message", href: "/contact.html" },
+      { label: "Pay / checkout", href: "/pay/" }
     ],
     maxTurnsSaved: 12
   };
@@ -98,7 +101,7 @@
     const toggle = createElement("button", "chatbot-toggle", {
       id: "jl-chatbot-toggle",
       type: "button",
-      "aria-label": "Open Concierge Daemon chat",
+      "aria-label": "Open Wattson chat assistant",
       "aria-expanded": "false",
       "aria-controls": "jl-chatbot-window",
       "aria-haspopup": "dialog"
@@ -124,8 +127,10 @@
       <div class="chatbot-messages-scroll" id="jl-chatbot-messages-scroll">
         <div class="chatbot-messages-list" id="jl-chatbot-messages"></div>
       </div>
-      <div class="chatbot-cta-row" id="jl-chatbot-cta" role="navigation" aria-label="Quick actions"></div>
-      <div class="chatbot-quick" id="jl-chatbot-quick"></div>
+      <p class="chatbot-panel-label" id="jl-chatbot-cta-label">Next steps</p>
+      <div class="chatbot-cta-row" id="jl-chatbot-cta" role="navigation" aria-labelledby="jl-chatbot-cta-label"></div>
+      <p class="chatbot-panel-label" id="jl-chatbot-quick-label">Common questions</p>
+      <div class="chatbot-quick" id="jl-chatbot-quick" aria-labelledby="jl-chatbot-quick-label"></div>
       <form class="chatbot-form" id="jl-chatbot-form">
         <textarea
           class="chatbot-input"
@@ -136,7 +141,7 @@
           required
         ></textarea>
         <div class="chatbot-actions">
-          <small>AI may be imperfect. Verify sensitive details before you act.</small>
+          <small>Answers are AI-generated. For quotes or contracts, use Book a call or Contact.</small>
           <button type="submit" class="btn-chatbot-send">Send</button>
         </div>
       </form>
@@ -155,6 +160,15 @@
 
     const renderHistory = () => {
       messagesEl.innerHTML = "";
+      if (state.history.length === 0 && CONFIG.welcomeMarkdown) {
+        const welcomeEl = createElement(
+          "div",
+          "chatbot-message assistant chatbot-message--rich chatbot-welcome"
+        );
+        welcomeEl.innerHTML = renderAssistantHtml(CONFIG.welcomeMarkdown);
+        welcomeEl.setAttribute("aria-label", "Welcome message");
+        messagesEl.appendChild(welcomeEl);
+      }
       state.history.forEach(({ role, content, error }) => {
         const bubble = createElement(
           "div",
@@ -230,13 +244,13 @@
         const reply =
           payload.reply ||
           payload.message ||
-          "I’m here, but I wasn’t able to find an answer.";
+          "I am not sure I understood that. Try one of the buttons below, or ask in your own words.";
         addMessage("assistant", reply);
       } catch (error) {
         console.error("[JL Chatbot]", error);
         addMessage(
           "assistant",
-          "Sorry, I hit a snag reaching the AI service. Please try again or email info@jlsolutions.io.",
+          "Something went wrong on our side. Please try again, email info@jlsolutions.io, or use Book a free call / Send a message below.",
           { error: true }
         );
       } finally {
@@ -260,7 +274,7 @@
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       toggle.setAttribute(
         "aria-label",
-        open ? "Close Concierge Daemon chat" : "Open Concierge Daemon chat"
+        open ? "Close Wattson chat" : "Open Wattson chat assistant"
       );
       if (open) {
         input.focus();
@@ -279,7 +293,8 @@
 
     CONFIG.ctaLinks.forEach(({ label, href }) => {
       const a = createElement("a", "chatbot-cta-link", {
-        href
+        href,
+        "aria-label": label + " (opens in same window)"
       });
       a.textContent = label;
       ctaEl.appendChild(a);
