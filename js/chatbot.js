@@ -165,6 +165,40 @@
     const input = windowEl.querySelector("#jl-chatbot-input");
     const closeBtn = windowEl.querySelector(".chatbot-close");
 
+    /**
+     * Scroll the transcript so the newest bubble (user or assistant) is visible.
+     * Uses the panel's scroll container only (does not scroll the page).
+     * Double rAF so layout exists after innerHTML updates.
+     */
+    const scrollLastBubbleIntoView = () => {
+      if (!messagesScrollEl || !messagesEl) return;
+      const container = messagesScrollEl;
+      const list = messagesEl;
+      const run = () => {
+        const bubbles = list.querySelectorAll(".chatbot-message");
+        const last = bubbles[bubbles.length - 1];
+        if (!last) {
+          container.scrollTop = 0;
+          return;
+        }
+        const topWithinContainer = list.offsetTop + last.offsetTop;
+        const maxScroll = Math.max(0, container.scrollHeight - container.clientHeight);
+        const pad = 10;
+        let nextTop;
+        if (last.offsetHeight + 2 * pad <= container.clientHeight) {
+          nextTop =
+            topWithinContainer + last.offsetHeight / 2 - container.clientHeight / 2;
+        } else {
+          nextTop = topWithinContainer - pad;
+        }
+        container.scrollTo({
+          top: Math.max(0, Math.min(nextTop, maxScroll)),
+          behavior: "smooth"
+        });
+      };
+      requestAnimationFrame(() => requestAnimationFrame(run));
+    };
+
     const renderHistory = () => {
       messagesEl.innerHTML = "";
       if (state.history.length === 0 && CONFIG.welcomeMarkdown) {
@@ -191,9 +225,7 @@
         if (error) bubble.classList.add("error");
         messagesEl.appendChild(bubble);
       });
-      if (messagesScrollEl) {
-        messagesScrollEl.scrollTop = messagesScrollEl.scrollHeight;
-      }
+      scrollLastBubbleIntoView();
     };
 
     const addMessage = (role, content, options = {}) => {
