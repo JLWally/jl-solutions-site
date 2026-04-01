@@ -212,6 +212,11 @@
     max-height: min(36rem, calc(100vh - 6rem));
     max-height: min(36rem, calc(100dvh - 5.75rem - max(0px, env(safe-area-inset-bottom, 0px))));
   }
+
+  .chatbot-window.open {
+    height: min(36rem, calc(100vh - 6rem));
+    height: min(36rem, calc(100dvh - 5.75rem - max(0px, env(safe-area-inset-bottom, 0px))));
+  }
 }
 
 /* Small Mobile Devices */

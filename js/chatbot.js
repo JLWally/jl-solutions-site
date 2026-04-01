@@ -55,6 +55,11 @@
     return parts.join("").replace(/\n/g, "<br>");
   };
 
+  /**
+   * Chat transcript persistence: browser localStorage only (this device / this origin).
+   * Not uploaded as a batch; each user/assistant turn is sent to the API when you send a message.
+   * Clear: site data for jlsolutions.io or DevTools → Application → Local Storage → remove jlSolutionsChatHistory.
+   */
   const STORAGE_KEY = "jlSolutionsChatHistory";
   const state = {
     isOpen: false,
@@ -126,11 +131,13 @@
       </header>
       <div class="chatbot-messages-scroll" id="jl-chatbot-messages-scroll">
         <div class="chatbot-messages-list" id="jl-chatbot-messages"></div>
+        <div class="chatbot-below-messages" id="jl-chatbot-below-messages">
+          <p class="chatbot-panel-label" id="jl-chatbot-cta-label">Next steps</p>
+          <div class="chatbot-cta-row" id="jl-chatbot-cta" role="navigation" aria-labelledby="jl-chatbot-cta-label"></div>
+          <p class="chatbot-panel-label" id="jl-chatbot-quick-label">Common questions</p>
+          <div class="chatbot-quick" id="jl-chatbot-quick" aria-labelledby="jl-chatbot-quick-label"></div>
+        </div>
       </div>
-      <p class="chatbot-panel-label" id="jl-chatbot-cta-label">Next steps</p>
-      <div class="chatbot-cta-row" id="jl-chatbot-cta" role="navigation" aria-labelledby="jl-chatbot-cta-label"></div>
-      <p class="chatbot-panel-label" id="jl-chatbot-quick-label">Common questions</p>
-      <div class="chatbot-quick" id="jl-chatbot-quick" aria-labelledby="jl-chatbot-quick-label"></div>
       <form class="chatbot-form" id="jl-chatbot-form">
         <textarea
           class="chatbot-input"
@@ -305,11 +312,21 @@
         type: "button"
       });
       chip.textContent = prompt;
-      chip.addEventListener("click", e => {
-        e.preventDefault();
-        e.stopPropagation();
+      const runChip = e => {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
         sendPrompt(prompt);
-      });
+      };
+      chip.addEventListener("click", runChip);
+      chip.addEventListener(
+        "pointerdown",
+        e => {
+          e.stopPropagation();
+        },
+        true
+      );
       quickEl.appendChild(chip);
     });
 

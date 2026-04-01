@@ -215,10 +215,14 @@ blockquote {
   overflow: hidden;
   z-index: 9998;
   font-family: var(--jl-font, "Inter", system-ui, sans-serif);
+  isolation: isolate;
 }
 
+/* Definite height when open so flex gives the message area real space to scroll (avoids collapsed middle). */
 .chatbot-window.open {
   display: flex;
+  height: min(36rem, calc(100vh - 6.5rem));
+  height: min(36rem, calc(100dvh - max(0.75rem, env(safe-area-inset-top, 0px)) - 5.5rem - max(0px, env(safe-area-inset-bottom, 0px))));
 }
 
 .chatbot-header {
@@ -270,7 +274,10 @@ blockquote {
   outline-offset: 2px;
 }
 
-/* Scroll layer must NOT be display:flex (WebKit won’t scroll flex overflow reliably). */
+/*
+ * Single scroll region: conversation + next-step links + question chips (form stays fixed below).
+ * flex:1 + min-height:0 + parent .open height yields a stable scroll viewport.
+ */
 .chatbot-messages-scroll {
   flex: 1 1 0%;
   min-height: 0;
@@ -280,6 +287,18 @@ blockquote {
   overscroll-behavior: contain;
   touch-action: pan-y;
   background: var(--jl-ink, #0a1628);
+  position: relative;
+  z-index: 0;
+}
+
+.chatbot-below-messages {
+  padding-bottom: 0.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 0.25rem;
+  background: var(--jl-ink, #0a1628);
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
 }
 
 .chatbot-messages-list {
@@ -300,6 +319,10 @@ blockquote {
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.45);
   background: var(--jl-ink, #0a1628);
+}
+
+.chatbot-below-messages .chatbot-panel-label:first-of-type {
+  padding-top: 0.35rem;
 }
 
 .chatbot-message {
@@ -383,6 +406,9 @@ blockquote {
   color: var(--jl-accent-hover, #ffd54f);
   text-decoration: none;
   border: 1px solid rgba(255, 193, 7, 0.45);
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .chatbot-cta-link:hover {
@@ -417,7 +443,8 @@ blockquote {
   line-height: 1.3;
   touch-action: manipulation;
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .chatbot-chip:hover {
@@ -512,6 +539,11 @@ blockquote {
     width: auto;
     max-height: min(36rem, calc(100vh - 6rem));
     max-height: min(36rem, calc(100dvh - 5.75rem - max(0px, env(safe-area-inset-bottom, 0px))));
+  }
+
+  .chatbot-window.open {
+    height: min(36rem, calc(100vh - 6rem));
+    height: min(36rem, calc(100dvh - 5.75rem - max(0px, env(safe-area-inset-bottom, 0px))));
   }
 
   .chatbot-toggle {
