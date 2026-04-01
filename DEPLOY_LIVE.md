@@ -15,8 +15,8 @@ Your **feature/azure-aws-cloud-migration-page** branch (pushed to GitHub) includ
   - **Referral dashboard** – `/referral-dashboard/` (stats, codes, referrals table)
   - Netlify function: `netlify/functions/referrals.js`
   - JS: `js/referral-auth.js`, `js/supabase-client.js`, `js/referral-config.example.js`
-- **Pay**
-  - **Pay page** – `/pay/index.html`
+- **Internal pay utility**
+  - **Pay page** – `/internal-pay/index.html`
   - Netlify: `stripe-checkout.js`, `stripe-webhook.js`
 - **Config**
   - `netlify.toml` – `publish = "."`, `functions = "netlify/functions"`
@@ -26,7 +26,7 @@ Your **feature/azure-aws-cloud-migration-page** branch (pushed to GitHub) includ
 ## Why the live site doesn’t have it yet
 
 - **main** uses a different layout (site in `public/`, different `netlify.toml`). Merging would require resolving that structure.
-- This branch uses **root as publish** (`publish = "."`) and has all funnel/dashboard/pay and Netlify functions at the root.
+- This branch uses **root as publish** (`publish = "."`) and has all funnel/dashboard/internal-pay and Netlify functions at the root.
 
 ## How to put this on jlsolutions.io
 
@@ -51,7 +51,7 @@ Your **feature/azure-aws-cloud-migration-page** branch (pushed to GitHub) includ
 - **Referral login**: https://www.jlsolutions.io/referral/login.html
 - **Referral signup**: https://www.jlsolutions.io/referral/signup.html
 - **Referral dashboard**: https://www.jlsolutions.io/referral-dashboard/ (requires auth).
-- **Pay**: https://www.jlsolutions.io/pay/
+- **Internal pay**: https://www.jlsolutions.io/internal-pay/
 
 Ensure Netlify env vars and Supabase/Stripe are set per `JLSOLUTIONS_REFERRAL_SETUP.md` and your Netlify dashboard.
 

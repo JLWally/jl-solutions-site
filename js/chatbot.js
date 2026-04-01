@@ -4,20 +4,20 @@
       document.currentScript?.dataset?.endpoint ||
       "/.netlify/functions/chatbot",
     brand: "Wattson",
-    subtitle: "JL Solutions assistant. Ask a question or pick a next step below.",
+    subtitle: "Demos and self-serve tools work without a call. Ask anything or use the shortcuts below.",
     /** Shown when there is no chat history yet (not saved to storage). */
     welcomeMarkdown:
-      "Hi, I am Wattson. I can explain what JL Solutions does, help you [book a free strategy call](/book-consultation.html), or point you to [pay an invoice](/pay/) or [send a message](/contact.html). What would you like to do?",
-    placeholder: "Ask about services, pricing, or your situation...",
+      "Hi, I am Wattson. You can [explore the interactive demo](/demo.html) or [try document extraction](/services/document-extraction-demo.html). For a personalized walkthrough or open-ended questions, use [Book a Free Call](/book-consultation.html) or [send a message](/contact.html). What would you like to do?",
+    placeholder: "Ask about demos, services, or next steps...",
     quickPrompts: [
-      "What does JL Solutions help businesses with?",
-      "I want to book a free call",
-      "I need to pay a deposit or invoice"
+      "Show me the product demo",
+      "I want to pay an invoice or deposit",
+      "What does JL Solutions help with?"
     ],
     ctaLinks: [
-      { label: "Book a free call", href: "/book-consultation.html" },
-      { label: "Send a message", href: "/contact.html" },
-      { label: "Pay / checkout", href: "/pay/" }
+      { label: "Interactive demo", href: "/demo.html" },
+      { label: "Book a Free Call", href: "/book-consultation.html" },
+      { label: "Contact", href: "/contact.html" }
     ],
     maxTurnsSaved: 12
   };
@@ -148,7 +148,7 @@
           required
         ></textarea>
         <div class="chatbot-actions">
-          <small>Answers are AI-generated. For quotes or contracts, use Book a call or Contact.</small>
+          <small>AI-generated answers. Demos and get started checkout work without a call. For binding quotes or contracts, use Contact or Book a Free Call.</small>
           <button type="submit" class="btn-chatbot-send">Send</button>
         </div>
       </form>
@@ -289,7 +289,7 @@
         console.error("[JL Chatbot]", error);
         addMessage(
           "assistant",
-          "Something went wrong on our side. Please try again, email info@jlsolutions.io, or use Book a free call / Send a message below.",
+          "Something went wrong on our side. Please try again, email info@jlsolutions.io, or use Book a Free Call / Send a message below.",
           { error: true }
         );
       } finally {

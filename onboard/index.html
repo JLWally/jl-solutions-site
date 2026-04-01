@@ -46,7 +46,7 @@
         <img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions" class="jl-logo-icon" height="40" onerror="this.style.display='none'">
       </a>
       <div class="d-flex align-items-center gap-3">
-        <a href="/book-consultation.html" class="text-white-50 small text-decoration-none">Book directly</a>
+        <a href="/book-consultation.html" class="text-white-50 small text-decoration-none">Book a Free Call</a>
         <a href="/" class="text-white-50 small">← Exit</a>
       </div>
     </div>
@@ -55,7 +55,7 @@
   <div class="wizard-hero">
     <div class="container">
       <h1 class="h3 mb-1">Get Started</h1>
-      <p class="mb-0 opacity-75 small">Start here — book a free call or pay for a service in a few steps</p>
+      <p class="mb-0 opacity-75 small">Start here — Book a Free Call or complete payment in a few steps</p>
     </div>
   </div>
 
@@ -70,8 +70,8 @@
         <div class="wizard-step active" data-step="1">
           <h2 class="mb-4">What do you need?</h2>
           <button type="button" class="path-btn" data-choice="consultation">
-            <h5>📞 Free consultation</h5>
-            <small>Book a call on our calendar — we’ll confirm by email</small>
+            <h5>📞 Book a Free Call</h5>
+            <small>Pick a time on our calendar — we’ll confirm by email</small>
           </button>
           <button type="button" class="path-btn" data-choice="payment">
             <h5>💳 Ready to pay</h5>
@@ -111,10 +111,10 @@
             <label class="form-label">Service of interest *</label>
             <select class="form-select" id="service" required>
               <option value="">Select...</option>
-              <option value="operations-optimization">Operations Optimization</option>
-              <option value="ai-solutions">AI Solutions</option>
-              <option value="automation-services">Automation Services</option>
-              <option value="document-intelligence">Document Intelligence</option>
+              <option value="operations-optimization">Operations optimization</option>
+              <option value="ai-solutions">AI &amp; document intelligence</option>
+              <option value="automation-services">Intake, scheduling &amp; automation</option>
+              <option value="document-intelligence">Document intelligence</option>
               <option value="government-contracting">Government Contracting</option>
               <option value="custom-solution">Custom Solution</option>
               <option value="not-sure">Not Sure Yet</option>
@@ -150,7 +150,7 @@
           </div>
         </div>
 
-        <!-- Payment (after intake + referral) — same fields / styling as /pay/ -->
+        <!-- Payment (after intake + referral) — same fields / styling as get-started payment step -->
         <div class="wizard-step" data-step="6b">
           <div class="jl-payment-card text-start">
             <h2 class="jl-payment-title mb-0">Complete payment</h2>
@@ -180,7 +180,7 @@
             </div>
             <button type="button" class="btn btn-wizard-outline mb-3" onclick="wizard.prev()">Back</button>
             <button type="button" class="btn-jl-payment-submit" id="btnPay" onclick="wizard.submitPayment()">Proceed to secure checkout</button>
-            <p class="jl-payment-footnote mb-0">Questions? <a href="/book-consultation.html">Book a free call</a> or <a href="/contact.html">contact</a>.</p>
+            <p class="jl-payment-footnote mb-0">Questions? <a href="/book-consultation.html">Book a Free Call</a> or <a href="/contact.html">contact</a> (we reply within one business day).</p>
           </div>
         </div>
       </form>
@@ -333,7 +333,7 @@
         params.append('referralCode', data.referralCode || '');
         params.append(
           'selectedDateTime',
-          'Completing time on Book a free call page (from /onboard/)'
+          'Completing time on Book a Free Call page (from /onboard/)'
         );
 
         fetch('/.netlify/functions/send-form-email', {

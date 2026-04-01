@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get started | JL Solutions</title>
+  <meta name="description" content="Choose the right JL Solutions package, answer a few questions, and continue to secure checkout or request a custom quote.">
+  <meta name="robots" content="noindex, follow">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/jl-getstarted.css">
+  <link rel="stylesheet" href="/css/jl-payment-form.css">
+  <link rel="stylesheet" href="/css/jl-contact-form.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+</head>
+<body class="jl-start-page">
+  <a href="#jl-start-main" class="skip-link">Skip to main content</a>
+
+  <header class="jl-start-header" role="banner">
+    <a class="jl-start-header__brand" href="/index.html">
+      <img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions home" width="160" height="44">
+    </a>
+    <a class="jl-start-header__cta" href="/book-consultation">Book a Free Call</a>
+  </header>
+
+  <!-- Wizard (default) -->
+  <div id="jl-start-wizard">
+    <section class="jl-start-hero" aria-labelledby="jl-start-hero-title">
+      <p class="jl-start-eyebrow">Get started</p>
+      <h1 id="jl-start-hero-title" class="jl-start-hero__title">Let’s get you into the right solution.</h1>
+      <p class="jl-start-hero__sub">Answer a few quick questions and we’ll guide you to the best next step — fixed-price checkout, custom quote, or a quick call.</p>
+      <div class="jl-start-pills" role="list">
+        <span class="jl-start-pill" role="listitem"><span aria-hidden="true">⚡</span> Fast turnaround</span>
+        <span class="jl-start-pill" role="listitem"><span aria-hidden="true">🔒</span> Secure checkout</span>
+        <span class="jl-start-pill" role="listitem"><span aria-hidden="true">✓</span> Built for real workflows</span>
+      </div>
+    </section>
+
+    <div class="jl-start-track-wrap" aria-label="Progress">
+      <div class="jl-start-track">
+        <div class="jl-start-step is-active" data-step="1" id="jl-track-1">
+          <span class="jl-start-step__num">1</span>
+          Choose
+        </div>
+        <div class="jl-start-step" data-step="2" id="jl-track-2">
+          <span class="jl-start-step__num">2</span>
+          Answer
+        </div>
+        <div class="jl-start-step" data-step="3" id="jl-track-3">
+          <span class="jl-start-step__num">3</span>
+          Start
+        </div>
+      </div>
+    </div>
+
+    <main id="jl-start-main" class="jl-start-body">
+      <section aria-labelledby="jl-choose-heading">
+        <h2 class="jl-start-section-title" id="jl-choose-heading">What do you need help with?</h2>
+        <p class="jl-start-section-helper">Choose the option that feels closest. We’ll guide you from there.</p>
+        <div class="jl-start-cards" role="group" aria-label="Service options">
+          <button type="button" class="jl-start-card" data-jl-service="fix-app" aria-pressed="false">
+            <span class="jl-start-card__icon" aria-hidden="true">🛠️</span>
+            <h3 class="jl-start-card__title">Fix My App Sprint</h3>
+            <p class="jl-start-card__outcome">Stop leaks in UX, forms, and mobile that cost you leads.</p>
+            <p class="jl-start-card__best">Best for: clear bugs or conversion issues on an existing site.</p>
+            <p class="jl-start-card__price" data-price-for="fix-app" hidden>$1,500 fixed price</p>
+          </button>
+          <button type="button" class="jl-start-card" data-jl-service="ai-intake" aria-pressed="false">
+            <span class="jl-start-card__icon" aria-hidden="true">🤖</span>
+            <h3 class="jl-start-card__title">AI Intake Form Setup</h3>
+            <p class="jl-start-card__outcome">Turn visitors into qualified leads automatically.</p>
+            <p class="jl-start-card__best">Best for: teams that need smarter capture and routing.</p>
+            <p class="jl-start-card__price" data-price-for="ai-intake" hidden>$2,500 fixed price</p>
+          </button>
+          <button type="button" class="jl-start-card" data-jl-service="scheduling" aria-pressed="false">
+            <span class="jl-start-card__icon" aria-hidden="true">📅</span>
+            <h3 class="jl-start-card__title">Scheduling &amp; Routing</h3>
+            <p class="jl-start-card__outcome">Let customers book and get routed without the back-and-forth.</p>
+            <p class="jl-start-card__best">Best for: appointments, jobs, or field teams.</p>
+            <p class="jl-start-card__price" data-price-for="scheduling" hidden>$3,000 fixed price</p>
+          </button>
+          <button type="button" class="jl-start-card" data-jl-service="lead-engine" aria-pressed="false">
+            <span class="jl-start-card__icon" aria-hidden="true">🎯</span>
+            <h3 class="jl-start-card__title">Lead Generation Engine</h3>
+            <p class="jl-start-card__outcome">Source, score, and speed up outreach to fit prospects.</p>
+            <p class="jl-start-card__best">Best for: outbound-heavy agencies and consultants.</p>
+            <p class="jl-start-card__price" data-price-for="lead-engine" hidden>$3,500 fixed price</p>
+          </button>
+        </div>
+      </section>
+
+      <section id="jl-start-recommend" class="jl-start-panel" aria-live="polite" hidden>
+        <p class="jl-start-section-title mb-2">Recommended next step</p>
+        <h2 class="jl-start-rec__title" id="jl-rec-title">Select a service above.</h2>
+        <p class="jl-start-rec__desc" id="jl-rec-desc"></p>
+        <ul class="jl-start-rec__benefits" id="jl-rec-benefits"></ul>
+        <div class="jl-start-rec__meta">
+          <span class="jl-start-rec__price" id="jl-rec-price"></span>
+          <span class="jl-start-rec__timeline" id="jl-rec-timeline"></span>
+        </div>
+        <p class="jl-start-rec__confidence" id="jl-rec-confidence">One new customer can often pay for this setup.</p>
+        <div class="jl-start-rec__actions">
+          <button type="button" class="jl-start-primary" id="jl-rec-continue">Continue</button>
+          <a class="jl-start-secondary" href="/book-consultation">Book a Free Call</a>
+        </div>
+      </section>
+
+      <section id="jl-start-intake" class="jl-start-panel" hidden>
+        <h2 class="jl-start-section-title mb-1">A few quick questions</h2>
+        <p class="jl-start-section-helper mb-3">This helps us confirm the fit and get your setup moving faster.</p>
+        <form id="jl-start-form" class="jl-start-form" novalidate>
+          <input type="hidden" name="form-name" id="jl-start-form-name" value="getstarted-product-intake">
+          <input type="hidden" name="gs_product" id="jl_gs_product" value="">
+          <p class="visually-hidden" aria-hidden="true">
+            <label>Leave blank: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
+          </p>
+          <div class="mb-3">
+            <label class="form-label" for="jl_gs_name">Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="jl_gs_name" name="name" required autocomplete="name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="jl_gs_email">Email <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="jl_gs_email" name="email" required autocomplete="email">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="jl_gs_business">Business name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="jl_gs_business" name="gs_business_name" required autocomplete="organization">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="jl_gs_website">Website URL <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="jl_gs_website" name="gs_website" required inputmode="url" placeholder="https://">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="jl_gs_main_goal">Main goal <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="jl_gs_main_goal" name="gs_main_goal" placeholder="What do you want this setup to improve?">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="jl_gs_not_working">What is not working right now? <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="jl_gs_not_working" name="gs_not_working" rows="2" placeholder="Share the current bottleneck"></textarea>
+          </div>
+
+          <div id="jl-intake-fix" class="jl-start-intake-panel" data-panel="fix-app">
+            <div class="mb-3">
+              <label class="form-label" for="jl_gs_fix_issues">What feels broken right now? <span class="text-danger">*</span></label>
+              <select class="form-select" id="jl_gs_fix_issues" name="gs_fix_issues">
+                <option value="">Select one</option>
+                <option value="Forms not working">Forms not working</option>
+                <option value="Mobile experience is weak">Mobile experience is weak</option>
+                <option value="Conversion flow is confusing">Conversion flow is confusing</option>
+                <option value="Something else">Something else</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="jl_gs_fix_platform">What platform is this built on? <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="jl_gs_fix_platform" name="gs_fix_platform" placeholder="WordPress, Webflow, custom app...">
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="jl_gs_fix_pages">Biggest priority right now? <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="jl_gs_fix_pages" name="gs_fix_pages" placeholder="What should we improve first?">
+            </div>
+          </div>
+
+          <div id="jl-intake-ai" class="jl-start-intake-panel" data-panel="ai-intake">
+            <div class="mb-3">
+              <label class="form-label" for="jl_gs_ai_lead_questions">What happens to new leads right now? <span class="text-danger">*</span></label>
+              <select class="form-select" id="jl_gs_ai_lead_questions" name="gs_ai_lead_questions">
+                <option value="">Select one</option>
+                <option value="Email inbox">Email inbox</option>
+                <option value="Spreadsheet">Spreadsheet</option>
+                <option value="CRM">CRM</option>
+                <option value="No consistent process">No consistent process</option>
+              </select>
+            </div>
+            <fieldset class="mb-3 border-0 p-0 m-0">
+              <legend class="form-label">Do you need qualification logic?</legend>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gs_ai_filter_qualify" id="jl_ai_q_yes" value="Yes">
+                <label class="form-check-label" for="jl_ai_q_yes">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gs_ai_filter_qualify" id="jl_ai_q_no" value="No">
+                <label class="form-check-label" for="jl_ai_q_no">No</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gs_ai_filter_qualify" id="jl_ai_q_ns" value="Not sure">
+                <label class="form-check-label" for="jl_ai_q_ns">Not sure</label>
+              </div>
+            </fieldset>
+            <div class="mb-0">
+              <label class="form-label" for="jl_gs_ai_dest">Where should qualified leads go?</label>
+              <input type="text" class="form-control" id="jl_gs_ai_dest" name="gs_ai_leads_destination" placeholder="Email, CRM, or sheet">
+            </div>
+          </div>
+
+          <div id="jl-intake-sched" class="jl-start-intake-panel" data-panel="scheduling">
+            <div class="mb-3">
+              <label class="form-label" for="jl_gs_sched_services">What type of appointments or jobs do customers book? <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="jl_gs_sched_services" name="gs_sched_services" placeholder="Consult calls, estimates, service visits...">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="jl_gs_sched_assign">Do you assign jobs manually or automatically? <span class="text-danger">*</span></label>
+              <select class="form-select" id="jl_gs_sched_assign" name="gs_sched_assign_manual_auto">
+                <option value="">Select one</option>
+                <option value="Manually">Manually</option>
+                <option value="Automatically">Automatically</option>
+                <option value="Mix of both">Mix of both</option>
+              </select>
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="jl_gs_sched_availability">Do you need reminders and confirmations? <span class="text-danger">*</span></label>
+              <select class="form-select" id="jl_gs_sched_availability" name="gs_sched_availability">
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="Not sure">Not sure</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="jl-intake-lead" class="jl-start-intake-panel" data-panel="lead-engine">
+            <div class="mb-3">
+              <label class="form-label" for="jl_gs_lead_niche">Who are you trying to reach? <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="jl_gs_lead_niche" name="gs_lead_niche" placeholder="Industry, role, company type...">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="jl_gs_lead_market">What market/location are you targeting? <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="jl_gs_lead_market" name="gs_lead_market" placeholder="US, regional, city-level, etc.">
+            </div>
+            <div class="mb-0">
+              <label class="form-label" for="jl_gs_lead_goal">Are you doing outbound manually today? <span class="text-danger">*</span></label>
+              <select class="form-select" id="jl_gs_lead_goal" name="gs_lead_goal">
+                <option value="">Select one</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="Somewhat">Somewhat</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-check mt-3 mb-0">
+            <input class="form-check-input" type="checkbox" id="jl_gs_custom_scope" name="gs_custom_scope" value="yes">
+            <label class="form-check-label small" for="jl_gs_custom_scope">This looks like a larger or multi-system build — I want a <strong>custom quote</strong> instead of checkout.</label>
+          </div>
+        </form>
+      </section>
+
+      <section id="jl-start-summary" class="jl-start-panel jl-start-sum" hidden>
+        <h2 class="jl-start-section-title mb-3">Your next step</h2>
+        <dl>
+          <div>
+            <dt>Service</dt>
+            <dd id="jl-sum-service">—</dd>
+          </div>
+          <div>
+            <dt>Timeline</dt>
+            <dd id="jl-sum-timeline">—</dd>
+          </div>
+          <div>
+            <dt>Investment</dt>
+            <dd id="jl-sum-price">—</dd>
+          </div>
+          <div>
+            <dt>Recommended action</dt>
+            <dd id="jl-sum-next">—</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="jl-start-cta-block" class="jl-start-panel" hidden>
+        <ul class="jl-start-reassure" id="jl-start-reassure" aria-label="Before you continue">
+          <li>Secure payment via Stripe</li>
+          <li>You’ll receive confirmation instantly</li>
+          <li>We begin within 1 business day</li>
+        </ul>
+        <button type="button" class="jl-start-primary" id="jl-start-primary">Continue to secure checkout</button>
+        <p class="jl-start-cta-note">Takes you to Stripe to complete your purchase.</p>
+        <a class="jl-start-secondary" href="/book-consultation">Prefer to talk first? Book a Free Call</a>
+      </section>
+    </main>
+  </div>
+
+  <!-- Post-purchase full intake: ?postPurchase=1 -->
+  <div id="jl-post-purchase-flow" class="d-none jl-contact-page jl-welcome-purchase">
+    <div class="container py-4">
+      <div class="jl-contact-intro text-center mb-4" id="jl-pp-intro">
+        <h1 class="h2 text-white fw-bold mb-3" id="jl-pp-headline">You’re in. Let’s get started.</h1>
+        <div id="jl-pp-service-meta" class="jl-kickoff-service-meta d-none mx-auto">
+          <p class="jl-kickoff-payment-confirm text-white mb-3 mb-md-2">We’ve received your payment and will begin within 1 business day.</p>
+          <p class="jl-kickoff-timeline-badge mb-3" role="status">
+            <span class="jl-kickoff-timeline-badge__label">Expected timeline</span>
+            <span class="jl-kickoff-timeline-badge__value" id="jl-pp-timeline-val">—</span>
+          </p>
+          <ul class="jl-kickoff-reassurance list-unstyled mb-0 text-white-50 small text-start text-md-center">
+            <li class="jl-kickoff-reassurance__item">You’ll receive a confirmation email shortly.</li>
+            <li class="jl-kickoff-reassurance__item">We’ll follow up if anything is missing.</li>
+          </ul>
+        </div>
+        <p class="text-white-50 mb-0 mx-auto jl-kickoff-intro-max" id="jl-pp-intro-default">
+          Complete the form below so we can start. Use the same email you used at checkout if possible.
+        </p>
+      </div>
+      <div class="jl-contact-card-wrap jl-kickoff-next-wrap">
+        <div class="jl-payment-card jl-kickoff-next-card mb-4">
+          <h2 class="jl-payment-title h5 mb-3">What happens next</h2>
+          <ol class="jl-kickoff-next__steps">
+            <li class="jl-kickoff-next__step"><span class="jl-kickoff-next__step-num">1</span><span class="jl-kickoff-next__step-body"><span class="jl-kickoff-next__step-title">We review your submission</span></span></li>
+            <li class="jl-kickoff-next__step"><span class="jl-kickoff-next__step-num">2</span><span class="jl-kickoff-next__step-body"><span class="jl-kickoff-next__step-title">We confirm details (if needed)</span></span></li>
+            <li class="jl-kickoff-next__step"><span class="jl-kickoff-next__step-num">3</span><span class="jl-kickoff-next__step-body"><span class="jl-kickoff-next__step-title">We begin your setup</span></span></li>
+            <li class="jl-kickoff-next__step"><span class="jl-kickoff-next__step-num">4</span><span class="jl-kickoff-next__step-body"><span class="jl-kickoff-next__step-title">You get updates as we build</span></span></li>
+          </ol>
+        </div>
+      </div>
+      <div class="jl-contact-card-wrap">
+        <div class="jl-payment-card" id="kickoff-form-wrap">
+          <h2 class="jl-payment-title h5 mb-1">Post-purchase intake</h2>
+          <p class="jl-payment-lead small mb-4">Questions? <a href="/book-consultation" class="fw-semibold">Book a Free Call</a> or <a href="/contact.html" class="fw-semibold">contact us</a>.</p>
+          <form id="jl-package-kickoff-form" name="package-kickoff" method="POST" action="/.netlify/functions/send-form-email">
+            <input type="hidden" name="form-name" value="package-kickoff">
+            <input type="hidden" name="purchase_service_slug" id="kp_purchase_service_slug" value="">
+            <input type="hidden" id="kp_package_name_locked" value="" disabled>
+            <p class="visually-hidden" aria-hidden="true">
+              <label>Leave blank: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
+            </p>
+            <div class="jl-intake-section" role="group" aria-labelledby="intake-s1">
+              <h3 class="jl-intake-section__title" id="intake-s1">Section 1: Basic Info</h3>
+              <div class="mb-3">
+                <label class="form-label" for="kp_business_name">Business name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="kp_business_name" name="business_name" required autocomplete="organization">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="kp_name">Contact name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="kp_name" name="name" required autocomplete="name">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="kp_email">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="kp_email" name="email" required autocomplete="email">
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="kp_phone">Phone <span class="text-danger">*</span></label>
+                <input type="tel" class="form-control" id="kp_phone" name="phone" required autocomplete="tel">
+              </div>
+              <div class="mb-0">
+                <label class="form-label" for="kp_website_url">Website URL <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="kp_website_url" name="website_url" required inputmode="url" placeholder="https:// or N/A">
+              </div>
+            </div>
+            <div class="jl-intake-section" id="jl-intake-section-package" role="group" aria-labelledby="intake-s2">
+              <h3 class="jl-intake-section__title" id="intake-s2">Section 2: What are we working on?</h3>
+              <p class="small text-secondary mb-2 d-none" id="jl-package-locked-note">Service locked from your checkout link. Need a different package? <a href="/contact.html">Contact us</a>.</p>
+              <div class="mb-0">
+                <label class="form-label" for="kp_package">Which service did you purchase? <span class="text-danger">*</span></label>
+                <select class="form-select" id="kp_package" name="package_name" required>
+                  <option value="">Select one</option>
+                  <option value="Fix My App">Fix My App</option>
+                  <option value="AI Intake Form">AI Intake Form</option>
+                  <option value="Scheduling Setup">Scheduling Setup</option>
+                  <option value="Lead Generation Engine">Lead Generation Engine</option>
+                  <option value="Other / not sure">Other / not sure</option>
+                </select>
+              </div>
+            </div>
+            <div class="jl-intake-section" role="group" aria-labelledby="intake-s3">
+              <h3 class="jl-intake-section__title" id="intake-s3">Section 3: Goals</h3>
+              <div class="mb-3">
+                <label class="form-label" for="kp_goal_main">What is your main goal? <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="kp_goal_main" name="goal_main" rows="3" required></textarea>
+              </div>
+              <div class="mb-0">
+                <label class="form-label" for="kp_not_working">What is NOT working right now? <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="kp_not_working" name="not_working" rows="3" required></textarea>
+              </div>
+            </div>
+            <div class="jl-intake-section" role="group" aria-labelledby="intake-s4">
+              <h3 class="jl-intake-section__title" id="intake-s4">Section 4: Access</h3>
+              <fieldset class="mb-3 border-0 p-0 m-0">
+                <legend class="form-label mb-2">Do you have access to your website/backend? <span class="text-danger">*</span></legend>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="access_backend" id="kp_access_yes" value="Yes" required>
+                  <label class="form-check-label" for="kp_access_yes">Yes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="access_backend" id="kp_access_no" value="No">
+                  <label class="form-check-label" for="kp_access_no">No</label>
+                </div>
+              </fieldset>
+              <div class="mb-3">
+                <label class="form-label" for="kp_platform">Platform <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="kp_platform" name="platform" required placeholder="e.g. WordPress, Webflow">
+              </div>
+              <div class="mb-0">
+                <label class="form-label" for="kp_login_details">Login details</label>
+                <textarea class="form-control" id="kp_login_details" name="login_details" rows="3" placeholder="Or write &quot;will provide securely&quot;"></textarea>
+              </div>
+            </div>
+            <div class="jl-intake-section jl-intake-section--features" role="group" aria-labelledby="intake-s5">
+              <h3 class="jl-intake-section__title" id="intake-s5">Section 5: Features (based on your service)</h3>
+              <p class="small text-secondary mb-3" id="jl-intake-s5-lead">Answer the block that matches what you purchased.</p>
+              <p class="small text-secondary mb-3 jl-intake-panel-hint" id="intake-panel-hint">Select your service in Section 2 to show the matching questions.</p>
+              <div class="jl-intake-panel d-none" data-intake-panel="ai">
+                <p class="fw-bold small text-uppercase text-muted mb-2">AI Intake</p>
+                <div class="mb-3">
+                  <label class="form-label" for="kp_ai_questions">Lead questions <span class="text-danger jl-kickoff-req-ai d-none" aria-hidden="true">*</span></label>
+                  <textarea class="form-control" id="kp_ai_questions" name="ai_current_questions" rows="3"></textarea>
+                </div>
+                <fieldset class="mb-3 border-0 p-0 m-0">
+                  <legend class="form-label mb-2">Filter / qualify leads?</legend>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ai_filter_qualify" id="kp_ai_f_yes" value="Yes">
+                    <label class="form-check-label" for="kp_ai_f_yes">Yes</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="ai_filter_qualify" id="kp_ai_f_no" value="No">
+                    <label class="form-check-label" for="kp_ai_f_no">No</label>
+                  </div>
+                </fieldset>
+                <div class="mb-0">
+                  <label class="form-label" for="kp_ai_dest">Where should leads go?</label>
+                  <textarea class="form-control" id="kp_ai_dest" name="ai_leads_destination" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="jl-intake-panel d-none" data-intake-panel="scheduling">
+                <p class="fw-bold small text-uppercase text-muted mb-2">Scheduling</p>
+                <div class="mb-3">
+                  <label class="form-label" for="kp_sched_services">What to book <span class="text-danger jl-kickoff-req-sched d-none" aria-hidden="true">*</span></label>
+                  <textarea class="form-control" id="kp_sched_services" name="sched_services_offered" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="kp_sched_avail">Availability <span class="text-danger jl-kickoff-req-sched d-none" aria-hidden="true">*</span></label>
+                  <textarea class="form-control" id="kp_sched_avail" name="sched_availability" rows="3"></textarea>
+                </div>
+                <div class="mb-0">
+                  <label class="form-label" for="kp_sched_assign">Manual or auto assign?</label>
+                  <select class="form-select" id="kp_sched_assign" name="sched_assign_manual_auto">
+                    <option value="">Select</option>
+                    <option value="Manually">Manually</option>
+                    <option value="Automatically">Automatically</option>
+                    <option value="Mix of both">Mix of both</option>
+                  </select>
+                </div>
+              </div>
+              <div class="jl-intake-panel d-none" data-intake-panel="fix">
+                <p class="fw-bold small text-uppercase text-muted mb-2">Fix My App</p>
+                <div class="mb-3">
+                  <label class="form-label" for="kp_fix_issues">Issues <span class="text-danger jl-kickoff-req-fix d-none" aria-hidden="true">*</span></label>
+                  <textarea class="form-control" id="kp_fix_issues" name="fix_issues_noticing" rows="3"></textarea>
+                </div>
+                <div class="mb-0">
+                  <label class="form-label" for="kp_fix_pages">Pages / flows <span class="text-danger jl-kickoff-req-fix d-none" aria-hidden="true">*</span></label>
+                  <textarea class="form-control" id="kp_fix_pages" name="fix_pages_flows" rows="2"></textarea>
+                </div>
+              </div>
+              <div class="jl-intake-panel d-none" data-intake-panel="lead">
+                <p class="fw-bold small text-uppercase text-muted mb-2">Lead Engine</p>
+                <div class="mb-3">
+                  <label class="form-label" for="kp_lead_target">Target market <span class="text-danger">*</span></label>
+                  <textarea class="form-control" id="kp_lead_target" name="lead_target_market" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="kp_lead_outreach">Outreach to automate <span class="text-danger">*</span></label>
+                  <textarea class="form-control" id="kp_lead_outreach" name="lead_outreach_goals" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="kp_lead_channels">Channels</label>
+                  <textarea class="form-control" id="kp_lead_channels" name="lead_channels" rows="2"></textarea>
+                </div>
+                <div class="mb-0">
+                  <label class="form-label" for="kp_lead_compliance">Compliance / voice</label>
+                  <textarea class="form-control" id="kp_lead_compliance" name="lead_compliance_notes" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="jl-intake-section" role="group" aria-labelledby="intake-s6">
+              <h3 class="jl-intake-section__title" id="intake-s6">Section 6: Final</h3>
+              <div class="mb-3">
+                <label class="form-label" for="kp_deadline">Deadline (if any)</label>
+                <input type="text" class="form-control" id="kp_deadline" name="deadline">
+              </div>
+              <div class="mb-0">
+                <label class="form-label" for="kp_final_notes">Anything else?</label>
+                <textarea class="form-control" id="kp_final_notes" name="final_notes" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="kp_timeline" name="timeline_ack" value="yes">
+              <label class="form-check-label small text-secondary" for="kp_timeline" id="kp_timeline_label">I understand kickoff timing for my package.</label>
+            </div>
+            <button type="submit" class="btn btn-jl-payment-submit w-100" id="jl-package-kickoff-submit">Submit intake</button>
+          </form>
+        </div>
+      </div>
+      <div class="jl-payment-card mt-4 mx-auto d-none text-center" id="jl-welcome-success" style="max-width: 640px;" role="status" aria-live="polite">
+        <p class="text-success fw-bold mb-2">You’re all set.</p>
+        <p class="small text-secondary mb-0">We received your intake. Check your email; we’ll follow up within one business day.</p>
+        <p class="mt-3 mb-0"><a href="/services/index.html" class="btn btn-primary jl-theme btn-sm">Back to Services</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="jl-gs-stripe-overlay" class="jl-gs-stripe-overlay d-none" aria-hidden="true" role="alertdialog" aria-labelledby="jl-gs-stripe-overlay-title" aria-busy="true">
+    <div class="jl-gs-stripe-overlay__panel">
+      <div class="jl-gs-stripe-overlay__spinner" aria-hidden="true"></div>
+      <p id="jl-gs-stripe-overlay-title" class="jl-gs-stripe-overlay__title">Redirecting to secure checkout</p>
+      <p class="jl-gs-stripe-overlay__sub">You’ll complete payment on Stripe. Use the back button if you need to return.</p>
+    </div>
+  </div>
+
+  <div id="jl-start-sticky" class="jl-start-sticky" aria-hidden="true">
+    <div class="jl-start-sticky__inner">
+      <div class="jl-start-sticky__text">
+        <span class="jl-start-sticky__name" id="jl-sticky-name">Select a service</span>
+        <span class="jl-start-sticky__price" id="jl-sticky-price"></span>
+      </div>
+      <button type="button" class="jl-start-sticky__btn" id="jl-sticky-btn">Continue</button>
+    </div>
+  </div>
+
+  <footer class="jl-start-footer" role="contentinfo">
+    <small>&copy; 2026 JL Solutions</small>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/jl-stripe-product-links.js"></script>
+  <script src="/js/jl-getstarted-page.js"></script>
+  <script src="/js/chatbot.js" defer data-jl-chatbot="true"></script>
+</body>
+</html>

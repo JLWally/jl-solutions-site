@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment received - JL Solutions</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/jl-payment-form.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+</head>
+<body class="jl-pay-page jl-pay-result-page">
+  <header class="navbar navbar-expand-lg navbar-dark jl-theme jl-pay-page-nav">
+    <div class="container">
+      <a class="navbar-brand py-2" href="/index.html">
+        <img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions home" class="jl-logo-icon" width="200" height="56">
+      </a>
+    </div>
+  </header>
+
+  <main id="main-content" class="jl-pay-page-main">
+    <div class="container jl-pay-page-inner">
+      <div class="jl-payment-card jl-payment-card--result text-center">
+        <h1 class="jl-payment-title">Payment received</h1>
+        <p class="jl-payment-lead text-start" id="successLead">
+          Thank you. Your payment was successfully submitted through Stripe.
+        </p>
+
+        <div class="jl-pay-result-details text-start d-none" id="successDetails">
+          <h2 class="h6 text-uppercase text-muted mb-3">Payment details</h2>
+          <dl class="jl-pay-review__dl jl-pay-review__dl--compact mb-0">
+            <div><dt>Receipt sent to</dt><dd id="detailEmail">—</dd></div>
+            <div><dt>Payment for</dt><dd id="detailFor">—</dd></div>
+            <div><dt>Amount paid</dt><dd id="detailAmount">—</dd></div>
+          </dl>
+        </div>
+
+        <p class="jl-payment-lead text-start mt-4 mb-4" id="successNext">
+          A member of JL Solutions will follow up if any project, invoice, or onboarding action is needed—the same standard we use for messages through our contact page (we reply within one business day when a reply is needed).
+        </p>
+
+        <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+          <a class="btn-jl-payment-submit text-center text-decoration-none" href="/index.html">Back to home</a>
+          <a class="btn btn-outline-secondary" href="/contact.html">Contact JL Solutions</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var sid = params.get('session_id');
+      var detailBox = document.getElementById('successDetails');
+      var emailEl = document.getElementById('detailEmail');
+      var forEl = document.getElementById('detailFor');
+      var amtEl = document.getElementById('detailAmount');
+
+      function formatMoney(cents, currency) {
+        var c = Number(cents);
+        if (!Number.isFinite(c)) return '—';
+        var cur = (currency || 'usd').toUpperCase();
+        try {
+          return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: cur,
+          }).format(c / 100);
+        } catch (e) {
+          return '$' + (c / 100).toFixed(2);
+        }
+      }
+
+      function typeLabel(t) {
+        var m = {
+          invoice: 'Pay an invoice',
+          deposit: 'Project deposit',
+          strategy_session: 'Paid strategy session',
+          custom: 'Custom payment',
+        };
+        return m[t] || (t ? t.replace(/_/g, ' ') : '');
+      }
+
+      function buildFor(meta) {
+        if (!meta) return '—';
+        var pt = meta.paymentType || '';
+        if (pt === 'invoice' && meta.invoiceNumber) {
+          return 'Invoice #' + meta.invoiceNumber;
+        }
+        if (pt === 'deposit' && meta.projectName) {
+          return 'Deposit: ' + meta.projectName;
+        }
+        if (pt === 'strategy_session' && meta.sessionTypeLabel) {
+          return meta.sessionTypeLabel;
+        }
+        if (pt === 'custom' && meta.customDescription) {
+          return meta.customDescription;
+        }
+        return typeLabel(pt) || 'JL Solutions';
+      }
+
+      if (!sid) {
+        return;
+      }
+
+      fetch('/.netlify/functions/stripe-session-summary?session_id=' + encodeURIComponent(sid))
+        .then(function (r) {
+          return r.json().then(function (j) {
+            return { ok: r.ok, j: j };
+          });
+        })
+        .then(function (_ref) {
+          var j = _ref.j;
+          var ok = _ref.ok;
+          if (!ok || !j || j.error) {
+            return;
+          }
+          if (!j.paid) {
+            document.getElementById('successLead').textContent =
+              'We could not confirm this session as completed. If you finished payment, check your email for a Stripe receipt or contact us.';
+            return;
+          }
+          detailBox.classList.remove('d-none');
+          emailEl.textContent = j.customer_email || '—';
+          forEl.textContent = buildFor(j.metadata || {});
+          amtEl.textContent = formatMoney(j.amount_total, j.currency);
+        })
+        .catch(function () {});
+    })();
+  </script>
+</body>
+</html>

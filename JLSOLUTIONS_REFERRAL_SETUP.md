@@ -96,7 +96,7 @@ referral/
   login.html           – Login for referral users
   signup.html          – Signup (client or sales agent)
 
-pay/                   – Payment page (Stripe Checkout)
+internal-pay/          – Internal payment page (Stripe Checkout utility)
 js/
   supabase-client.js   – Supabase client init
   referral-auth.js     – Auth helpers for referral dashboard
@@ -126,4 +126,4 @@ Referral codes are validated and linked to the submitting agent when stored.
 
 ## 9. Payment Page
 
-Visit `/pay/` to process payments. Clients can enter a referral code; when the payment completes via Stripe webhook, the referral is recorded and commission is calculated for the sales agent.
+Visit `/internal-pay/` to process payments. Clients can enter a referral code; when the payment completes via Stripe webhook, the referral is recorded and commission is calculated for the sales agent.

@@ -3,362 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Services | JL Solutions</title>
+  <title>Services &amp; Packages | JL Solutions</title>
+  <meta name="description" content="Fixed-price JL Solutions packages: Fix My App, AI intake, scheduling, and Lead Generation Engine. Buy on Stripe or book a free call. Custom builds available.">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/theme-jl.css">
   <link rel="stylesheet" href="/css/responsive.css">
   <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="stylesheet" href="/css/jl-services-products.css">
   <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
-  <link rel="shortcut icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
-  <link rel="apple-touch-icon" href="/assets/images/jlsolutions-logo.png">
-  <style>
-    .services-hero {
-      background: var(--jl-dark);
-      padding: 4rem 0;
-      text-align: center;
-      color: white;
-    }
-    
-    .core-services {
-      background: var(--jl-surface-light);
-      border-radius: 16px;
-      padding: 3.5rem 2rem;
-      margin: 3rem 0;
-    }
-    .core-services h2 {
-      color: #0f172a !important;
-      font-weight: 700;
-    }
-    
-    .service-card {
-      background: var(--jl-white);
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      transition: all 0.3s;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    }
-    
-    .service-card.featured {
-      border-color: rgba(255, 193, 7, 0.6);
-    }
-    
-    .service-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 14px 44px rgba(0, 0, 0, 0.12);
-      border-color: rgba(255, 193, 7, 0.7);
-    }
-    
-    .service-icon {
-      font-size: 2.75rem;
-      margin-bottom: 1rem;
-      line-height: 1;
-      color: var(--jl-brand-cyan-deep, #0b6579);
-    }
-
-    .service-icon i {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    
-    .service-card h4 {
-      color: #0f172a;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.01em;
-    }
-    
-    .service-card__eyebrow {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--jl-text-dark-muted);
-      margin-bottom: 0.35rem;
-    }
-    
-    .service-card__meta {
-      font-size: 0.85rem;
-      color: var(--jl-text-dark-muted);
-      margin-bottom: 0.75rem;
-    }
-    
-    .service-card p {
-      color: #1e293b;
-      line-height: 1.7;
-      flex-grow: 1;
-      margin-bottom: 1.5rem;
-      font-size: 0.98rem;
-    }
-    
-    .btn-service {
-      background: var(--jl-accent);
-      color: #1a1a1a;
-      border: none;
-      padding: 0.75rem 1.6rem;
-      font-weight: 700;
-      border-radius: 10px;
-      transition: all 0.3s;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: auto;
-      font-size: 1rem;
-      box-shadow: 0 4px 20px rgba(255, 193, 7, 0.35);
-    }
-    
-    .btn-service:hover {
-      background: var(--jl-accent-hover);
-      transform: translateY(-2px);
-      color: #1a1a1a;
-      box-shadow: 0 8px 28px rgba(255, 193, 7, 0.45);
-    }
-    
-    .btn-outline-service {
-      background: transparent;
-      color: var(--jl-accent);
-      border: 2px solid var(--jl-accent);
-      padding: 0.75rem 1.5rem;
-      font-weight: 600;
-      border-radius: 8px;
-      transition: all 0.3s;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: auto;
-    }
-    
-    .btn-outline-service:hover {
-      background: var(--jl-accent);
-      color: white;
-    }
-    
-    .badge-featured {
-      background: var(--jl-accent);
-      color: #1a1a1a;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-      display: inline-block;
-      letter-spacing: 0.06em;
-    }
-    
-    /* How We Deliver Strip */
-    .how-we-deliver {
-      background: var(--jl-surface);
-      border-radius: 16px;
-      padding: 2.5rem;
-      margin: 3rem 0;
-    }
-    .how-we-deliver h2 {
-      color: #0f172a !important;
-      font-weight: 700;
-    }
-    
-    .how-we-deliver .step-card {
-      background: var(--jl-white);
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      height: 100%;
-      transition: all 0.3s;
-    }
-    
-    .how-we-deliver .step-card.step-discover { border-left: 4px solid var(--jl-brand-cyan, #5fdbf0); }
-    .how-we-deliver .step-card.step-develop { border-left: 4px solid var(--jl-accent); }
-    .how-we-deliver .step-card.step-deploy { border-left: 4px solid #0e7490; }
-    
-    .how-we-deliver .step-icon {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto 1rem;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.75rem;
-    }
-    .how-we-deliver .step-discover .step-icon { background: rgba(95, 219, 240, 0.18); color: var(--jl-brand-cyan-deep, #0b6579); }
-    .how-we-deliver .step-develop .step-icon { background: rgba(255, 193, 7, 0.2); color: #b45309; }
-    .how-we-deliver .step-deploy .step-icon { background: rgba(14, 116, 144, 0.15); color: #0e7490; }
-    
-    .how-we-deliver .step-card h4 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 0.5rem;
-    }
-    
-    .how-we-deliver .step-card p {
-      font-size: 0.9rem;
-      color: #4b5563;
-      margin: 0;
-    }
-    
-    .best-for-chip {
-      display: inline-block;
-      background: rgba(95, 219, 240, 0.12);
-      color: var(--jl-brand-cyan-deep, #0b6579);
-      border: 1px solid rgba(11, 101, 121, 0.22);
-      padding: 0.25rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin: 0.2rem;
-    }
-    
-    .btn-book-demo {
-      background: var(--jl-accent);
-      color: #1a1a1a;
-      border: none;
-      padding: 0.6rem 1.25rem;
-      font-weight: 600;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 0.5rem;
-      transition: all 0.3s;
-    }
-    
-    .btn-book-demo:hover {
-      background: var(--jl-accent-hover);
-      transform: translateY(-2px);
-      color: #1a1a1a;
-    }
-
-    /* Card CTAs: allow longer tailored labels */
-    .how-we-deliver .step-card .btn-book-demo {
-      white-space: normal;
-      line-height: 1.25;
-      font-size: 0.875rem;
-      padding: 0.55rem 0.85rem;
-    }
-
-    /* Starter Offers: 2-column grid, equal-height cards per row (stretch) */
-    .starter-offers {
-      background: var(--jl-surface-light);
-      border-radius: 16px;
-      padding: 2.75rem 1.75rem 2.25rem;
-      margin: 3rem 0;
-    }
-
-    .starter-offers__eyebrow {
-      font-size: 0.8125rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--jl-brand-cyan-deep, #0b6579);
-      margin-bottom: 0.65rem;
-    }
-    .starter-offers__grid {
-      display: grid;
-      gap: 1.5rem;
-      grid-template-columns: 1fr;
-      align-items: stretch;
-    }
-    @media (min-width: 768px) {
-      .starter-offers__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-    .starter-offers__grid > .service-card {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      min-height: 0;
-      padding: 1.5rem 1.75rem;
-    }
-    .starter-offers .service-card h4 {
-      margin-bottom: 0.35rem;
-    }
-    .starter-offers .service-card p {
-      flex-grow: 0;
-      margin-bottom: 0.5rem;
-    }
-    .starter-offers .service-card p.service-card__meta {
-      margin-bottom: 0.5rem;
-    }
-    .starter-offers .service-card ul {
-      flex: 1 1 auto;
-      margin-bottom: 0.75rem !important;
-      padding-left: 1.15rem;
-      font-size: 0.875rem;
-      line-height: 1.4;
-      color: var(--jl-text-dark-muted);
-    }
-    .starter-offers .service-card ul li {
-      margin-bottom: 0.2rem;
-    }
-    .starter-offers .service-card .btn-book-demo {
-      margin-top: auto;
-      width: 100%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      white-space: normal;
-      line-height: 1.25;
-      font-size: 0.9rem;
-      padding: 0.55rem 0.85rem;
-      text-align: center;
-    }
-
-    .core-services .service-card .btn-book-demo {
-      white-space: normal;
-      line-height: 1.25;
-      font-size: 0.9rem;
-      text-align: center;
-    }
-
-    /* Post-grid callouts: stand off light surface (avoid washed-out text-muted) */
-    .starter-offers__callout {
-      background: var(--jl-white);
-      border: 1px solid rgba(15, 23, 42, 0.12);
-      border-radius: 16px;
-      padding: 1.75rem 1.75rem;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
-      text-align: center;
-    }
-    .starter-offers__callout h3 {
-      color: #0f172a;
-      font-weight: 700;
-      margin-bottom: 0.65rem;
-      letter-spacing: -0.02em;
-    }
-    .starter-offers__callout p {
-      color: #334155;
-      font-size: 1rem;
-      line-height: 1.65;
-      margin-bottom: 0;
-    }
-    .starter-offers__callout--cta {
-      border-top: 3px solid var(--jl-accent);
-      padding-top: 1.85rem;
-    }
-    .starter-offers__callout--cta p {
-      margin-bottom: 1.25rem;
-    }
-  </style>
 </head>
 <body>
-  <!-- Skip Navigation Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark jl-theme" role="navigation" aria-label="Main navigation">
     <div class="container">
       <a class="navbar-brand" href="/index.html">
@@ -381,333 +40,163 @@
           </li>
           <li class="nav-item"><a class="nav-link" href="/contact.html">Contact</a></li>
         </ul>
-        <a href="/book-consultation.html" class="btn btn-book-call">Book a Free Call</a>
+        <a href="/book-consultation" class="btn btn-book-call">Book a Free Call</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="services-hero" role="banner">
+  <header class="jl-services-hero" role="banner">
     <div class="container">
-      <h1 class="display-4 mb-3">Automation Services for Service-Based Teams</h1>
-      <p class="lead">From intake and eligibility to scheduling and follow-up, JL Solutions designs practical systems that reduce missed leads and manual admin work.</p>
+      <p class="jl-services-hero__eyebrow">Capture · Qualify · Convert</p>
+      <h1 class="jl-services-hero__title">Stop losing leads. Start closing more customers automatically.</h1>
+      <p class="jl-services-hero__lead">We build simple, powerful systems that capture, qualify, and convert your leads — so you don’t miss opportunities or waste time chasing them.</p>
+      <div class="jl-services-hero__actions">
+        <a href="#featured-offers" class="btn btn-primary jl-theme">Buy a Service</a>
+        <a href="/book-consultation" class="btn btn-outline-light jl-services-hero__btn-outline">Book a Free Call</a>
+      </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main id="main-content" role="main" class="container my-5 jl-main-text">
-    
-    <!-- How We Deliver Strip -->
-    <section class="how-we-deliver" aria-labelledby="how-we-deliver-heading">
-      <h2 id="how-we-deliver-heading" class="text-center mb-4">How We Deliver</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="step-card step-discover">
-            <div class="step-icon"><i class="bi bi-search"></i></div>
-            <h4>Discover</h4>
-            <p>We analyze your workflows and identify automation opportunities.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="step-card step-develop">
-            <div class="step-icon"><i class="bi bi-gear"></i></div>
-            <h4>Develop</h4>
-            <p>We build tailored solutions that fit your business and processes.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="step-card step-deploy">
-            <div class="step-icon"><i class="bi bi-rocket-takeoff"></i></div>
-            <h4>Deploy</h4>
-            <p>We launch, train your team, and support you every step of the way.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Our Services Section -->
-    <div class="core-services">
-      <div class="text-center mb-4">
-        <span class="badge-featured">OUR SERVICES</span>
-        <h2 class="mb-3">Automation That Scales With You</h2>
-        <p class="text-muted mb-0" style="max-width: 720px; margin: 0 auto;">
-          Start where the friction hits hardest: missed leads, slow intake, scheduling chaos, or manual follow-up.
-          Each service can stand alone or be combined into a simple end-to-end system.
-        </p>
-      </div>
-      
-      <div class="row g-4">
-        <!-- 1. Lead & Client Intake Automation -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card featured">
-            <div class="service-icon" aria-hidden="true"><i class="bi bi-inbox-fill"></i></div>
-            <p class="service-card__eyebrow">DON’T LOSE WARM LEADS</p>
-            <h4>Lead &amp; client intake automation</h4>
-            <div class="mb-2">
-              <span class="best-for-chip">Home services</span>
-              <span class="best-for-chip">Clinics</span>
-              <span class="best-for-chip">Catering</span>
-            </div>
-            <p>Capture every inquiry in one place, ask the right questions up front, and route to the right person automatically, so jobs and clients never slip through the cracks.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">See How It Works</a>
-          </div>
-        </div>
-
-        <!-- 2. Guided intake & screening -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card featured">
-            <div class="service-icon"><i class="bi bi-clipboard2-check"></i></div>
-            <p class="service-card__eyebrow">SERVE THE RIGHT PEOPLE FASTER</p>
-            <h4>Guided intake &amp; screening</h4>
-            <div class="mb-2">
-              <span class="best-for-chip">Nonprofits</span>
-              <span class="best-for-chip">Clinics</span>
-              <span class="best-for-chip">Assistance programs</span>
-            </div>
-            <p>Use guided forms to gather clean information, check basic fit, and move people to the right next step automatically, without back-and-forth or manual review.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">See What’s Included</a>
-          </div>
-        </div>
-
-        <!-- 3. Quote, Proposal, & Order Automation -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card featured">
-            <div class="service-icon"><i class="bi bi-file-earmark-text"></i></div>
-            <p class="service-card__eyebrow">RESPOND QUICKLY, WIN MORE WORK</p>
-            <h4>Quote, proposal, &amp; order automation</h4>
-            <div class="mb-2">
-              <span class="best-for-chip">Contractors</span>
-              <span class="best-for-chip">Catering</span>
-              <span class="best-for-chip">B2B services</span>
-            </div>
-            <p>Turn rough details into clear estimates, proposals, or order confirmations in minutes, not days, with consistent pricing and fewer manual edits.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Request a Quote</a>
-          </div>
-        </div>
-
-        <!-- 4. Scheduling & Resource Routing -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="service-icon"><i class="bi bi-calendar-week"></i></div>
-            <p class="service-card__eyebrow">STOP JUGGLING CALENDARS</p>
-            <h4>Scheduling &amp; resource routing</h4>
-            <div class="mb-2">
-              <span class="best-for-chip">Home services</span>
-              <span class="best-for-chip">Field teams</span>
-              <span class="best-for-chip">Clinics</span>
-            </div>
-            <p>Route jobs and appointments based on skills, location, and availability so your day fills efficiently without constant manual reshuffling.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Talk About My Workflow</a>
-          </div>
-        </div>
-
-        <!-- 5. Follow-Up & Retention Automation -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="service-icon"><i class="bi bi-arrow-repeat"></i></div>
-            <p class="service-card__eyebrow">STAY IN FRONT OF THE RIGHT PEOPLE</p>
-            <h4>Follow-up &amp; retention automation</h4>
-            <div class="mb-2">
-              <span class="best-for-chip">Service businesses</span>
-              <span class="best-for-chip">Sales &amp; account teams</span>
-            </div>
-            <p>Automated check-ins, reminders, and nurture sequences keep warm leads and past clients engaged, without adding more to-do’s to someone’s list.</p>
-            <a href="/case-studies/index.html" class="btn-book-demo">See Example Flow</a>
-          </div>
-        </div>
-
-        <!-- 6. Peak & Event Scalability -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="service-icon"><i class="bi bi-graph-up-arrow"></i></div>
-            <p class="service-card__eyebrow">HANDLE THE BUSY SEASON CALMLY</p>
-            <h4>Peak &amp; event scalability</h4>
-            <div class="mb-2">
-              <span class="best-for-chip">Seasonal businesses</span>
-              <span class="best-for-chip">Event-based</span>
-            </div>
-            <p>Design your systems for your busiest weeks, so you can handle surges in demand without burning out staff or turning away good work.</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Explore Options</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- More Ways We Help -->
-    <section class="how-we-deliver mt-5" aria-labelledby="more-ways-heading">
-      <h2 id="more-ways-heading" class="text-center mb-4">More Ways We Help</h2>
-      <p class="text-center text-muted mb-4" style="max-width: 720px; margin: 0 auto;">
-        Need something built, fixed, or cleaned up? These services support teams that already have tools in place but need them to work better.
-      </p>
-      <div class="row g-4">
-        <!-- 7. Fix My App -->
-        <div class="col-md-6 col-lg-4">
-          <div class="step-card step-discover">
-            <div class="step-icon"><i class="bi bi-wrench-adjustable"></i></div>
-            <p class="service-card__eyebrow">WHEN YOUR SYSTEM IS SLOWING YOU DOWN</p>
-            <h4>Fix My App</h4>
-            <p class="mb-2">
-              We troubleshoot broken workflows, messy UX, logic issues, performance problems, and clunky processes so your existing app works the way it should.
-            </p>
-            <p class="service-card__meta">Internal tools · Client portals · Intake systems</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Get My Fix Plan</a>
-          </div>
-        </div>
-
-        <!-- 8. Build My App -->
-        <div class="col-md-6 col-lg-4">
-          <div class="step-card step-develop">
-            <div class="step-icon"><i class="bi bi-boxes"></i></div>
-            <p class="service-card__eyebrow">WHEN OFF-THE-SHELF ISN’T CUTTING IT</p>
-            <h4>Build My App</h4>
-            <p class="mb-2">
-              We design and build custom business apps, portals, and workflow tools that fit how your team actually works, not how generic software expects you to work.
-            </p>
-            <p class="service-card__meta">Portals · Internal systems · Workflow tools</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Discuss Your Build</a>
-          </div>
-        </div>
-
-        <!-- 9. Workflow cleanup & process redesign -->
-        <div class="col-md-6 col-lg-4">
-          <div class="step-card step-deploy">
-            <div class="step-icon"><i class="bi bi-diagram-3"></i></div>
-            <p class="service-card__eyebrow">WHEN THE PROCESS IS THE PROBLEM</p>
-            <h4>Workflow cleanup &amp; process redesign</h4>
-            <p class="mb-2">
-              We map the gaps, remove bottlenecks, and simplify the steps that are slowing your team down before we automate what actually matters.
-            </p>
-            <p class="service-card__meta">Growing teams · Admin-heavy operations</p>
-            <a href="/book-consultation.html" class="btn-book-demo">See How We’d Approach It</a>
-          </div>
-        </div>
-
-        <!-- 10. AI & document automation -->
-        <div class="col-md-6 col-lg-4">
-          <div class="step-card step-discover">
-            <div class="step-icon"><i class="bi bi-file-earmark-text"></i></div>
-            <p class="service-card__eyebrow">CUT DOWN MANUAL DATA WORK</p>
-            <h4>AI &amp; document automation</h4>
-            <p class="mb-2">
-              Extract information, route documents, trigger approvals, and reduce repetitive manual handling with practical AI and document-driven workflows.
-            </p>
-            <p class="service-card__meta">Forms · Documents · Repetitive admin</p>
-            <a href="/book-consultation.html" class="btn-book-demo">Explore Automation Options</a>
-          </div>
-        </div>
-
-        <!-- 11. Dashboards & reporting -->
-        <div class="col-md-6 col-lg-4">
-          <div class="step-card step-develop">
-            <div class="step-icon"><i class="bi bi-speedometer2"></i></div>
-            <p class="service-card__eyebrow">SEE WHAT’S WORKING</p>
-            <h4>Dashboards &amp; reporting</h4>
-            <p class="mb-2">
-              Turn scattered activity into simple dashboards and reporting views so you can track response time, workflow volume, bottlenecks, and results.
-            </p>
-            <p class="service-card__meta">Ops teams · Managers · Business owners</p>
-            <a href="/book-consultation.html" class="btn-book-demo">See Reporting Options</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Starter Offers -->
-    <section class="starter-offers" aria-labelledby="starter-offers-heading">
+  <main id="main-content" role="main">
+    <section class="jl-featured-offers" id="featured-offers" aria-labelledby="featured-offers-heading">
       <div class="container">
-        <p class="starter-offers__eyebrow text-center">Starter offers</p>
-        <h2 id="starter-offers-heading" class="text-center mb-3">Start with a focused win</h2>
-        <p class="text-center text-muted mb-4" style="max-width: 720px; margin: 0 auto;">
-          Not every project needs a massive rebuild. These starter offers are designed to fix one painful bottleneck fast, so you can get traction, save time, and build from there.
+        <div class="jl-featured-offers__head">
+          <p class="jl-featured-offers__kicker">Featured offers</p>
+          <h2 id="featured-offers-heading" class="jl-featured-offers__title">Fixed-price packages you can buy today</h2>
+          <p class="jl-featured-offers__sub"><strong>Buy Now</strong> starts with a short intake, then continues to secure Stripe checkout. <strong>Book a Free Call</strong> if you want to confirm fit first. After payment, you can finish details on <a href="/get-started">get started</a> if we send you there.</p>
+        </div>
+
+        <div class="jl-product-grid">
+          <article class="service-card">
+            <h3>Fix My App Sprint</h3>
+            <p class="price">$1,500</p>
+            <p class="description">We identify and fix the biggest issues in your website or app that are costing you customers.</p>
+            <p class="service-card__bestfor"><strong>Best for:</strong> broken forms, clunky UX, and conversion leaks.</p>
+            <ul>
+              <li>Workflow + UX audit</li>
+              <li>Fix up to 3 high-impact issues</li>
+              <li>Mobile optimization improvements</li>
+              <li>Form + conversion fixes</li>
+              <li>7 days of post-launch support</li>
+            </ul>
+            <div class="buttons">
+              <a href="/getstarted?service=fix-app" class="btn-primary">Buy Now</a>
+              <a href="/book-consultation" class="btn-secondary">Book a Free Call</a>
+            </div>
+          </article>
+
+          <article class="service-card">
+            <h3>AI Intake Form Setup</h3>
+            <p class="price">$2,500</p>
+            <p class="description">Turn website visitors into qualified leads automatically.</p>
+            <p class="service-card__bestfor"><strong>Best for:</strong> qualifying leads automatically before they hit your team.</p>
+            <ul>
+              <li>Custom branded intake form</li>
+              <li>Smart branching logic</li>
+              <li>Lead routing + notifications</li>
+              <li>Confirmation messaging</li>
+              <li>Dashboard or data capture</li>
+            </ul>
+            <div class="buttons">
+              <a href="/getstarted?service=ai-intake" class="btn-primary">Buy Now</a>
+              <a href="/book-consultation" class="btn-secondary">Book a Free Call</a>
+            </div>
+          </article>
+
+          <article class="service-card">
+            <h3>Scheduling &amp; Routing Setup</h3>
+            <p class="price">$3,000</p>
+            <p class="description">We set up clean booking so customers schedule instantly and jobs route automatically.</p>
+            <p class="service-card__bestfor"><strong>Best for:</strong> booking jobs fast and assigning work with less back-and-forth.</p>
+            <ul>
+              <li>Online booking system setup</li>
+              <li>Service + availability configuration</li>
+              <li>Automated confirmations + reminders</li>
+              <li>Basic routing + assignment logic</li>
+              <li>Admin tracking view</li>
+            </ul>
+            <div class="buttons">
+              <a href="/getstarted?service=scheduling" class="btn-primary">Buy Now</a>
+              <a href="/book-consultation" class="btn-secondary">Book a Free Call</a>
+            </div>
+          </article>
+
+          <article class="service-card">
+            <h3>Lead Generation Engine</h3>
+            <p class="price">$3,500</p>
+            <p class="description">Find, score, and draft outreach for high-fit leads automatically.</p>
+            <p class="service-card__support">We set up a lead generation system that helps you identify strong-fit prospects, analyze opportunities, and speed up outreach without doing everything manually.</p>
+            <ul>
+              <li>Target business lead sourcing setup</li>
+              <li>Lead scoring and qualification logic</li>
+              <li>Outreach draft generation workflow</li>
+              <li>CRM or sheet-ready lead tracking</li>
+              <li>Basic handoff and operating instructions</li>
+            </ul>
+            <p class="service-card__bestfor"><strong>Best for:</strong> Agencies, consultants, and service businesses doing outbound sales.</p>
+            <p class="service-card__muted-note">Optional monthly management available.</p>
+            <div class="buttons">
+              <a href="/getstarted?service=lead-engine" class="btn-primary">Buy Now</a>
+              <a href="/book-consultation" class="btn-secondary">Book a Free Call</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="jl-services-hiw jl-main-text" aria-labelledby="hiw-heading">
+      <div class="container">
+        <h2 id="hiw-heading" class="jl-services-hiw__title">How it works</h2>
+        <div class="jl-services-hiw__steps">
+          <div class="jl-services-hiw__step">
+            <div class="jl-services-hiw__num" aria-hidden="true">1</div>
+            <h3>Choose your service</h3>
+            <p>Buy online or book a quick call to confirm it’s the right fit.</p>
+          </div>
+          <div class="jl-services-hiw__step">
+            <div class="jl-services-hiw__num" aria-hidden="true">2</div>
+            <h3>Complete your intake</h3>
+            <p>We gather everything we need to build your system properly.</p>
+          </div>
+          <div class="jl-services-hiw__step">
+            <div class="jl-services-hiw__num" aria-hidden="true">3</div>
+            <h3>We build + launch</h3>
+            <p>Your system is ready in days — not weeks — and built to convert.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="jl-custom-solutions jl-main-text" aria-labelledby="custom-heading">
+      <div class="container">
+        <h2 id="custom-heading" class="jl-custom-solutions__title">Need something more advanced? We build that too.</h2>
+        <p class="jl-custom-solutions__sub">Beyond these four packages — scoped builds for teams that need depth.</p>
+        <ul class="jl-custom-list">
+          <li><a href="/services/document-extraction.html">Document AI &amp; data extraction</a></li>
+          <li><a href="/services/eligibility-wizard.html">Multi-step eligibility workflows</a></li>
+          <li><a href="/services/automation-ai.html">Automated follow-up systems</a></li>
+          <li><a href="/contact.html">Internal dashboards &amp; admin tools</a></li>
+          <li><a href="/contact.html">Full application portals</a></li>
+        </ul>
+        <p class="jl-custom-solutions__cta-wrap text-center mt-4 mb-0">
+          <a href="/contact.html" class="btn btn-primary jl-theme">Request a Custom Quote</a>
         </p>
+      </div>
+    </section>
 
-        <div class="starter-offers__grid">
-          <!-- 1. Fix My App Sprint -->
-          <div class="service-card">
-            <p class="service-card__eyebrow">FASTEST FIX</p>
-            <h4>Fix My App Sprint</h4>
-            <p class="service-card__meta">Starting at $1,500</p>
-            <p>For businesses with a broken form, clunky workflow, messy logic, or frustrating internal tool that needs fast cleanup.</p>
-            <ul class="mb-0">
-              <li>workflow and UX review</li>
-              <li>top-priority fixes</li>
-              <li>form / logic cleanup</li>
-              <li>focused implementation sprint</li>
-              <li>next-steps summary</li>
-            </ul>
-            <a href="/book-consultation.html" class="btn-book-demo">Get My Fix Plan</a>
-          </div>
-
-          <!-- 2. Lead Intake Starter -->
-          <div class="service-card">
-            <p class="service-card__eyebrow">MOST REQUESTED</p>
-            <h4>Lead Intake Starter</h4>
-            <p class="service-card__meta">Starting at $2,500</p>
-            <p>For teams losing inquiries across email, forms, phone calls, or manual handoff.</p>
-            <ul class="mb-0">
-              <li>intake flow mapping</li>
-              <li>smart form or guided intake setup</li>
-              <li>routing / notification logic</li>
-              <li>basic qualification rules</li>
-              <li>simple visibility into new requests</li>
-            </ul>
-            <a href="/book-consultation.html" class="btn-book-demo">See Setup Options</a>
-          </div>
-
-          <!-- 3. Follow-Up Starter -->
-          <div class="service-card">
-            <p class="service-card__eyebrow">EASY ROI WIN</p>
-            <h4>Follow-Up Starter</h4>
-            <p class="service-card__meta">Starting at $2,000</p>
-            <p>For businesses that know leads or clients are slipping because follow-up is inconsistent.</p>
-            <ul class="mb-0">
-              <li>reminder and follow-up workflow</li>
-              <li>basic nurture automation</li>
-              <li>lead/client status triggers</li>
-              <li>internal alerts or task creation</li>
-              <li>simple tracking setup</li>
-            </ul>
-            <a href="/case-studies/index.html" class="btn-book-demo">See Example Flow</a>
-          </div>
-
-          <!-- 4. Scheduling Starter -->
-          <div class="service-card">
-            <p class="service-card__eyebrow">BEST FOR FIELD TEAMS</p>
-            <h4>Scheduling Starter</h4>
-            <p class="service-card__meta">Starting at $3,000</p>
-            <p>For home services, field teams, and operations-heavy businesses stuck juggling calendars and manual coordination.</p>
-            <ul class="mb-0">
-              <li>scheduling workflow review</li>
-              <li>assignment / routing logic</li>
-              <li>appointment or job rules</li>
-              <li>notifications / confirmations</li>
-              <li>handoff recommendations for growth</li>
-            </ul>
-            <a href="/book-consultation.html" class="btn-book-demo">Talk About My Workflow</a>
-          </div>
-        </div>
-
-        <div class="starter-offers__callout mt-4" role="region" aria-labelledby="starter-bigger-heading">
-          <h3 id="starter-bigger-heading" class="h5">Need something bigger?</h3>
-          <p>
-            Custom builds, advanced automations, and larger workflow systems are quoted after a call.
-            Most focused starter projects begin between $1,500 and $3,000 depending on scope.
-          </p>
-        </div>
-
-        <div class="starter-offers__callout starter-offers__callout--cta my-5" role="region" aria-labelledby="starter-unsure-heading">
-          <h3 id="starter-unsure-heading" class="h4">Not sure where to start?</h3>
-          <p>
-            Tell us what’s slowing your team down (missed leads, broken workflows, weak follow-up, or scheduling chaos), and we’ll point you to the fastest first step.
-          </p>
-          <a href="/book-consultation.html" class="btn-service me-md-3 mb-3 mb-md-0 d-inline-flex">Book a Free Call</a>
-          <a href="/contact.html" class="btn-outline-service d-inline-flex">Contact Us</a>
+    <section class="jl-services-cta" aria-labelledby="services-cta-heading">
+      <div class="container">
+        <h2 id="services-cta-heading">Ready to stop losing leads?</h2>
+        <p>Buy a package, book a call, or request a quote — we’ll match you to the fastest path.</p>
+        <div class="jl-services-cta__row">
+          <a href="#featured-offers" class="btn btn-book-call">Buy Now</a>
+          <a href="/book-consultation" class="jl-btn-secondary-offer">Book a Free Call</a>
+          <a href="/contact.html" class="jl-btn-secondary-offer">Request a Quote</a>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="jl-theme footer-home" role="contentinfo">
     <div class="container footer__container">
       <div class="row align-items-start footer__row">
@@ -721,14 +210,14 @@
             <li><a href="/services/index.html">Services</a></li>
             <li><a href="/case-studies/index.html">Case Studies</a></li>
             <li><a href="/resources/index.html">Resources</a></li>
-            <li><a href="/book-consultation.html">Book a Free Call</a></li>
+            <li><a href="/book-consultation">Book a Free Call</a></li>
             <li><a href="/contact.html">Contact</a></li>
           </ul>
         </div>
         <div class="col-md-4 footer__contact">
           <h5 class="footer__heading">Get in Touch</h5>
           <p class="footer__email-wrap"><a href="mailto:info@jlsolutions.io" class="footer__email">info@jlsolutions.io</a></p>
-          <a href="/book-consultation.html" class="footer__cta">Book a Free Call</a>
+          <a href="/book-consultation" class="footer__cta">Book a Free Call</a>
           <p class="mb-2 mt-3 footer__social">
             <a href="https://facebook.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-white me-2" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
             <a href="https://instagram.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
@@ -744,5 +233,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/main.js"></script>
+  <script src="/js/chatbot.js" defer data-jl-chatbot="true"></script>
 </body>
 </html>

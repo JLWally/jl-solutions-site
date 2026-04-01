@@ -54,19 +54,21 @@ Netlify’s function bundler can treat **static** `process.env.STRIPE_SECRET_KEY
 
 `stripe-checkout.js` supports:
 
-- **Custom amount** (what `/pay/` sends): `line_items` are built from `amount` in dollars.
+- **Custom amount** (what `/internal-pay/` sends): `line_items` are built from `amount` in dollars.
 - **Catalog price**: if you set `STRIPE_PRICE_ID` and omit `amount`, Checkout uses that Price.
 
 Add `STRIPE_PRICE_ID=price_xxx` in Netlify only if you use that mode.
 
 ## 5. Success and cancel URLs
 
-The pay page sends:
+The `/internal-pay/` flow sends:
 
-- `successUrl`: `/thank-you.html?session_id={CHECKOUT_SESSION_ID}&from=pay`
-- `cancelUrl`: `/pay/?canceled=1`
+- `successUrl`: `/internal-pay/success.html?session_id={CHECKOUT_SESSION_ID}`
+- `cancelUrl`: `/internal-pay/cancel.html`
 
-No extra Stripe Dashboard configuration is required for those; they are passed when creating the Checkout Session.
+Legacy `GET /pay/?canceled=1` redirects to `/internal-pay/cancel.html`. The function default `success_url` also targets `/internal-pay/success.html` if the client omits it.
+
+`stripe-session-summary` (GET, `session_id` query) returns safe payment fields for the success page. No extra Stripe Dashboard configuration is required; URLs are set on each Checkout Session.
 
 ## 6. Local testing with Stripe CLI
 
@@ -91,5 +93,5 @@ Checkout still **succeeds for the customer** if Supabase insert fails; errors ar
 - [ ] `STRIPE_SECRET_KEY` in Netlify (test + live as needed)
 - [ ] Webhook endpoint added; event `checkout.session.completed`
 - [ ] `STRIPE_WEBHOOK_SECRET` in Netlify matches that endpoint
-- [ ] Test payment in Test mode, confirm redirect to thank-you page
+- [ ] Test payment in Test mode, confirm redirect to `/internal-pay/success.html` (and cancel flow to `/internal-pay/cancel.html`)
 - [ ] Confirm webhook deliveries in Stripe **Developers → Webhooks → [endpoint] → Attempts**

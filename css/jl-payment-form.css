@@ -1,5 +1,5 @@
 /**
- * Shared JL payment form (used by /pay/ and onboard wizard payment step).
+ * Shared JL payment form (onboard wizard + legacy result pages).
  */
 .jl-payment-card {
   max-width: 32rem;
@@ -130,4 +130,492 @@
 /* Wizard: light card inside dark wizard shell */
 .wizard-card .jl-payment-card {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* --- Full checkout-style flow (legacy static pages) --- */
+
+.jl-pay-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    165deg,
+    var(--jl-ink, #0a1628) 0%,
+    var(--jl-dark-alt, #132a3d) 45%,
+    var(--jl-dark-lighter, #1e3a4f) 100%
+  );
+  color: var(--jl-text, #fff);
+}
+
+.jl-pay-page-nav {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.jl-pay-page-nav .navbar-brand .jl-logo-icon {
+  height: 56px;
+  width: auto;
+  min-width: 120px;
+  object-fit: contain;
+}
+
+.jl-pay-page-main {
+  flex: 1;
+  padding: 1.5rem 0 4rem;
+}
+
+.jl-pay-page-inner {
+  max-width: 40rem;
+}
+
+.jl-pay-page.jl-pay-sticky-on .jl-pay-page-main {
+  padding-bottom: 6.5rem;
+}
+
+@media (min-width: 576px) {
+  .jl-pay-page.jl-pay-sticky-on .jl-pay-page-main {
+    padding-bottom: 4rem;
+  }
+}
+
+.jl-pay-hero {
+  margin-bottom: 2rem;
+  padding: 0 0.25rem;
+}
+
+.jl-pay-hero__title {
+  font-size: clamp(1.65rem, 4vw, 2.15rem);
+  font-weight: 700;
+  color: var(--jl-text, #fff);
+  margin-bottom: 0.65rem;
+  letter-spacing: -0.02em;
+}
+
+.jl-pay-hero__sub {
+  color: var(--jl-text-muted, rgba(255, 255, 255, 0.82));
+  font-size: 1.05rem;
+  line-height: 1.55;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.jl-pay-hero__trust {
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--jl-text-dim, rgba(255, 255, 255, 0.72));
+  max-width: 34rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.jl-pay-hero__support {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--jl-text-muted, rgba(255, 255, 255, 0.82));
+}
+
+.jl-pay-hero__support a {
+  color: var(--jl-brand-cyan, #5fdbf0);
+  font-weight: 600;
+}
+
+.jl-pay-hero__support a:hover {
+  color: #fff;
+}
+
+.jl-pay-progress {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+  padding: 0 0.25rem;
+}
+
+.jl-pay-progress__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 5.5rem;
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
+}
+
+.jl-pay-progress__step--active,
+.jl-pay-progress__step--done {
+  opacity: 1;
+}
+
+.jl-pay-progress__num {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.jl-pay-progress__step--active .jl-pay-progress__num {
+  border-color: var(--jl-accent, #ffc107);
+  background: rgba(255, 193, 7, 0.15);
+  color: var(--jl-accent, #ffc107);
+}
+
+.jl-pay-progress__step--done .jl-pay-progress__num {
+  border-color: rgba(95, 219, 240, 0.6);
+  background: rgba(95, 219, 240, 0.12);
+  color: var(--jl-brand-cyan, #5fdbf0);
+}
+
+.jl-pay-progress__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--jl-text-dim, rgba(255, 255, 255, 0.72));
+  max-width: 8rem;
+  line-height: 1.25;
+}
+
+.jl-pay-progress__step--active .jl-pay-progress__label {
+  color: var(--jl-text, #fff);
+  font-weight: 600;
+}
+
+.jl-pay-progress__connector {
+  width: 1.5rem;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  margin-top: 1rem;
+  flex-shrink: 0;
+}
+
+.jl-payment-card--flow {
+  max-width: 40rem;
+}
+
+.jl-payment-card--review-open {
+  box-shadow: 0 28px 70px rgba(10, 22, 40, 0.4);
+}
+
+.jl-payment-title--section {
+  font-size: 1.2rem;
+  margin-bottom: 0.35rem;
+}
+
+.jl-pay-section__label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--jl-text-dark-dim, #6b7280);
+  margin-bottom: 0.85rem;
+  font-weight: 700;
+}
+
+.jl-pay-type-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 480px) {
+  .jl-pay-type-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.jl-pay-type-card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 2px solid rgba(15, 23, 42, 0.12);
+  background: var(--jl-white, #fff);
+  color: var(--jl-text-dark, #1a1a1a);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.jl-pay-type-card:hover {
+  border-color: rgba(11, 101, 121, 0.35);
+  box-shadow: 0 8px 24px rgba(10, 22, 40, 0.08);
+}
+
+.jl-pay-type-card:focus-visible {
+  outline: 3px solid var(--jl-brand-cyan-deep, #0b6579);
+  outline-offset: 2px;
+}
+
+.jl-pay-type-card--featured {
+  border-color: rgba(11, 101, 121, 0.28);
+  box-shadow: 0 4px 18px rgba(10, 22, 40, 0.06);
+}
+
+.jl-pay-type-card--selected {
+  border-color: var(--jl-brand-cyan-deep, #0b6579);
+  box-shadow: 0 0 0 3px rgba(11, 101, 121, 0.2);
+  background: linear-gradient(145deg, #fff 0%, rgba(95, 219, 240, 0.06) 100%);
+}
+
+.jl-pay-type-card__title {
+  display: block;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--jl-ink, #0a1628);
+}
+
+.jl-pay-type-card__desc {
+  display: block;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+}
+
+.jl-pay-form-panel {
+  margin-top: 1.75rem;
+  padding-top: 0.25rem;
+}
+
+.jl-pay-helper {
+  font-size: 0.875rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  line-height: 1.45;
+  margin-bottom: 1rem;
+}
+
+.jl-pay-session-price-note {
+  font-size: 0.9rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+}
+
+.jl-pay-optional__toggle {
+  font-weight: 600;
+  color: var(--jl-brand-cyan-deep, #0b6579) !important;
+  text-decoration: none !important;
+  font-size: 0.9375rem;
+}
+
+.jl-pay-optional__toggle:hover {
+  color: var(--jl-ink, #0a1628) !important;
+}
+
+.jl-pay-review__intro {
+  font-size: 0.95rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  margin-bottom: 1rem;
+}
+
+.jl-pay-review__dl {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  background: rgba(15, 23, 42, 0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.jl-pay-review__dl > div {
+  display: grid;
+  grid-template-columns: minmax(6rem, 38%) 1fr;
+  gap: 0.35rem 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.jl-pay-review__dl > div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.jl-pay-review__dl dt {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--jl-text-dark-dim, #6b7280);
+  font-weight: 600;
+}
+
+.jl-pay-review__dl dd {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--jl-ink, #0a1628);
+  word-break: break-word;
+}
+
+.jl-pay-review__dl--compact > div {
+  grid-template-columns: minmax(7rem, 42%) 1fr;
+}
+
+.jl-pay-checkout-assurances {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--jl-text-dark-muted, #374151);
+  line-height: 1.45;
+}
+
+.jl-pay-checkout-assurances li {
+  position: relative;
+  padding-left: 1.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.jl-pay-checkout-assurances li:last-child {
+  margin-bottom: 0;
+}
+
+.jl-pay-checkout-assurances li::before {
+  content: '✔';
+  position: absolute;
+  left: 0;
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-size: 0.95rem;
+}
+
+.jl-pay-checkout-assurances--sticky {
+  margin-bottom: 0.65rem;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.jl-pay-checkout-assurances--sticky li::before {
+  color: rgba(125, 211, 232, 0.95);
+}
+
+.jl-pay-trust-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 1.25rem 0 1.25rem;
+  font-size: 0.8125rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  line-height: 1.4;
+}
+
+.jl-pay-trust-strip a {
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-weight: 600;
+}
+
+.jl-pay-cta-lock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.jl-pay-lock {
+  display: flex;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.jl-pay-cta-support {
+  font-size: 0.875rem;
+}
+
+.jl-pay-cta-support a {
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-weight: 600;
+}
+
+.jl-pay-edit-btn {
+  border-width: 2px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.jl-pay-faq {
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.jl-pay-faq__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--jl-ink, #0a1628);
+  margin-bottom: 1rem;
+}
+
+.jl-pay-faq__item {
+  margin-bottom: 1rem;
+}
+
+.jl-pay-faq__q {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--jl-ink, #0a1628);
+  margin-bottom: 0.25rem;
+}
+
+.jl-pay-faq__a {
+  font-size: 0.875rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.jl-pay-faq__a a {
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-weight: 600;
+}
+
+.jl-pay-sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1030;
+  padding: 0.65rem 0 calc(0.65rem + env(safe-area-inset-bottom, 0));
+  background: linear-gradient(180deg, transparent 0%, rgba(10, 22, 40, 0.92) 35%, rgba(10, 22, 40, 0.98) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (min-width: 576px) {
+  .jl-pay-sticky-cta {
+    display: none !important;
+  }
+}
+
+.jl-pay-result-page .jl-pay-page-main {
+  align-items: center;
+  display: flex;
+}
+
+.jl-payment-card--result {
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.jl-payment-card--result .btn-jl-payment-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jl-payment-card .form-select {
+  background-color: var(--jl-white, #fff);
+  border: 2px solid rgba(15, 23, 42, 0.12);
+  color: var(--jl-text-dark, #1a1a1a);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+}
+
+.jl-payment-card .form-select:focus {
+  border-color: var(--jl-brand-cyan-deep, #0b6579);
+  box-shadow: 0 0 0 3px rgba(11, 101, 121, 0.2);
 }

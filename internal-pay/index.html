@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure payment - JL Solutions</title>
+  <meta name="robots" content="noindex, nofollow">
+  <script>
+    (function () {
+      if (new URLSearchParams(window.location.search).get('canceled') === '1') {
+        window.location.replace('/get-started');
+      }
+    })();
+  </script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="stylesheet" href="/css/jl-payment-form.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+</head>
+<body class="jl-pay-page">
+  <a href="#main-content" class="skip-link">Skip to payment steps</a>
+
+  <header class="navbar navbar-expand-lg navbar-dark jl-theme jl-pay-page-nav">
+    <div class="container">
+      <a class="navbar-brand py-2" href="/index.html">
+        <img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions home" class="jl-logo-icon" width="200" height="56">
+      </a>
+      <div class="ms-auto d-flex gap-2 align-items-center">
+        <a class="nav-link text-white py-2" href="/book-consultation">Book a Free Call</a>
+        <a class="nav-link text-white py-2" href="/contact.html">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="jl-pay-page-main">
+    <div class="container jl-pay-page-inner">
+      <header class="jl-pay-hero text-center">
+        <h1 class="jl-pay-hero__title">Secure manual payment</h1>
+        <p class="jl-pay-hero__sub">
+          Use this page for invoices, project deposits, paid strategy sessions, and custom payment amounts already confirmed with JL Solutions.
+        </p>
+        <p class="jl-pay-hero__trust">
+          Powered by Stripe. JL Solutions never stores your card number. A receipt is sent to your email after payment.
+        </p>
+        <p class="jl-pay-hero__support mb-0">
+          Need package guidance first? Use <a href="/get-started">get started</a>. For payment questions, <a href="/contact.html">contact us</a>.
+        </p>
+      </header>
+
+      <nav class="jl-pay-progress" aria-label="Payment steps">
+        <div class="jl-pay-progress__step jl-pay-progress__step--active" id="payStep1">
+          <span class="jl-pay-progress__num">1</span>
+          <span class="jl-pay-progress__label">Choose payment type</span>
+        </div>
+        <div class="jl-pay-progress__connector" aria-hidden="true"></div>
+        <div class="jl-pay-progress__step" id="payStep2">
+          <span class="jl-pay-progress__num">2</span>
+          <span class="jl-pay-progress__label">Your details</span>
+        </div>
+        <div class="jl-pay-progress__connector" aria-hidden="true"></div>
+        <div class="jl-pay-progress__step" id="payStep3">
+          <span class="jl-pay-progress__num">3</span>
+          <span class="jl-pay-progress__label">Secure checkout</span>
+        </div>
+      </nav>
+
+      <div class="jl-payment-card jl-payment-card--flow" id="payFlowCard">
+        <input type="hidden" id="payTypeField" name="payType" value="" autocomplete="off" />
+        <p class="visually-hidden" aria-hidden="true">
+          <label>Leave empty: <input type="text" id="payBotField" name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <section class="jl-pay-section" aria-labelledby="pay-type-heading">
+          <h2 class="jl-pay-section__label" id="pay-type-heading">Choose what you’re paying for</h2>
+          <div class="jl-pay-type-grid" role="group" aria-label="Payment type">
+            <button type="button" class="jl-pay-type-card jl-pay-type-card--featured" data-pay-type="invoice">
+              <span class="jl-pay-type-card__title">Pay an invoice</span>
+              <span class="jl-pay-type-card__desc">For approved invoices or final balances.</span>
+            </button>
+            <button type="button" class="jl-pay-type-card jl-pay-type-card--featured" data-pay-type="deposit">
+              <span class="jl-pay-type-card__title">Project deposit</span>
+              <span class="jl-pay-type-card__desc">For deposits to start a new build, automation setup, or redesign.</span>
+            </button>
+            <button type="button" class="jl-pay-type-card" data-pay-type="strategy_session">
+              <span class="jl-pay-type-card__title">Paid strategy session</span>
+              <span class="jl-pay-type-card__desc">For fixed-price consulting or implementation planning sessions.</span>
+            </button>
+            <button type="button" class="jl-pay-type-card" data-pay-type="custom">
+              <span class="jl-pay-type-card__title">Custom payment</span>
+              <span class="jl-pay-type-card__desc">For agreed payments that do not fit the options above.</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Invoice -->
+        <div class="jl-pay-form-panel d-none" data-pay-form-panel="invoice" id="panel-invoice">
+          <h2 class="jl-payment-title jl-payment-title--section">Invoice payment details</h2>
+          <div class="mb-3">
+            <label class="form-label" for="invNumber">Invoice number <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="text" class="form-control" id="invNumber" required autocomplete="off" aria-required="true" placeholder="e.g. 1042" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="invEmail">Email address <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="email" class="form-control" id="invEmail" data-pay-email required autocomplete="email" aria-required="true" placeholder="you@example.com" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="invCompany">Business or client name</label>
+            <input type="text" class="form-control" id="invCompany" autocomplete="organization" placeholder="Optional" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="invAmount">Amount due (USD) <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="number" class="form-control" id="invAmount" required min="1" step="0.01" inputmode="decimal" aria-required="true" placeholder="0.00" />
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="invNotes">Notes for our team</label>
+            <textarea class="form-control" id="invNotes" rows="2" placeholder="Optional context"></textarea>
+          </div>
+          <button type="button" class="btn-jl-payment-submit" data-pay-to-review disabled>Review payment</button>
+        </div>
+
+        <!-- Deposit -->
+        <div class="jl-pay-form-panel d-none" data-pay-form-panel="deposit" id="panel-deposit">
+          <h2 class="jl-payment-title jl-payment-title--section">Project deposit details</h2>
+          <p class="jl-pay-helper">Deposits reserve your project slot and kick off onboarding.</p>
+          <div class="mb-3">
+            <label class="form-label" for="depProject">Project name <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="text" class="form-control" id="depProject" required autocomplete="off" aria-required="true" placeholder="Your project or engagement name" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="depEmail">Email address <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="email" class="form-control" id="depEmail" data-pay-email required autocomplete="email" aria-required="true" placeholder="you@example.com" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="depCompany">Client or business name</label>
+            <input type="text" class="form-control" id="depCompany" autocomplete="organization" placeholder="Optional" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="depAmount">Deposit amount (USD) <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="number" class="form-control" id="depAmount" required min="1" step="0.01" inputmode="decimal" aria-required="true" placeholder="0.00" />
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="depNotes">Notes for our team</label>
+            <textarea class="form-control" id="depNotes" rows="2" placeholder="Optional"></textarea>
+          </div>
+          <button type="button" class="btn-jl-payment-submit" data-pay-to-review disabled>Review payment</button>
+        </div>
+
+        <!-- Strategy session — option values must match stripe-checkout.js keys; data-usd + labels must match PAY_STRATEGY_*_USD defaults (or .env overrides) -->
+        <div class="jl-pay-form-panel d-none" data-pay-form-panel="strategy_session" id="panel-strategy">
+          <h2 class="jl-payment-title jl-payment-title--section">Strategy session details</h2>
+          <p class="jl-pay-helper">After payment, we’ll send your next steps and booking details by email.</p>
+          <div class="mb-3">
+            <label class="form-label" for="strSessionType">Session type <span class="text-danger" aria-hidden="true">*</span></label>
+            <select class="form-select" id="strSessionType" required aria-required="true">
+              <option value="" data-usd="0">Select a session…</option>
+              <option value="strategy_60" data-usd="350">60-minute strategy session — $350</option>
+              <option value="strategy_audit" data-usd="750">Audit + recommendations — $750</option>
+              <option value="strategy_technical" data-usd="950">Technical planning session — $950</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="strEmail">Email address <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="email" class="form-control" id="strEmail" data-pay-email required autocomplete="email" aria-required="true" placeholder="you@example.com" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="strName">Your name <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="text" class="form-control" id="strName" required autocomplete="name" aria-required="true" placeholder="Full name" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="strHelp">What do you want help with? <span class="text-danger" aria-hidden="true">*</span></label>
+            <textarea class="form-control" id="strHelp" rows="3" required aria-required="true" placeholder="Brief context for the session"></textarea>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Session price <span class="text-danger" aria-hidden="true">*</span></label>
+            <p class="jl-pay-session-price-note mb-0">Choose a session type above — the price is fixed for that option.</p>
+          </div>
+          <button type="button" class="btn-jl-payment-submit" data-pay-to-review disabled>Review payment</button>
+        </div>
+
+        <!-- Custom -->
+        <div class="jl-pay-form-panel d-none" data-pay-form-panel="custom" id="panel-custom">
+          <h2 class="jl-payment-title jl-payment-title--section">Custom payment details</h2>
+          <p class="jl-pay-helper">Use this only if JL Solutions already gave you a custom amount.</p>
+          <div class="mb-3">
+            <label class="form-label" for="custDesc">Payment description <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="text" class="form-control" id="custDesc" required autocomplete="off" aria-required="true" placeholder="What you agreed with JL Solutions" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="custEmail">Email address <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="email" class="form-control" id="custEmail" data-pay-email required autocomplete="email" aria-required="true" placeholder="you@example.com" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="custCompany">Client or business name</label>
+            <input type="text" class="form-control" id="custCompany" autocomplete="organization" placeholder="Optional" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="custAmount">Amount (USD) <span class="text-danger" aria-hidden="true">*</span></label>
+            <input type="number" class="form-control" id="custAmount" required min="1" step="0.01" inputmode="decimal" aria-required="true" placeholder="0.00" />
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="custNotes">Notes for our team</label>
+            <textarea class="form-control" id="custNotes" rows="2" placeholder="Optional"></textarea>
+          </div>
+          <button type="button" class="btn-jl-payment-submit" data-pay-to-review disabled>Review payment</button>
+        </div>
+
+        <div class="jl-pay-optional mt-4">
+          <button type="button" class="jl-pay-optional__toggle btn btn-link px-0" id="payOptionalToggle" aria-controls="payOptionalBody">
+            + Add optional details (referral code, extra notes)
+          </button>
+          <div id="payOptionalBody" class="d-none mt-2">
+            <label class="form-label" for="payReferralCode">Referral code</label>
+            <input type="text" class="form-control text-uppercase" id="payReferralCode" autocomplete="off" placeholder="e.g. AGENT-ABC123" style="text-transform: uppercase;" />
+            <p class="jl-pay-helper mt-2 mb-0">If someone referred you, enter their code here.</p>
+          </div>
+        </div>
+
+        <section class="jl-pay-review d-none mt-4" id="payReview" aria-labelledby="pay-review-heading">
+          <h2 class="jl-payment-title jl-payment-title--section" id="pay-review-heading">Review your payment</h2>
+          <p class="jl-pay-review__intro">Please confirm the details below before continuing to secure Stripe checkout.</p>
+          <dl class="jl-pay-review__dl">
+            <div><dt>Payment type</dt><dd id="reviewType">—</dd></div>
+            <div><dt>Description</dt><dd id="reviewDesc">—</dd></div>
+            <div><dt>Email for receipt</dt><dd id="reviewEmail">—</dd></div>
+            <div><dt>Amount</dt><dd id="reviewAmount">—</dd></div>
+            <div><dt>Optional reference</dt><dd id="reviewRef">—</dd></div>
+          </dl>
+          <ul class="jl-pay-checkout-assurances" role="list" aria-label="Before you check out">
+            <li>Secure payment via Stripe</li>
+            <li>You’ll receive confirmation instantly</li>
+            <li>We begin within 1 business day</li>
+          </ul>
+          <button type="button" class="btn-jl-payment-submit jl-pay-cta-lock" id="payContinueStripe">
+            <span class="jl-pay-lock" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 17a2 2 0 100-4 2 2 0 000 4z" fill="currentColor"/><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-9H9V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2z" fill="currentColor"/></svg>
+            </span>
+            <span class="jl-pay-btn-label">Continue to secure Stripe checkout</span>
+          </button>
+          <p class="jl-pay-cta-support text-center mb-3">
+            <a href="mailto:info@jlsolutions.io">info@jlsolutions.io</a>
+          </p>
+          <button type="button" class="btn btn-outline-secondary w-100 jl-pay-edit-btn" id="payEditBtn">Edit payment details</button>
+        </section>
+
+        <section class="jl-pay-faq mt-5 pt-4" aria-labelledby="pay-faq-heading">
+          <h2 class="jl-pay-faq__title" id="pay-faq-heading">Common questions</h2>
+          <div class="jl-pay-faq__item">
+            <h3 class="jl-pay-faq__q">When will I get my receipt?</h3>
+            <p class="jl-pay-faq__a">Immediately after successful payment, Stripe emails your receipt to the address you entered.</p>
+          </div>
+          <div class="jl-pay-faq__item">
+            <h3 class="jl-pay-faq__q">What happens after I pay a deposit?</h3>
+            <p class="jl-pay-faq__a">We’ll follow up with onboarding details, next steps, and anything needed to begin the project.</p>
+          </div>
+          <div class="jl-pay-faq__item">
+            <h3 class="jl-pay-faq__q">What if I entered the wrong amount?</h3>
+            <p class="jl-pay-faq__a">Stop before paying and contact us. If you already paid, email us right away so we can fix it.</p>
+          </div>
+          <div class="jl-pay-faq__item">
+            <h3 class="jl-pay-faq__q">Do I need a call before I can pay or try a demo?</h3>
+            <p class="jl-pay-faq__a mb-0">No. You can <a href="/demo.html">view the interactive demo</a>, try the <a href="/services/document-extraction-demo.html">document extraction demo</a>, or complete checkout on this page without scheduling a call, as long as you know what you are paying for. If you are not sure yet, <a href="/contact.html">contact us</a> or <a href="/book-consultation">Book a Free Call</a> and we’ll help you choose.</p>
+          </div>
+        </section>
+
+        <p class="jl-payment-footnote mt-4">Exploring first? <a href="/demo.html">Interactive demo</a> or <strong>Wattson</strong> (chat, lower right). Prefer to talk? <a href="/book-consultation">Book a Free Call</a> or <a href="/contact.html">contact us</a> (we reply within one business day).</p>
+        <p class="jl-payment-back mb-0"><a href="/index.html">← Back to JL Solutions</a></p>
+      </div>
+    </div>
+  </main>
+
+  <div class="jl-pay-sticky-cta d-none" id="payStickyCta" role="region" aria-label="Continue to checkout">
+    <div class="container">
+      <ul class="jl-pay-checkout-assurances jl-pay-checkout-assurances--sticky" role="list" aria-label="Before you check out">
+        <li>Secure payment via Stripe</li>
+        <li>You’ll receive confirmation instantly</li>
+        <li>We begin within 1 business day</li>
+      </ul>
+      <button type="button" class="btn-jl-payment-submit jl-pay-cta-lock w-100" id="payStickyContinue">
+        <span class="jl-pay-lock" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 17a2 2 0 100-4 2 2 0 000 4z" fill="currentColor"/><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-9H9V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2z" fill="currentColor"/></svg>
+        </span>
+        <span class="jl-pay-btn-label">Continue to secure Stripe checkout</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jl-stripe-pay.js"></script>
+  <script src="/js/jl-pay-page.js"></script>
+  <script src="/js/chatbot.js" defer></script>
+</body>
+</html>

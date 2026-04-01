@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact | JL Solutions</title>
-  <meta name="description" content="Contact JL Solutions: send a message and we will reply within one business day. Book a call, ask about automation, or get in touch.">
+  <meta name="description" content="Contact JL Solutions: send a message and we will reply within one business day. Book a Free Call for the fastest time on the calendar, or write to us here.">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
@@ -21,7 +21,7 @@
     <div class="container py-4">
       <div class="jl-contact-intro text-center mb-4">
         <h1 class="h2 text-white fw-bold mb-2">Contact</h1>
-        <p class="text-white-50 mb-0">Send a note and we will reply within one business day. Questions first? Chat with <strong class="text-white">Wattson</strong> (lower right).</p>
+        <p class="text-white-50 mb-0">Send a note and we will reply within one business day. Paying an invoice or deposit? We will send you a secure Stripe link when it is time to pay. Want a demo or help choosing a next step? Chat with <strong class="text-white">Wattson</strong> (lower right).</p>
       </div>
 
       <div class="jl-contact-card-wrap">
@@ -40,7 +40,7 @@
               <select class="form-select" id="inquiry_type" name="inquiry_type" required>
                 <option value="">Select a topic</option>
                 <option value="General question">General question</option>
-                <option value="Book a consultation">Book a consultation</option>
+                <option value="Book a Free Call">Book a Free Call</option>
                 <option value="Automation / intake / scheduling project">Automation, intake, or scheduling</option>
                 <option value="Partnership or media">Partnership or media</option>
                 <option value="Other">Other</option>
@@ -48,8 +48,8 @@
             </div>
 
             <div class="jl-contact-book-hint d-none mb-3" id="bookCallHint" role="status">
-              <strong>Need a time on the calendar?</strong>
-              <a href="/book-consultation.html">Book a free call</a> (fastest). You can still send a message here and we will follow up by email.
+              <strong>Want a time on the calendar?</strong>
+              <a href="/book-consultation.html">Book a Free Call</a> — that is the fastest way to reserve a slot. You can still send a message here; we reply within one business day.
             </div>
 
             <div class="mb-3">
@@ -100,7 +100,7 @@
 
         if (inquiry && bookHint) {
           function syncBookHint() {
-            bookHint.classList.toggle('d-none', inquiry.value !== 'Book a consultation');
+            bookHint.classList.toggle('d-none', inquiry.value !== 'Book a Free Call');
           }
           inquiry.addEventListener('change', syncBookHint);
           syncBookHint();

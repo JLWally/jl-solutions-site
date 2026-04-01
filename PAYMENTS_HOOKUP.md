@@ -8,7 +8,7 @@ The site already has Stripe and referral logic in place. To hook payments to the
 - **Stripe Webhook** – `netlify/functions/stripe-webhook.js` on `checkout.session.completed`:
   - Reads `metadata.referralCode` and customer email from the session.
   - Finds the referral code in Supabase and records the sale in `referrals` (amount, commission, status).
-- **Pay page** – `/pay/index.html` can send users to Checkout with an optional referral code.
+- **Internal pay page** – `/internal-pay/index.html` can send users to Checkout with an optional referral code.
 - **Consultation form** – Saves to Supabase and can include a referral code; consultation is free, but you can add a “paid consultation” product in Stripe and link to it from the site.
 
 ## Netlify Environment Variables (required for payments + referrals)
@@ -34,10 +34,10 @@ Add these in **Netlify → Site configuration → Environment variables**.
 ## Connecting the flow
 
 1. **Consultation (free)** – Form posts to `send-form-email` (email to info@jlsolutions.io) and optionally to `consultation` (Supabase). Add a referral code field so the sales agent’s code is stored with the lead.
-2. **Paid product** – From any page, link to `/pay/` or call `/.netlify/functions/stripe-checkout` with:
+2. **Paid product** – For manual/internal payments, link to `/internal-pay/` or call `/.netlify/functions/stripe-checkout` with:
    - `priceId` or use default `STRIPE_PRICE_ID`
    - `referralCode` in metadata (so the webhook can attribute the sale to the right agent).
-3. **Pay page** – Ensure `/pay/index.html` passes the referral code (e.g. from query string `?ref=AGENT-ABC`) into the checkout session metadata. The stripe-checkout function should accept `referralCode` and add it to `session.metadata`.
+3. **Internal pay page** – Ensure `/internal-pay/index.html` passes the referral code (e.g. from query string `?ref=AGENT-ABC`) into the checkout session metadata. The stripe-checkout function should accept `referralCode` and add it to `session.metadata`.
 4. **Referral dashboard** – Once Supabase + Stripe webhook are configured, the dashboard shows referrals and commissions from completed checkouts.
 
 ## Checking stripe-checkout for referral code
@@ -51,6 +51,6 @@ metadata: {
 },
 ```
 
-Then the pay page or any “Buy” link can include `?ref=AGENT-CODE` and pass it into the checkout.
+Then the internal pay page or any “Buy” link can include `?ref=AGENT-CODE` and pass it into checkout.
 
 See **JLSOLUTIONS_REFERRAL_SETUP.md** for full Supabase schema and referral tables.

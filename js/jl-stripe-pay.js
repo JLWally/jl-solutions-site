@@ -8,6 +8,13 @@
     if (!res.ok) throw new Error('Could not notify team (HTTP ' + res.status + ')');
   }
 
+  function setButtonLabel(btn, label) {
+    if (!btn) return;
+    var lab = btn.querySelector('.jl-pay-btn-label');
+    if (lab) lab.textContent = label;
+    else btn.textContent = label;
+  }
+
   global.jlStripePay = {
     /**
      * @param {object} opts
@@ -15,6 +22,7 @@
      * @param {URLSearchParams|Record<string,string>} opts.notifyParams
      * @param {object} opts.stripePayload — JSON body for stripe-checkout
      * @param {HTMLButtonElement} [opts.button]
+     * @param {HTMLButtonElement[]} [opts.extraButtons] — same disabled/label treatment as button
      * @param {string} [opts.submitLabel]
      * @param {string} [opts.redirectingLabel]
      * @param {boolean} [opts.requireNotify=true]
@@ -23,13 +31,15 @@
     run: async function (opts) {
       var base = opts.baseUrl || (global.location && global.location.origin) || '';
       var button = opts.button;
+      var extraButtons = opts.extraButtons || [];
+      var allButtons = [button].concat(extraButtons).filter(Boolean);
       var submitLabel = opts.submitLabel || 'Proceed to secure checkout';
       var redirectingLabel = opts.redirectingLabel || 'Redirecting…';
       var requireNotify = opts.requireNotify !== false;
 
-      if (button) {
-        button.disabled = true;
-        button.textContent = redirectingLabel;
+      for (var bi = 0; bi < allButtons.length; bi++) {
+        allButtons[bi].disabled = true;
+        setButtonLabel(allButtons[bi], redirectingLabel);
       }
 
       try {
@@ -73,9 +83,9 @@
             : 'Checkout failed');
         throw new Error(errMsg);
       } catch (err) {
-        if (button) {
-          button.disabled = false;
-          button.textContent = submitLabel;
+        for (var bj = 0; bj < allButtons.length; bj++) {
+          allButtons[bj].disabled = false;
+          setButtonLabel(allButtons[bj], submitLabel);
         }
         if (opts.onError) opts.onError(err);
         else if (global.alert) global.alert(err.message || 'Something went wrong. Please try again.');

@@ -1,7 +1,8 @@
 /**
  * Sends website form submissions to info@jlsolutions.io (Resend).
  * Supported form-name values: contact, consultation, fix-my-app, newsletter,
- * roi-calculator, ai-intake-demo, onboard-payment, pay-checkout.
+ * roi-calculator, ai-intake-demo, onboard-payment, pay-checkout, package-kickoff,
+ * getstarted-product-intake, getstarted-custom-quote.
  *
  * Set RESEND_API_KEY in Netlify. Use FORM_FROM_EMAIL with a domain verified in Resend
  * (e.g. JL Solutions <notifications@jlsolutions.io>) for production.
@@ -113,6 +114,202 @@ function buildFixMyAppEmail(data) {
       <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
       <p><em>Sent from jlsolutions.io services/fix-my-app</em></p>
     `,
+  };
+}
+
+function buildPackageKickoffEmail(data) {
+  const contactName = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const pkg = data.package_name ? String(data.package_name).trim() : '(not specified)';
+
+  const rowTable = (rows) => {
+    const body = rows
+      .filter(([, val]) => val != null && String(val).trim() !== '')
+      .map(
+        ([k, val]) =>
+          `<tr><td style="vertical-align:top;padding:6px 14px 6px 0;"><strong>${escapeHtml(k)}</strong></td><td style="padding:6px 0;">${escapeHtml(String(val))}</td></tr>`
+      )
+      .join('');
+    return body ? `<table style="border-collapse:collapse;">${body}</table>` : '';
+  };
+
+  const section = (title, rows) => {
+    const t = rowTable(rows);
+    if (!t) return '';
+    return `<h3 style="margin:1.35em 0 0.5em;font-size:1.05em;">${escapeHtml(title)}</h3>${t}`;
+  };
+
+  let html = `<h2>Post-purchase intake</h2>`;
+  html += section('Section 1: Basic Info', [
+    ['Business name', data.business_name],
+    ['Contact name', contactName],
+    ['Email', email],
+    ['Phone', data.phone],
+    ['Website URL', data.website_url],
+  ]);
+  const s2rows = [['Which service did you purchase?', pkg]];
+  const slug = data.purchase_service_slug ? String(data.purchase_service_slug).trim() : '';
+  if (slug) s2rows.push(['Service slug (from checkout link)', slug]);
+  html += section('Section 2: What are we working on?', s2rows);
+  html += section('Section 3: Goals', [
+    ['Main goal', data.goal_main],
+    ['What is NOT working right now?', data.not_working],
+  ]);
+  html += section('Section 4: Access', [
+    ['Access to website/backend', data.access_backend],
+    ['Platform', data.platform],
+    ['Login details', data.login_details],
+  ]);
+
+  const pkgNorm = pkg.toLowerCase();
+  if (pkgNorm.includes('ai intake') || pkgNorm.includes('intake form')) {
+    html += section('Section 5: Features (AI Intake)', [
+      ['Questions you currently ask customers', data.ai_current_questions],
+      ['Filter / qualify leads', data.ai_filter_qualify],
+      ['Where should leads go?', data.ai_leads_destination],
+    ]);
+  } else if (pkgNorm.includes('scheduling')) {
+    html += section('Section 5: Features (Scheduling)', [
+      ['Services you offer', data.sched_services_offered],
+      ['Availability (days/times)', data.sched_availability],
+      ['Assign jobs manually or automatically', data.sched_assign_manual_auto],
+    ]);
+  } else if (pkgNorm.includes('fix my app') || pkgNorm.includes('fix')) {
+    html += section('Section 5: Features (Fix My App)', [
+      ['Issues you are noticing', data.fix_issues_noticing],
+      ['Specific pages or flows to fix', data.fix_pages_flows],
+    ]);
+  } else if (pkgNorm.includes('lead generation') || pkgNorm.includes('lead engine')) {
+    html += section('Section 5: Features (Lead Generation Engine)', [
+      ['Target market / ideal customer', data.lead_target_market],
+      ['Outreach goals & messaging', data.lead_outreach_goals],
+      ['Preferred channels', data.lead_channels],
+      ['Compliance, brand voice, or constraints', data.lead_compliance_notes],
+    ]);
+  }
+
+  html += section('Section 6: Final', [
+    ['Deadline', data.deadline],
+    ['Anything else we should know', data.final_notes],
+  ]);
+
+  const ack = data.timeline_ack ? String(data.timeline_ack).trim() : '';
+  if (ack !== '') {
+    html += `<p style="margin-top:1em;"><strong>Timeline acknowledgment:</strong> ${escapeHtml(ack)}</p>`;
+  }
+
+  html += `<p style="margin-top:1.25em;color:#555;"><em>From /get-started</em></p>`;
+
+  return {
+    subject: `[JL Solutions] Package intake — ${contactName} (${pkg})`,
+    html,
+  };
+}
+
+function buildGetstartedProductIntakeEmail(data) {
+  const contactName = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const product = data.gs_product ? String(data.gs_product).trim() : '(not specified)';
+
+  const rowTable = (rows) => {
+    const body = rows
+      .filter(([, val]) => val != null && String(val).trim() !== '')
+      .map(
+        ([k, val]) =>
+          `<tr><td style="vertical-align:top;padding:6px 14px 6px 0;"><strong>${escapeHtml(k)}</strong></td><td style="padding:6px 0;">${escapeHtml(String(val))}</td></tr>`
+      )
+      .join('');
+    return body ? `<table style="border-collapse:collapse;">${body}</table>` : '';
+  };
+
+  const section = (title, rows) => {
+    const t = rowTable(rows);
+    if (!t) return '';
+    return `<h3 style="margin:1.35em 0 0.5em;font-size:1.05em;">${escapeHtml(title)}</h3>${t}`;
+  };
+
+  let html = `<h2>Pre-checkout intake (get started)</h2>`;
+  html += `<p><strong>Product:</strong> ${escapeHtml(product)}</p>`;
+  html += section('Contact', [
+    ['Name', contactName],
+    ['Email', email],
+    ['Phone', data.phone],
+    ['Business name', data.gs_business_name],
+    ['Website', data.gs_website],
+  ]);
+
+  if (product === 'ai-intake') {
+    html += section('AI Intake', [
+      ['Lead questions / fields', data.gs_ai_lead_questions],
+      ['Filter / qualify', data.gs_ai_filter_qualify],
+      ['Leads destination', data.gs_ai_leads_destination],
+    ]);
+  } else if (product === 'fix-my-app') {
+    html += section('Fix My App', [
+      ['Issues', data.gs_fix_issues],
+      ['Pages / reproduction', data.gs_fix_pages],
+    ]);
+  } else if (product === 'lead-gen') {
+    html += section('Lead Generation', [
+      ['Niche / target market', data.gs_lead_niche],
+      ['Primary outreach goal', data.gs_lead_goal],
+    ]);
+  } else if (product === 'scheduling') {
+    html += section('Scheduling', [
+      ['What to book', data.gs_sched_services],
+      ['Availability', data.gs_sched_availability],
+      ['Assignment', data.gs_sched_assign],
+    ]);
+  }
+
+  html += `<p style="margin-top:1.25em;color:#555;"><em>From /get-started (pre-checkout)</em></p>`;
+
+  return {
+    subject: `[JL Solutions] Pre-checkout intake — ${contactName} (${product})`,
+    html,
+  };
+}
+
+function buildGetstartedCustomQuoteEmail(data) {
+  const contactName = data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const svc = data.gs_service_label ? String(data.gs_service_label).trim() : '(not specified)';
+
+  const rowTable = (rows) => {
+    const body = rows
+      .filter(([, val]) => val != null && String(val).trim() !== '')
+      .map(
+        ([k, val]) =>
+          `<tr><td style="vertical-align:top;padding:6px 14px 6px 0;"><strong>${escapeHtml(k)}</strong></td><td style="padding:6px 0;">${escapeHtml(String(val))}</td></tr>`
+      )
+      .join('');
+    return body ? `<table style="border-collapse:collapse;">${body}</table>` : '';
+  };
+
+  const rows = [
+    ['Interested service', svc],
+    ['Name', contactName],
+    ['Email', email],
+    ['Business', data.gs_business_name],
+    ['Website', data.gs_website],
+    ['Fix: issues', data.gs_fix_issues],
+    ['Fix: pages', data.gs_fix_pages],
+    ['AI: lead fields', data.gs_ai_lead_questions],
+    ['AI: qualify', data.gs_ai_filter_qualify],
+    ['AI: destination', data.gs_ai_leads_destination],
+    ['Schedule: offerings', data.gs_sched_services],
+    ['Schedule: availability', data.gs_sched_availability],
+    ['Lead: niche', data.gs_lead_niche],
+    ['Lead: goal', data.gs_lead_goal],
+  ];
+
+  let html = `<h2>Get started: custom quote request</h2>`;
+  html += rowTable(rows);
+  html += `<p style="margin-top:1.25em;color:#555;"><em>From /get-started</em></p>`;
+
+  return {
+    subject: `[JL Solutions] Custom quote request — ${contactName} (${svc})`,
+    html,
   };
 }
 
@@ -258,10 +455,18 @@ function buildPayCheckoutEmail(data) {
   const email = data.email || '(not provided)';
   const amt = data.paymentAmount != null ? String(data.paymentAmount) : '(not provided)';
   const fields = [
+    ['Payment type', data.paymentType],
+    ['Summary / description', data.paymentSummary || data.paymentDescription],
     ['Name', name],
     ['Email', email],
     ['Amount (USD)', amt],
+    ['Invoice #', data.invoiceNumber],
+    ['Project', data.projectName],
+    ['Session type', data.sessionTypeLabel],
+    ['Help with', data.helpWith],
+    ['Notes', data.notes],
     ['Referral code', data.referralCode],
+    ['Client reference', data.clientReferenceId],
   ];
   const rows = fields
     .filter(([, v]) => v != null && String(v).trim() !== '')
@@ -272,7 +477,7 @@ function buildPayCheckoutEmail(data) {
     html: `
       <h2>Pay page — proceeding to Stripe</h2>
       <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
-      <p><em>Sent from jlsolutions.io /pay/</em></p>
+      <p><em>Sent from jlsolutions.io checkout intent</em></p>
     `,
   };
 }
@@ -417,13 +622,58 @@ async function persistToConsultationsTable(formName, data) {
     };
   } else if (formName === 'pay-checkout') {
     const ref = (data.referralCode || data.referral_code || '').trim().toUpperCase();
+    const ptype = (data.paymentType || '').trim();
+    const summary = (data.paymentSummary || data.paymentDescription || '').trim();
     row = {
       name,
       email,
-      message: `Pay page checkout: $${data.paymentAmount || '?'}${ref ? ` (ref ${ref})` : ''}`,
+      message: `Pay [${ptype || 'payment'}]: $${data.paymentAmount || '?'} — ${summary}${ref ? ` (ref ${ref})` : ''}`,
       referral_code: ref || null,
       status: 'new',
       source: 'pay_page_intent',
+    };
+  } else if (formName === 'getstarted-product-intake') {
+    const prod = data.gs_product ? String(data.gs_product).trim() : '';
+    const bits = [data.gs_ai_lead_questions, data.gs_fix_issues, data.gs_lead_niche, data.gs_sched_services]
+      .map((x) => (x ? String(x).trim() : ''))
+      .filter(Boolean);
+    row = {
+      name,
+      email,
+      phone: data.phone ? String(data.phone).trim() : null,
+      company: data.gs_business_name ? String(data.gs_business_name).trim() : null,
+      service: prod || 'getstarted-product',
+      message: bits.join(' — ') || 'Get started pre-checkout intake',
+      status: 'new',
+      source: 'getstarted_precheckout',
+    };
+  } else if (formName === 'getstarted-custom-quote') {
+    const svc = data.gs_service_label ? String(data.gs_service_label).trim() : '';
+    row = {
+      name,
+      email,
+      phone: data.phone ? String(data.phone).trim() : null,
+      company: data.gs_business_name ? String(data.gs_business_name).trim() : null,
+      service: svc || 'custom-quote',
+      message: `Custom quote from get-started — ${svc || 'service unknown'}`,
+      status: 'new',
+      source: 'getstarted_custom_quote',
+    };
+  } else if (formName === 'package-kickoff') {
+    const pkg = data.package_name ? String(data.package_name).trim() : '';
+    const business = data.business_name ? String(data.business_name).trim() : '';
+    const goal = data.goal_main ? String(data.goal_main).trim() : '';
+    const broken = data.not_working ? String(data.not_working).trim() : '';
+    const message = [goal, broken].filter(Boolean).join(' — ') || 'Package intake submitted';
+    row = {
+      name,
+      email,
+      phone: data.phone ? String(data.phone).trim() : null,
+      company: business || (data.company ? String(data.company).trim() : null),
+      service: pkg || 'package',
+      message,
+      status: 'new',
+      source: 'package_purchase_kickoff',
     };
   } else {
     const it = String(data.inquiry_type || data.inquiryType || '').trim();
@@ -562,6 +812,18 @@ exports.handler = async (event) => {
     const built = buildPayCheckoutEmail(data);
     subject = built.subject;
     html = built.html;
+  } else if (formName === 'package-kickoff') {
+    const built = buildPackageKickoffEmail(data);
+    subject = built.subject;
+    html = built.html;
+  } else if (formName === 'getstarted-product-intake') {
+    const built = buildGetstartedProductIntakeEmail(data);
+    subject = built.subject;
+    html = built.html;
+  } else if (formName === 'getstarted-custom-quote') {
+    const built = buildGetstartedCustomQuoteEmail(data);
+    subject = built.subject;
+    html = built.html;
   } else {
     const built = buildContactEmail(data);
     subject = built.subject;
@@ -654,7 +916,37 @@ exports.handler = async (event) => {
           <p><em>info@jlsolutions.io</em></p>
         `,
                     }
-                  : {
+                  : formName === 'package-kickoff'
+                    ? {
+                        subject: "You're in — we received your kickoff details | JL Solutions",
+                        html: `
+          <h2>Hi ${first},</h2>
+          <p>Thank you for completing your post-purchase intake. We will confirm access and next steps within one business day.</p>
+          <p> - The JL Solutions team</p>
+          <p><em>info@jlsolutions.io</em></p>
+        `,
+                      }
+                    : formName === 'getstarted-product-intake'
+                      ? {
+                          subject: 'Continue to checkout — JL Solutions',
+                          html: `
+          <h2>Hi ${first},</h2>
+          <p>We saved your intake. Complete payment on the Stripe page that opens next.</p>
+          <p>If the page does not open, return to our site and use the same product link again, or email <em>info@jlsolutions.io</em>.</p>
+          <p> - The JL Solutions team</p>
+        `,
+                        }
+                      : formName === 'getstarted-custom-quote'
+                        ? {
+                            subject: 'We received your custom quote request — JL Solutions',
+                            html: `
+          <h2>Hi ${first},</h2>
+          <p>Thanks for the details. We will review scope and reply with next steps, usually within one business day.</p>
+          <p> - The JL Solutions team</p>
+          <p><em>info@jlsolutions.io</em></p>
+        `,
+                          }
+                        : {
                       subject: 'We received your message - JL Solutions',
                       html: `
           <h2>Thank you for reaching out</h2>
