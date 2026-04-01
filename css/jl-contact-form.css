@@ -23,6 +23,18 @@
   color: var(--jl-ink, #0a1628);
 }
 
+/* Body on onboarding/get-started is light-on-dark; cards are white — never inherit white onto card text */
+.jl-welcome-purchase .jl-payment-card .form-check-label,
+.jl-welcome-purchase .jl-payment-card .form-check-label.small {
+  color: #0a1628;
+  font-weight: 500;
+}
+
+.jl-welcome-purchase .jl-payment-card .form-check-label.text-secondary,
+.jl-welcome-purchase .jl-payment-card label.text-secondary {
+  color: #334155 !important;
+}
+
 .jl-contact-page .jl-contact-card-wrap .form-control,
 .jl-contact-page .jl-contact-card-wrap .form-select {
   background: var(--jl-white, #fff);
