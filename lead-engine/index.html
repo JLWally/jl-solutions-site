@@ -8,101 +8,6 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/lead-engine-ui.css">
   <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
-  <style>
-    body { background: #121212; color: #e8e8e8; min-height: 100vh; }
-    .card-dark { background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; }
-    .table-dark-ish { --bs-table-bg: #1a1a1a; --bs-table-color: #e8e8e8; }
-    .table-dark-ish th { color: #9ca3af; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
-    .lead-history-row td { background: #0d0d0d !important; border-color: rgba(255,255,255,0.08) !important; }
-    .list-summary-bar { font-size: 0.8rem; color: #b0b0b0; line-height: 1.5; }
-    .audit-fail-banner { color: #fecaca; font-weight: 600; }
-    .text-muted { color: #b9bec8 !important; }
-    .text-secondary { color: #c6ccd6 !important; }
-    .form-label { color: #d6dbe4 !important; }
-    .form-check-label { color: #d6dbe4 !important; }
-    .form-control,
-    .form-select {
-      color: #e8e8e8 !important;
-      background-color: #111827 !important;
-      border-color: #4b5563 !important;
-    }
-    .form-control:focus,
-    .form-select:focus {
-      color: #f3f4f6 !important;
-      background-color: #111827 !important;
-      border-color: #7c9cff !important;
-      box-shadow: 0 0 0 0.2rem rgba(124, 156, 255, 0.25) !important;
-    }
-    .form-control::placeholder { color: #9aa3b2; opacity: 1; }
-    .form-select option { background: #1a1a1a; color: #e8e8e8; }
-    /* Table density: keep row height sane */
-    #leadsTableWrap {
-      max-height: max(16rem, calc(100vh - 12.5rem));
-      overflow: auto;
-    }
-    #leadsTableWrap .table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 3;
-      background: #1a1a1a;
-      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-    #leadsTableWrap .table td { vertical-align: top; }
-    .le-audit-col, .le-score-col, .le-outreach-col {
-      min-width: 11rem;
-      max-width: 28rem;
-      word-break: normal;
-      overflow-wrap: break-word;
-    }
-    /* Cap cell height so one row doesn’t span the viewport; scroll inside cell */
-    .le-cell-clip {
-      max-height: 5.25rem;
-      overflow-y: auto;
-      font-size: 0.8rem;
-      line-height: 1.35;
-      padding-right: 0.2rem;
-    }
-    .le-actions-col {
-      width: 8.75rem;
-      min-width: 8rem;
-      max-width: 10rem;
-    }
-    .le-pipeline-hint {
-      color: #fcd34d;
-      font-size: 0.68rem;
-      line-height: 1.3;
-      max-height: 3rem;
-      overflow-y: auto;
-      margin-bottom: 0.28rem;
-    }
-    .lead-actions-stack .btn {
-      width: 100%;
-      font-size: 0.72rem;
-      padding: 0.28rem 0.4rem;
-      line-height: 1.2;
-      margin-bottom: 0.28rem;
-    }
-    .lead-actions-stack .btn:last-child { margin-bottom: 0; }
-    details.le-panel > summary {
-      cursor: pointer;
-      color: #cbd5e1;
-      font-weight: 600;
-      list-style: none;
-    }
-    details.le-panel > summary::-webkit-details-marker { display: none; }
-    details.le-panel > summary::before { content: '▸ '; color: #94a3b8; }
-    details.le-panel[open] > summary::before { content: '▾ '; }
-    .batch-toolbar-secondary .btn { font-size: 0.72rem; padding: 0.25rem 0.45rem; }
-    .le-page-tight { padding-top: 0.65rem !important; padding-bottom: 0.65rem !important; }
-    .le-main-compact .card-dark { padding: 0.75rem 0.9rem; }
-    .le-main-compact .le-panel.card-dark { padding: 0.55rem 0.75rem; }
-    .navbar.le-nav-tight { padding-top: 0.35rem; padding-bottom: 0.35rem; }
-    .le-filter-actions .btn { min-width: 6.4rem; }
-    @media (max-width: 767.98px) {
-      #leadsTableWrap { max-height: calc(100vh - 15rem); }
-      .le-filter-actions .btn { flex: 1 1 auto; }
-    }
-  </style>
 </head>
 <body class="lead-engine-surface">
   <nav class="navbar navbar-dark bg-dark le-nav-tight">
@@ -193,8 +98,8 @@
         <div class="col-12">
           <div class="card card-dark p-3">
             <h2 class="h6 text-secondary mb-2">Leads</h2>
-            <p class="small text-muted mb-2 mb-lg-1"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
-            <div class="row g-2 mb-2">
+            <p class="small text-muted mb-2 mb-lg-1 le-readable-hint"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
+            <div class="row g-2 mb-2 le-filter-bar">
               <div class="col-6 col-md-3">
                 <label class="form-label small mb-0" for="filterStatus">Lead status</label>
                 <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterStatus">
@@ -269,7 +174,7 @@
                 </select>
               </div>
             </div>
-            <div class="row g-2 mb-3">
+            <div class="row g-2 mb-3 le-filter-bar">
               <div class="col-md-6">
                 <label class="form-label small mb-0" for="filterSearch">Search (company / URL)</label>
                 <input class="form-control form-control-sm bg-dark text-light border-secondary" id="filterSearch" placeholder="company or URL" />
@@ -315,7 +220,7 @@
             <div id="listSummary" class="list-summary-bar mb-2 p-2 rounded border border-secondary" style="display:none;"></div>
             <p id="listErr" class="text-danger small" style="display:none; white-space: pre-wrap; word-break: break-word;"></p>
             <div class="table-responsive" id="leadsTableWrap">
-              <table class="table table-sm table-dark-ish table-hover mb-0 w-100">
+              <table class="table table-dark-ish table-hover mb-0 w-100 le-leads-table">
                 <thead>
                   <tr>
                     <th>Select</th>

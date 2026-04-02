@@ -1,4 +1,26 @@
-/* Lead engine + operator login (dark UI). Load after style.css. */
+/* Lead engine + operator UI. Load after style.css to override global !important rules. */
+
+/* --- Surface: charcoal tool UI (global theme forces blue body / bg-dark) --- */
+body.lead-engine-surface {
+  background-color: #121212 !important;
+  color: #e8eaed !important;
+  font-size: 1rem;
+  line-height: 1.55;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.lead-engine-surface .navbar.bg-dark {
+  background-color: #0a0a0a !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lead-engine-surface .bg-dark.text-light,
+.lead-engine-surface .form-control.bg-dark,
+.lead-engine-surface .form-select.bg-dark {
+  background-color: #111827 !important;
+}
+
 .lead-engine-surface .btn-outline-light {
   color: #f8fafc !important;
   border-color: rgba(248, 250, 252, 0.92) !important;
@@ -20,4 +42,302 @@
   color: #0f172a !important;
   background-color: #e2e8f0 !important;
   border-color: #cbd5e1 !important;
+}
+
+/* Cards & tables */
+.lead-engine-surface .card-dark {
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+}
+
+.lead-engine-surface .table-dark-ish {
+  --bs-table-bg: #1e1e1e;
+  --bs-table-color: #e8eaed;
+  --bs-table-border-color: rgba(255, 255, 255, 0.1);
+  /* Bootstrap default hover uses --bs-body-color (dark); without this, row hover flips text to ~black on dark cells. */
+  --bs-table-hover-color: #e8eaed;
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.08);
+  --bs-table-active-color: #e8eaed;
+  --bs-table-active-bg: rgba(255, 255, 255, 0.1);
+  --bs-table-striped-color: #e8eaed;
+}
+
+.lead-engine-surface .table-dark-ish th {
+  color: #d1d5db;
+  font-weight: 650;
+  font-size: 0.8125rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.lead-engine-surface .table-dark-ish tbody tr {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.lead-engine-surface .text-muted {
+  color: #a8b0bd !important;
+}
+
+.lead-engine-surface .text-secondary {
+  color: #c4cad4 !important;
+}
+
+.lead-engine-surface .form-label {
+  color: #e2e6ed !important;
+}
+
+.lead-engine-surface .form-check-label {
+  color: #e2e6ed !important;
+}
+
+.lead-engine-surface .form-control,
+.lead-engine-surface .form-select {
+  color: #e8eaed !important;
+  background-color: #111827 !important;
+  border-color: #4b5563 !important;
+}
+
+.lead-engine-surface .form-control:focus,
+.lead-engine-surface .form-select:focus {
+  color: #f3f4f6 !important;
+  background-color: #151f32 !important;
+  border-color: #93c5fd !important;
+  box-shadow: 0 0 0 0.2rem rgba(147, 197, 253, 0.22) !important;
+}
+
+.lead-engine-surface .form-control::placeholder {
+  color: #8b95a5;
+  opacity: 1;
+}
+
+.lead-engine-surface .form-select option {
+  background: #1e1e1e;
+  color: #e8eaed;
+}
+
+.lead-engine-surface .form-check-input {
+  border-color: #6b7280;
+  background-color: #111827;
+}
+.lead-engine-surface .form-check-input:checked {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.lead-engine-surface code {
+  background: rgba(0, 0, 0, 0.35);
+  color: #e5e7eb;
+  padding: 0.12rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.88em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lead-engine-surface .text-danger {
+  color: #fca5a5 !important;
+}
+
+.lead-engine-surface .text-success {
+  color: #86efac !important;
+}
+
+.lead-engine-surface .link-info {
+  color: #7dd3fc !important;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.lead-engine-surface .link-info:hover {
+  color: #bae6fd !important;
+}
+
+/* Main leads table: comfortable scanning */
+.lead-engine-surface .le-leads-table {
+  font-size: 0.9375rem;
+}
+.lead-engine-surface .le-leads-table > :not(caption) > * > * {
+  padding: 0.55rem 0.65rem;
+}
+.lead-engine-surface .le-leads-table tbody td.small,
+.lead-engine-surface .le-leads-table tbody .small {
+  font-size: 0.875rem !important;
+}
+
+.lead-engine-surface #leadsTableWrap {
+  max-height: max(18rem, calc(100vh - 11rem));
+  overflow: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lead-engine-surface #leadsTableWrap .table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #252525;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.lead-engine-surface #leadsTableWrap .table td {
+  vertical-align: top;
+}
+
+.lead-engine-surface .le-audit-col,
+.lead-engine-surface .le-score-col,
+.lead-engine-surface .le-outreach-col {
+  min-width: 11rem;
+  max-width: 28rem;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.lead-engine-surface .le-cell-clip {
+  max-height: 6.5rem;
+  overflow-y: auto;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  padding-right: 0.35rem;
+}
+
+.lead-engine-surface .le-actions-col {
+  width: 9.25rem;
+  min-width: 8.5rem;
+  max-width: 11rem;
+}
+
+.lead-engine-surface .le-pipeline-hint {
+  color: #fde047;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  max-height: 4rem;
+  overflow-y: auto;
+  margin-bottom: 0.35rem;
+  padding: 0.2rem 0;
+}
+
+.lead-engine-surface .lead-actions-stack .btn {
+  width: 100%;
+  font-size: 0.8125rem;
+  padding: 0.35rem 0.45rem;
+  line-height: 1.25;
+  margin-bottom: 0.3rem;
+}
+.lead-engine-surface .lead-actions-stack .btn:last-child {
+  margin-bottom: 0;
+}
+
+.lead-engine-surface details.le-panel > summary {
+  cursor: pointer;
+  color: #e2e8f0;
+  font-weight: 650;
+  font-size: 0.9375rem;
+  list-style: none;
+}
+.lead-engine-surface details.le-panel > summary::-webkit-details-marker {
+  display: none;
+}
+.lead-engine-surface details.le-panel > summary::before {
+  content: '▸ ';
+  color: #94a3b8;
+}
+.lead-engine-surface details.le-panel[open] > summary::before {
+  content: '▾ ';
+}
+
+.lead-engine-surface .batch-toolbar-secondary .btn {
+  font-size: 0.8125rem;
+  padding: 0.3rem 0.5rem;
+}
+
+.lead-engine-surface .le-page-tight {
+  padding-top: 0.65rem !important;
+  padding-bottom: 0.65rem !important;
+}
+.lead-engine-surface .le-main-compact .card-dark {
+  padding: 0.85rem 1rem;
+}
+.lead-engine-surface .le-main-compact .le-panel.card-dark {
+  padding: 0.65rem 0.85rem;
+}
+.lead-engine-surface .navbar.le-nav-tight {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+.lead-engine-surface .le-filter-actions .btn {
+  min-width: 6.4rem;
+}
+
+.lead-engine-surface .le-filter-bar .form-label.small {
+  font-size: 0.8125rem;
+  font-weight: 650;
+  color: #dce1e8 !important;
+  margin-bottom: 0.2rem;
+}
+
+.lead-engine-surface .le-readable-hint {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #b8c0cc !important;
+}
+
+.lead-engine-surface .le-readable-hint strong {
+  color: #e8eaed;
+  font-weight: 650;
+}
+
+.lead-engine-surface .lead-history-row td {
+  background: #141414 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.lead-engine-surface .list-summary-bar {
+  font-size: 0.875rem;
+  color: #d0d5dd;
+  line-height: 1.55;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.lead-engine-surface .audit-fail-banner {
+  color: #fecaca;
+  font-weight: 650;
+}
+
+.lead-engine-surface pre.text-light,
+.lead-engine-surface pre.small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #d1d5db !important;
+}
+
+/* Submissions page */
+.lead-engine-surface .submissions-table-wrap {
+  max-height: 70vh;
+  overflow: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.lead-engine-surface .submissions-table-wrap thead th {
+  position: sticky;
+  top: 0;
+  background: #252525;
+  z-index: 2;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.lead-engine-surface .msg-clip {
+  max-width: 22rem;
+  max-height: 4.25rem;
+  overflow: auto;
+  line-height: 1.4;
+  white-space: normal;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 767.98px) {
+  .lead-engine-surface #leadsTableWrap {
+    max-height: calc(100vh - 14rem);
+  }
+  .lead-engine-surface .le-filter-actions .btn {
+    flex: 1 1 auto;
+  }
 }
