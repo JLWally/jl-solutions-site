@@ -36,9 +36,6 @@
   --section-inner-max: 64rem;
   --card-padding: 2.25rem;
   --card-radius: 16px;
-  /* One size for nav logos site-wide (navbar + get-started / onboarding headers) */
-  --jl-nav-logo-height: 44px;
-  --jl-nav-logo-max-width: 160px;
 }
 
 body {
@@ -98,15 +95,33 @@ main#main-content.jl-main-text .text-muted {
   min-height: 0;
 }
 
-/* All pages: same logo dimensions in navbar or compact headers */
+/*
+ * Nav logos: homepage used 104px height on desktop; scale down on narrow viewports
+ * so the bar stays usable and the mark stays legible (not the previous 44px global).
+ */
 .navbar-brand .jl-logo-icon,
 .jl-start-header__brand img {
-  height: var(--jl-nav-logo-height);
   width: auto;
-  max-width: var(--jl-nav-logo-max-width);
   min-width: 0;
   object-fit: contain;
   object-position: left center;
+  /* phones / small tablets — larger than 44px, capped so the bar + menu still fit */
+  height: clamp(52px, 15vw, 84px);
+  max-width: min(82vw, 260px);
+}
+
+@media (min-width: 769px) {
+  .navbar-brand .jl-logo-icon,
+  .jl-start-header__brand img {
+    height: 104px;
+    max-height: 112px;
+    max-width: min(38vw, 360px);
+    min-width: 168px;
+  }
+
+  .navbar.jl-theme .navbar-brand {
+    min-height: 104px;
+  }
 }
 
 .navbar.jl-theme .nav-link {
