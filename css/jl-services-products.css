@@ -115,56 +115,6 @@
   color: var(--jl-ink, #0a1628);
 }
 
-/* Mini proof / case snippet (between value strip and packages) */
-.jl-services-proof-snippet {
-  padding: 0 0 clamp(1.25rem, 3vw, 1.75rem);
-  background: var(--jl-surface-light, #fafbfc);
-}
-
-.jl-services-proof-snippet__card {
-  max-width: 44rem;
-  margin: 0 auto;
-  padding: 1.15rem 1.35rem;
-  border-radius: 12px;
-  border: 1px solid rgba(11, 101, 121, 0.18);
-  background: #fff;
-  box-shadow: 0 8px 28px rgba(11, 101, 121, 0.07);
-}
-
-.jl-services-proof-snippet__kicker {
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--jl-brand-cyan-deep, #0b6579);
-  margin: 0 0 0.4rem;
-}
-
-.jl-services-proof-snippet__quote {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--jl-ink, #0a1628);
-  line-height: 1.5;
-  margin: 0 0 0.5rem;
-}
-
-.jl-services-proof-snippet__cite {
-  font-size: 0.875rem;
-  margin: 0;
-  color: #475569;
-}
-
-.jl-services-proof-snippet__cite a {
-  font-weight: 700;
-  color: var(--jl-brand-cyan-deep, #0b6579);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.jl-services-proof-snippet__cite a:hover {
-  color: var(--jl-ink, #0a1628);
-}
-
 /* Featured offers */
 .jl-featured-offers {
   padding: clamp(2rem, 5vw, 3.5rem) 0;
