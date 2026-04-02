@@ -40,11 +40,6 @@
     font-size: 1.25rem;
   }
 
-  .navbar.jl-theme .navbar-brand .jl-logo-icon {
-    height: 60px;
-    min-width: 110px;
-  }
-
   .navbar-nav {
     padding: 1rem 0;
   }

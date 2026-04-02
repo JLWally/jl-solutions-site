@@ -42,13 +42,6 @@
   text-decoration: none;
 }
 
-.jl-start-header__brand img {
-  height: 40px;
-  width: auto;
-  max-width: 160px;
-  object-fit: contain;
-}
-
 .jl-start-header nav a.jl-start-header__secondary {
   color: rgba(255, 255, 255, 0.95) !important;
   opacity: 1 !important;

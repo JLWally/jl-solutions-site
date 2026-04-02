@@ -36,6 +36,9 @@
   --section-inner-max: 64rem;
   --card-padding: 2.25rem;
   --card-radius: 16px;
+  /* One size for nav logos site-wide (navbar + get-started / onboarding headers) */
+  --jl-nav-logo-height: 44px;
+  --jl-nav-logo-max-width: 160px;
 }
 
 body {
@@ -92,14 +95,16 @@ main#main-content.jl-main-text .text-muted {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 104px;
+  min-height: 0;
 }
 
-.navbar.jl-theme .navbar-brand .jl-logo-icon {
-  height: 104px;
+/* All pages: same logo dimensions in navbar or compact headers */
+.navbar-brand .jl-logo-icon,
+.jl-start-header__brand img {
+  height: var(--jl-nav-logo-height);
   width: auto;
-  max-height: 112px;
-  min-width: 168px;
+  max-width: var(--jl-nav-logo-max-width);
+  min-width: 0;
   object-fit: contain;
   object-position: left center;
 }

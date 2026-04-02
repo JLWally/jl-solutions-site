@@ -151,13 +151,6 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.jl-pay-page-nav .navbar-brand .jl-logo-icon {
-  height: 56px;
-  width: auto;
-  min-width: 120px;
-  object-fit: contain;
-}
-
 .jl-pay-page-main {
   flex: 1;
   padding: 1.5rem 0 4rem;
