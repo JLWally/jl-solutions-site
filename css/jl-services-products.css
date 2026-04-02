@@ -77,29 +77,31 @@
 .jl-services-proof {
   background: var(--jl-surface-alt, #eef0f4);
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-  padding: clamp(1.25rem, 3vw, 1.65rem) 0;
+  padding: clamp(1.35rem, 3.2vw, 1.85rem) 0;
 }
 
 .jl-services-proof__inner {
-  max-width: 48rem;
+  max-width: 40rem;
   margin: 0 auto;
   text-align: center;
   padding: 0 1rem;
 }
 
 .jl-services-proof__lead {
-  font-size: clamp(1rem, 2.2vw, 1.0625rem);
-  font-weight: 700;
+  font-size: clamp(1.0625rem, 2.5vw, 1.1875rem);
+  font-weight: 800;
   color: var(--jl-ink, #0a1628);
-  margin: 0 0 0.45rem;
-  line-height: 1.5;
+  margin: 0 0 0.65rem;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
 }
 
 .jl-services-proof__tail {
-  font-size: 0.9375rem;
+  font-size: 0.96875rem;
   color: #334155;
   margin: 0;
   line-height: 1.55;
+  font-weight: 500;
 }
 
 .jl-services-proof__tail a {
@@ -113,10 +115,61 @@
   color: var(--jl-ink, #0a1628);
 }
 
+/* Mini proof / case snippet (between value strip and packages) */
+.jl-services-proof-snippet {
+  padding: 0 0 clamp(1.25rem, 3vw, 1.75rem);
+  background: var(--jl-surface-light, #fafbfc);
+}
+
+.jl-services-proof-snippet__card {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.15rem 1.35rem;
+  border-radius: 12px;
+  border: 1px solid rgba(11, 101, 121, 0.18);
+  background: #fff;
+  box-shadow: 0 8px 28px rgba(11, 101, 121, 0.07);
+}
+
+.jl-services-proof-snippet__kicker {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  margin: 0 0 0.4rem;
+}
+
+.jl-services-proof-snippet__quote {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--jl-ink, #0a1628);
+  line-height: 1.5;
+  margin: 0 0 0.5rem;
+}
+
+.jl-services-proof-snippet__cite {
+  font-size: 0.875rem;
+  margin: 0;
+  color: #475569;
+}
+
+.jl-services-proof-snippet__cite a {
+  font-weight: 700;
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.jl-services-proof-snippet__cite a:hover {
+  color: var(--jl-ink, #0a1628);
+}
+
 /* Featured offers */
 .jl-featured-offers {
   padding: clamp(2rem, 5vw, 3.5rem) 0;
   background: var(--jl-surface-light, #fafbfc);
+  border-top: 1px solid rgba(15, 23, 42, 0.05);
 }
 
 .jl-featured-offers__head {
@@ -799,22 +852,20 @@
   margin-top: 0.5rem;
 }
 
-/* How it works (simple 3-step) */
+/* How it works (simple 3-step) — clean band + heavier cards */
 .jl-services-hiw {
-  padding: clamp(2.5rem, 5vw, 3.5rem) 0;
-  background:
-    radial-gradient(ellipse 100% 70% at 50% 0%, rgba(95, 219, 240, 0.14), transparent 52%),
-    linear-gradient(180deg, rgba(11, 101, 121, 0.07) 0%, var(--jl-surface, #f5f6f8) 42%, #eef5f7 100%);
-  border-top: 1px solid rgba(11, 101, 121, 0.12);
-  border-bottom: 1px solid rgba(11, 101, 121, 0.1);
+  padding: clamp(2.75rem, 5vw, 3.75rem) 0;
+  background: linear-gradient(180deg, #e8f0f3 0%, var(--jl-surface, #f0f3f6) 28%, #eef1f4 100%);
+  border-top: 2px solid rgba(11, 101, 121, 0.22);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .jl-services-hiw__title {
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-size: clamp(1.35rem, 3.2vw, 1.6rem);
   font-weight: 800;
-  color: var(--jl-brand-cyan-deep, #0b6579);
+  color: var(--jl-ink, #0a1628);
   text-align: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
   letter-spacing: -0.02em;
 }
 
@@ -829,23 +880,25 @@
 @media (min-width: 768px) {
   .jl-services-hiw__steps {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
+    gap: 1.35rem;
   }
 }
 
 .jl-services-hiw__step {
   background: var(--jl-white, #fff);
   border-radius: 14px;
-  padding: 1.35rem 1.25rem;
-  border: 1px solid rgba(11, 101, 121, 0.14);
-  border-top: 3px solid var(--jl-brand-cyan-deep, #0b6579);
+  padding: 1.5rem 1.35rem;
+  border: 2px solid rgba(11, 101, 121, 0.2);
+  border-top: 4px solid var(--jl-brand-cyan-deep, #0b6579);
   text-align: center;
-  box-shadow: 0 10px 32px rgba(11, 101, 121, 0.08);
+  box-shadow:
+    0 4px 0 rgba(11, 101, 121, 0.06),
+    0 16px 40px rgba(10, 22, 40, 0.1);
 }
 
 .jl-services-hiw__num {
-  width: 2.35rem;
-  height: 2.35rem;
+  width: 2.45rem;
+  height: 2.45rem;
   border-radius: 50%;
   background: linear-gradient(145deg, var(--jl-brand-cyan-deep, #0b6579), #0a4f61);
   color: #fff;
@@ -859,17 +912,18 @@
 }
 
 .jl-services-hiw__step h3 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--jl-brand-cyan-deep, #0b6579);
-  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin: 0 0 0.5rem;
 }
 
 .jl-services-hiw__step p {
   font-size: 0.9375rem;
-  color: #1e293b;
+  color: #334155;
   margin: 0;
-  line-height: 1.55;
+  line-height: 1.6;
+  font-weight: 500;
 }
 
 .jl-services-hiw__step p a {
@@ -901,17 +955,31 @@
 .jl-services-cta p {
   color: #ffffff;
   max-width: min(36rem, 92vw);
-  margin: 0 auto 1.25rem;
+  margin-left: auto;
+  margin-right: auto;
   font-size: 1.0625rem;
   line-height: 1.6;
 }
 
-.jl-services-cta p a.text-white {
+.jl-services-cta__lead {
+  margin-bottom: 0.65rem !important;
+  font-weight: 600;
+}
+
+.jl-services-cta__sub {
+  margin-bottom: 1.35rem !important;
+  font-size: 1rem !important;
+  opacity: 0.95;
+}
+
+.jl-services-cta p a.text-white,
+.jl-services-cta__sub a {
   color: #ffffff !important;
   text-underline-offset: 3px;
 }
 
-.jl-services-cta p a.text-white:hover {
+.jl-services-cta p a.text-white:hover,
+.jl-services-cta__sub a:hover {
   color: var(--jl-accent-hover, #ffd54f) !important;
 }
 
