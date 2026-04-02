@@ -802,15 +802,20 @@
 /* How it works (simple 3-step) */
 .jl-services-hiw {
   padding: clamp(2.5rem, 5vw, 3.5rem) 0;
-  background: var(--jl-surface, #f5f6f8);
+  background:
+    radial-gradient(ellipse 100% 70% at 50% 0%, rgba(95, 219, 240, 0.14), transparent 52%),
+    linear-gradient(180deg, rgba(11, 101, 121, 0.07) 0%, var(--jl-surface, #f5f6f8) 42%, #eef5f7 100%);
+  border-top: 1px solid rgba(11, 101, 121, 0.12);
+  border-bottom: 1px solid rgba(11, 101, 121, 0.1);
 }
 
 .jl-services-hiw__title {
   font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 800;
-  color: var(--jl-ink, #0a1628);
+  color: var(--jl-brand-cyan-deep, #0b6579);
   text-align: center;
   margin-bottom: 1.75rem;
+  letter-spacing: -0.02em;
 }
 
 .jl-services-hiw__steps {
@@ -832,28 +837,31 @@
   background: var(--jl-white, #fff);
   border-radius: 14px;
   padding: 1.35rem 1.25rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(11, 101, 121, 0.14);
+  border-top: 3px solid var(--jl-brand-cyan-deep, #0b6579);
   text-align: center;
+  box-shadow: 0 10px 32px rgba(11, 101, 121, 0.08);
 }
 
 .jl-services-hiw__num {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.35rem;
+  height: 2.35rem;
   border-radius: 50%;
-  background: rgba(255, 193, 7, 0.25);
-  color: var(--jl-ink, #0a1628);
+  background: linear-gradient(145deg, var(--jl-brand-cyan-deep, #0b6579), #0a4f61);
+  color: #fff;
   font-weight: 800;
   font-size: 0.95rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 0.75rem;
+  box-shadow: 0 4px 14px rgba(11, 101, 121, 0.28);
 }
 
 .jl-services-hiw__step h3 {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--jl-ink, #0a1628);
+  color: var(--jl-brand-cyan-deep, #0b6579);
   margin: 0 0 0.4rem;
 }
 
@@ -862,6 +870,17 @@
   color: #1e293b;
   margin: 0;
   line-height: 1.55;
+}
+
+.jl-services-hiw__step p a {
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.jl-services-hiw__step p a:hover {
+  color: var(--jl-ink, #0a1628);
 }
 
 /* Bottom CTA band */
