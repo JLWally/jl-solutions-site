@@ -225,9 +225,13 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: body.toString(),
-          redirect: 'manual',
         });
-        if (res.status === 302 || res.status === 303 || res.status === 200) {
+        if (
+          res.ok ||
+          res.status === 302 ||
+          res.status === 303 ||
+          res.type === 'opaqueredirect'
+        ) {
           form.reset();
           if (wrap) wrap.classList.add('d-none');
           document.querySelectorAll('.jl-kickoff-next-wrap').forEach(function (el) {

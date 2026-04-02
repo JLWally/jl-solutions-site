@@ -75,6 +75,11 @@
     return window.location.origin + '/.netlify/functions/send-form-email';
   }
 
+  /** send-form-email returns 302 → thank-you; default redirect:follow ends at 200. manual mode yields opaque-redirect (status 0) and breaks success checks. */
+  function isFormPostOk(res) {
+    return res && (res.ok || res.status === 302 || res.status === 303 || res.type === 'opaqueredirect');
+  }
+
   function minDelay(ms) {
     return new Promise(function (resolve) {
       setTimeout(resolve, ms);
@@ -414,10 +419,9 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams(fd).toString(),
-          redirect: 'manual',
         })
           .then(function (res) {
-            if (res.status === 302 || res.status === 303 || res.status === 200) {
+            if (isFormPostOk(res)) {
               window.location.href = '/contact.html?from=getstarted-quote';
               return;
             }
@@ -448,7 +452,6 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(fd2).toString(),
-        redirect: 'manual',
       });
 
       Promise.all([sendPromise, minDelay(720)])
@@ -456,9 +459,9 @@
           return r[0];
         })
         .then(function (res) {
-          if (res.status !== 302 && res.status !== 303 && res.status !== 200) {
+          if (!isFormPostOk(res)) {
             setOverlay(false);
-            window.alert('Could not save intake.');
+            window.alert('Could not save intake. Email info@jlsolutions.io if this keeps happening.');
             primary.disabled = false;
             primary.textContent = prev;
             return;
@@ -471,6 +474,7 @@
         })
         .catch(function () {
           setOverlay(false);
+          window.alert('Could not save intake. Check your connection and try again.');
           primary.disabled = false;
           primary.textContent = prev;
         });
