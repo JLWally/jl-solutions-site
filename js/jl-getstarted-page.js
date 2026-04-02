@@ -20,7 +20,6 @@
       ],
       price: '$1,500',
       timeline: '2–5 days to first deliverables',
-      confidence: 'One new customer can often pay for this setup.',
     },
     'ai-intake': {
       id: 'ai-intake',
@@ -37,7 +36,6 @@
       ],
       price: '$2,500',
       timeline: '3–7 days after kickoff',
-      confidence: 'One new customer can often pay for this setup.',
     },
     scheduling: {
       id: 'scheduling',
@@ -54,7 +52,6 @@
       ],
       price: '$3,000',
       timeline: '3–7 days after kickoff',
-      confidence: 'One new customer can often pay for this setup.',
     },
     'lead-engine': {
       id: 'lead-engine',
@@ -71,7 +68,6 @@
       ],
       price: '$3,500',
       timeline: '5–10 days after kickoff',
-      confidence: 'One new customer can often pay for this setup.',
     },
   };
 
@@ -248,7 +244,6 @@
     });
     document.getElementById('jl-rec-price').textContent = svc.price;
     document.getElementById('jl-rec-timeline').textContent = svc.timeline;
-    document.getElementById('jl-rec-confidence').textContent = svc.confidence;
 
     showPanel(document.getElementById('jl-start-recommend'), true);
     showPanel(document.getElementById('jl-start-intake'), false);

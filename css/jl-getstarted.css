@@ -382,15 +382,6 @@
   align-self: center;
 }
 
-.jl-start-rec__confidence {
-  font-size: 0.9375rem;
-  font-style: italic;
-  color: #334155;
-  margin: 0;
-  padding-top: 0.5rem;
-  border-top: 1px solid rgba(15, 23, 42, 0.12);
-}
-
 /* Form */
 .jl-start-form .form-label,
 .jl-start-panel .jl-start-form legend.form-label {
