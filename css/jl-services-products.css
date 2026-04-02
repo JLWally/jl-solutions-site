@@ -129,14 +129,16 @@
   .jl-product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.75rem;
-    max-width: 68rem;
+    /* Use full .container width — 68rem left unused space on xl/xxl */
+    max-width: 100%;
     margin: 0 auto;
   }
 }
 
 @media (min-width: 1440px) {
   .jl-product-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* Slightly wider minimum track than equal 1fr quarters on large desktops */
+    grid-template-columns: repeat(4, minmax(15.75rem, 1fr));
     max-width: none;
     gap: 1.5rem;
   }
@@ -145,7 +147,7 @@
 /* Productized offer cards — /services featured four */
 .jl-service-product-card {
   border: 1px solid rgba(15, 23, 42, 0.14);
-  padding: 1.35rem 1.25rem;
+  padding: 1.35rem 1.5rem;
   border-radius: 14px;
   background: #fff;
   box-shadow: 0 6px 22px rgba(10, 22, 40, 0.06);
