@@ -899,7 +899,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const Resend = require('resend');
+    const { Resend } = require('resend');
     const resend = new Resend(env.resendApiKey);
 
     console.log('[send-form-email] Sending to', TO_EMAIL, 'subject:', subject);
