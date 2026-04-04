@@ -21,7 +21,8 @@ body {
   padding: 0;
 }
 
-h1, h2, h3, h4, h5, p, small, li {
+/* Headings only: p/li/small inherited from body or light sections (global white made jl-main-text lists & paragraphs invisible on pale backgrounds). */
+h1, h2, h3, h4, h5 {
   color: rgba(255, 255, 255, 0.95);
 }
 
