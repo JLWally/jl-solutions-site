@@ -149,9 +149,41 @@
       text-decoration: underline;
       text-underline-offset: 2px;
     }
+
+    /* Bootstrap .text-muted is ~#6c757d — invisible on dark cards */
+    .fix-my-app-page .feature-card .text-muted,
+    .fix-my-app-page .pricing-card .text-muted {
+      color: rgba(241, 245, 249, 0.96) !important;
+      font-weight: 600;
+    }
+
+    .fix-my-app-page .feature-card p,
+    .fix-my-app-page .feature-card li,
+    .fix-my-app-page .pricing-card p,
+    .fix-my-app-page .pricing-card li {
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    .fix-my-app-page .feature-card h4,
+    .fix-my-app-page .feature-card h5,
+    .fix-my-app-page .pricing-card h4 {
+      color: #fff;
+    }
+
+    .fix-my-app-page .feature-card h3.text-primary {
+      color: var(--yellow) !important;
+    }
+
+    .fix-my-app-page .form-check-label {
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .fix-my-app-page .content-section .text-center.lead {
+      color: rgba(255, 255, 255, 0.92);
+    }
   </style>
 </head>
-<body>
+<body class="fix-my-app-page">
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark" role="navigation" aria-label="Main navigation">
     <div class="container">
