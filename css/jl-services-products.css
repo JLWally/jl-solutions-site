@@ -118,6 +118,14 @@
   letter-spacing: -0.02em;
 }
 
+.jl-services-proof__micro {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #334155;
+  margin: 0 0 0.85rem;
+  line-height: 1.5;
+}
+
 .jl-services-proof__tail {
   font-size: 0.96875rem;
   color: #334155;
