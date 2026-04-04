@@ -7,7 +7,7 @@
     subtitle: "Demos and self-serve tools work without a call. Ask anything or use the shortcuts below.",
     /** Shown when there is no chat history yet (not saved to storage). */
     welcomeMarkdown:
-      "Hi, I am Wattson. You can [explore the interactive demo](/demo.html) or [try document extraction](/services/document-extraction-demo.html). For a personalized walkthrough or open-ended questions, use [Book a Free Call](/book-consultation.html) or [send a message](/contact.html). What would you like to do?",
+      "Hi, I am Wattson. You can [open the live demo](/demo) or [try document extraction](/services/document-extraction-demo.html). For a personalized walkthrough or open-ended questions, use [Book a Free Call](/book-consultation.html) or [send a message](/contact.html). What would you like to do?",
     placeholder: "Ask about demos, services, or next steps...",
     quickPrompts: [
       "Show me the product demo",
@@ -15,7 +15,7 @@
       "What does JL Solutions help with?"
     ],
     ctaLinks: [
-      { label: "Interactive demo", href: "/demo.html" },
+      { label: "Live demo", href: "/demo" },
       { label: "Book a Free Call", href: "/book-consultation.html" },
       { label: "Contact", href: "/contact.html" }
     ],
