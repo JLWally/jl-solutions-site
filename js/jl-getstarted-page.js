@@ -75,9 +75,18 @@
     return window.location.origin + '/.netlify/functions/send-form-email';
   }
 
-  /** send-form-email returns 302 → thank-you; default redirect:follow ends at 200. manual mode yields opaque-redirect (status 0) and breaks success checks. */
-  function isFormPostOk(res) {
-    return res && (res.ok || res.status === 302 || res.status === 303 || res.type === 'opaqueredirect');
+  function sendFormHeaders() {
+    return window.jlSendFormEmail
+      ? window.jlSendFormEmail.jsonHeaders()
+      : { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' };
+  }
+
+  function sendFormResult(res) {
+    if (window.jlSendFormEmail) return window.jlSendFormEmail.handleResponse(res);
+    var legacyOk =
+      res &&
+      (res.ok || res.status === 302 || res.status === 303 || res.type === 'opaqueredirect');
+    return Promise.resolve({ ok: legacyOk });
   }
 
   function minDelay(ms) {
@@ -417,15 +426,19 @@
         var fd = new FormData(form);
         fetch(formEndpoint(), {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: sendFormHeaders(),
           body: new URLSearchParams(fd).toString(),
+          redirect: 'manual',
         })
           .then(function (res) {
-            if (isFormPostOk(res)) {
+            return sendFormResult(res);
+          })
+          .then(function (outcome) {
+            if (outcome.ok) {
               window.location.href = '/contact.html?from=getstarted-quote';
               return;
             }
-            window.alert('Could not send. Email info@jlsolutions.io.');
+            window.alert(outcome.message || 'Could not send. Email info@jlsolutions.io.');
           })
           .catch(function () {
             window.alert('Network error.');
@@ -450,8 +463,9 @@
       var fd2 = new FormData(form);
       var sendPromise = fetch(formEndpoint(), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: sendFormHeaders(),
         body: new URLSearchParams(fd2).toString(),
+        redirect: 'manual',
       });
 
       Promise.all([sendPromise, minDelay(720)])
@@ -459,9 +473,14 @@
           return r[0];
         })
         .then(function (res) {
-          if (!isFormPostOk(res)) {
+          return sendFormResult(res);
+        })
+        .then(function (outcome) {
+          if (!outcome.ok) {
             setOverlay(false);
-            window.alert('Could not save intake. Email info@jlsolutions.io if this keeps happening.');
+            window.alert(
+              outcome.message || 'Could not save intake. Email info@jlsolutions.io if this keeps happening.'
+            );
             primary.disabled = false;
             primary.textContent = prev;
             return;

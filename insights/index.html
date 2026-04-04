@@ -339,6 +339,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jl-send-form-email-client.js"></script>
   <script src="/js/live-chat.js"></script>
   <script>
     async function subscribeNewsletter(event) {
@@ -358,15 +359,16 @@
         params.append('email', email);
         const res = await fetch('/.netlify/functions/send-form-email', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: window.jlSendFormEmail.jsonHeaders(),
           body: params.toString(),
+          redirect: 'manual',
         });
-        if (res.ok || res.redirected) {
+        const outcome = await window.jlSendFormEmail.handleResponse(res);
+        if (outcome.ok) {
           alert('Thanks! You\'re subscribed — check your inbox for a quick confirmation.');
           form.reset();
         } else {
-          const data = await res.json().catch(function () { return {}; });
-          alert(data.error || 'Something went wrong. Email us at info@jlsolutions.io.');
+          alert(outcome.message || 'Something went wrong. Email us at info@jlsolutions.io.');
         }
       } catch (_e) {
         alert('Network error. Email info@jlsolutions.io to join the list.');

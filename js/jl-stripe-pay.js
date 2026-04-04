@@ -4,8 +4,29 @@
 (function (global) {
   'use strict';
 
-  function notifyOk(res) {
-    if (!res.ok) throw new Error('Could not notify team (HTTP ' + res.status + ')');
+  async function notifyOutcome(res) {
+    if (global.jlSendFormEmail && global.jlSendFormEmail.handleResponse) {
+      return global.jlSendFormEmail.handleResponse(res);
+    }
+    var ct = (res.headers.get('content-type') || '').toLowerCase();
+    if (ct.indexOf('application/json') !== -1) {
+      var body = {};
+      try {
+        body = await res.json();
+      } catch (_) {}
+      if (body.filtered) return { ok: true };
+      if (body.success === true && body.emailed === true) return { ok: true };
+      return {
+        ok: false,
+        message:
+          body.error ||
+          'We could not notify the team. Email info@jlsolutions.io or try again.',
+      };
+    }
+    if (!res.ok && res.status !== 302 && res.status !== 303 && res.type !== 'opaqueredirect') {
+      return { ok: false, message: 'Could not notify team (HTTP ' + res.status + ')' };
+    }
+    return { ok: true };
   }
 
   function setButtonLabel(btn, label) {
@@ -48,14 +69,21 @@
             ? opts.notifyParams
             : new URLSearchParams(opts.notifyParams || {});
 
+        var notifyHeaders = { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' };
+        if (global.jlSendFormEmail && global.jlSendFormEmail.jsonHeaders) {
+          notifyHeaders = global.jlSendFormEmail.jsonHeaders();
+        }
         var notifyRes = await fetch(base + '/.netlify/functions/send-form-email', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: notifyHeaders,
           body: params.toString(),
-          redirect: 'follow',
+          redirect: 'manual',
         });
 
-        if (requireNotify) notifyOk(notifyRes);
+        if (requireNotify) {
+          var nOut = await notifyOutcome(notifyRes);
+          if (!nOut.ok) throw new Error(nOut.message || 'Could not notify team.');
+        }
 
         var res = await fetch(base + '/.netlify/functions/stripe-checkout', {
           method: 'POST',

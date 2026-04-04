@@ -221,17 +221,25 @@
       btn.textContent = 'Sending…';
       try {
         var body = new URLSearchParams(new FormData(form));
+        var hdrs = window.jlSendFormEmail
+          ? window.jlSendFormEmail.jsonHeaders()
+          : { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' };
         var res = await fetch(formEndpoint(), {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: hdrs,
           body: body.toString(),
+          redirect: 'manual',
         });
-        if (
-          res.ok ||
-          res.status === 302 ||
-          res.status === 303 ||
-          res.type === 'opaqueredirect'
-        ) {
+        var outcome = window.jlSendFormEmail
+          ? await window.jlSendFormEmail.handleResponse(res)
+          : {
+              ok:
+                res.ok ||
+                res.status === 302 ||
+                res.status === 303 ||
+                res.type === 'opaqueredirect',
+            };
+        if (outcome.ok) {
           form.reset();
           if (wrap) wrap.classList.add('d-none');
           document.querySelectorAll('.jl-kickoff-next-wrap').forEach(function (el) {
@@ -245,7 +253,7 @@
           }
           return;
         }
-        window.alert('Could not send. Email info@jlsolutions.io.');
+        window.alert(outcome.message || 'Could not send. Email info@jlsolutions.io.');
       } catch (err) {
         window.alert('Network error.');
       } finally {

@@ -10,6 +10,11 @@
  * When SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY are set, also inserts a row into
  * public.consultations so you can review submissions in Supabase (Table Editor).
  * This is separate from lead_engine_leads (operator / n8n pipeline).
+ *
+ * JSON mode: if the client sends Accept: application/json (or form field response_format=json),
+ * the function returns JSON instead of redirecting to thank-you. On Resend failure or missing
+ * RESEND_API_KEY it returns success:false so the UI can warn the user (submissions may still be
+ * stored in Blobs/Supabase).
  */
 const { createClient } = require('@supabase/supabase-js');
 const { envVarFromB64 } = require('./lib/runtime-process-env');
@@ -63,6 +68,14 @@ function parseBody(event) {
     }
   }
   return {};
+}
+
+/** When true, return JSON instead of 302 so fetch clients can detect email failures. */
+function wantsJsonResponse(event, data) {
+  const accept = String(event.headers?.accept || event.headers?.Accept || '').toLowerCase();
+  if (accept.includes('application/json')) return true;
+  if (String(data.response_format || '').toLowerCase() === 'json') return true;
+  return false;
 }
 
 function buildContactEmail(data) {
@@ -736,7 +749,7 @@ exports.handler = async (event) => {
       statusCode: 204,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Headers': 'Content-Type, Accept',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
       },
     };
@@ -751,11 +764,22 @@ exports.handler = async (event) => {
   }
 
   const data = parseBody(event);
+  const jsonMode = wantsJsonResponse(event, data);
   const formName = data['form-name'] || data.formName || 'contact';
   const botField = data['bot-field'];
   if (String(botField || '').trim() !== '') {
     console.log('[send-form-email] Honeypot filled; skipping send');
-    return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ success: true }) };
+    if (jsonMode) {
+      return {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        body: JSON.stringify({ success: true, filtered: true }),
+      };
+    }
+    return { statusCode: 302, headers: { Location: '/thank-you.html' }, body: '' };
   }
   console.log('[send-form-email] formName=', formName, 'keys=', Object.keys(data).join(','));
 
@@ -830,11 +854,31 @@ exports.handler = async (event) => {
     html = built.html;
   }
 
-  const redirectSuccess = () => ({
-    statusCode: 302,
-    headers: { Location: '/thank-you.html' },
-    body: '',
-  });
+  const jsonHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  };
+  function jsonFail(statusCode, code, error) {
+    return {
+      statusCode,
+      headers: jsonHeaders,
+      body: JSON.stringify({ success: false, code, error }),
+    };
+  }
+  const redirectSuccess = () => {
+    if (jsonMode) {
+      return {
+        statusCode: 200,
+        headers: jsonHeaders,
+        body: JSON.stringify({ success: true, emailed: true }),
+      };
+    }
+    return {
+      statusCode: 302,
+      headers: { Location: '/thank-you.html' },
+      body: '',
+    };
+  };
 
   const env = getRuntimeEnv();
   if (!env.resendApiKey) {
@@ -843,6 +887,13 @@ exports.handler = async (event) => {
       await appendSubmissionAudit(formName, data, { _fallbackReason: 'missing_resend_api_key' });
     } catch (e) {
       console.error('[send-form-email] Blob fallback failed:', e);
+    }
+    if (jsonMode) {
+      return jsonFail(
+        503,
+        'MISSING_RESEND',
+        'Email delivery is not configured. Your details were saved — please email info@jlsolutions.io so we can follow up.'
+      );
     }
     return redirectSuccess();
   }
@@ -864,6 +915,13 @@ exports.handler = async (event) => {
     if (err1) {
       console.error('[send-form-email] Resend error (to info@):', JSON.stringify(err1));
       await appendSubmissionAudit(formName, data, { _fallbackReason: 'resend_to_info_failed', _resendError: err1.message });
+      if (jsonMode) {
+        return jsonFail(
+          502,
+          'RESEND_ERROR',
+          'We could not send email right now. Your details were saved — please email info@jlsolutions.io or try again shortly.'
+        );
+      }
       return redirectSuccess();
     }
 
@@ -969,6 +1027,9 @@ exports.handler = async (event) => {
   } catch (err) {
     console.error('[send-form-email]', err);
     await appendSubmissionAudit(formName, data, { _fallbackReason: 'send_form_email_exception', _error: err.message });
+    if (jsonMode) {
+      return jsonFail(500, 'SEND_EXCEPTION', 'Something went wrong. Please email info@jlsolutions.io.');
+    }
     return redirectSuccess();
   }
 
