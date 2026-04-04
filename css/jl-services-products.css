@@ -281,6 +281,23 @@
   vertical-align: middle;
 }
 
+.jl-service-product-card__overview {
+  margin: -0.15rem 0 0.65rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.jl-service-product-card__overview a {
+  color: #064e63;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.jl-service-product-card__overview a:hover {
+  color: #0a1628;
+}
+
 .jl-service-product-card__actions {
   display: flex;
   flex-direction: column;
@@ -970,6 +987,20 @@
   color: var(--jl-text, #fff);
   padding: clamp(2.5rem, 6vw, 3.5rem) 0;
   text-align: center;
+}
+
+.jl-doc-seller__crumb {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 auto 0.75rem;
+  max-width: 40rem;
+}
+
+.jl-doc-seller__crumb a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .jl-doc-seller__hero h1 {

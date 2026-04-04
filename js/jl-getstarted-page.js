@@ -8,6 +8,7 @@
     'fix-app': {
       id: 'fix-app',
       stripeSlug: 'fix-my-app',
+      landingPage: '/services/fix-my-app.html',
       cardTitle: 'Fix My App Sprint',
       recTitle: 'Fix My App Sprint',
       outcome: 'We focus on the highest-impact fixes so you stop losing leads to broken UX.',
@@ -24,6 +25,7 @@
     'ai-intake': {
       id: 'ai-intake',
       stripeSlug: 'ai-intake',
+      landingPage: '/services/ai-intake-form.html',
       cardTitle: 'AI Intake Form Setup',
       recTitle: 'AI Intake Form Setup',
       outcome: 'A branded intake flow that qualifies leads and routes them to the right place.',
@@ -40,6 +42,7 @@
     scheduling: {
       id: 'scheduling',
       stripeSlug: 'scheduling',
+      landingPage: '/services/scheduling-routing-setup.html',
       cardTitle: 'Scheduling & Routing Setup',
       recTitle: 'Scheduling & Routing Setup',
       outcome: 'Customers book in fewer clicks; your team spends less time coordinating.',
@@ -56,6 +59,7 @@
     'lead-engine': {
       id: 'lead-engine',
       stripeSlug: 'lead-gen',
+      landingPage: '/services/lead-generation-engine.html',
       cardTitle: 'Lead Generation Engine',
       recTitle: 'Lead Generation Engine',
       outcome: 'A repeatable way to surface fit accounts and speed up first-touch outreach.',
@@ -258,6 +262,12 @@
     });
     document.getElementById('jl-rec-price').textContent = svc.price;
     document.getElementById('jl-rec-timeline').textContent = svc.timeline;
+
+    var landingA = document.getElementById('jl-rec-landing');
+    if (landingA) {
+      landingA.href = svc.landingPage || '/services/index.html';
+      landingA.hidden = false;
+    }
 
     showPanel(document.getElementById('jl-start-recommend'), true);
     showPanel(document.getElementById('jl-start-intake'), false);

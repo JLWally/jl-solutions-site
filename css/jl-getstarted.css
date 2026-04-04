@@ -287,6 +287,13 @@
   margin-top: 0.9rem;
 }
 
+.jl-start-rec__actions--row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
+}
+
 .jl-start-card__price {
   font-size: 0.8125rem;
   font-weight: 800;
