@@ -27,21 +27,21 @@
     
     .hero-section {
       background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
-      padding: 5rem 0;
+      padding: 2.5rem 0 2rem;
       text-align: center;
       color: white;
     }
     
     .content-section {
-      padding: 4rem 0;
+      padding: 2.25rem 0;
     }
     
     .feature-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 16px;
-      padding: 2rem;
-      margin-bottom: 2rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 0;
       height: 100%;
       transition: all 0.3s;
     }
@@ -56,7 +56,7 @@
       max-width: 100%;
       height: auto;
       border-radius: 12px;
-      margin: 2rem 0;
+      margin: 0.5rem 0 0;
     }
     
     .btn-primary-custom {
@@ -81,7 +81,7 @@
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 16px;
-      padding: 2rem;
+      padding: 1.5rem 1.35rem;
       text-align: center;
       height: 100%;
     }
@@ -89,14 +89,14 @@
     .pricing-card h2 {
       color: var(--blue);
       font-weight: 700;
-      margin: 1rem 0;
+      margin: 0.5rem 0;
     }
     
     .form-section {
       background: rgba(255, 255, 255, 0.02);
       border-radius: 16px;
-      padding: 3rem;
-      margin: 3rem 0;
+      padding: 1.75rem 1.5rem;
+      margin: 1.25rem 0 0;
     }
     
     .form-control, .form-select {
@@ -114,6 +114,15 @@
     .form-label {
       color: rgba(255, 255, 255, 0.9);
       font-weight: 500;
+    }
+
+    .fix-page-section-title {
+      margin-bottom: 1.25rem !important;
+    }
+
+    #get-started .lead {
+      font-size: 1.05rem;
+      margin-bottom: 1rem !important;
     }
   </style>
 </head>
@@ -150,14 +159,14 @@
   <!-- Hero Section -->
   <header class="hero-section" role="banner">
     <div class="container">
-      <h1 class="display-4 mb-3">Fix My App</h1>
-      <p class="lead">We don't judge your code. We just fix it.</p>
-      <a href="#get-started" class="btn-primary-custom mt-3">Submit a Fix Request</a>
+      <h1 class="display-5 mb-2">Fix My App</h1>
+      <p class="lead mb-2">We don't judge your code. We just fix it.</p>
+      <a href="#get-started" class="btn-primary-custom mt-2">Submit a Fix Request</a>
     </div>
   </header>
 
   <!-- Banner Image -->
-  <section class="content-section">
+  <section class="content-section pt-2 pb-1">
     <div class="container text-center">
       <img src="/assets/images/fix_my_app_banner.png" alt="Fix My App Banner" class="banner-image">
     </div>
@@ -166,8 +175,8 @@
   <!-- What We Fix -->
   <section class="content-section">
     <div class="container">
-      <h2 class="text-center mb-5">We Fix Apps That...</h2>
-      <div class="row g-4">
+      <h2 class="text-center fix-page-section-title">We Fix Apps That...</h2>
+      <div class="row g-3">
         <div class="col-md-4">
           <div class="feature-card">
             <h4>Crash or Freeze</h4>
@@ -193,8 +202,8 @@
   <!-- How It Works -->
   <section class="content-section" style="background: rgba(255, 255, 255, 0.02);">
     <div class="container">
-      <h2 class="text-center mb-5">How It Works</h2>
-      <div class="row g-4">
+      <h2 class="text-center fix-page-section-title">How It Works</h2>
+      <div class="row g-3">
         <div class="col-md-3">
           <div class="feature-card text-center">
             <h3 class="text-primary mb-3">1</h3>
@@ -230,14 +239,14 @@
   <!-- Pricing -->
   <section class="content-section">
     <div class="container">
-      <h2 class="text-center mb-5">Transparent Pricing</h2>
-      <div class="row g-4">
+      <h2 class="text-center fix-page-section-title">Transparent Pricing</h2>
+      <div class="row g-3">
         <div class="col-md-4">
           <div class="pricing-card">
             <h4>Quick Fix</h4>
             <h2>$500</h2>
             <p>1 issue or small feature. 48–72 hour turnaround.</p>
-            <ul class="list-unstyled mt-4">
+            <ul class="list-unstyled mt-3 mb-0">
               <li>✓ Single bug fix</li>
               <li>✓ Fast turnaround</li>
               <li>✓ Documentation included</li>
@@ -249,7 +258,7 @@
             <h4>App Rescue</h4>
             <h2>From $2,500</h2>
             <p>Audit + Fix multiple issues. Timeline scoped per app.</p>
-            <ul class="list-unstyled mt-4">
+            <ul class="list-unstyled mt-3 mb-0">
               <li>✓ Full app audit</li>
               <li>✓ Multiple fixes</li>
               <li>✓ Performance optimization</li>
@@ -262,7 +271,7 @@
             <h4>Ongoing TLC</h4>
             <h2>$1,000/mo</h2>
             <p>Monthly fixes, updates, and peace of mind.</p>
-            <ul class="list-unstyled mt-4">
+            <ul class="list-unstyled mt-3 mb-0">
               <li>✓ Monthly maintenance</li>
               <li>✓ Priority support</li>
               <li>✓ Regular updates</li>
@@ -277,8 +286,8 @@
   <!-- Why Choose Us -->
   <section class="content-section" style="background: rgba(255, 255, 255, 0.02);">
     <div class="container">
-      <h2 class="text-center mb-5">Why Choose JL Solutions?</h2>
-      <div class="row g-4">
+      <h2 class="text-center fix-page-section-title">Why Choose JL Solutions?</h2>
+      <div class="row g-3">
         <div class="col-md-4">
           <div class="feature-card text-center">
             <h5>Veteran-Owned</h5>
@@ -302,45 +311,45 @@
   </section>
 
   <!-- Fix My App Form -->
-  <section id="get-started" class="content-section">
+  <section id="get-started" class="content-section pt-3">
     <div class="container">
       <div class="form-section">
-        <h2 class="text-center mb-4">Let's Fix That App.</h2>
-        <p class="text-center lead mb-4">We'll review and respond within 1–2 business days.</p>
+        <h2 class="text-center mb-2">Let's Fix That App.</h2>
+        <p class="text-center lead mb-3">We'll review and respond within 1–2 business days.</p>
 
-        <!-- Submits to send-form-email → Resend → info@jlsolutions.io -->
-        <form name="fix-my-app" method="POST" netlify-honeypot="bot-field" action="/.netlify/functions/send-form-email" class="mx-auto" style="max-width: 600px;">
+        <!-- Submits via fetch → send-form-email (JSON) → Resend → info@jlsolutions.io -->
+        <form id="jl-fix-my-app-form" name="fix-my-app" method="POST" netlify-honeypot="bot-field" class="mx-auto" style="max-width: 600px;">
           <input type="hidden" name="form-name" value="fix-my-app" />
           <p hidden>
             <label>Don't fill this out if you're human: <input name="bot-field" /></label>
           </p>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" id="name" name="name" required>
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email" required>
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <label for="company" class="form-label">Company Name</label>
             <input type="text" class="form-control" id="company" name="company">
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <label for="url" class="form-label">App or Website URL</label>
             <input type="url" class="form-control" id="url" name="url">
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <label for="issue" class="form-label">What's broken?</label>
-            <textarea class="form-control" id="issue" name="issue" rows="5" required></textarea>
+            <textarea class="form-control" id="issue" name="issue" rows="4" required></textarea>
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <label for="tech" class="form-label">What is this app built with?</label>
             <select class="form-select" id="tech" name="tech" required>
               <option value="">Select one...</option>
@@ -353,7 +362,7 @@
             </select>
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <label for="access" class="form-label">Can you share access?</label>
             <select class="form-select" id="access" name="access">
               <option value="">Select one...</option>
@@ -363,7 +372,7 @@
             </select>
           </div>
 
-          <div class="mb-3">
+          <div class="mb-2">
             <label for="urgency" class="form-label">How urgent is this?</label>
             <select class="form-select" id="urgency" name="urgency">
               <option value="">Select one...</option>
@@ -372,7 +381,7 @@
             </select>
           </div>
 
-          <div class="form-check mb-4">
+          <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" value="yes" id="bundle" name="bundle">
             <label class="form-check-label" for="bundle">
               I'm also interested in Automation & AI Integration (10% discount)
@@ -380,12 +389,12 @@
           </div>
 
           <div class="text-center">
-            <button type="submit" class="btn-primary-custom">Submit Fix Request</button>
+            <button type="submit" id="jl-fix-my-app-submit" class="btn-primary-custom">Submit Fix Request</button>
           </div>
         </form>
         <!-- Netlify Form END -->
 
-        <div class="text-center mt-5">
+        <div class="text-center mt-3 mb-0">
           <p style="color: rgba(255, 255, 255, 0.7);">Need a full rebuild or AI upgrade? <a href="/services/automation-ai.html" style="color: var(--blue);">Check out our Automation & AI Integration service</a>.</p>
         </div>
       </div>
@@ -395,8 +404,8 @@
   <!-- Testimonials -->
   <section class="content-section" style="background: rgba(255, 255, 255, 0.02);">
     <div class="container">
-      <h2 class="text-center mb-5">What Our Clients Say</h2>
-      <div class="row g-4">
+      <h2 class="text-center fix-page-section-title">What Our Clients Say</h2>
+      <div class="row g-3">
         <div class="col-md-6">
           <div class="feature-card">
             <p class="mb-3">"JL Solutions turned our broken app into a reliable tool we can trust. Their team is responsive, professional, and truly cares about our success."</p>
@@ -414,17 +423,17 @@
   </section>
 
   <!-- CTA Section -->
-  <section class="content-section">
+  <section class="content-section pb-3">
     <div class="container text-center">
-      <h2 class="mb-4">Ready to Fix Your App?</h2>
-      <p class="lead mb-4">Let's get your app working perfectly again.</p>
+      <h2 class="mb-2">Ready to Fix Your App?</h2>
+      <p class="lead mb-3">Let's get your app working perfectly again.</p>
       <a href="#get-started" class="btn-primary-custom me-3">Submit Fix Request</a>
       <a href="/contact.html" class="btn btn-outline-light">Contact Us</a>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="jl-theme footer-home mt-5" role="contentinfo">
+  <footer class="jl-theme footer-home mt-3" role="contentinfo">
     <div class="container footer__container">
       <div class="row align-items-start footer__row">
         <div class="col-md-4 mb-4 mb-md-0 footer__brand">
@@ -459,6 +468,47 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.js"></script>
+  <script src="/js/jl-send-form-email-client.js"></script>
   <script src="/js/main.js"></script>
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('jl-fix-my-app-form');
+        if (!form) return;
+        form.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          var btn = document.getElementById('jl-fix-my-app-submit');
+          var orig = btn ? btn.textContent : '';
+          if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+          }
+          try {
+            var params = new URLSearchParams(new FormData(form));
+            var res = await fetch(window.location.origin + '/.netlify/functions/send-form-email', {
+              method: 'POST',
+              headers: window.jlSendFormEmail.jsonHeaders(),
+              body: params.toString(),
+              redirect: 'manual',
+            });
+            var outcome = await window.jlSendFormEmail.handleResponse(res);
+            if (outcome.ok) {
+              window.location.href = '/thank-you.html';
+              return;
+            }
+            alert(outcome.message || 'Could not submit. Email info@jlsolutions.io or try again.');
+          } catch (err) {
+            alert('Network error. Email info@jlsolutions.io directly.');
+            if (window.console && console.error) console.error(err);
+          } finally {
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = orig;
+            }
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
