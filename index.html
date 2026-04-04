@@ -178,30 +178,82 @@
   </section>
 
   <!-- Testimonials -->
-  <section class="section-testimonials" aria-labelledby="testimonials-heading">
+  <section class="section-testimonials jl-reviews-section" aria-labelledby="testimonials-heading">
     <div class="container">
-      <span class="section-testimonials__eyebrow">Real results</span>
-      <h2 id="testimonials-heading" class="section-testimonials__title">What Our Clients Say</h2>
-      <p class="section-testimonials__subtitle">From clinics, contractors, and teams like yours.</p>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <figure class="feature-card-jl feature-card-jl--dark feature-card-jl--testimonial">
-            <blockquote class="testimonial-quote">JL Solutions automated our client intake and eligibility tracking. We onboard more patients in a day than we used to in a week.</blockquote>
-            <figcaption class="testimonial-cite">Mental Health Clinic</figcaption>
-          </figure>
-        </div>
-        <div class="col-md-4">
-          <figure class="feature-card-jl feature-card-jl--dark feature-card-jl--testimonial">
-            <blockquote class="testimonial-quote">Our catering requests used to get lost in email. Now everything is captured automatically, and we never miss an event.</blockquote>
-            <figcaption class="testimonial-cite">Local Catering Company</figcaption>
-          </figure>
-        </div>
-        <div class="col-md-4">
-          <figure class="feature-card-jl feature-card-jl--dark feature-card-jl--testimonial">
-            <blockquote class="testimonial-quote">JL Solutions cut our quote turnaround in half. We're booking jobs we used to miss.</blockquote>
-            <figcaption class="testimonial-cite">Electrical Contractor</figcaption>
-          </figure>
-        </div>
+      <header class="jl-reviews-section__header">
+        <span class="jl-reviews-section__eyebrow">Testimonials</span>
+        <h2 id="testimonials-heading" class="jl-reviews-section__title">What Our Customers Say</h2>
+        <p class="jl-reviews-section__subtitle">From clinics, contractors, and teams like yours.</p>
+      </header>
+      <div class="jl-reviews-grid" role="list">
+        <article class="jl-review-card jl-review-card--summary" role="listitem">
+          <div class="jl-review-card__summary-head">
+            <span class="jl-review-card__sparkle" aria-hidden="true"><i class="bi bi-stars"></i></span>
+            <span class="jl-review-card__summary-title">AI-generated summary</span>
+          </div>
+          <ul class="jl-review-card__summary-list">
+            <li>Clients highlight faster intake, fewer dropped leads, and clearer follow-up after JL Solutions workflows.</li>
+            <li>Teams report projects staying on track with automation instead of manual email chasing.</li>
+            <li>Strong focus on practical outcomes: more bookings, less admin, and better visibility into the pipeline.</li>
+          </ul>
+        </article>
+        <article class="jl-review-card" role="listitem">
+          <div class="jl-review-card__top">
+            <div class="jl-review-card__avatar-wrap">
+              <div class="jl-review-card__avatar" aria-hidden="true">MH</div>
+              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions client">JL</span>
+            </div>
+            <div class="jl-review-card__meta">
+              <div class="jl-review-card__name-row">
+                <span class="jl-review-card__name">Mental health clinic</span>
+                <i class="bi bi-patch-check-fill jl-review-card__verified" aria-label="Verified"></i>
+              </div>
+              <span class="jl-review-card__time">2 months ago</span>
+            </div>
+          </div>
+          <div class="jl-review-card__stars" aria-label="5 out of 5 stars"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
+          <blockquote class="jl-review-card__quote">
+            <p>JL Solutions automated our client intake and eligibility tracking. We onboard more patients in a day than we used to in a week.</p>
+          </blockquote>
+        </article>
+        <article class="jl-review-card" role="listitem">
+          <div class="jl-review-card__top">
+            <div class="jl-review-card__avatar-wrap">
+              <div class="jl-review-card__avatar" aria-hidden="true">LC</div>
+              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions client">JL</span>
+            </div>
+            <div class="jl-review-card__meta">
+              <div class="jl-review-card__name-row">
+                <span class="jl-review-card__name">Local catering company</span>
+                <i class="bi bi-patch-check-fill jl-review-card__verified" aria-label="Verified"></i>
+              </div>
+              <span class="jl-review-card__time">1 month ago</span>
+            </div>
+          </div>
+          <div class="jl-review-card__stars" aria-label="5 out of 5 stars"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
+          <blockquote class="jl-review-card__quote">
+            <p>Our catering requests used to get lost in email. Now everything is captured automatically, and we never miss an event.</p>
+          </blockquote>
+        </article>
+        <article class="jl-review-card" role="listitem">
+          <div class="jl-review-card__top">
+            <div class="jl-review-card__avatar-wrap">
+              <div class="jl-review-card__avatar" aria-hidden="true">EC</div>
+              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions client">JL</span>
+            </div>
+            <div class="jl-review-card__meta">
+              <div class="jl-review-card__name-row">
+                <span class="jl-review-card__name">Electrical contractor</span>
+                <i class="bi bi-patch-check-fill jl-review-card__verified" aria-label="Verified"></i>
+              </div>
+              <span class="jl-review-card__time">3 weeks ago</span>
+            </div>
+          </div>
+          <div class="jl-review-card__stars" aria-label="5 out of 5 stars"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
+          <blockquote class="jl-review-card__quote">
+            <p>JL Solutions cut our quote turnaround in half. We're booking jobs we used to miss.</p>
+          </blockquote>
+        </article>
       </div>
     </div>
   </section>
