@@ -260,12 +260,13 @@
 }
 
 .jl-start-card__title {
-  font-size: 1.0625rem;
+  font-size: clamp(0.95rem, 2.1vw, 1.0625rem);
   font-weight: 800;
   margin: 0 0 0.35rem;
   letter-spacing: -0.02em;
   color: #050a12;
-  line-height: 1.25;
+  line-height: 1.28;
+  text-align: left;
 }
 
 .jl-start-card__outcome {

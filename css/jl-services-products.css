@@ -73,6 +73,28 @@
   border-color: #ffffff;
 }
 
+.jl-services-hero__link-packages {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0.35rem 0.5rem;
+}
+
+.jl-services-hero__link-packages:hover {
+  color: #ffffff;
+}
+
+@media (min-width: 576px) {
+  .jl-services-hero__link-packages {
+    width: auto;
+  }
+}
+
 /* Proof / credibility strip (below hero) */
 .jl-services-proof {
   background: var(--jl-surface-alt, #eef0f4);
@@ -221,11 +243,11 @@
 }
 
 .jl-service-product-card__title {
-  font-size: 1.25rem;
+  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
   font-weight: 800;
   color: #0a1628;
-  margin: 0 0 0.5rem;
-  line-height: 1.28;
+  margin: 0 0 0.65rem;
+  line-height: 1.3;
   letter-spacing: -0.02em;
 }
 
@@ -279,6 +301,39 @@
   color: #033948;
   margin-left: 0.2rem;
   vertical-align: middle;
+}
+
+.jl-service-product-card__roi {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #064e63;
+  margin: -0.35rem 0 0.65rem;
+  line-height: 1.45;
+}
+
+.jl-service-product-card__bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.85rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #0f172a;
+}
+
+.jl-service-product-card__bullets li {
+  position: relative;
+  padding-left: 1.15rem;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.jl-service-product-card__bullets li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-weight: 800;
+  font-size: 0.8rem;
 }
 
 .jl-service-product-card__overview {
@@ -345,15 +400,25 @@
   color: #0a1628;
 }
 
-@media (min-width: 576px) {
-  .jl-service-product-card__actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-  }
+.jl-service-product-card__tertiary {
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0.25rem;
+}
 
+.jl-service-product-card__tertiary:hover {
+  color: #0a1628;
+}
+
+/* Keep vertical CTA hierarchy: primary → secondary link → tertiary quote */
+@media (min-width: 576px) {
   .jl-service-product-card__actions .btn.jl-theme {
-    width: auto;
+    width: 100%;
+    max-width: none;
   }
 }
 
@@ -922,6 +987,133 @@
   color: var(--jl-ink, #0a1628);
 }
 
+/* Why not a basic form? — differentiation */
+.jl-services-vs-basic {
+  padding: clamp(2.5rem, 5vw, 3.5rem) 0;
+  background: var(--jl-white, #fff);
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.jl-services-vs-basic__title {
+  font-size: clamp(1.25rem, 3vw, 1.55rem);
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.jl-services-vs-basic__lead {
+  text-align: center;
+  color: #334155;
+  max-width: 36rem;
+  margin: 0 auto 1.75rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.jl-services-vs-basic__grid {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .jl-services-vs-basic__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.jl-services-vs-basic__col {
+  background: var(--jl-surface-light, #fafbfc);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 14px;
+  padding: 1.35rem 1.4rem;
+}
+
+.jl-services-vs-basic__col--highlight {
+  border-color: rgba(11, 101, 121, 0.28);
+  border-top-width: 4px;
+  border-top-color: var(--jl-brand-cyan-deep, #0b6579);
+  background: #fff;
+  box-shadow: 0 10px 32px rgba(10, 22, 40, 0.07);
+}
+
+.jl-services-vs-basic__subhead {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin: 0 0 0.75rem;
+}
+
+.jl-services-vs-basic__list {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: #1e293b;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+.jl-services-vs-basic__list li {
+  margin-bottom: 0.45rem;
+}
+
+/* Not sure which package — guided path */
+.jl-services-guided {
+  padding: clamp(2.25rem, 4.5vw, 3rem) 0;
+  background: linear-gradient(180deg, #f1f5f9 0%, var(--jl-surface-light, #fafbfc) 100%);
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.jl-services-guided__title {
+  font-size: clamp(1.2rem, 2.8vw, 1.45rem);
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.jl-services-guided__lead {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #334155;
+  max-width: 32rem;
+  margin: 0 auto 1.25rem;
+  line-height: 1.55;
+}
+
+.jl-services-guided__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 480px) {
+  .jl-services-guided__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: none;
+  }
+}
+
+.jl-services-guided__actions .btn-primary.jl-theme {
+  font-weight: 800;
+  min-width: 12rem;
+}
+
+.jl-services-guided__actions .jl-btn-secondary-offer {
+  min-width: 12rem;
+}
+
 /* Bottom CTA band */
 .jl-services-cta {
   padding: clamp(2.5rem, 5vw, 3.5rem) 1rem;
@@ -970,10 +1162,41 @@
 
 .jl-services-cta__row {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  gap: 0.6rem;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 520px) {
+  .jl-services-cta__row {
+    flex-direction: row;
+    align-items: center;
+    max-width: none;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+.jl-services-cta__btn-primary {
+  font-weight: 800 !important;
+}
+
+.jl-services-cta__btn-tertiary {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+}
+
+.jl-services-cta__btn-tertiary:hover {
+  color: var(--jl-accent-hover, #ffd54f);
 }
 
 .jl-services-cta .btn-book-call {
