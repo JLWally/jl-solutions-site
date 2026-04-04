@@ -4,6 +4,15 @@
 (function () {
   'use strict';
 
+  /** First step: map pain → recommended SKU */
+  var PAIN_TO_SERVICE = {
+    'not-enough-leads': 'lead-engine',
+    'bad-leads': 'ai-intake',
+    'manual-followup': 'ai-intake',
+    'booking-messy': 'scheduling',
+    'site-not-converting': 'fix-app',
+  };
+
   var SERVICES = {
     'fix-app': {
       id: 'fix-app',
@@ -137,15 +146,16 @@
       if (!el) return;
       el.classList.remove('is-active', 'is-done');
     });
-    if (step >= 1 && t1) t1.classList.add('is-done');
-    if (step >= 2 && t2) t2.classList.add('is-active');
-    else if (step === 1 && t1) t1.classList.add('is-active');
     if (step >= 3 && t3) {
       t3.classList.add('is-active');
-      if (t2) t2.classList.remove('is-active');
+      if (t1) t1.classList.add('is-done');
       if (t2) t2.classList.add('is-done');
+    } else if (step >= 2 && t2) {
+      t2.classList.add('is-active');
+      if (t1) t1.classList.add('is-done');
+    } else if (step >= 1 && t1) {
+      t1.classList.add('is-active');
     }
-    if (step === 2 && t1) t1.classList.add('is-done');
   }
 
   function showPanel(el, show) {
@@ -168,19 +178,19 @@
     if (mode === 'quote') {
       primary.textContent = 'Request a custom quote';
       if (reassure) reassure.classList.add('d-none');
-      if (secondary) secondary.textContent = 'Book a Free Call';
+      if (secondary) secondary.textContent = 'Talk it through first';
       if (secondary) secondary.setAttribute('href', '/book-consultation');
       if (stickyBtn) stickyBtn.textContent = 'Request quote';
     } else if (mode === 'call') {
-      primary.textContent = 'Book a Free Call';
+      primary.textContent = 'Talk it through first';
       if (reassure) reassure.classList.add('d-none');
       if (secondary) secondary.textContent = 'Need a quote instead? Contact us';
       if (secondary) secondary.setAttribute('href', '/contact.html');
-      if (stickyBtn) stickyBtn.textContent = 'Book call';
+      if (stickyBtn) stickyBtn.textContent = 'Talk first';
     } else {
       primary.textContent = 'Continue to Secure Checkout';
       if (reassure) reassure.classList.remove('d-none');
-      if (secondary) secondary.textContent = 'Book a Free Call';
+      if (secondary) secondary.textContent = 'Talk it through first';
       if (secondary) secondary.setAttribute('href', '/book-consultation');
       if (stickyBtn) stickyBtn.textContent = 'Continue';
     }
@@ -230,7 +240,8 @@
     return 'checkout';
   }
 
-  function selectService(id, scroll) {
+  function selectService(id, scroll, source) {
+    source = source || 'card';
     var svc = SERVICES[id];
     if (!svc) return;
 
@@ -251,7 +262,17 @@
     if (old) old.remove();
     if (form) form.appendChild(hiddenLabel);
 
-    document.getElementById('jl-rec-title').textContent = svc.recTitle + ' looks like the right fit.';
+    var recTitle = document.getElementById('jl-rec-title');
+    var recFit = document.getElementById('jl-rec-fit-name');
+    if (recTitle) {
+      recTitle.textContent =
+        source === 'problem'
+          ? 'Based on your answer, here’s the best fit'
+          : 'Based on your selection, here’s the best fit';
+    }
+    if (recFit) {
+      recFit.textContent = svc.recTitle;
+    }
     document.getElementById('jl-rec-desc').textContent = svc.outcome;
     var ul = document.getElementById('jl-rec-benefits');
     ul.innerHTML = '';
@@ -288,6 +309,10 @@
     }
     document.getElementById('jl-sticky-name').textContent = svc.cardTitle;
     document.getElementById('jl-sticky-price').textContent = svc.price;
+
+    document.querySelectorAll('.jl-start-card__price').forEach(function (el) {
+      el.hidden = el.getAttribute('data-price-for') !== id;
+    });
 
     updateSteps(2);
 
@@ -352,10 +377,16 @@
     }
 
     var pre = resolveWizardServiceId(params);
+    var problemSec = document.getElementById('jl-start-problem');
+    var orPackages = document.getElementById('jl-or-packages');
+
     if (pre && SERVICES[pre]) {
-      document.getElementById('jl-start-hero-title').textContent = 'Let’s get your ' + SERVICES[pre].recTitle + ' started.';
+      if (problemSec) problemSec.hidden = true;
+      if (orPackages) orPackages.hidden = true;
+      document.getElementById('jl-start-hero-title').textContent =
+        'Let’s get your ' + SERVICES[pre].recTitle + ' started.';
       selectedId = pre;
-      selectService(pre, false);
+      selectService(pre, false, 'card');
       requestAnimationFrame(function () {
         var rec = document.getElementById('jl-start-recommend');
         if (rec) rec.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -364,14 +395,35 @@
         el.hidden = el.getAttribute('data-price-for') !== pre;
       });
     } else {
+      showPanel(document.getElementById('jl-start-recommend'), false);
       updateSteps(1);
     }
+
+    document.querySelectorAll('.jl-start-problem__opt').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var pain = btn.getAttribute('data-jl-pain');
+        var sid = PAIN_TO_SERVICE[pain];
+        if (!sid || !SERVICES[sid]) return;
+        var probInp = document.getElementById('jl_gs_biggest_problem');
+        if (probInp) probInp.value = btn.getAttribute('data-jl-pain-label') || btn.textContent.trim();
+        document.querySelectorAll('.jl-start-problem__opt').forEach(function (b) {
+          b.classList.toggle('is-selected', b === btn);
+        });
+        selectedId = sid;
+        selectService(sid, true, 'problem');
+      });
+    });
 
     document.querySelectorAll('.jl-start-card').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var id = this.getAttribute('data-jl-service');
         selectedId = id;
-        selectService(id, true);
+        var probInp = document.getElementById('jl_gs_biggest_problem');
+        if (probInp) probInp.value = '';
+        document.querySelectorAll('.jl-start-problem__opt').forEach(function (b) {
+          b.classList.remove('is-selected');
+        });
+        selectService(id, true, 'card');
       });
     });
 

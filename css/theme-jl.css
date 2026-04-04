@@ -170,6 +170,21 @@ main#main-content.jl-main-text .text-muted {
   outline-offset: 2px;
 }
 
+.navbar.jl-theme .btn-book-call--nav {
+  font-size: 0.875rem;
+  padding: 0.45rem 0.95rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 400px) {
+  .navbar.jl-theme .btn-book-call--nav {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+    max-width: 9.5rem;
+  }
+}
+
 /* Navbar dropdown (Resources) - match JL nav styling */
 .navbar.jl-theme .nav-item.dropdown .dropdown-toggle::after {
   margin-left: 0.25rem;

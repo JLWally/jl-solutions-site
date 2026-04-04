@@ -29,15 +29,15 @@
     <a class="jl-start-header__brand" href="/index.html">
       <img src="/assets/images/jlsolutions-logo-nav.png" alt="JL Solutions home">
     </a>
-    <a class="jl-start-header__cta" href="/book-consultation">Book a Free Call</a>
+    <a class="jl-start-header__cta" href="/book-consultation">Talk it through first</a>
   </header>
 
   <!-- Wizard (default) -->
   <div id="jl-start-wizard">
     <section class="jl-start-hero" aria-labelledby="jl-start-hero-title">
       <p class="jl-start-eyebrow">Get started</p>
-      <h1 id="jl-start-hero-title" class="jl-start-hero__title">Choose your fixed-price system.</h1>
-      <p class="jl-start-hero__sub">Pick a package, answer a short intake, then continue to secure Stripe checkout. Book a free call anytime if you want to confirm fit first.</p>
+      <h1 id="jl-start-hero-title" class="jl-start-hero__title">What’s your biggest problem right now?</h1>
+      <p class="jl-start-hero__sub">Tell us what’s broken—we’ll recommend the best package. Then a short intake and secure Stripe checkout. Want to talk first? <a class="jl-start-hero__link" href="/book-consultation">Talk it through first</a>.</p>
       <div class="jl-start-pills" role="list">
         <span class="jl-start-pill" role="listitem"><span aria-hidden="true">⚡</span> Fast turnaround</span>
         <span class="jl-start-pill" role="listitem"><span aria-hidden="true">🔒</span> Secure checkout</span>
@@ -49,11 +49,11 @@
       <div class="jl-start-track">
         <div class="jl-start-step is-active" data-step="1" id="jl-track-1">
           <span class="jl-start-step__num">1</span>
-          Choose
+          Problem
         </div>
         <div class="jl-start-step" data-step="2" id="jl-track-2">
           <span class="jl-start-step__num">2</span>
-          Answer
+          Best fit
         </div>
         <div class="jl-start-step" data-step="3" id="jl-track-3">
           <span class="jl-start-step__num">3</span>
@@ -63,9 +63,23 @@
     </div>
 
     <main id="jl-start-main" class="jl-start-body">
+      <section id="jl-start-problem" class="jl-start-problem" aria-labelledby="jl-problem-heading">
+        <h2 class="jl-start-section-title" id="jl-problem-heading">What’s your biggest problem right now?</h2>
+        <p class="jl-start-section-helper">Pick the one that stings most—we’ll match you to a package.</p>
+        <div class="jl-start-problem-grid" role="group" aria-label="Biggest problems">
+          <button type="button" class="jl-start-problem__opt" data-jl-pain="not-enough-leads" data-jl-pain-label="Not getting enough leads">Not getting enough leads</button>
+          <button type="button" class="jl-start-problem__opt" data-jl-pain="bad-leads" data-jl-pain-label="Getting bad leads">Getting bad leads</button>
+          <button type="button" class="jl-start-problem__opt" data-jl-pain="manual-followup" data-jl-pain-label="Too much manual follow-up">Too much manual follow-up</button>
+          <button type="button" class="jl-start-problem__opt" data-jl-pain="booking-messy" data-jl-pain-label="Booking is messy">Booking is messy</button>
+          <button type="button" class="jl-start-problem__opt" data-jl-pain="site-not-converting" data-jl-pain-label="Website not converting">Website not converting</button>
+        </div>
+      </section>
+
+      <p id="jl-or-packages" class="jl-start-or-packages">Or choose a package directly</p>
+
       <section aria-labelledby="jl-choose-heading">
-        <h2 class="jl-start-section-title" id="jl-choose-heading">What do you need help with?</h2>
-        <p class="jl-start-section-helper">Choose the option that feels closest. We’ll guide you from there.</p>
+        <h2 class="jl-start-section-title" id="jl-choose-heading">Fixed-price packages</h2>
+        <p class="jl-start-section-helper">Prefer to pick yourself? Same intake and checkout either way.</p>
         <div class="jl-start-cards" role="group" aria-label="Service options">
           <button type="button" class="jl-start-card" data-jl-service="fix-app" aria-pressed="false">
             <span class="jl-start-card__icon" aria-hidden="true">🛠️</span>
@@ -99,7 +113,8 @@
       </section>
 
       <section id="jl-start-recommend" class="jl-start-panel" aria-live="polite" hidden>
-        <h2 class="jl-start-rec__title" id="jl-rec-title">Select a service above.</h2>
+        <h2 class="jl-start-rec__title" id="jl-rec-title"></h2>
+        <p class="jl-start-rec__fit-name" id="jl-rec-fit-name"></p>
         <p class="jl-start-rec__desc" id="jl-rec-desc"></p>
         <ul class="jl-start-rec__benefits" id="jl-rec-benefits"></ul>
         <div class="jl-start-rec__meta">
@@ -109,7 +124,7 @@
         <div class="jl-start-rec__actions jl-start-rec__actions--row">
           <a class="jl-start-secondary" id="jl-rec-landing" href="/services/index.html" hidden>Service overview</a>
           <button type="button" class="jl-start-primary" id="jl-rec-continue">Continue</button>
-          <a class="jl-start-secondary" href="/book-consultation">Book a Free Call</a>
+          <a class="jl-start-secondary" href="/book-consultation">Talk it through first</a>
         </div>
       </section>
 
@@ -119,6 +134,7 @@
         <form id="jl-start-form" class="jl-start-form" novalidate>
           <input type="hidden" name="form-name" id="jl-start-form-name" value="getstarted-product-intake">
           <input type="hidden" name="gs_product" id="jl_gs_product" value="">
+          <input type="hidden" name="gs_biggest_problem" id="jl_gs_biggest_problem" value="">
           <p class="visually-hidden" aria-hidden="true">
             <label>Leave blank: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
           </p>
@@ -260,7 +276,7 @@
         </ul>
         <button type="button" class="jl-start-primary" id="jl-start-primary">Continue to Secure Checkout</button>
         <p class="jl-start-cta-note">Takes you to Stripe to complete your purchase.</p>
-        <a class="jl-start-secondary" href="/book-consultation">Book a Free Call</a>
+        <a class="jl-start-secondary" href="/book-consultation">Talk it through first</a>
       </section>
     </main>
   </div>
