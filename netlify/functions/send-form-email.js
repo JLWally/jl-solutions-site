@@ -903,14 +903,41 @@ exports.handler = async (event) => {
     const resend = new Resend(env.resendApiKey);
 
     console.log('[send-form-email] Sending to', TO_EMAIL, 'subject:', subject);
-    // 1. Send lead to info@jlsolutions.io
-    const { error: err1 } = await resend.emails.send({
-      from: env.formFromEmail,
-      to: [TO_EMAIL],
-      subject,
-      html,
-      replyTo: data.email || undefined,
-    });
+    // 1. Send lead to info@jlsolutions.io (Resend may throw on network/validation errors)
+    let err1;
+    try {
+      const out1 = await resend.emails.send({
+        from: env.formFromEmail,
+        to: [TO_EMAIL],
+        subject,
+        html,
+        replyTo: data.email || undefined,
+      });
+      err1 = out1.error;
+    } catch (sendErr) {
+      console.error('[send-form-email] Resend threw (to info@):', sendErr && sendErr.message, sendErr);
+      await appendSubmissionAudit(formName, data, {
+        _fallbackReason: 'resend_to_info_threw',
+        _error: sendErr && sendErr.message,
+      });
+      if (jsonMode) {
+        const hint =
+          sendErr && sendErr.message
+            ? String(sendErr.message)
+                .replace(/\s+/g, ' ')
+                .trim()
+                .slice(0, 180)
+            : '';
+        return jsonFail(
+          502,
+          'RESEND_ERROR',
+          hint
+            ? `Email could not be sent (${hint}). Please email info@jlsolutions.io or try again.`
+            : 'We could not send email right now. Your details may be saved — please email info@jlsolutions.io.'
+        );
+      }
+      return redirectSuccess();
+    }
 
     if (err1) {
       console.error('[send-form-email] Resend error (to info@):', JSON.stringify(err1));
@@ -927,9 +954,10 @@ exports.handler = async (event) => {
 
     console.log('[send-form-email] Delivered to', TO_EMAIL, 'form=', formName);
 
-    // 2. Send confirmation to customer (consultation, contact, fix-my-app, newsletter)
+    // 2. Send confirmation to customer — must not fail the request if info@ already succeeded
     const customerEmail = (data.email || '').trim();
     if (customerEmail) {
+      try {
       const first = escapeHtml((data.name || 'there').trim().split(' ')[0]);
       const cust =
         formName === 'consultation'
@@ -1023,12 +1051,32 @@ exports.handler = async (event) => {
       if (err2) {
         console.warn('[send-form-email] Customer confirmation failed (lead was sent):', err2);
       }
+      } catch (confirmErr) {
+        console.warn(
+          '[send-form-email] Customer confirmation threw (lead was already sent):',
+          confirmErr && confirmErr.message,
+          confirmErr
+        );
+      }
     }
   } catch (err) {
-    console.error('[send-form-email]', err);
+    console.error('[send-form-email] Unexpected error:', err && err.message, err);
     await appendSubmissionAudit(formName, data, { _fallbackReason: 'send_form_email_exception', _error: err.message });
     if (jsonMode) {
-      return jsonFail(500, 'SEND_EXCEPTION', 'Something went wrong. Please email info@jlsolutions.io.');
+      const detail =
+        err && err.message
+          ? String(err.message)
+              .replace(/\s+/g, ' ')
+              .trim()
+              .slice(0, 140)
+          : '';
+      return jsonFail(
+        500,
+        'SEND_EXCEPTION',
+        detail
+          ? `Something went wrong (${detail}). Please email info@jlsolutions.io.`
+          : 'Something went wrong. Please email info@jlsolutions.io.'
+      );
     }
     return redirectSuccess();
   }
