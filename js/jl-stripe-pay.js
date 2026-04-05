@@ -15,7 +15,9 @@
         body = await res.json();
       } catch (_) {}
       if (body.filtered) return { ok: true };
-      if (body.success === true && body.emailed === true) return { ok: true };
+      if (body.success === true) {
+        return { ok: true, emailed: body.emailed === false ? false : true };
+      }
       return {
         ok: false,
         message:

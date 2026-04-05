@@ -18,9 +18,10 @@
  * - Stripe Payment Links: success URL must be /onboarding?service=ai-intake | fix-app | scheduling | lead-engine.
  *
  * JSON mode: if the client sends Accept: application/json (or form field response_format=json),
- * the function returns JSON instead of redirecting to thank-you. On Resend failure or missing
- * RESEND_API_KEY it returns success:false so the UI can warn the user (submissions may still be
- * stored in Blobs/Supabase).
+ * the function returns JSON instead of redirecting to thank-you. For most forms, Resend failure
+ * or missing RESEND_API_KEY returns success:false. For form-name getstarted-product-intake,
+ * once intake is persisted (Supabase when configured), the response is success:true with
+ * emailed:false so /get-started can continue to Stripe; failures are logged and audit-appended.
  */
 const { createClient } = require('@supabase/supabase-js');
 const { envVarFromB64 } = require('./lib/runtime-process-env');
@@ -973,6 +974,31 @@ exports.handler = async (event) => {
   const consultationId = await persistToConsultationsTable(formName, data);
   await appendSubmissionAudit(formName, data, consultationId ? { consultationId } : {});
 
+  const supabaseConfigured = !!getServiceSupabase();
+  if (
+    jsonMode &&
+    formName === 'getstarted-product-intake' &&
+    supabaseConfigured &&
+    !consultationId
+  ) {
+    console.error(
+      '[send-form-email] getstarted-product-intake: consultations row required but insert failed or validation skipped persist'
+    );
+    return {
+      statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: JSON.stringify({
+        success: false,
+        code: 'PERSIST_FAILED',
+        error:
+          'We could not save your intake. Please try again or email info@jlsolutions.io.',
+      }),
+    };
+  }
+
   let subject, html;
   if (formName === 'consultation') {
     const built = buildConsultationEmail(data);
@@ -1052,6 +1078,14 @@ exports.handler = async (event) => {
       body: JSON.stringify({ success: false, code, error }),
     };
   }
+  /** Product checkout path: intake saved; email optional for JSON clients */
+  function jsonIntakeSavedCheckoutOk(emailed, extra = {}) {
+    return {
+      statusCode: 200,
+      headers: jsonHeaders,
+      body: JSON.stringify({ success: true, emailed: !!emailed, ...extra }),
+    };
+  }
   const redirectSuccess = () => {
     if (jsonMode) {
       return {
@@ -1076,6 +1110,12 @@ exports.handler = async (event) => {
       console.error('[send-form-email] Blob fallback failed:', e);
     }
     if (jsonMode) {
+      if (formName === 'getstarted-product-intake') {
+        console.warn(
+          '[send-form-email] getstarted-product-intake: RESEND_API_KEY missing; intake persisted, proceeding JSON ok without email'
+        );
+        return jsonIntakeSavedCheckoutOk(false, { code: 'MISSING_RESEND' });
+      }
       return jsonFail(
         503,
         'MISSING_RESEND',
@@ -1108,6 +1148,13 @@ exports.handler = async (event) => {
         _error: sendErr && sendErr.message,
       });
       if (jsonMode) {
+        if (formName === 'getstarted-product-intake') {
+          console.error(
+            '[send-form-email] getstarted-product-intake: Resend threw to info@; checkout JSON still ok:',
+            sendErr && sendErr.message
+          );
+          return jsonIntakeSavedCheckoutOk(false, { code: 'RESEND_ERROR' });
+        }
         const hint =
           sendErr && sendErr.message
             ? String(sendErr.message)
@@ -1130,6 +1177,13 @@ exports.handler = async (event) => {
       console.error('[send-form-email] Resend error (to info@):', JSON.stringify(err1));
       await appendSubmissionAudit(formName, data, { _fallbackReason: 'resend_to_info_failed', _resendError: err1.message });
       if (jsonMode) {
+        if (formName === 'getstarted-product-intake') {
+          console.error(
+            '[send-form-email] getstarted-product-intake: Resend error to info@; checkout JSON still ok:',
+            err1.message
+          );
+          return jsonIntakeSavedCheckoutOk(false, { code: 'RESEND_ERROR' });
+        }
         return jsonFail(
           502,
           'RESEND_ERROR',
@@ -1275,6 +1329,13 @@ exports.handler = async (event) => {
     console.error('[send-form-email] Unexpected error:', err && err.message, err);
     await appendSubmissionAudit(formName, data, { _fallbackReason: 'send_form_email_exception', _error: err.message });
     if (jsonMode) {
+      if (formName === 'getstarted-product-intake') {
+        console.error(
+          '[send-form-email] getstarted-product-intake: exception during send path; intake already persisted, checkout JSON ok:',
+          err && err.message
+        );
+        return jsonIntakeSavedCheckoutOk(false, { code: 'SEND_EXCEPTION' });
+      }
       const detail =
         err && err.message
           ? String(err.message)

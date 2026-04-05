@@ -153,7 +153,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.96);
   padding: 0.55rem 0.35rem;
   border-radius: 8px;
   position: relative;
@@ -172,8 +172,10 @@
 .jl-start-step__num {
   display: block;
   font-size: 0.6875rem;
-  opacity: 0.9;
+  font-weight: 800;
+  opacity: 1;
   margin-bottom: 0.2rem;
+  color: inherit;
 }
 
 /* --- Main content --- */
@@ -234,7 +236,7 @@
   }
 }
 
-.jl-start-problem-card {
+button.jl-start-problem-card {
   display: block;
   width: 100%;
   text-align: left;
@@ -252,12 +254,12 @@
     transform 0.15s ease;
 }
 
-.jl-start-problem-card:hover {
+button.jl-start-problem-card:hover {
   border-color: rgba(11, 101, 121, 0.35);
   box-shadow: 0 8px 24px rgba(10, 22, 40, 0.1);
 }
 
-.jl-start-problem-card.is-selected {
+button.jl-start-problem-card.is-selected {
   border-color: var(--jl-brand-cyan-deep, #0b6579);
   box-shadow:
     0 0 0 3px rgba(11, 101, 121, 0.22),
@@ -265,7 +267,7 @@
   background: linear-gradient(165deg, #ffffff 0%, #f4f8fb 100%);
 }
 
-.jl-start-problem-card--complex.is-selected {
+button.jl-start-problem-card--complex.is-selected {
   border-color: rgba(11, 101, 121, 0.45);
 }
 
@@ -292,9 +294,9 @@
 
 .jl-start-problem-card__hint {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: #475569;
+  color: #1e293b;
   line-height: 1.35;
 }
 
@@ -322,7 +324,7 @@
   }
 }
 
-.jl-start-card {
+button.jl-start-card {
   display: block;
   width: 100%;
   text-align: left;
@@ -348,12 +350,12 @@
   margin-bottom: 0.35rem;
 }
 
-.jl-start-card:hover {
+button.jl-start-card:hover {
   border-color: rgba(11, 101, 121, 0.35);
   box-shadow: 0 8px 24px rgba(10, 22, 40, 0.08);
 }
 
-.jl-start-card.is-selected {
+button.jl-start-card.is-selected {
   border-color: var(--jl-brand-cyan-deep, #0b6579);
   box-shadow:
     0 0 0 3px rgba(11, 101, 121, 0.28),
@@ -374,14 +376,14 @@
 .jl-start-card__outcome {
   font-size: 0.9375rem;
   line-height: 1.5;
-  color: #0f172a;
+  color: #020617;
   margin: 0 0 0.4rem;
 }
 
 .jl-start-card__best {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 700;
-  color: #033948;
+  color: #0f172a;
   margin: 0;
   line-height: 1.45;
 }
@@ -465,7 +467,7 @@
 .jl-start-rec__desc {
   font-size: 0.9375rem;
   line-height: 1.55;
-  color: #4b5563;
+  color: #1e293b;
   margin: 0 0 1rem;
 }
 
@@ -475,7 +477,7 @@
   padding: 0;
   font-size: 0.875rem;
   line-height: 1.45;
-  color: #374151;
+  color: #0f172a;
 }
 
 .jl-start-rec__benefits li {
@@ -512,16 +514,16 @@
 
 .jl-start-rec__price-stack .jl-start-rec__timeline {
   font-size: 0.875rem;
-  font-weight: 500;
-  color: #4b5563;
+  font-weight: 600;
+  color: #334155;
   margin: 0.25rem 0 0;
   line-height: 1.4;
 }
 
 .jl-start-rec__price-stack .jl-start-rec__roi {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #4b5563;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #334155;
   margin: 0.35rem 0 0;
   line-height: 1.45;
 }
@@ -562,7 +564,7 @@
   text-decoration: underline !important;
 }
 
-.jl-start-card--custom {
+button.jl-start-card--custom {
   grid-column: 1 / -1;
   max-width: 40rem;
   margin-left: auto;
@@ -574,7 +576,7 @@
 }
 
 @media (min-width: 480px) {
-  .jl-start-card--custom {
+  button.jl-start-card--custom {
     grid-column: span 2;
     max-width: none;
     margin-left: 0;
@@ -583,7 +585,7 @@
 }
 
 @media (min-width: 900px) {
-  .jl-start-card--custom {
+  button.jl-start-card--custom {
     grid-column: 1 / -1;
     max-width: 48rem;
     margin-left: auto;
@@ -886,7 +888,7 @@
 }
 
 .jl-start-footer small {
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255, 0.92);
   font-size: 0.8125rem;
 }
 

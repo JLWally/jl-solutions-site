@@ -1,6 +1,7 @@
 /**
  * Pair with send-form-email Netlify function: send Accept: application/json
- * and use handleResponse() so failed Resend/missing key does not look like success.
+ * and use handleResponse(). success:true means the server accepted the submission;
+ * emailed:false means notification email did not send (checkout flows may still proceed).
  */
 (function (g) {
   'use strict';
@@ -15,7 +16,7 @@
 
     /**
      * @param {Response} res
-     * @returns {Promise<{ ok: boolean, message?: string, legacy?: boolean }>}
+     * @returns {Promise<{ ok: boolean, emailed?: boolean, message?: string, legacy?: boolean, code?: string }>}
      */
     handleResponse: async function (res) {
       var ct = (res.headers.get('content-type') || '').toLowerCase();
@@ -27,14 +28,19 @@
         if (body.filtered) {
           return { ok: true };
         }
-        if (body.success === true && body.emailed === true) {
-          return { ok: true };
+        if (body.success === true) {
+          return {
+            ok: true,
+            emailed: body.emailed === false ? false : true,
+            code: body.code,
+          };
         }
         return {
           ok: false,
           message:
             body.error ||
             'We could not complete your request. Email info@jlsolutions.io or try again.',
+          code: body.code,
         };
       }
       var legacyOk =

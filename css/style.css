@@ -26,9 +26,10 @@ h1, h2, h3, h4, h5 {
   color: inherit;
 }
 
-/* Let solid buttons follow theme; do not force inherit on Bootstrap outline variants (dark pages need their own text/border colors). */
+/* Let solid buttons follow theme; do not force inherit on Bootstrap outline variants (dark pages need their own text/border colors).
+ * Exclude white “card” buttons: inherit would pull body’s light text onto #fff (unreadable). */
 .btn:not([class*='btn-outline']),
-button:not([class*='btn-outline']) {
+button:not([class*='btn-outline']):not(.jl-start-problem-card):not(.jl-start-card):not(.jl-pay-type-card) {
   color: inherit;
 }
 
@@ -86,11 +87,11 @@ section {
 }
 
 .navbar-dark .navbar-nav .nav-link:hover {
-  color: #bbbbbb;
+  color: #e2e8f0;
 }
 
 footer small {
-  color: #aaaaaa;
+  color: #cbd5e1;
 }
 .container {
   max-width: 960px;
@@ -122,7 +123,7 @@ blockquote {
   border-left: 4px solid #FFC107;
   padding-left: 1rem;
   font-style: italic;
-  color: #ccc;
+  color: #e2e8f0;
   margin: 1rem 0;
 }
 

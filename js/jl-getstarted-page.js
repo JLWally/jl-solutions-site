@@ -767,6 +767,12 @@
             primary.textContent = prev;
             return;
           }
+          if (outcome.emailed === false) {
+            console.warn(
+              '[get-started] Intake saved; internal notification email did not send. Continuing to checkout.',
+              outcome.code || ''
+            );
+          }
           var t = document.getElementById('jl-gs-stripe-overlay-title');
           if (t) t.textContent = 'Opening secure Stripe checkout…';
           return minDelay(400).then(function () {
