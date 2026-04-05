@@ -102,6 +102,32 @@
   box-shadow: 0 6px 22px rgba(255, 193, 7, 0.4);
 }
 
+.jl-services-hero__trust {
+  list-style: none;
+  margin: 1.35rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
+  justify-content: center;
+  align-items: center;
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.jl-services-hero__trust-item {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 /* Proof / credibility strip (below hero) */
 .jl-services-proof {
   background: var(--jl-surface-alt, #eef0f4);
@@ -245,6 +271,60 @@
 .jl-services-for__list strong {
   font-weight: 800;
   color: var(--jl-ink, #0a1628);
+}
+
+/* Compact white card: high contrast on gray featured band */
+.jl-services-for--compact-card {
+  max-width: 26rem;
+  margin-left: 0;
+  margin-right: auto;
+  padding: 1rem 1.15rem 1.1rem 1.1rem;
+  background: #fff !important;
+  border: 2px solid #0a1628 !important;
+  border-left: 5px solid var(--jl-brand-cyan-deep, #0b6579) !important;
+  border-radius: 12px !important;
+  box-shadow:
+    0 1px 0 rgba(10, 22, 40, 0.06),
+    0 14px 36px rgba(10, 22, 40, 0.12) !important;
+}
+
+.jl-services-for--compact-card .jl-services-for__title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0a1628;
+  margin-bottom: 0.6rem;
+}
+
+.jl-services-for--compact-card .jl-services-for__list {
+  list-style: disc;
+  padding-left: 1.2rem;
+  font-size: 0.90625rem;
+  line-height: 1.5;
+  color: #1e293b;
+}
+
+.jl-services-for--compact-card .jl-services-for__list li {
+  padding-left: 0;
+  margin-bottom: 0.35rem;
+}
+
+.jl-services-for--compact-card .jl-services-for__list li::before {
+  display: none;
+}
+
+.jl-services-for--compact-card .jl-services-for__list strong {
+  color: #0a1628;
+  font-weight: 800;
+}
+
+.jl-product-cards-section {
+  margin-top: 0.25rem;
+}
+
+.jl-services-noscript-packages {
+  font-size: 0.9375rem;
+  color: #334155;
+  margin: 1rem 0 0;
 }
 
 .jl-product-grid {
