@@ -99,9 +99,30 @@
     el.hidden = !text;
   }
 
+  function isLikelyProductionHost() {
+    var h = (window.location && window.location.hostname) || '';
+    if (!h || h === 'localhost' || h === '127.0.0.1') return false;
+    if (/\.local$/i.test(h)) return false;
+    return true;
+  }
+
+  function formatDiagnosticsLine(d) {
+    if (!d || typeof d !== 'object') return '';
+    var parts = [];
+    if (d.storageMode) parts.push('storage=' + d.storageMode);
+    if (d.blobStore) parts.push('blob=' + d.blobStore);
+    if (d.supabasePersistence) parts.push('db=' + d.supabasePersistence);
+    if (d.deploy) parts.push('runtime=' + d.deploy + (d.context ? '/' + d.context : ''));
+    if (d.authOk === false) parts.push('auth=failed');
+    if (d.blobErrorName) parts.push('blobErr=' + d.blobErrorName);
+    return parts.length ? '\n\nDiagnostics: ' + parts.join(' · ') : '';
+  }
+
   function formatDemoConfigError(body, status) {
     var err = (body && body.error) || 'HTTP ' + status;
-    if (body && body.details) err += '\n\n' + body.details;
+    var details = (body && body.details) || '';
+    if (details) err += '\n\n' + details;
+    if (body && body.diagnostics) err += formatDiagnosticsLine(body.diagnostics);
     return err;
   }
 
@@ -139,7 +160,10 @@
         if (btn) btn.disabled = false;
       })
       .catch(function (e) {
-        setMsg(msg, e.message || 'Load presets failed. Use Netlify dev or deploy with Functions.', false);
+        var hint = isLikelyProductionHost()
+          ? 'Could not load industries (check Functions and demo-config).'
+          : 'Could not load industries. Use npm run dev / netlify dev, or open the deployed site.';
+        setMsg(msg, e.message || hint, false);
       });
 
     $('idbSlugSuggest') &&
@@ -255,7 +279,15 @@
             if (result) result.hidden = false;
             setMsg(msg, 'Demo created. Share the URL below.', true);
             if (dbHint && x.body) {
-              if (x.body.persistedSupabase) {
+              if (x.body.blobWriteRecoveredViaSupabase) {
+                dbHint.textContent =
+                  'Blob write failed; config was saved to Supabase so the demo link still works.';
+                dbHint.hidden = false;
+              } else if (x.body.persistedSupabase && x.body.persistedBlob === false) {
+                dbHint.textContent =
+                  'Saved to Supabase only (Netlify Blobs unavailable). The live demo URL still loads config from the database.';
+                dbHint.hidden = false;
+              } else if (x.body.persistedSupabase) {
                 dbHint.textContent = 'Also saved to Supabase (jl_demo_configs).';
                 dbHint.hidden = false;
               } else {

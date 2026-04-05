@@ -146,13 +146,15 @@ Static pages **`/internal/outreach`** and **`/internal/demo-builder`** use the *
 - **`GET`** — Public read by slug; `?meta=industries` for preset keys (no auth).
 - **`POST`** — Creates a blob-backed demo config. When **`LEAD_ENGINE_ENABLED`** and operator auth env are configured, **`POST` requires** either a valid **`lead_engine_session`** cookie **or** `Authorization: Bearer <DEMO_GENERATOR_SECRET>` if that env is set. If lead engine auth is **not** configured, behavior matches older deploys: optional bearer secret only when `DEMO_GENERATOR_SECRET` is set; otherwise open (typical local dev).
 
-#### Local development (Netlify Blobs)
+#### Storage: Blobs and Supabase fallback
 
-Creating or loading demos by slug needs **Netlify Blobs**. On production, Netlify injects context automatically. **Locally**, run **`npm run dev`** from the repo root after **`netlify link`** to the **Netlify site that deploys this repo** (if the CLI says you are linked to a different project—e.g. the academy—run **`netlify unlink`** and link again).
+**Primary:** Netlify Blobs store **`smart-demos`**. On production, Netlify usually injects Blobs context automatically. **Locally**, run **`npm run dev`** after **`netlify link`** to the site that deploys this repo. If the CLI is linked to the wrong project, run **`netlify unlink`** and link again.
 
-If functions log **`MissingBlobsEnvironmentError`**, add **`NETLIFY_SITE_ID`** and **`NETLIFY_AUTH_TOKEN`** to **`.env`** as a fallback (site ID in Site configuration → Site details; personal access token in User settings → Applications). Code uses **`getNamedBlobStore`** in **`netlify/functions/lib/get-blob-store.js`** to try injected context first, then those variables.
+If functions log **`MissingBlobsEnvironmentError`**, add **`NETLIFY_SITE_ID`** and **`NETLIFY_AUTH_TOKEN`** to **`.env`** (see **`getNamedBlobStore`** in **`netlify/functions/lib/get-blob-store.js`**).
 
-**`npm start`** / plain static servers cannot **`POST`** demos; **`GET ?meta=industries`** still works without Blobs.
+**Fallback:** When Blobs cannot be opened but **`SUPABASE_URL`** + **`SUPABASE_SERVICE_ROLE_KEY`** are set and **`jl_demo_configs`** exists (**`supabase/jl_demo_configs.sql`**), **`demo-config`** can **read and write** demo JSON via Supabase only. Responses include **`diagnostics.storageMode`** (`blobs`, `supabase`, `blobs+supabase`, or `unavailable`) for support. If a Blob **write** fails mid-request, the handler retries persistence via Supabase when configured.
+
+**`npm start`** / plain static servers cannot **`POST`** demos unless Supabase env is available to the process; **`GET ?meta=industries`** still works without Blobs or DB.
 
 ### `lead-engine-demo-outreach-status`
 
