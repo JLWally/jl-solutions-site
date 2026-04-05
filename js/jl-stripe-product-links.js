@@ -1,11 +1,28 @@
 /**
  * Central Stripe Payment Link URLs (product slug → checkout).
- * Used by /get-started after pre-checkout intake; keep in sync with Stripe Dashboard. Success URL → /onboarding
+ * Used by /get-started after pre-checkout intake; keep in sync with Stripe Dashboard.
+ *
+ * After purchase, buyers must land on post-purchase intake. In Stripe Dashboard → each Payment Link
+ * → After payment → Don’t show confirmation page → Use your own success page, set URL to:
+ *   https://YOUR_PRODUCTION_DOMAIN/onboarding?service=ai-intake
+ *   https://YOUR_PRODUCTION_DOMAIN/onboarding?service=fix-app
+ *   https://YOUR_PRODUCTION_DOMAIN/onboarding?service=scheduling
+ *   https://YOUR_PRODUCTION_DOMAIN/onboarding?service=lead-engine
+ * (Netlify maps /onboarding → onboarding/index.html; query locks the right package in the form.)
+ *
+ * Verify each Payment Link success URL uses the onboarding *service* slug (not the keys below):
+ * | Link key in stripeLinks | Stripe Dashboard success URL must end with        |
+ * |-------------------------|-----------------------------------------------------|
+ * | ai-intake               | /onboarding?service=ai-intake                       |
+ * | fix-my-app              | /onboarding?service=fix-app                         |
+ * | scheduling              | /onboarding?service=scheduling                      |
+ * | lead-gen                | /onboarding?service=lead-engine                     |
  */
 (function (global) {
   'use strict';
 
-  const stripeLinks = {
+  /** Slug → Stripe Payment Link (single source for checkout redirects) */
+  var stripeLinks = {
     'ai-intake': 'https://buy.stripe.com/dRmaEQ9eg9Z2a3A6bZ3Ru01',
     'fix-my-app': 'https://buy.stripe.com/3cI9AM1LOfjmdfM1VJ3Ru00',
     'lead-gen': 'https://buy.stripe.com/3cIfZacqsgnq6Ro6bZ3Ru03',
@@ -13,6 +30,7 @@
   };
 
   global.JL_STRIPE_PRODUCT_LINKS = stripeLinks;
+  global.JL_STRIPE_LINKS = stripeLinks;
 
   /** Legacy keys for any page that still references STRIPE_LINK_* */
   global.JL_SERVICE_STRIPE_LINKS = {

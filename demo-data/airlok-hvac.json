@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "slug": "airlok-hvac",
+  "businessName": "Airlok HVAC",
+  "industry": "hvac",
+  "industryLabel": "HVAC",
+  "services": [
+    "AC Repair",
+    "Heating Repair",
+    "Installation",
+    "Maintenance",
+    "Emergency Service"
+  ],
+  "issueOptions": [
+    "Not cooling",
+    "Not heating",
+    "System won’t turn on",
+    "Strange noise",
+    "Leak or water issue",
+    "Need inspection"
+  ],
+  "ctaService": "ai-intake",
+  "subtext": "Here's what a smarter intake and booking flow could look like for your business.",
+  "headerTitle": "Airlok HVAC – Smart Intake Demo",
+  "createdAt": "2026-04-02T00:00:00.000Z"
+}

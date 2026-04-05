@@ -19,6 +19,12 @@ const EVENT_TYPES = {
   GLOBAL_SUPPRESSION_CREATED: 'global_suppression_created',
   CRM_SYNC_SUCCEEDED: 'crm_sync_succeeded',
   CRM_SYNC_FAILED: 'crm_sync_failed',
+  DEMO_GENERATED: 'demo_generated',
+  /** Custom-demo composer one-click send (/internal/outreach) */
+  DEMO_OUTREACH_SENT: 'demo_outreach_sent',
+  DEMO_OUTREACH_SEND_FAILED: 'demo_outreach_send_failed',
+  DEMO_OUTREACH_DRAFTED: 'demo_outreach_drafted',
+  DEMO_OUTREACH_FOLLOWUP_DUE: 'demo_outreach_followup_due',
 };
 
 async function logLeadEngineEvent(supabase, event) {

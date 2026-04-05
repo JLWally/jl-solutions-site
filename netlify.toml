@@ -80,6 +80,37 @@
   to = "/book-consultation.html"
   status = 200
 
+# Industry lander: HVAC
+[[redirects]]
+  from = "/hvac-lead-system"
+  to = "/hvac-lead-system.html"
+  status = 200
+
+[[redirects]]
+  from = "/hvac-lead-system/"
+  to = "/hvac-lead-system.html"
+  status = 200
+
+[[redirects]]
+  from = "/plumbing-lead-system"
+  to = "/plumbing-lead-system.html"
+  status = 200
+
+[[redirects]]
+  from = "/plumbing-lead-system/"
+  to = "/plumbing-lead-system.html"
+  status = 200
+
+[[redirects]]
+  from = "/home-services-lead-system"
+  to = "/home-services-lead-system.html"
+  status = 200
+
+[[redirects]]
+  from = "/home-services-lead-system/"
+  to = "/home-services-lead-system.html"
+  status = 200
+
 # Interactive demo (clean URL)
 [[redirects]]
   from = "/demo"
@@ -89,6 +120,34 @@
 [[redirects]]
   from = "/demo/"
   to = "/demo.html"
+  status = 200
+
+# Smart demo generator UI (must be before /demo/* catch-all)
+[[redirects]]
+  from = "/demo/builder"
+  to = "/demo-builder.html"
+  status = 200
+
+[[redirects]]
+  from = "/demo/builder/"
+  to = "/demo-builder.html"
+  status = 200
+
+# Quick wizard: name + industry → create demo → redirect (before /demo/* catch-all)
+[[redirects]]
+  from = "/demo/quick"
+  to = "/demo-quick.html"
+  status = 200
+
+[[redirects]]
+  from = "/demo/quick/"
+  to = "/demo-quick.html"
+  status = 200
+
+# Per-business smart intake demos: /demo/your-slug → demo page with ?demo=
+[[redirects]]
+  from = "/demo/*"
+  to = "/demo.html?demo=:splat"
   status = 200
 
 # Pre-checkout guided flow
@@ -102,7 +161,7 @@
   to = "/get-started.html"
   status = 200
 
-# Post-purchase intake (set Stripe Payment Link success URL to /onboarding?service=…)
+# Post-purchase intake — Stripe Payment Links: success URL must be /onboarding?service=ai-intake | fix-app | scheduling | lead-engine (see js/jl-stripe-product-links.js)
 [[redirects]]
   from = "/onboarding"
   to = "/onboarding/index.html"
@@ -148,6 +207,28 @@
 [[redirects]]
   from = "/internal-pay/"
   to = "/internal-pay/index.html"
+  status = 200
+
+# Internal: smart demo builder (admin intent — protect with DEMO_GENERATOR_SECRET on POST)
+[[redirects]]
+  from = "/internal/demo-builder"
+  to = "/internal-demo-builder.html"
+  status = 200
+
+[[redirects]]
+  from = "/internal/demo-builder/"
+  to = "/internal-demo-builder.html"
+  status = 200
+
+# Internal: custom-demo outreach composer (copy/paste; ties lead → demo → funnel)
+[[redirects]]
+  from = "/internal/outreach"
+  to = "/internal-outreach.html"
+  status = 200
+
+[[redirects]]
+  from = "/internal/outreach/"
+  to = "/internal-outreach.html"
   status = 200
 
 # Legacy site paths → get started (query string preserved by Netlify)

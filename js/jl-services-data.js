@@ -1,5 +1,7 @@
 /**
- * Single source of truth for /services product cards (rendered by jl-services-page.js).
+ * Featured offer cards for /services (and optional industry landers).
+ * Rendered via JLConversionSections.renderProductCard in jl-services-page.js.
+ * Page copy lives in jl-services-page-config.js.
  */
 (function (global) {
   'use strict';
@@ -31,7 +33,8 @@
       eyebrow: 'You’re getting leads—just not the good ones',
       outcomeTitle: 'Turn Website Visitors Into Qualified Jobs Automatically',
       serviceName: 'AI Intake Form Setup',
-      transformLine: 'Capture better leads without the manual back-and-forth.',
+      transformLine:
+        'Stop paying for leads you can’t close—get qualified, complete inquiries that are ready to buy.',
       bullets: [
         'Capture complete job details upfront',
         'Filter out low-quality leads',
@@ -52,7 +55,8 @@
       eyebrow: 'Booking is stuck in texts, calls, and inbox chaos',
       outcomeTitle: 'Let Customers Book Instantly Without Back-and-Forth',
       serviceName: 'Scheduling & Routing Setup',
-      transformLine: 'Make it easier for serious customers to schedule now.',
+      transformLine:
+        'More booked jobs from the same demand—less revenue lost to scheduling friction.',
       bullets: [
         'Self-serve booking without the email-and-text spiral',
         'Jobs routed to the right person or crew',
@@ -74,7 +78,8 @@
       eyebrow: 'Outbound research is eating your selling time',
       outcomeTitle: 'Get High-Quality Leads Delivered To You Daily',
       serviceName: 'Lead Generation Engine',
-      transformLine: 'Build a steady pipeline instead of hunting from scratch.',
+      transformLine:
+        'Replace hours of manual research with a pipeline you can actually work—more deals, less admin.',
       bullets: [
         'Find fit-match prospects and reduce bad outreach',
         'Generate ready-to-send messaging',

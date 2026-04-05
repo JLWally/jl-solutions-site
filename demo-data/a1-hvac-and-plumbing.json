@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "slug": "a1-hvac-and-plumbing",
+  "businessName": "A1 HVAC & Plumbing",
+  "industry": "hvac",
+  "industryLabel": "HVAC",
+  "services": [
+    "HVAC repair & install",
+    "Plumbing repair",
+    "Drain & water heater",
+    "Emergency service",
+    "Maintenance plans"
+  ],
+  "issueOptions": [
+    "HVAC not cooling or heating",
+    "Plumbing leak or clog",
+    "No hot water",
+    "Emergency — need someone today",
+    "Estimate for replacement",
+    "Seasonal tune-up"
+  ],
+  "ctaService": "ai-intake",
+  "subtext": "Here's what a smarter intake and booking flow could look like for your business.",
+  "headerTitle": "A1 HVAC & Plumbing – Smart Intake Demo",
+  "createdAt": "2026-04-02T00:00:00.000Z"
+}

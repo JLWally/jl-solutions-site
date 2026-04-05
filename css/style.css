@@ -21,9 +21,9 @@ body {
   padding: 0;
 }
 
-/* Headings only: p/li/small inherited from body or light sections (global white made jl-main-text lists & paragraphs invisible on pale backgrounds). */
+/* Headings inherit so light bands (jl-main-text, case studies, resources) stay legible; dark shells set color on section/hero or via body. */
 h1, h2, h3, h4, h5 {
-  color: rgba(255, 255, 255, 0.95);
+  color: inherit;
 }
 
 /* Let solid buttons follow theme; do not force inherit on Bootstrap outline variants (dark pages need their own text/border colors). */
@@ -318,7 +318,7 @@ blockquote {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.72);
   background: var(--jl-ink, #0a1628);
 }
 

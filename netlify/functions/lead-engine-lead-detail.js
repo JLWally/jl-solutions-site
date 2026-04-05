@@ -12,7 +12,7 @@ const {
 const { fetchSuppressionLookupForLeads, isLeadGloballySuppressed } = require('./lib/lead-engine-global-suppression');
 
 const LEAD_SELECT =
-  'id, company_name, website_url, contact_email, email_opted_out, status, source, created_at, created_by, external_crm_id, crm_source, sync_status, last_synced_at, sync_error';
+  'id, company_name, business_name, website_url, contact_email, email_opted_out, status, source, niche, demo_slug, demo_outreach_status, demo_outreach_status_at, demo_followup_due_at, demo_last_contacted_at, created_at, created_by, external_crm_id, crm_source, sync_status, last_synced_at, sync_error';
 
 exports.handler = async (event) => {
   const headers = withCors('GET, OPTIONS');

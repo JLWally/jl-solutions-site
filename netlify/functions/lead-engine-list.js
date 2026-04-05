@@ -20,13 +20,28 @@ const {
   resolvePreFilteredLeadIds,
   fetchLeadsByIdsChained,
 } = require('./lib/lead-engine-list-filters');
-const { summarizeLeadRowsCore, buildPipelineCountsForLeads, buildSummaryStandardPath } = require('./lib/lead-engine-list-summary');
+const {
+  summarizeLeadRowsCore,
+  buildPipelineCountsForLeads,
+  buildSummaryStandardPath,
+  summarizeDemoOutreachQueueFromRows,
+} = require('./lib/lead-engine-list-summary');
 const { describeApprovedSendRecovery } = require('./lib/lead-engine-send-recovery');
 const { fetchSuppressionLookupForLeads, isLeadGloballySuppressed } = require('./lib/lead-engine-global-suppression');
 const { supabaseErrorPayload } = require('./lib/lead-engine-supabase-error');
 
 const COMPACT_SELECT =
-  'id, company_name, website_url, contact_email, email_opted_out, status, source, created_at, created_by, external_crm_id, crm_source, sync_status, last_synced_at, sync_error';
+  'id, company_name, website_url, contact_email, email_opted_out, status, source, created_at, created_by, external_crm_id, crm_source, sync_status, last_synced_at, sync_error, demo_slug, demo_outreach_status, demo_outreach_status_at, demo_followup_due_at, demo_last_contacted_at';
+
+function emptyDemoQueue() {
+  return {
+    demoFollowupDueToday: 0,
+    demoFollowupOverdue: 0,
+    demoOutreachSendFailed: 0,
+    demoOutreachReplied: 0,
+    demoOutreachInterested: 0,
+  };
+}
 
 function emptySummary() {
   return {
@@ -35,6 +50,7 @@ function emptySummary() {
     flags: { optedOut: 0, globallySuppressed: 0, missingContactEmail: 0 },
     pipeline: null,
     pipelineNote: null,
+    demoQueue: emptyDemoQueue(),
   };
 }
 
@@ -91,6 +107,10 @@ exports.handler = async (event) => {
     recommendedOffer,
     reviewQueue,
     needsAttentionSend,
+    demoOutreachStatus,
+    demoFollowupDue,
+    demoRecentSentDays,
+    demoQueuePreset,
     includeSummary,
   } = parsed.value;
 
@@ -110,6 +130,10 @@ exports.handler = async (event) => {
     needsAttentionSend,
     suppressed,
     reviewQueue,
+    demoOutreachStatus,
+    demoFollowupDue,
+    demoRecentSentDays,
+    demoQueuePreset,
   });
   if (!pre.ok) {
     return {
@@ -178,6 +202,7 @@ exports.handler = async (event) => {
           },
           pipeline,
           pipelineNote: null,
+          demoQueue: summarizeDemoOutreachQueueFromRows(filtered),
         };
       }
     }

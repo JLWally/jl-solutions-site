@@ -12,7 +12,10 @@ const { completeDraftModel } = require('./lead-engine-openai-draft');
 const { pickNewestSuccessfulAnalysisRow } = require('./lead-engine-analysis-pick');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lead-engine-audit-log');
 
-const LEAD_SELECT = 'id, company_name, website_url, source, status';
+const { buildOutreachDemoFooter } = require('./lead-engine-demo-templates');
+const { getLeadEnginePublicSiteUrl } = require('./lead-engine-public-site-url');
+
+const LEAD_SELECT = 'id, company_name, website_url, source, status, demo_slug';
 
 async function runDraftForLead(supabase, leadId, channel, actor) {
   const { data: lead, error: leadErr } = await supabase
@@ -105,7 +108,15 @@ async function runDraftForLead(supabase, leadId, channel, actor) {
     };
   }
 
-  const draftBody = composeDraftBody(parsed.value.body, parsed.value.follow_up_body);
+  let draftBody = composeDraftBody(parsed.value.body, parsed.value.follow_up_body);
+  const publicBase = getLeadEnginePublicSiteUrl().replace(/\/+$/, '');
+  const pathUrl = lead.demo_slug ? `/demo/${String(lead.demo_slug).trim()}` : '';
+  if (pathUrl) {
+    const absoluteUrl = publicBase ? `${publicBase}${pathUrl}` : pathUrl;
+    if (!String(draftBody).includes(pathUrl)) {
+      draftBody += buildOutreachDemoFooter(pathUrl, absoluteUrl);
+    }
+  }
   const nowIso = new Date().toISOString();
   const { data: inserted, error: insErr } = await supabase
     .from('lead_engine_outreach')

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart demo builder | JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/demo-dynamic-intake.css">
+  <link rel="icon" href="assets/images/jlsolutions-logo.png" type="image/png">
+  <meta name="description" content="Create a branded smart intake demo with a shareable link.">
+  <style>
+    body.demo-builder-body { font-family: Inter, system-ui, sans-serif; }
+  </style>
+</head>
+<body class="demo-builder-body demo-builder-page">
+  <nav class="navbar navbar-expand-lg navbar-dark jl-theme" role="navigation" aria-label="Main">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html">
+        <img src="assets/images/jlsolutions-logo-nav.png" alt="JL Solutions" class="jl-logo-icon" width="120" height="36" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navB" aria-controls="navB" aria-expanded="false" aria-label="Toggle menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navB">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/demo">Live demo</a></li>
+          <li class="nav-item"><a class="nav-link" href="/get-started">Get started</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content" class="demo-builder-shell">
+    <div class="demo-builder-card">
+      <h1>Smart intake demo builder</h1>
+      <p class="demo-builder-lead">
+        Enter a business name and industry. We’ll generate a mobile-friendly intake preview and a shareable URL like <code>/demo/your-slug</code>.
+      </p>
+
+      <form id="demoBuilderForm" novalidate>
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="builderBusinessName">Business name *</label>
+          <input type="text" class="form-control form-control-lg" id="builderBusinessName" name="businessName" required autocomplete="organization" placeholder="e.g. North Star HVAC" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="builderIndustry">Industry</label>
+          <select class="form-select form-select-lg" id="builderIndustry" name="industry"></select>
+          <p class="form-text small text-muted mb-0">Service options pre-fill from this preset; add your own lines below.</p>
+        </div>
+        <div class="mb-2">
+          <span class="form-label fw-semibold d-block">Services to show on the demo</span>
+          <div id="builderServices" class="demo-builder-services" role="group" aria-label="Preset services"></div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="builderCustomServices">Additional services <span class="text-muted fw-normal">(one per line)</span></label>
+          <textarea class="form-control" id="builderCustomServices" rows="3" placeholder="Commercial maintenance&#10;Warranty visit"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="builderIssueOptions">What’s going on? <span class="text-muted fw-normal">(optional — one per line; defaults by industry)</span></label>
+          <textarea class="form-control" id="builderIssueOptions" rows="4" placeholder="Not cooling&#10;Strange noise&#10;Need inspection"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="builderCtaService">Get Started package</label>
+          <select class="form-select" id="builderCtaService">
+            <option value="ai-intake" selected>AI intake</option>
+            <option value="scheduling">Scheduling &amp; routing</option>
+            <option value="fix-app">Fix my app / site</option>
+            <option value="lead-engine">Lead engine</option>
+            <option value="custom">Custom / talk first</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold" for="builderSecret">Generator secret <span class="text-muted fw-normal">(only if DEMO_GENERATOR_SECRET is set on Netlify)</span></label>
+          <input type="password" class="form-control" id="builderSecret" autocomplete="off" placeholder="Bearer token" />
+        </div>
+        <button type="submit" class="btn btn-lg w-100 d-sm-inline-block" id="builderSubmit" disabled style="background: linear-gradient(135deg, #0d9488, #0f766e); color: #fff; border: none; font-weight: 700;">
+          Create shareable demo
+        </button>
+      </form>
+
+      <p id="builderMsg" class="demo-builder-msg" hidden></p>
+
+      <div id="builderResult" class="demo-builder-result" hidden>
+        <p class="fw-semibold mb-1">Share this link</p>
+        <a id="builderShareLink" href="#" rel="noopener"></a>
+        <div class="demo-builder-copy-row">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="builderCopyBtn">Copy link</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/demo-builder-page.js"></script>
+</body>
+</html>

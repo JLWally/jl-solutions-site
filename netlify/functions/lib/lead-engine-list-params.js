@@ -4,6 +4,27 @@
 
 const VALID_STATUS = new Set(['new', 'analyzed', 'review', 'archived']);
 const VALID_OUTREACH_STATUS = new Set(['draft', 'approved', 'sent', 'cancelled']);
+const VALID_DEMO_OUTREACH_STATUS = new Set([
+  'drafted',
+  'copied',
+  'sent_manual',
+  'followup_due',
+  'send_failed',
+  'replied',
+  'interested',
+  'not_interested',
+  'unset',
+]);
+const MIN_DEMO_RECENT_SENT_DAYS = 1;
+const MAX_DEMO_RECENT_SENT_DAYS = 30;
+const VALID_DEMO_FOLLOWUP_DUE = new Set([
+  'unset',
+  'set',
+  'overdue',
+  'today',
+  'next_2_days',
+  'upcoming',
+]);
 const { VALID_REVIEW_QUEUE_MODES } = require('./lead-engine-review-queue');
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 25;
@@ -116,6 +137,65 @@ function parseListQueryParams(qs) {
     recommendedOffer = off;
   }
 
+  let demoOutreachStatus = null;
+  if (q.demoOutreachStatus != null && String(q.demoOutreachStatus).trim() !== '') {
+    const dos = String(q.demoOutreachStatus).trim().toLowerCase();
+    if (!VALID_DEMO_OUTREACH_STATUS.has(dos)) {
+      return {
+        ok: false,
+        errors: [
+          'demoOutreachStatus must be one of: drafted, copied, sent_manual, followup_due, send_failed, replied, interested, not_interested, unset',
+        ],
+      };
+    }
+    demoOutreachStatus = dos;
+  }
+
+  let demoRecentSentDays = null;
+  if (q.demoRecentSentDays != null && String(q.demoRecentSentDays).trim() !== '') {
+    const n = parseInt(String(q.demoRecentSentDays).trim(), 10);
+    if (
+      !Number.isFinite(n) ||
+      n < MIN_DEMO_RECENT_SENT_DAYS ||
+      n > MAX_DEMO_RECENT_SENT_DAYS
+    ) {
+      return {
+        ok: false,
+        errors: [
+          `demoRecentSentDays must be an integer between ${MIN_DEMO_RECENT_SENT_DAYS} and ${MAX_DEMO_RECENT_SENT_DAYS}`,
+        ],
+      };
+    }
+    demoRecentSentDays = n;
+  }
+
+  let demoFollowupDue = null;
+  if (q.demoFollowupDue != null && String(q.demoFollowupDue).trim() !== '') {
+    const dfd = String(q.demoFollowupDue).trim().toLowerCase();
+    if (!VALID_DEMO_FOLLOWUP_DUE.has(dfd)) {
+      return {
+        ok: false,
+        errors: ['demoFollowupDue must be one of: unset, set, overdue, today, next_2_days, upcoming'],
+      };
+    }
+    demoFollowupDue = dfd;
+  }
+
+  /** Union preset: overdue ∪ due today ∪ send_failed (ignores demoOutreachStatus + demoFollowupDue params). */
+  let demoQueuePreset = null;
+  if (q.demoQueuePreset != null && String(q.demoQueuePreset).trim() !== '') {
+    const p = String(q.demoQueuePreset).trim().toLowerCase();
+    if (p !== 'daily_action') {
+      return {
+        ok: false,
+        errors: ['demoQueuePreset must be daily_action when set'],
+      };
+    }
+    demoQueuePreset = 'daily_action';
+    demoOutreachStatus = null;
+    demoFollowupDue = null;
+  }
+
   let reviewQueue = null;
   if (q.reviewQueue != null && String(q.reviewQueue).trim() !== '') {
     const rq = String(q.reviewQueue).trim().toLowerCase();
@@ -149,6 +229,10 @@ function parseListQueryParams(qs) {
       recommendedOffer,
       reviewQueue,
       needsAttentionSend,
+      demoOutreachStatus,
+      demoFollowupDue,
+      demoRecentSentDays,
+      demoQueuePreset,
       includeSummary,
     },
   };
@@ -162,4 +246,8 @@ module.exports = {
   MAX_PAGE_SIZE,
   VALID_STATUS,
   VALID_OUTREACH_STATUS,
+  VALID_DEMO_OUTREACH_STATUS,
+  VALID_DEMO_FOLLOWUP_DUE,
+  MIN_DEMO_RECENT_SENT_DAYS,
+  MAX_DEMO_RECENT_SENT_DAYS,
 };

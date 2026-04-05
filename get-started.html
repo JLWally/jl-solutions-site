@@ -37,7 +37,7 @@
     <section class="jl-start-hero" aria-labelledby="jl-start-hero-title">
       <p class="jl-start-eyebrow">Get started</p>
       <h1 id="jl-start-hero-title" class="jl-start-hero__title">What’s your biggest problem right now?</h1>
-      <p class="jl-start-hero__sub">Tell us what’s broken—we’ll recommend the best package. Then a short intake and secure Stripe checkout. Want to talk first? <a class="jl-start-hero__link" href="/book-consultation">Talk it through first</a>.</p>
+      <p class="jl-start-hero__sub">We’ll match you to the right fixed-price system—or a custom build if that’s what you need. Short intake, then secure checkout or a clear next step. <a class="jl-start-hero__link" href="/book-consultation">Talk it through first</a> anytime.</p>
       <div class="jl-start-pills" role="list">
         <span class="jl-start-pill" role="listitem"><span aria-hidden="true">⚡</span> Fast turnaround</span>
         <span class="jl-start-pill" role="listitem"><span aria-hidden="true">🔒</span> Secure checkout</span>
@@ -66,12 +66,37 @@
       <section id="jl-start-problem" class="jl-start-problem" aria-labelledby="jl-problem-heading">
         <h2 class="jl-start-section-title" id="jl-problem-heading">What’s your biggest problem right now?</h2>
         <p class="jl-start-section-helper">Pick the one that stings most—we’ll match you to a package.</p>
-        <div class="jl-start-problem-grid" role="group" aria-label="Biggest problems">
-          <button type="button" class="jl-start-problem__opt" data-jl-pain="not-enough-leads" data-jl-pain-label="Not getting enough leads">Not getting enough leads</button>
-          <button type="button" class="jl-start-problem__opt" data-jl-pain="bad-leads" data-jl-pain-label="Getting bad leads">Getting bad leads</button>
-          <button type="button" class="jl-start-problem__opt" data-jl-pain="manual-followup" data-jl-pain-label="Too much manual follow-up">Too much manual follow-up</button>
-          <button type="button" class="jl-start-problem__opt" data-jl-pain="booking-messy" data-jl-pain-label="Booking is messy">Booking is messy</button>
-          <button type="button" class="jl-start-problem__opt" data-jl-pain="site-not-converting" data-jl-pain-label="Website not converting">Website not converting</button>
+        <div class="jl-start-problem-cards" role="group" aria-label="Biggest problems">
+          <button type="button" class="jl-start-problem-card" data-jl-pain="not-enough-leads" data-jl-pain-label="I’m not getting enough leads" aria-pressed="false">
+            <span class="jl-start-problem-card__icon" aria-hidden="true">📉</span>
+            <span class="jl-start-problem-card__title">I’m not getting enough leads</span>
+            <span class="jl-start-problem-card__hint">Pipeline feels thin</span>
+          </button>
+          <button type="button" class="jl-start-problem-card" data-jl-pain="bad-leads" data-jl-pain-label="I’m getting bad leads" aria-pressed="false">
+            <span class="jl-start-problem-card__icon" aria-hidden="true">🎯</span>
+            <span class="jl-start-problem-card__title">I’m getting bad leads</span>
+            <span class="jl-start-problem-card__hint">Volume without fit</span>
+          </button>
+          <button type="button" class="jl-start-problem-card" data-jl-pain="manual-followup" data-jl-pain-label="Too much manual follow-up" aria-pressed="false">
+            <span class="jl-start-problem-card__icon" aria-hidden="true">✉️</span>
+            <span class="jl-start-problem-card__title">Too much manual follow-up</span>
+            <span class="jl-start-problem-card__hint">Inbox &amp; chasing details</span>
+          </button>
+          <button type="button" class="jl-start-problem-card" data-jl-pain="booking-messy" data-jl-pain-label="Booking is messy" aria-pressed="false">
+            <span class="jl-start-problem-card__icon" aria-hidden="true">📅</span>
+            <span class="jl-start-problem-card__title">Booking is messy</span>
+            <span class="jl-start-problem-card__hint">Calls, texts, chaos</span>
+          </button>
+          <button type="button" class="jl-start-problem-card" data-jl-pain="site-not-converting" data-jl-pain-label="My site is not converting" aria-pressed="false">
+            <span class="jl-start-problem-card__icon" aria-hidden="true">🛠️</span>
+            <span class="jl-start-problem-card__title">My site is not converting</span>
+            <span class="jl-start-problem-card__hint">Traffic but weak UX</span>
+          </button>
+          <button type="button" class="jl-start-problem-card jl-start-problem-card--complex" data-jl-pain="workflow-complex" data-jl-pain-label="My workflow is more complex than that" aria-pressed="false">
+            <span class="jl-start-problem-card__icon" aria-hidden="true">⚙️</span>
+            <span class="jl-start-problem-card__title">My workflow is more complex than that</span>
+            <span class="jl-start-problem-card__hint">Custom build — we’ll consult, no checkout</span>
+          </button>
         </div>
       </section>
 
@@ -109,22 +134,30 @@
             <p class="jl-start-card__best">Best for: outbound-heavy agencies and consultants.</p>
             <p class="jl-start-card__price" data-price-for="lead-engine" hidden>$3,500 fixed price</p>
           </button>
+          <button type="button" class="jl-start-card jl-start-card--custom" data-jl-service="custom" aria-pressed="false">
+            <span class="jl-start-card__icon" aria-hidden="true">⚙️</span>
+            <h3 class="jl-start-card__title">Custom build / advanced workflow</h3>
+            <p class="jl-start-card__outcome">Multi-step apps, automation, dashboards, or full platforms—we’ll scope it with you.</p>
+            <p class="jl-start-card__best">Best for: workflows that don’t fit a single package.</p>
+            <p class="jl-start-card__price jl-start-card__price--custom" data-price-for="custom" hidden>Scoped together</p>
+          </button>
         </div>
       </section>
 
-      <section id="jl-start-recommend" class="jl-start-panel" aria-live="polite" hidden>
-        <h2 class="jl-start-rec__title" id="jl-rec-title"></h2>
-        <p class="jl-start-rec__fit-name" id="jl-rec-fit-name"></p>
+      <section id="jl-start-recommend" class="jl-start-panel jl-start-panel--recommend" aria-live="polite" hidden>
+        <p class="jl-start-rec__context" id="jl-rec-title"></p>
+        <h2 class="jl-start-rec__headline" id="jl-rec-fit-name"></h2>
         <p class="jl-start-rec__desc" id="jl-rec-desc"></p>
         <ul class="jl-start-rec__benefits" id="jl-rec-benefits"></ul>
-        <div class="jl-start-rec__meta">
-          <span class="jl-start-rec__price" id="jl-rec-price"></span>
-          <span class="jl-start-rec__timeline" id="jl-rec-timeline"></span>
+        <div class="jl-start-rec__price-stack" id="jl-rec-meta">
+          <p class="jl-start-rec__price" id="jl-rec-price"></p>
+          <p class="jl-start-rec__timeline" id="jl-rec-timeline"></p>
+          <p class="jl-start-rec__roi" id="jl-rec-roi" hidden></p>
         </div>
-        <div class="jl-start-rec__actions jl-start-rec__actions--row">
-          <a class="jl-start-secondary" id="jl-rec-landing" href="/services/index.html" hidden>Service overview</a>
-          <button type="button" class="jl-start-primary" id="jl-rec-continue">Continue</button>
-          <a class="jl-start-secondary" href="/book-consultation">Talk it through first</a>
+        <a class="jl-start-rec__landing jl-start-secondary jl-start-secondary--rec" id="jl-rec-landing" href="/services/index.html" hidden>Service overview</a>
+        <div class="jl-start-rec__actions jl-start-rec__actions--stack" id="jl-rec-actions">
+          <button type="button" class="jl-start-primary" id="jl-rec-continue">Get My System Started</button>
+          <a class="jl-start-secondary jl-start-secondary--rec" id="jl-rec-talk" href="/book-consultation">Talk it through first</a>
         </div>
       </section>
 
@@ -135,6 +168,8 @@
           <input type="hidden" name="form-name" id="jl-start-form-name" value="getstarted-product-intake">
           <input type="hidden" name="gs_product" id="jl_gs_product" value="">
           <input type="hidden" name="gs_biggest_problem" id="jl_gs_biggest_problem" value="">
+          <input type="hidden" name="gs_intent" id="jl_gs_intent" value="">
+          <input type="hidden" name="gs_landing_vertical" id="jl_gs_landing_vertical" value="">
           <p class="visually-hidden" aria-hidden="true">
             <label>Leave blank: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
           </p>
@@ -155,32 +190,22 @@
             <input type="text" class="form-control" id="jl_gs_website" name="gs_website" required inputmode="url" placeholder="https://">
           </div>
           <div class="mb-3">
-            <label class="form-label" for="jl_gs_main_goal">Main goal <span class="text-danger">*</span></label>
+            <label class="form-label" for="jl_gs_main_goal">What’s your main goal? <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="jl_gs_main_goal" name="gs_main_goal" placeholder="What do you want this setup to improve?">
           </div>
           <div class="mb-3">
-            <label class="form-label" for="jl_gs_not_working">What is not working right now? <span class="text-danger">*</span></label>
+            <label class="form-label" for="jl_gs_not_working">What’s not working right now? <span class="text-danger">*</span></label>
             <textarea class="form-control" id="jl_gs_not_working" name="gs_not_working" rows="2" placeholder="Share the current bottleneck"></textarea>
           </div>
 
           <div id="jl-intake-fix" class="jl-start-intake-panel" data-panel="fix-app">
             <div class="mb-3">
-              <label class="form-label" for="jl_gs_fix_issues">What feels broken right now? <span class="text-danger">*</span></label>
-              <select class="form-select" id="jl_gs_fix_issues" name="gs_fix_issues">
-                <option value="">Select one</option>
-                <option value="Forms not working">Forms not working</option>
-                <option value="Mobile experience is weak">Mobile experience is weak</option>
-                <option value="Conversion flow is confusing">Conversion flow is confusing</option>
-                <option value="Something else">Something else</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="jl_gs_fix_platform">What platform is this built on? <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="jl_gs_fix_platform" name="gs_fix_platform" placeholder="WordPress, Webflow, custom app...">
+              <label class="form-label" for="jl_gs_fix_breaking">What is breaking conversions right now? <span class="text-danger">*</span></label>
+              <textarea class="form-control" id="jl_gs_fix_breaking" name="gs_fix_breaking" rows="2" placeholder="Forms, mobile, confusing steps, speed…"></textarea>
             </div>
             <div class="mb-0">
-              <label class="form-label" for="jl_gs_fix_pages">Biggest priority right now? <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="jl_gs_fix_pages" name="gs_fix_pages" placeholder="What should we improve first?">
+              <label class="form-label" for="jl_gs_fix_platform">What platform are you on? <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="jl_gs_fix_platform" name="gs_fix_platform" placeholder="WordPress, Webflow, custom app…">
             </div>
           </div>
 
@@ -211,32 +236,24 @@
               </div>
             </fieldset>
             <div class="mb-0">
-              <label class="form-label" for="jl_gs_ai_dest">Where should qualified leads go?</label>
+              <label class="form-label" for="jl_gs_ai_dest">Where should qualified leads go? <span class="text-muted fw-normal">(optional)</span></label>
               <input type="text" class="form-control" id="jl_gs_ai_dest" name="gs_ai_leads_destination" placeholder="Email, CRM, or sheet">
             </div>
           </div>
 
           <div id="jl-intake-sched" class="jl-start-intake-panel" data-panel="scheduling">
             <div class="mb-3">
-              <label class="form-label" for="jl_gs_sched_services">What type of appointments or jobs do customers book? <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="jl_gs_sched_services" name="gs_sched_services" placeholder="Consult calls, estimates, service visits...">
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="jl_gs_sched_assign">Do you assign jobs manually or automatically? <span class="text-danger">*</span></label>
-              <select class="form-select" id="jl_gs_sched_assign" name="gs_sched_assign_manual_auto">
-                <option value="">Select one</option>
-                <option value="Manually">Manually</option>
-                <option value="Automatically">Automatically</option>
-                <option value="Mix of both">Mix of both</option>
-              </select>
+              <label class="form-label" for="jl_gs_sched_services">What type of jobs are customers booking? <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="jl_gs_sched_services" name="gs_sched_services" placeholder="Consult calls, estimates, service visits…">
             </div>
             <div class="mb-0">
-              <label class="form-label" for="jl_gs_sched_availability">Do you need reminders and confirmations? <span class="text-danger">*</span></label>
-              <select class="form-select" id="jl_gs_sched_availability" name="gs_sched_availability">
+              <label class="form-label" for="jl_gs_sched_assign">Do jobs need to be assigned to a person or crew? <span class="text-danger">*</span></label>
+              <select class="form-select" id="jl_gs_sched_assign" name="gs_sched_assign_crew">
                 <option value="">Select one</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-                <option value="Not sure">Not sure</option>
+                <option value="A specific person">A specific person</option>
+                <option value="A crew or team">A crew or team</option>
+                <option value="Both depending on job">Both depending on job</option>
+                <option value="Not sure yet">Not sure yet</option>
               </select>
             </div>
           </div>
@@ -244,14 +261,10 @@
           <div id="jl-intake-lead" class="jl-start-intake-panel" data-panel="lead-engine">
             <div class="mb-3">
               <label class="form-label" for="jl_gs_lead_niche">Who are you trying to reach? <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="jl_gs_lead_niche" name="gs_lead_niche" placeholder="Industry, role, company type...">
-            </div>
-            <div class="mb-3">
-              <label class="form-label" for="jl_gs_lead_market">What market/location are you targeting? <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="jl_gs_lead_market" name="gs_lead_market" placeholder="US, regional, city-level, etc.">
+              <input type="text" class="form-control" id="jl_gs_lead_niche" name="gs_lead_niche" placeholder="Industry, role, company type…">
             </div>
             <div class="mb-0">
-              <label class="form-label" for="jl_gs_lead_goal">Are you doing outbound manually today? <span class="text-danger">*</span></label>
+              <label class="form-label" for="jl_gs_lead_goal">Are you doing outbound manually now? <span class="text-danger">*</span></label>
               <select class="form-select" id="jl_gs_lead_goal" name="gs_lead_goal">
                 <option value="">Select one</option>
                 <option value="Yes">Yes</option>
@@ -261,7 +274,7 @@
             </div>
           </div>
 
-          <div class="form-check mt-3 mb-0">
+          <div class="form-check mt-3 mb-0" id="jl-custom-scope-wrap">
             <input class="form-check-input" type="checkbox" id="jl_gs_custom_scope" name="gs_custom_scope" value="yes">
             <label class="form-check-label small" for="jl_gs_custom_scope">This looks like a larger or multi-system build — I want a <strong>custom quote</strong> instead of checkout.</label>
           </div>
@@ -269,14 +282,25 @@
       </section>
 
       <section id="jl-start-cta-block" class="jl-start-panel" hidden>
-        <ul class="jl-start-reassure" id="jl-start-reassure" aria-label="Before you continue">
-          <li>Secure payment via Stripe</li>
-          <li>You’ll receive confirmation instantly</li>
-          <li>We begin within 1 business day</li>
-        </ul>
-        <button type="button" class="jl-start-primary" id="jl-start-primary">Continue to Secure Checkout</button>
-        <p class="jl-start-cta-note">Takes you to Stripe to complete your purchase.</p>
-        <a class="jl-start-secondary" href="/book-consultation">Talk it through first</a>
+        <div id="jl-cta-stripe-wrap">
+          <ul class="jl-start-reassure" id="jl-start-reassure" aria-label="Before you continue">
+            <li>Secure payment via Stripe</li>
+            <li>Confirmation instantly</li>
+            <li>We begin within 1 business day</li>
+          </ul>
+          <button type="button" class="jl-start-primary" id="jl-start-primary">Continue to Secure Checkout</button>
+          <p class="jl-start-cta-note" id="jl-start-cta-note">Takes you to Stripe to complete your purchase.</p>
+          <a class="jl-start-secondary" id="jl-cta-stripe-secondary" href="/book-consultation">Talk it through first</a>
+        </div>
+        <div id="jl-cta-custom-wrap" hidden>
+          <p class="jl-start-section-helper mb-3">Complex workflow — <strong>no Stripe checkout</strong>. Save your details and we’ll route you to a consultation to scope the build.</p>
+          <ul class="jl-start-reassure jl-start-reassure--muted" aria-label="What happens next">
+            <li>We review your intake before the call</li>
+            <li>You’ll book a time that works for you</li>
+          </ul>
+          <button type="button" class="jl-start-primary" id="jl-start-book-call">Book a consultation</button>
+          <button type="button" class="jl-start-primary jl-start-primary--ghost" id="jl-start-request-quote">Request a custom quote instead</button>
+        </div>
       </section>
     </main>
   </div>

@@ -99,6 +99,17 @@
           <div class="card card-dark p-3">
             <h2 class="h6 text-secondary mb-2">Leads</h2>
             <p class="small text-muted mb-2 mb-lg-1 le-readable-hint"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
+            <div id="leDailyActionSummaryBar" class="le-daily-action-summary mb-2" style="display: none" aria-live="polite"></div>
+            <div class="le-daily-queue mb-2 p-2 rounded" role="region" aria-label="Demo outreach daily queue">
+              <div class="d-flex flex-wrap align-items-center gap-2">
+                <button type="button" class="btn btn-sm btn-warning text-dark fw-semibold le-daily-queue-btn le-daily-queue-btn--primary" data-le-daily="daily_action" title="List API union: overdue F/U, due today (UTC), or demo send failed">Needs action today</button>
+                <span class="small text-secondary text-nowrap">Narrow:</span>
+                <button type="button" class="btn btn-sm btn-outline-warning le-daily-queue-btn" data-le-daily="overdue" title="Demo F/U overdue (UTC) only">Overdue F/U</button>
+                <button type="button" class="btn btn-sm btn-outline-warning le-daily-queue-btn" data-le-daily="today" title="Demo F/U due today (UTC) only">Due today</button>
+                <button type="button" class="btn btn-sm btn-outline-warning le-daily-queue-btn" data-le-daily="send_failed" title="Demo outreach send failed only">Send failed</button>
+              </div>
+              <p class="small text-muted mb-0 mt-1"><strong>Needs action today</strong> uses <code class="text-secondary">demoQueuePreset=daily_action</code> (union). Narrow buttons match one dropdown below. Changing demo filters by hand clears the preset.</p>
+            </div>
             <div class="row g-2 mb-2 le-filter-bar">
               <div class="col-6 col-md-3">
                 <label class="form-label small mb-0" for="filterStatus">Lead status</label>
@@ -174,6 +185,44 @@
                 </select>
               </div>
             </div>
+            <div class="row g-2 mb-2 le-filter-bar">
+              <div class="col-12 col-md-4">
+                <label class="form-label small mb-0" for="filterDemoOutreach">Demo outreach</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterDemoOutreach">
+                  <option value="">Any</option>
+                  <option value="unset">No outreach yet</option>
+                  <option value="drafted">Drafted</option>
+                  <option value="copied">Copied</option>
+                  <option value="sent_manual">Sent (manual)</option>
+                  <option value="send_failed">Send failed</option>
+                  <option value="followup_due">Follow-up due (status)</option>
+                  <option value="replied">Replied</option>
+                  <option value="interested">Interested</option>
+                  <option value="not_interested">Not interested</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label small mb-0" for="filterDemoRecentSent">Demo sent recently</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterDemoRecentSent">
+                  <option value="">Any</option>
+                  <option value="7">Last 7 days</option>
+                  <option value="3">Last 3 days</option>
+                  <option value="14">Last 14 days</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label small mb-0" for="filterDemoFollowupDue">Demo F/U date</label>
+                <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterDemoFollowupDue">
+                  <option value="">Any</option>
+                  <option value="unset">No date set</option>
+                  <option value="set">Has due date</option>
+                  <option value="overdue">Overdue (UTC)</option>
+                  <option value="today">Due today (UTC)</option>
+                  <option value="next_2_days">Due next 2 days (UTC)</option>
+                  <option value="upcoming">Due after today (UTC)</option>
+                </select>
+              </div>
+            </div>
             <div class="row g-2 mb-3 le-filter-bar">
               <div class="col-md-6">
                 <label class="form-label small mb-0" for="filterSearch">Search (company / URL)</label>
@@ -231,12 +280,14 @@
                     <th>CRM sync</th>
                     <th>Latest audit</th>
                     <th>AI fit</th>
+                    <th>Demo outreach</th>
+                    <th>F/U due</th>
                     <th>Outreach</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="leadsBody">
-                  <tr><td colspan="10" class="text-muted small">No data</td></tr>
+                  <tr><td colspan="12" class="text-muted small">No data</td></tr>
                 </tbody>
               </table>
             </div>
@@ -266,6 +317,8 @@
 
     var leadListPage = 1;
     var leadListPageSize = 25;
+    /** When set, list uses demoQueuePreset=daily_action (union); demo dropdowns stay cleared. */
+    var leadDemoQueuePreset = '';
     var leadHistoryCache = {};
     var selectedLeadIds = new Set();
     var currentListRows = [];
@@ -280,6 +333,8 @@
     };
     /** Draft text for History "Copy email" — never put full body in HTML attributes (truncation / parse bugs). */
     var draftClipboardByKey = Object.create(null);
+    /** Last absolute demo URL returned by lead-engine-generate-demo (until history refresh). */
+    var leadDemoUrlByLeadId = Object.create(null);
 
     function formatDraftEmailClip(subject, body) {
       var subj = String(subject || '').trim() || '(no subject)';
@@ -324,6 +379,223 @@
       return Date.now() - t > 16 * 60 * 1000;
     }
 
+    function formatFollowupDueLastContactLine(r) {
+      var lc = r.demo_last_contacted_at;
+      if (!lc) return '';
+      var t = new Date(lc);
+      if (!Number.isFinite(t.getTime())) return '';
+      return (
+        '<div class="small text-muted mt-1 le-followup-sub" title="' +
+        escapeAttr(String(lc)) +
+        '">Last contact: ' +
+        escapeHtml(t.toLocaleString()) +
+        '</div>'
+      );
+    }
+
+    function formatFollowupDueCell(r) {
+      var raw = r.demo_followup_due_at;
+      var main;
+      if (!raw) {
+        main = '<span class="text-muted small">—</span>';
+      } else {
+        var d = new Date(raw);
+        if (!Number.isFinite(d.getTime())) {
+          main = '<span class="text-muted small">—</span>';
+        } else {
+          var now = new Date();
+          var startUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+          var overdue = d.getTime() < startUtc;
+          var label = (raw || '').slice(0, 10) + ' ' + (raw || '').slice(11, 16);
+          main =
+            '<span class="small ' +
+            (overdue ? 'text-warning fw-semibold' : 'text-light') +
+            '" title="' +
+            escapeAttr(String(raw)) +
+            '">' +
+            escapeHtml(label.trim()) +
+            '</span>';
+        }
+      }
+      return '<div class="le-followup-due-stack">' + main + formatFollowupDueLastContactLine(r) + '</div>';
+    }
+
+    /** UTC: due date is before today, or within today's calendar day. */
+    function isDemoFollowupDueTodayOrOverdueRow(r) {
+      var raw = r.demo_followup_due_at;
+      if (!raw) return false;
+      var d = new Date(raw);
+      if (!Number.isFinite(d.getTime())) return false;
+      var now = new Date();
+      var startUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+      var endUtc = startUtc + 86400000;
+      if (d.getTime() < startUtc) return true;
+      if (d.getTime() >= startUtc && d.getTime() < endUtc) return true;
+      return false;
+    }
+
+    function isTerminalDemoOutreachOutcome(st) {
+      return st === 'replied' || st === 'interested' || st === 'not_interested';
+    }
+
+    /** Follow-up execution shortcut: composer opens with Follow-up 1 template. */
+    function shouldShowSendFollowup1QuickAction(r) {
+      var st = r.demo_outreach_status ? String(r.demo_outreach_status) : '';
+      if (isTerminalDemoOutreachOutcome(st)) return false;
+      if (st === 'send_failed') return false;
+      if (isDemoFollowupDueTodayOrOverdueRow(r)) return true;
+      if (st === 'sent_manual') return true;
+      return false;
+    }
+
+    /**
+     * Second follow-up template — stricter than F/U 1: must be due now (UTC) and past a first send / F/U 1 stage
+     * (we approximate with sent_manual or followup_due; no per-template send log on the lead).
+     */
+    function shouldShowSendFollowup2QuickAction(r) {
+      var st = r.demo_outreach_status ? String(r.demo_outreach_status) : '';
+      if (isTerminalDemoOutreachOutcome(st)) return false;
+      if (st === 'send_failed') return false;
+      if (!isDemoFollowupDueTodayOrOverdueRow(r)) return false;
+      if (st === 'sent_manual' || st === 'followup_due') return true;
+      return false;
+    }
+
+    /** Compact queue badges (UTC calendar day for F/U). */
+    function formatDemoQueueBadges(r) {
+      var parts = [];
+      var raw = r.demo_followup_due_at;
+      if (raw) {
+        var d = new Date(raw);
+        if (Number.isFinite(d.getTime())) {
+          var now = new Date();
+          var startUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+          var endUtc = startUtc + 86400000;
+          if (d.getTime() < startUtc) {
+            parts.push('<span class="badge le-queue-badge bg-danger">Overdue</span>');
+          } else if (d.getTime() >= startUtc && d.getTime() < endUtc) {
+            parts.push('<span class="badge le-queue-badge bg-warning text-dark">Due today</span>');
+          }
+        }
+      }
+      var st = r.demo_outreach_status ? String(r.demo_outreach_status) : '';
+      if (st === 'replied') parts.push('<span class="badge le-queue-badge bg-info text-dark">Replied</span>');
+      if (st === 'interested') {
+        parts.push(
+          '<span class="badge le-queue-badge le-queue-badge--interested bg-success">Interested</span>'
+        );
+      }
+      if (!parts.length) return '';
+      return '<div class="d-flex flex-wrap gap-1 mb-1 le-queue-badges">' + parts.join('') + '</div>';
+    }
+
+    function formatDemoOutreachSelect(r) {
+      var cur = r.demo_outreach_status ? String(r.demo_outreach_status) : '';
+      var opts = [
+        { v: '', l: '—' },
+        { v: 'drafted', l: 'Drafted' },
+        { v: 'copied', l: 'Copied' },
+        { v: 'sent_manual', l: 'Sent' },
+        { v: 'send_failed', l: 'Send failed' },
+        { v: 'followup_due', l: 'F/U due' },
+        { v: 'replied', l: 'Replied' },
+        { v: 'interested', l: 'Interested' },
+        { v: 'not_interested', l: 'Not int.' },
+      ];
+      var inner = opts
+        .map(function (o) {
+          return (
+            '<option value="' +
+            escapeAttr(o.v) +
+            '"' +
+            (cur === o.v ? ' selected' : '') +
+            '>' +
+            escapeHtml(o.l) +
+            '</option>'
+          );
+        })
+        .join('');
+      return (
+        '<select class="form-select form-select-sm bg-dark text-light border-secondary demo-outreach-status-select" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" aria-label="Demo outreach status">' +
+        inner +
+        '</select>'
+      );
+    }
+
+    /** Quick demo-outreach actions (opens composer, clipboard, PATCH status API). */
+    function formatDemoQuickActions(r) {
+      var name = (r.company_name || '').trim();
+      var slug = (r.demo_slug || '').trim();
+      var origin = window.location.origin || '';
+      var demoUrl = slug ? origin + '/demo/' + encodeURIComponent(slug) : '';
+      var q = 'leadId=' + encodeURIComponent(r.id);
+      if (name) q += '&businessName=' + encodeURIComponent(name);
+      if (slug) q += '&demoSlug=' + encodeURIComponent(slug);
+      var href = '/internal/outreach?' + q;
+      var openA =
+        '<a class="btn btn-outline-info btn-sm py-0 px-1 small" href="' +
+        escapeAttr(href) +
+        '" target="_blank" rel="noopener">Open outreach</a>';
+      var sendFu1 = '';
+      if (shouldShowSendFollowup1QuickAction(r)) {
+        var qFu1 = q + '&templateVariant=' + encodeURIComponent('followup_1');
+        var hrefFu1 = '/internal/outreach?' + qFu1;
+        sendFu1 =
+          '<a class="btn btn-warning btn-sm py-0 px-1 small text-dark fw-semibold" href="' +
+          escapeAttr(hrefFu1) +
+          '" target="_blank" rel="noopener" title="Composer with Follow-up 1 template (demo send)">Send F/U 1</a>';
+      }
+      var sendFu2 = '';
+      if (shouldShowSendFollowup2QuickAction(r)) {
+        var qFu2 = q + '&templateVariant=' + encodeURIComponent('followup_2');
+        var hrefFu2 = '/internal/outreach?' + qFu2;
+        sendFu2 =
+          '<a class="btn btn-outline-warning btn-sm py-0 px-1 small" href="' +
+          escapeAttr(hrefFu2) +
+          '" target="_blank" rel="noopener" title="Composer with Follow-up 2 template (Advanced; second nudge)">Send F/U 2</a>';
+      }
+      var copyB = demoUrl
+        ? '<button type="button" class="btn btn-outline-secondary btn-sm py-0 px-1 small le-demo-copy-url" data-demo-url="' +
+          escapeAttr(demoUrl) +
+          '">Copy demo URL</button>'
+        : '<span class="small text-muted">No slug</span>';
+      var outcomes =
+        '<span class="le-demo-outcome-group d-inline-flex flex-wrap gap-1 align-items-center" role="group" aria-label="Mark outcome">' +
+        '<button type="button" class="btn btn-outline-info btn-sm py-0 px-1 small le-demo-outcome" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" data-demo-outcome="replied" title="Set demo status: replied">Replied</button>' +
+        '<button type="button" class="btn btn-outline-success btn-sm py-0 px-1 small le-demo-outcome" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" data-demo-outcome="interested" title="Set demo status: interested">Interested</button>' +
+        '<button type="button" class="btn btn-outline-secondary btn-sm py-0 px-1 small le-demo-outcome" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" data-demo-outcome="not_interested" title="Set demo status: not interested">Not int.</button>' +
+        '</span>';
+      var noFu =
+        '<button type="button" class="btn btn-outline-warning btn-sm py-0 px-1 small le-demo-nofollowup" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" title="Clear follow-up due date">No F/U needed</button>';
+      var clr =
+        r.demo_outreach_status === 'send_failed'
+          ? '<button type="button" class="btn btn-outline-success btn-sm py-0 px-1 small le-demo-clearfail" data-lead-id="' +
+            escapeAttr(r.id) +
+            '">Clear failed</button>'
+          : '';
+      return (
+        '<div class="d-flex flex-wrap gap-1 align-items-center le-demo-quick-actions">' +
+        openA +
+        sendFu1 +
+        sendFu2 +
+        copyB +
+        outcomes +
+        noFu +
+        clr +
+        '</div>'
+      );
+    }
+
     function buildListQuery(resetPage) {
       if (resetPage) leadListPage = 1;
       leadListPageSize = parseInt(document.getElementById('filterPageSize').value, 10) || 25;
@@ -344,6 +616,16 @@
       if (search) q.set('search', search);
       var natt = document.getElementById('filterNeedsAttention').value;
       if (natt === 'send') q.set('needsAttention', 'send');
+      var frs = document.getElementById('filterDemoRecentSent').value;
+      if (frs) q.set('demoRecentSentDays', frs);
+      if (leadDemoQueuePreset === 'daily_action') {
+        q.set('demoQueuePreset', 'daily_action');
+      } else {
+        var fdemo = document.getElementById('filterDemoOutreach').value;
+        if (fdemo) q.set('demoOutreachStatus', fdemo);
+        var ffu = document.getElementById('filterDemoFollowupDue').value;
+        if (ffu) q.set('demoFollowupDue', ffu);
+      }
       q.set('page', String(leadListPage));
       q.set('pageSize', String(leadListPageSize));
       q.set('includeLatestAnalysis', '1');
@@ -352,7 +634,111 @@
       return q;
     }
 
+    /** Daily queue shortcuts: union preset or one demo dimension. */
+    function applyDailyDemoQueueFilter(mode) {
+      var fu = document.getElementById('filterDemoFollowupDue');
+      var demo = document.getElementById('filterDemoOutreach');
+      if (mode === 'daily_action') {
+        leadDemoQueuePreset = 'daily_action';
+        if (demo) demo.value = '';
+        if (fu) fu.value = '';
+      } else if (mode === 'overdue') {
+        leadDemoQueuePreset = '';
+        if (demo) demo.value = '';
+        if (fu) fu.value = 'overdue';
+      } else if (mode === 'today') {
+        leadDemoQueuePreset = '';
+        if (demo) demo.value = '';
+        if (fu) fu.value = 'today';
+      } else if (mode === 'send_failed') {
+        leadDemoQueuePreset = '';
+        if (fu) fu.value = '';
+        if (demo) demo.value = 'send_failed';
+      }
+      syncDailyQueueToUrl();
+      loadList(true);
+    }
+
+    function syncDailyQueueButtonStates() {
+      var fuEl = document.getElementById('filterDemoFollowupDue');
+      var demoEl = document.getElementById('filterDemoOutreach');
+      var fu = fuEl ? fuEl.value : '';
+      var demo = demoEl ? demoEl.value : '';
+      document.querySelectorAll('.le-daily-queue-btn').forEach(function (btn) {
+        var m = btn.getAttribute('data-le-daily');
+        var active = false;
+        if (m === 'daily_action') active = leadDemoQueuePreset === 'daily_action';
+        else if (m === 'overdue') active = leadDemoQueuePreset === '' && fu === 'overdue' && !demo;
+        else if (m === 'today') active = leadDemoQueuePreset === '' && fu === 'today' && !demo;
+        else if (m === 'send_failed') active = leadDemoQueuePreset === '' && demo === 'send_failed' && !fu;
+        btn.classList.toggle('le-daily-queue-btn--active', active);
+      });
+    }
+
+    function selectHasOptionValue(selectEl, value) {
+      if (!selectEl || value == null || value === '') return false;
+      var v = String(value);
+      for (var i = 0; i < selectEl.options.length; i++) {
+        if (selectEl.options[i].value === v) return true;
+      }
+      return false;
+    }
+
+    /** Apply demo queue slice from URL (preset wins over demoOutreachStatus / demoFollowupDue, same as server). */
+    function hydrateDailyQueueFromUrl() {
+      try {
+        var p = new URLSearchParams(window.location.search || '');
+        var preset = String(p.get('demoQueuePreset') || '').trim().toLowerCase();
+        var demoEl = document.getElementById('filterDemoOutreach');
+        var fuEl = document.getElementById('filterDemoFollowupDue');
+        if (preset === 'daily_action') {
+          leadDemoQueuePreset = 'daily_action';
+          if (demoEl) demoEl.value = '';
+          if (fuEl) fuEl.value = '';
+          return;
+        }
+        leadDemoQueuePreset = '';
+        var dos = p.get('demoOutreachStatus');
+        if (dos != null && String(dos) !== '' && demoEl && selectHasOptionValue(demoEl, dos)) {
+          demoEl.value = String(dos);
+        }
+        var dfd = p.get('demoFollowupDue');
+        if (dfd != null && String(dfd) !== '' && fuEl && selectHasOptionValue(fuEl, dfd)) {
+          fuEl.value = String(dfd);
+        }
+      } catch (_e) {}
+    }
+
+    /** Keep address bar in sync for daily queue slice only (replaceState; preserves other query keys and hash). */
+    function syncDailyQueueToUrl() {
+      if (typeof history === 'undefined' || !history.replaceState) return;
+      try {
+        var u = new URL(window.location.href);
+        var q = u.searchParams;
+        q.delete('demoQueuePreset');
+        q.delete('demoOutreachStatus');
+        q.delete('demoFollowupDue');
+        if (leadDemoQueuePreset === 'daily_action') {
+          q.set('demoQueuePreset', 'daily_action');
+        } else {
+          var demoEl = document.getElementById('filterDemoOutreach');
+          var fuEl = document.getElementById('filterDemoFollowupDue');
+          var dv = demoEl && demoEl.value ? String(demoEl.value) : '';
+          var fv = fuEl && fuEl.value ? String(fuEl.value) : '';
+          if (dv) q.set('demoOutreachStatus', dv);
+          if (fv) q.set('demoFollowupDue', fv);
+        }
+        var qs = q.toString();
+        var next = u.pathname + (qs ? '?' + qs : '') + (u.hash || '');
+        var cur = window.location.pathname + window.location.search + window.location.hash;
+        if (next !== cur) {
+          history.replaceState(null, '', next);
+        }
+      } catch (_e) {}
+    }
+
     function clearListFilters() {
+      leadDemoQueuePreset = '';
       document.getElementById('filterStatus').value = '';
       document.getElementById('filterOffer').value = '';
       document.getElementById('filterOutreach').value = '';
@@ -360,8 +746,12 @@
       document.getElementById('filterNeedsAttention').value = '';
       document.getElementById('filterOptedOut').value = '';
       document.getElementById('filterSuppressed').value = '';
+      document.getElementById('filterDemoOutreach').value = '';
+      document.getElementById('filterDemoRecentSent').value = '';
+      document.getElementById('filterDemoFollowupDue').value = '';
       document.getElementById('filterSearch').value = '';
       document.getElementById('filterPageSize').value = '25';
+      syncDailyQueueToUrl();
       loadList(true);
     }
 
@@ -387,6 +777,10 @@
         confidence: scoring.confidence || '',
         email_opted_out: r.email_opted_out === true ? 'true' : 'false',
         globally_suppressed: r.global_email_suppressed === true ? 'true' : 'false',
+        demo_outreach_status: r.demo_outreach_status || '',
+        demo_slug: r.demo_slug || '',
+        demo_followup_due_at: r.demo_followup_due_at || '',
+        demo_last_contacted_at: r.demo_last_contacted_at || '',
       };
     }
 
@@ -414,6 +808,34 @@
       URL.revokeObjectURL(a.href);
     }
 
+    function renderDailyActionSummaryBar(dq) {
+      var bar = document.getElementById('leDailyActionSummaryBar');
+      if (!bar) return;
+      var q = dq || {};
+      bar.style.display = 'flex';
+      bar.innerHTML =
+        '<span class="le-daily-action-summary__label small fw-semibold text-secondary text-nowrap">Daily demo focus (filtered cohort)</span>' +
+        '<span class="le-daily-action-summary__chip" title="Demo F/U due today UTC"><span class="text-warning">Due today</span> <strong class="text-light">' +
+        (q.demoFollowupDueToday || 0) +
+        '</strong></span>' +
+        '<span class="le-daily-action-summary__chip" title="Demo F/U overdue UTC"><span class="text-danger">Overdue</span> <strong class="text-light">' +
+        (q.demoFollowupOverdue || 0) +
+        '</strong></span>' +
+        '<span class="le-daily-action-summary__chip" title="demo_outreach_status send_failed"><span class="text-secondary">Send failed</span> <strong class="text-light">' +
+        (q.demoOutreachSendFailed || 0) +
+        '</strong></span>' +
+        '<span class="le-daily-action-summary__chip" title="demo_outreach_status interested"><span class="text-success">Interested</span> <strong class="text-light">' +
+        (q.demoOutreachInterested || 0) +
+        '</strong></span>';
+    }
+
+    function hideDailyActionSummaryBar() {
+      var bar = document.getElementById('leDailyActionSummaryBar');
+      if (!bar) return;
+      bar.style.display = 'none';
+      bar.innerHTML = '';
+    }
+
     function renderListSummary(sum, d) {
       var el = document.getElementById('listSummary');
       var metaLine = '';
@@ -431,6 +853,7 @@
           '</div>';
       }
       if (!sum) {
+        hideDailyActionSummaryBar();
         el.style.display = metaLine ? 'block' : 'none';
         el.innerHTML = metaLine || '';
         return;
@@ -468,7 +891,23 @@
         );
       }
       if (sum.pipelineNote) parts.push('<span class="text-warning">' + escapeHtml(sum.pipelineNote) + '</span>');
-      el.innerHTML = '<div>' + parts.join(' &nbsp;|&nbsp; ') + '</div>' + metaLine;
+      var dq = sum.demoQueue || {};
+      renderDailyActionSummaryBar(dq);
+      var demoLine =
+        '<div class="mt-2 small text-info">' +
+        '<strong class="text-light">Demo queue (filtered cohort):</strong> ' +
+        'F/U due today ' +
+        (dq.demoFollowupDueToday || 0) +
+        ' · overdue ' +
+        (dq.demoFollowupOverdue || 0) +
+        ' · send failed ' +
+        (dq.demoOutreachSendFailed || 0) +
+        ' · replied ' +
+        (dq.demoOutreachReplied || 0) +
+        ' · interested ' +
+        (dq.demoOutreachInterested || 0) +
+        '</div>';
+      el.innerHTML = '<div>' + parts.join(' &nbsp;|&nbsp; ') + '</div>' + demoLine + metaLine;
     }
 
     function renderActivitySummary(d) {
@@ -489,7 +928,15 @@
         ' · reconciliations ' +
         (op.recentReconciliations || 0) +
         ' · CRM sync failures ' +
-        (op.recentCrmSyncFailures || 0);
+        (op.recentCrmSyncFailures || 0) +
+        ' · demo sent ' +
+        (op.recentDemoOutreachSent || 0) +
+        ' · demo send failed ' +
+        (op.recentDemoOutreachSendFailed || 0) +
+        ' · demo drafted ' +
+        (op.recentDemoOutreachDrafted || 0) +
+        ' · demo follow-up status ' +
+        (op.recentDemoOutreachFollowupDue || 0);
       var recent = d.recent || [];
       if (!recent.length) {
         recentEl.innerHTML = '<span class="text-muted">No events logged yet.</span>';
@@ -564,6 +1011,38 @@
         if (d.lead.last_synced_at) crmBits.push('last ' + escapeHtml(String(d.lead.last_synced_at).slice(0, 19)));
         if (d.lead.sync_error) crmBits.push('<span class="text-danger">error: ' + escapeHtml(String(d.lead.sync_error).slice(0, 120)) + '</span>');
         bits.push('<div class="mb-2"><strong class="text-info">CRM</strong> · ' + crmBits.join(' · ') + '</div>');
+        var demoSlug = d.lead.demo_slug ? String(d.lead.demo_slug).trim() : '';
+        var demoFromSession = leadId && leadDemoUrlByLeadId[leadId] ? leadDemoUrlByLeadId[leadId] : '';
+        var demoUrl =
+          demoFromSession || (demoSlug ? window.location.origin + '/demo/' + demoSlug : '');
+        bits.push(
+          '<div class="mb-2"><strong class="text-info">Smart demo</strong> · ' +
+            '<button type="button" class="btn btn-outline-info btn-sm generate-lead-demo me-1" data-lead-id="' +
+            escapeAttr(leadId) +
+            '">Generate demo</button>' +
+            '<button type="button" class="btn btn-outline-light btn-sm copy-lead-demo-url" data-lead-id="' +
+            escapeAttr(leadId) +
+            '"' +
+            (!demoUrl ? ' disabled' : '') +
+            (demoUrl ? ' data-demo-url="' + escapeAttr(demoUrl) + '"' : '') +
+            '>Copy demo URL</button>' +
+            (demoUrl
+              ? ' <a class="btn btn-outline-warning btn-sm ms-1" href="' +
+                escapeAttr(
+                  '/internal/outreach?businessName=' +
+                    encodeURIComponent(String(d.lead.company_name || '').trim()) +
+                    '&demoUrl=' +
+                    encodeURIComponent(demoUrl) +
+                    '&leadId=' +
+                    encodeURIComponent(leadId)
+                ) +
+                '">Outreach emails</a>'
+              : '') +
+            (demoSlug
+              ? ' <span class="small text-muted ms-1">Saved as <code>/demo/' + escapeHtml(demoSlug) + '</code></span>'
+              : '') +
+            '</div>'
+        );
       }
       function listAudits(a) {
         if (!a || !a.length) return '<p class="text-muted mb-1">No audits.</p>';
@@ -882,8 +1361,10 @@
         document.getElementById('listErr').textContent = lerr;
         document.getElementById('listErr').style.display = 'block';
         document.getElementById('listSummary').style.display = 'none';
+        hideDailyActionSummaryBar();
         document.getElementById('leadsBody').innerHTML =
-          '<tr><td colspan="10" class="text-muted small">Could not load rows. See error above.</td></tr>';
+          '<tr><td colspan="12" class="text-muted small">Could not load rows. See error above.</td></tr>';
+        syncDailyQueueButtonStates();
         return;
       }
       var d = out.data;
@@ -901,7 +1382,7 @@
       var rows = d.leads || [];
       currentListRows = rows;
       if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" class="text-muted small">No leads match these filters</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="12" class="text-muted small">No leads match these filters</td></tr>';
       } else {
         tbody.innerHTML = rows
           .map(function (r) {
@@ -913,6 +1394,12 @@
             var scoreCell = '<div class="le-cell-clip">' + formatScoringCell(la) + '</div>';
             var o = getOutreachSummary(r);
             var outreachCell = '<div class="le-cell-clip">' + formatOutreachColumn(r, o) + '</div>';
+            var demoOutreachCell =
+              '<div class="le-cell-clip le-demo-outreach-cell">' +
+              formatDemoQueueBadges(r) +
+              formatDemoOutreachSelect(r) +
+              '</div>';
+            var followupDueCell = '<div class="le-cell-clip le-followup-due-cell">' + formatFollowupDueCell(r) + '</div>';
             var crmCell = '<div class="le-cell-clip">' + formatCrmSyncCell(r) + '</div>';
             var auditOk = la && la.summary && la.summary.success === true;
             var canScore = auditOk;
@@ -978,8 +1465,10 @@
               escapeAttr(r.id) +
               '">History</button>';
             var syncBtn = '<button type="button" class="btn btn-outline-light btn-sm sync-crm-btn" data-lead-id="' + escapeAttr(r.id) + '">CRM</button>';
+            var demoQuick = formatDemoQuickActions(r);
             var actionsStack =
               '<div class="lead-actions-stack">' +
+              demoQuick +
               analyzeBtn +
               scoreBtn +
               draftBtn +
@@ -1011,6 +1500,10 @@
               sumCell +
               '</td><td class="small le-score-col">' +
               scoreCell +
+              '</td><td class="small le-demo-outreach-col">' +
+              demoOutreachCell +
+              '</td><td class="small le-followup-due-col">' +
+              followupDueCell +
               '</td><td class="small le-outreach-col">' +
               outreachCell +
               '</td><td class="le-actions-col">' +
@@ -1019,7 +1512,7 @@
             var histRow =
               '<tr class="lead-history-row d-none" data-history-for="' +
               escapeAttr(r.id) +
-              '"><td colspan="10" class="small text-light p-3"><div class="history-inner text-muted">Loading…</div></td></tr>';
+              '"><td colspan="12" class="small text-light p-3"><div class="history-inner text-muted">Loading…</div></td></tr>';
             return mainRow + histRow;
           })
           .join('');
@@ -1027,6 +1520,7 @@
       document.getElementById('selectVisible').checked = rows.length > 0 && rows.every(function (r) { return selectedLeadIds.has(r.id); });
       updateBatchActionState();
       loadActivitySummary();
+      syncDailyQueueButtonStates();
     }
 
     function escapeHtml(s) {
@@ -1251,6 +1745,12 @@
       document.getElementById('clearFilters').onclick = function () {
         clearListFilters();
       };
+      document.querySelectorAll('.le-daily-queue-btn').forEach(function (btn) {
+        btn.onclick = function () {
+          var m = btn.getAttribute('data-le-daily');
+          if (m) applyDailyDemoQueueFilter(m);
+        };
+      });
       document.getElementById('downloadCsvBtn').onclick = function () {
         downloadCurrentLeadsCsv();
       };
@@ -1275,6 +1775,19 @@
       document.getElementById('filterNeedsAttention').onchange = function () {
         loadList(true);
       };
+      document.getElementById('filterDemoOutreach').onchange = function () {
+        leadDemoQueuePreset = '';
+        syncDailyQueueToUrl();
+        loadList(true);
+      };
+      document.getElementById('filterDemoRecentSent').onchange = function () {
+        loadList(true);
+      };
+      document.getElementById('filterDemoFollowupDue').onchange = function () {
+        leadDemoQueuePreset = '';
+        syncDailyQueueToUrl();
+        loadList(true);
+      };
       document.getElementById('filterPageSize').onchange = function () {
         loadList(true);
       };
@@ -1296,6 +1809,57 @@
       };
 
       document.getElementById('leadsTableWrap').addEventListener('click', async function (ev) {
+        var genDemoBtn = ev.target.closest('.generate-lead-demo');
+        if (genDemoBtn) {
+          var gdid = genDemoBtn.getAttribute('data-lead-id');
+          if (!gdid) return;
+          genDemoBtn.disabled = true;
+          var demOut = await api('lead-engine-generate-demo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadId: gdid }),
+          });
+          genDemoBtn.disabled = false;
+          if (!demOut.res.ok) {
+            window.alert(demOut.data.error || 'Generate demo failed');
+            return;
+          }
+          leadDemoUrlByLeadId[gdid] = demOut.data.url || '';
+          delete leadHistoryCache[gdid];
+          window.alert('Demo ready:\n' + (demOut.data.url || demOut.data.path || ''));
+          var demHistTr = document.querySelector('tr.lead-history-row[data-history-for="' + gdid + '"]');
+          if (demHistTr && !demHistTr.classList.contains('d-none')) {
+            var demInner = demHistTr.querySelector('.history-inner');
+            demInner.textContent = 'Loading…';
+            var demH = await api('lead-engine-lead-detail?leadId=' + encodeURIComponent(gdid));
+            if (demH.res.ok) {
+              leadHistoryCache[gdid] = demH.data;
+              demInner.innerHTML = formatHistoryDetail(demH.data);
+            } else {
+              demInner.innerHTML =
+                '<span class="text-danger">' + escapeHtml(demH.data.error || 'Refresh failed') + '</span>';
+            }
+          }
+          loadList(false);
+          return;
+        }
+
+        var copyDemoBtn = ev.target.closest('.copy-lead-demo-url');
+        if (copyDemoBtn) {
+          var cdid = copyDemoBtn.getAttribute('data-lead-id');
+          var durl =
+            copyDemoBtn.getAttribute('data-demo-url') ||
+            (cdid ? leadDemoUrlByLeadId[cdid] : '') ||
+            '';
+          if (!durl) {
+            window.alert('Generate a demo first.');
+            return;
+          }
+          var dcOk = await copyTextWithFallback(durl);
+          window.alert(dcOk ? 'Demo URL copied.' : 'Copy failed.');
+          return;
+        }
+
         var copyBtn = ev.target.closest('.copy-draft-btn');
         if (copyBtn) {
           var ckey = copyBtn.getAttribute('data-copy-key') || '';
@@ -1532,6 +2096,84 @@
           window.alert(label + ' failed: ' + String((err && err.message) || err || 'network error'));
         } finally {
           btn.disabled = false;
+        }
+      });
+
+      document.getElementById('leadsTableWrap').addEventListener('change', async function (ev) {
+        var sel = ev.target.closest('.demo-outreach-status-select');
+        if (!sel) return;
+        var lid = sel.getAttribute('data-lead-id');
+        if (!lid) return;
+        var st = sel.value;
+        var out = await api('lead-engine-demo-outreach-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ leadId: lid, status: st === '' ? null : st }),
+        });
+        if (!out.res.ok) {
+          window.alert(out.data.error || out.data.details || 'Could not update demo outreach status');
+        }
+        loadList(false);
+      });
+
+      document.getElementById('leadsTableWrap').addEventListener('click', async function (ev) {
+        var copyBtn = ev.target.closest('.le-demo-copy-url');
+        if (copyBtn) {
+          var u = copyBtn.getAttribute('data-demo-url') || '';
+          if (!u) return;
+          var ok = await copyTextWithFallback(u);
+          if (!ok) window.prompt('Copy demo URL:', u);
+          return;
+        }
+        var noFu = ev.target.closest('.le-demo-nofollowup');
+        if (noFu) {
+          var lid = noFu.getAttribute('data-lead-id');
+          if (!lid) return;
+          var outN = await api('lead-engine-demo-outreach-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadId: lid, demoFollowupDueAt: null }),
+          });
+          if (!outN.res.ok) {
+            window.alert(outN.data.error || outN.data.details || 'Could not clear follow-up date');
+          }
+          loadList(false);
+          return;
+        }
+        var clr = ev.target.closest('.le-demo-clearfail');
+        if (clr) {
+          var lidc = clr.getAttribute('data-lead-id');
+          if (!lidc) return;
+          var outC = await api('lead-engine-demo-outreach-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadId: lidc, status: null }),
+          });
+          if (!outC.res.ok) {
+            window.alert(outC.data.error || outC.data.details || 'Could not clear status');
+          }
+          loadList(false);
+          return;
+        }
+        var outcomeBtn = ev.target.closest('.le-demo-outcome');
+        if (outcomeBtn) {
+          var lidO = outcomeBtn.getAttribute('data-lead-id');
+          var ost = outcomeBtn.getAttribute('data-demo-outcome');
+          if (!lidO || !ost) return;
+          outcomeBtn.disabled = true;
+          try {
+            var outO = await api('lead-engine-demo-outreach-status', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ leadId: lidO, status: ost }),
+            });
+            if (!outO.res.ok) {
+              window.alert(outO.data.error || outO.data.details || 'Could not set outcome');
+            }
+            await loadList(false);
+          } finally {
+            outcomeBtn.disabled = false;
+          }
         }
       });
 
@@ -1786,6 +2428,9 @@
         loadList(true);
       };
 
+      hydrateDailyQueueFromUrl();
+      syncDailyQueueToUrl();
+      syncDailyQueueButtonStates();
       loadList(true);
       loadActivitySummary();
     }

@@ -197,6 +197,8 @@ exports.handler = async (event) => {
     const priceId = process.env['STRIPE_PRICE_ID'];
     const baseUrl = (process.env['URL'] || 'http://localhost:8888').replace(/\/$/, '');
 
+    // Productized packages use Stripe Payment Links (see jl-stripe-product-links.js) with success URL /onboarding?service=…
+    // This API checkout is for invoices, deposits, strategy sessions, etc. — not the main package flow.
     const sessionConfig = {
       mode: 'payment',
       automatic_payment_methods: { enabled: true },

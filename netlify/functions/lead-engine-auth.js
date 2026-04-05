@@ -9,7 +9,7 @@ const {
   getLeadEngineOperators,
   getLeadEngineSecret,
 } = require('./lib/lead-engine-config');
-const { buildSessionCookie, clearSessionCookie } = require('./lib/lead-engine-session');
+const { buildSessionCookie, clearSessionCookie, getLeadEngineSession } = require('./lib/lead-engine-session');
 const { withCors } = require('./lib/lead-engine-guard');
 const { envVarFromB64 } = require('./lib/runtime-process-env');
 
@@ -23,10 +23,40 @@ function allowDevQuickLogin(event, body) {
 }
 
 exports.handler = async (event) => {
-  const headers = withCors('POST, DELETE, OPTIONS');
+  const headers = withCors('GET, POST, DELETE, OPTIONS');
 
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers };
+  }
+
+  if (event.httpMethod === 'GET') {
+    if (!isLeadEngineEnabled()) {
+      return {
+        statusCode: 403,
+        headers,
+        body: JSON.stringify({ error: 'Lead engine is disabled', authenticated: false }),
+      };
+    }
+    if (!isLeadEngineAuthConfigured()) {
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify({ error: 'Lead engine auth is not configured', authenticated: false }),
+      };
+    }
+    const session = getLeadEngineSession(event);
+    if (!session) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ error: 'Unauthorized', authenticated: false }),
+      };
+    }
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ authenticated: true, username: session.username }),
+    };
   }
 
   if (!isLeadEngineEnabled()) {

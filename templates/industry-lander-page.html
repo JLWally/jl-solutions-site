@@ -1,0 +1,43 @@
+<!--
+  JL Solutions — industry vertical lander (clone for new verticals)
+
+  Steps:
+  1. Copy this file to e.g. cleaning-lead-system.html at site root.
+  2. Add Netlify redirects: /cleaning-lead-system → cleaning-lead-system.html (status 200).
+  3. In <head>: title, meta description, body class jl-industry-lander--__SLUG__.
+  4. In <nav>: active link + vertical label; nav CTA href to match ctaGetStartedHref.
+  5. Before scripts: <script>window.JL_INDUSTRY_LANDER_SLUG = '__SLUG__';</script>
+  6. Add an entry to js/jl-industry-lander-registry.js (or a small js/jl-industry-config-__SLUG__.js
+     that assigns JL_INDUSTRY_LANDER_CONFIG if you prefer not to use the registry).
+  7. packages section id must match packagesSectionId (default __SLUG__-packages).
+  8. Optional: demo-data/__SLUG__-sample.json for /demo/__SLUG__-sample fallback.
+
+  Scripts (order):
+    jl-services-data.js
+    jl-conversion-sections.js
+    jl-services-page-config.js
+    jl-industry-lander.js
+    jl-industry-lander-registry.js   (or your vertical config)
+    jl-industry-lander-bootstrap.js
+    jl-industry-lander-page.js
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>__INDUSTRY_NAME__ Lead Systems | JL Solutions</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme-jl.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="stylesheet" href="/css/jl-services-products.css">
+  <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
+</head>
+<body class="jl-industry-lander jl-industry-lander--__SLUG__">
+  <!-- Copy nav + main + footer from hvac-lead-system.html; replace __SLUG__ / labels / hrefs. -->
+</body>
+</html>

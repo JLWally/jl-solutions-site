@@ -11,6 +11,12 @@
  * public.consultations so you can review submissions in Supabase (Table Editor).
  * This is separate from lead_engine_leads (operator / n8n pipeline).
  *
+ * Post-purchase onboarding (form-name package-kickoff, page /onboarding):
+ * - Buyer confirmation: subject "We've got your JL Solutions setup started" (service, timeline, next steps).
+ * - Internal (info@): full HTML with "At a glance" (name, email, business, service, website) +
+ *   main notes rollup + full sections. Optional ONBOARDING_OPS_EMAIL sends a second concise summary.
+ * - Stripe Payment Links: success URL must be /onboarding?service=ai-intake | fix-app | scheduling | lead-engine.
+ *
  * JSON mode: if the client sends Accept: application/json (or form field response_format=json),
  * the function returns JSON instead of redirecting to thank-you. On Resend failure or missing
  * RESEND_API_KEY it returns success:false so the UI can warn the user (submissions may still be
@@ -130,10 +136,140 @@ function buildFixMyAppEmail(data) {
   };
 }
 
-function buildPackageKickoffEmail(data) {
+function getPurchaseKickoffMeta(data) {
+  const slug = data.purchase_service_slug ? String(data.purchase_service_slug).trim().toLowerCase() : '';
+  const bySlug = {
+    'ai-intake': { label: 'AI Intake', timeline: '3–7 business days' },
+    'fix-app': { label: 'Fix My App', timeline: '2–5 business days' },
+    scheduling: { label: 'Scheduling & routing setup', timeline: '3–7 business days' },
+    'lead-engine': { label: 'Lead Generation Engine', timeline: '5–10 business days' },
+  };
+  if (slug && bySlug[slug]) return bySlug[slug];
+  const pkg = (data.package_name && String(data.package_name).trim()) || '';
+  const lower = pkg.toLowerCase();
+  if (lower.includes('ai intake')) return bySlug['ai-intake'];
+  if (lower.includes('fix')) return bySlug['fix-app'];
+  if (lower.includes('scheduling')) return bySlug.scheduling;
+  if (lower.includes('lead')) return bySlug['lead-engine'];
+  return { label: pkg || 'your package', timeline: 'a few business days' };
+}
+
+function buildPackageKickoffBuyerConfirmation(data) {
+  const meta = getPurchaseKickoffMeta(data);
+  const first = escapeHtml((data.name || 'there').trim().split(/\s+/)[0] || 'there');
+  const serviceLine = escapeHtml(meta.label);
+  const timeline = escapeHtml(meta.timeline);
+  return {
+    subject: "We've got your JL Solutions setup started",
+    html: `
+      <h2>Hi ${first},</h2>
+      <p>Thank you for completing your kickoff intake. Your purchase is confirmed, and we are ready to begin <strong>${serviceLine}</strong>.</p>
+      <h3 style="margin-top:1.25em;font-size:1.05em;">What you purchased</h3>
+      <p style="margin:0.35em 0 0;"><strong>${serviceLine}</strong></p>
+      <h3 style="margin-top:1.25em;font-size:1.05em;">What happens next</h3>
+      <ol style="margin:0.5em 0 0 1.25em;padding:0;">
+        <li>We review your submission and follow up within one business day if we need anything else.</li>
+        <li>We align on access, scope, and timing, then start implementation.</li>
+        <li>You receive clear updates as work moves forward.</li>
+      </ol>
+      <h3 style="margin-top:1.25em;font-size:1.05em;">Expected turnaround</h3>
+      <p style="margin:0.35em 0 0;">Once your intake is confirmed, most packages progress on a <strong>${timeline}</strong> timeline. We will flag anything that needs a different schedule.</p>
+      <p style="margin-top:1.25em;">Questions or something urgent? Reply to this email. For urgent items, include <strong>URGENT</strong> in the subject line.</p>
+      <p style="margin-top:1.5em;"> — The JL Solutions team</p>
+      <p><em>info@jlsolutions.io</em></p>
+    `,
+  };
+}
+
+function buildPackageKickoffOpsBrief(data, { consultationId, siteUrl }) {
+  const name = (data.name || '').trim() || '(not provided)';
+  const email = (data.email || '').trim() || '(not provided)';
+  const business = (data.business_name || '').trim() || '(not provided)';
+  const pkg = (data.package_name || '').trim() || '(not specified)';
+  const website = (data.website_url || '').trim() || '—';
+  const slug = (data.purchase_service_slug || '').trim();
+  const mainNotes = collectPackageKickoffMainNotes(data);
+  const base = (siteUrl || '').replace(/\/+$/, '');
+  const onboardingLink = base ? `${base}/onboarding` : '/onboarding';
+  const refBlock = consultationId
+    ? `<p><strong>Consultation row ID (Supabase):</strong> <code>${escapeHtml(consultationId)}</code></p>
+       <p>Table <strong>consultations</strong>, source <code>package_purchase_kickoff</code>.</p>`
+    : '<p><em>No Supabase row id (not configured or insert failed). Full intake is in the message to info@jlsolutions.io.</em></p>';
+  return {
+    subject: `[JL Ops] New kickoff — ${business} — ${pkg}`,
+    html: `
+      <h2>New post-purchase onboarding</h2>
+      <table style="border-collapse:collapse;margin-bottom:12px;">
+        <tr><td style="padding:4px 16px 4px 0;"><strong>Name</strong></td><td>${escapeHtml(name)}</td></tr>
+        <tr><td style="padding:4px 16px 4px 0;"><strong>Email</strong></td><td><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>
+        <tr><td style="padding:4px 16px 4px 0;"><strong>Business</strong></td><td>${escapeHtml(business)}</td></tr>
+        <tr><td style="padding:4px 16px 4px 0;"><strong>Service</strong></td><td>${escapeHtml(pkg)}${slug ? ` <span style="color:#555;">(${escapeHtml(slug)})</span>` : ''}</td></tr>
+        <tr><td style="padding:4px 16px 4px 0;"><strong>Website</strong></td><td>${escapeHtml(website)}</td></tr>
+      </table>
+      <h3 style="margin-top:0.75em;font-size:1.05em;">Main notes / onboarding details</h3>
+      <pre style="white-space:pre-wrap;font-family:inherit;background:#f5f5f5;padding:12px;border-radius:8px;font-size:0.95em;">${escapeHtml(mainNotes || '—')}</pre>
+      ${refBlock}
+      <p><strong>Onboarding form URL:</strong> <a href="${escapeHtml(onboardingLink)}">${escapeHtml(onboardingLink)}</a> <span style="color:#555;">(Stripe success should use <code>?service=ai-intake</code> etc.)</span></p>
+      <p style="margin-top:1em;color:#555;font-size:0.9em;">A complete section-by-section copy is emailed to info@jlsolutions.io.</p>
+    `,
+  };
+}
+
+/**
+ * Plain-text rollup for internal emails (mirrors Section 3–6 of the kickoff form).
+ */
+function collectPackageKickoffMainNotes(data) {
+  const parts = [];
+  const push = (label, val) => {
+    const v = val != null ? String(val).trim() : '';
+    if (v) parts.push(`${label}\n${v}`);
+  };
+  push('Main goal', data.goal_main);
+  push('What is NOT working right now', data.not_working);
+  const ab = (data.access_backend || '').trim();
+  const pl = (data.platform || '').trim();
+  if (ab || pl) {
+    parts.push(`Access & platform\nBackend access: ${ab || '—'}\nPlatform: ${pl || '—'}`);
+  }
+  push('Login details', data.login_details);
+
+  const pkg = String(data.package_name || '').toLowerCase();
+  if (pkg.includes('ai intake') || pkg.includes('intake form')) {
+    push('Lead questions (current)', data.ai_current_questions);
+    const fq = (data.ai_filter_qualify || '').trim();
+    if (fq) parts.push(`Filter / qualify leads\n${fq}`);
+    push('Where leads should go', data.ai_leads_destination);
+  } else if (pkg.includes('scheduling')) {
+    push('What to book', data.sched_services_offered);
+    push('Availability', data.sched_availability);
+    const asg = (data.sched_assign_manual_auto || '').trim();
+    if (asg) parts.push(`Assign manually or automatically\n${asg}`);
+  } else if (pkg.includes('fix my app') || pkg.includes('fix')) {
+    push('Issues noticing', data.fix_issues_noticing);
+    push('Pages / flows', data.fix_pages_flows);
+  } else if (pkg.includes('lead generation') || pkg.includes('lead engine')) {
+    push('Target market', data.lead_target_market);
+    push('Outreach goals', data.lead_outreach_goals);
+    push('Channels', data.lead_channels);
+    push('Compliance / voice', data.lead_compliance_notes);
+  }
+
+  push('Deadline', data.deadline);
+  push('Anything else', data.final_notes);
+  const ack = (data.timeline_ack || '').trim();
+  if (ack) parts.push(`Timeline acknowledgment\n${ack}`);
+  return parts.join('\n\n');
+}
+
+function buildPackageKickoffEmail(data, opts = {}) {
+  const consultationId = opts.consultationId || null;
   const contactName = data.name || '(not provided)';
   const email = data.email || '(not provided)';
   const pkg = data.package_name ? String(data.package_name).trim() : '(not specified)';
+  const business = data.business_name ? String(data.business_name).trim() : '(not provided)';
+  const website = data.website_url ? String(data.website_url).trim() : '(not provided)';
+  const slug = data.purchase_service_slug ? String(data.purchase_service_slug).trim() : '';
+  const mainNotesBlock = collectPackageKickoffMainNotes(data);
 
   const rowTable = (rows) => {
     const body = rows
@@ -152,7 +288,24 @@ function buildPackageKickoffEmail(data) {
     return `<h3 style="margin:1.35em 0 0.5em;font-size:1.05em;">${escapeHtml(title)}</h3>${t}`;
   };
 
-  let html = `<h2>Post-purchase intake</h2>`;
+  let html = `<h2>Post-purchase intake (internal)</h2>`;
+  html += `<p style="margin:0 0 12px;color:#444;">Stripe productized checkout should redirect buyers to <code>/onboarding?service=…</code> so the correct package and timeline lock in the form.</p>`;
+  html += `<div style="margin-bottom:1.25em;padding:14px 16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;">`;
+  html += `<h3 style="margin:0 0 10px;font-size:1.05em;">At a glance</h3>`;
+  html += `<table style="border-collapse:collapse;width:100%;max-width:560px;">`;
+  html += `<tr><td style="padding:5px 12px 5px 0;vertical-align:top;"><strong>Name</strong></td><td style="padding:5px 0;">${escapeHtml(contactName)}</td></tr>`;
+  html += `<tr><td style="padding:5px 12px 5px 0;vertical-align:top;"><strong>Email</strong></td><td style="padding:5px 0;"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>`;
+  html += `<tr><td style="padding:5px 12px 5px 0;vertical-align:top;"><strong>Business</strong></td><td style="padding:5px 0;">${escapeHtml(business)}</td></tr>`;
+  html += `<tr><td style="padding:5px 12px 5px 0;vertical-align:top;"><strong>Service purchased</strong></td><td style="padding:5px 0;">${escapeHtml(pkg)}${slug ? ` <span style="color:#64748b;">(${escapeHtml(slug)})</span>` : ''}</td></tr>`;
+  html += `<tr><td style="padding:5px 12px 5px 0;vertical-align:top;"><strong>Website</strong></td><td style="padding:5px 0;">${escapeHtml(website)}</td></tr>`;
+  html += `</table>`;
+  html += `<h4 style="margin:14px 0 6px;font-size:0.98em;">Main notes / onboarding details</h4>`;
+  html += `<pre style="margin:0;white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:0.88em;background:#fff;padding:12px;border-radius:8px;border:1px solid #e2e8f0;">${escapeHtml(mainNotesBlock || '—')}</pre>`;
+  html += `</div>`;
+  if (consultationId) {
+    html += `<p style="margin-bottom:1em;padding:10px 12px;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd;"><strong>Consultation ID:</strong> <code>${escapeHtml(consultationId)}</code> (Supabase <code>consultations</code>)</p>`;
+  }
+  html += `<h3 style="margin-top:1.5em;font-size:1.08em;">Full submission</h3>`;
   html += section('Section 1: Basic Info', [
     ['Business name', data.business_name],
     ['Contact name', contactName],
@@ -161,7 +314,6 @@ function buildPackageKickoffEmail(data) {
     ['Website URL', data.website_url],
   ]);
   const s2rows = [['Which service did you purchase?', pkg]];
-  const slug = data.purchase_service_slug ? String(data.purchase_service_slug).trim() : '';
   if (slug) s2rows.push(['Service slug (from checkout link)', slug]);
   html += section('Section 2: What are we working on?', s2rows);
   html += section('Section 3: Goals', [
@@ -214,7 +366,7 @@ function buildPackageKickoffEmail(data) {
   html += `<p style="margin-top:1.25em;color:#555;"><em>From /onboarding (post-purchase)</em></p>`;
 
   return {
-    subject: `[JL Solutions] Package intake — ${contactName} (${pkg})`,
+    subject: `[JL Solutions] Kickoff intake — ${business} — ${pkg}`,
     html,
   };
 }
@@ -249,6 +401,7 @@ function buildGetstartedProductIntakeEmail(data) {
     ['Phone', data.phone],
     ['Business name', data.gs_business_name],
     ['Website', data.gs_website],
+    ['Landing vertical', data.gs_landing_vertical],
   ]);
 
   if (product === 'ai-intake') {
@@ -303,6 +456,7 @@ function buildGetstartedCustomQuoteEmail(data) {
     ['Interested service', svc],
     ['Name', contactName],
     ['Email', email],
+    ['Landing vertical', data.gs_landing_vertical],
     ['Business', data.gs_business_name],
     ['Website', data.gs_website],
     ['Fix: issues', data.gs_fix_issues],
@@ -413,9 +567,13 @@ function buildAiIntakeDemoEmail(data) {
   const fields = [
     ['Name', name],
     ['Email', email],
+    ['Phone', data.phone],
     ['Need', needLabel],
     ['Other detail', data.demoOther],
     ['Description', data.demoDesc],
+    ['Smart demo slug', data.demoSlug],
+    ['Configured business', data.demoBusinessName],
+    ['Configured industry', data.demoIndustry],
   ];
   const rows = fields
     .filter(([, v]) => v != null && String(v).trim() !== '')
@@ -544,22 +702,23 @@ function getServiceSupabase() {
 
 /**
  * Best-effort mirror into consultations (service role bypasses RLS). Does not block email.
+ * @returns {Promise<string|null>} inserted row UUID, or null
  */
 async function persistToConsultationsTable(formName, data) {
   const supabase = getServiceSupabase();
-  if (!supabase) return;
+  if (!supabase) return null;
 
   const email = (data.email || '').trim();
   let name = (data.name || '').trim();
   if (!email) {
     console.warn('[send-form-email] Skipping Supabase persist: missing email');
-    return;
+    return null;
   }
   if (!name && formName === 'newsletter') name = 'Newsletter subscriber';
   if (!name && formName === 'pay-checkout') name = 'Pay page lead';
   if (!name) {
     console.warn('[send-form-email] Skipping Supabase persist: missing name');
-    return;
+    return null;
   }
 
   let row;
@@ -610,11 +769,16 @@ async function persistToConsultationsTable(formName, data) {
     };
   } else if (formName === 'ai-intake-demo') {
     const need = [data.demoNeedLabel, data.demoOther, data.demoDesc].filter((x) => x && String(x).trim()).join(' — ');
+    const slug = data.demoSlug ? String(data.demoSlug).trim() : '';
+    const biz = data.demoBusinessName ? String(data.demoBusinessName).trim() : '';
+    const ind = data.demoIndustry ? String(data.demoIndustry).trim() : '';
+    const meta = [slug && `demo:${slug}`, biz && `biz:${biz}`, ind && `industry:${ind}`].filter(Boolean).join(' | ');
     row = {
       name,
       email,
+      phone: data.phone ? String(data.phone).trim() : null,
       service: data.demoNeed ? String(data.demoNeed).trim() : 'ai-intake-demo',
-      message: need || 'AI intake demo',
+      message: [meta, need].filter(Boolean).join(' — ') || 'AI intake demo',
       status: 'new',
       source: 'ai_intake_demo',
     };
@@ -647,7 +811,16 @@ async function persistToConsultationsTable(formName, data) {
     };
   } else if (formName === 'getstarted-product-intake') {
     const prod = data.gs_product ? String(data.gs_product).trim() : '';
-    const bits = [data.gs_ai_lead_questions, data.gs_fix_issues, data.gs_lead_niche, data.gs_sched_services]
+    const bits = [
+      data.gs_landing_vertical ? `vertical:${String(data.gs_landing_vertical).trim()}` : '',
+      data.gs_intent,
+      data.gs_fix_breaking,
+      data.gs_ai_lead_questions,
+      data.gs_fix_issues,
+      data.gs_lead_niche,
+      data.gs_sched_services,
+      data.gs_sched_assign_crew,
+    ]
       .map((x) => (x ? String(x).trim() : ''))
       .filter(Boolean);
     row = {
@@ -662,13 +835,16 @@ async function persistToConsultationsTable(formName, data) {
     };
   } else if (formName === 'getstarted-custom-quote') {
     const svc = data.gs_service_label ? String(data.gs_service_label).trim() : '';
+    const vert = data.gs_landing_vertical ? String(data.gs_landing_vertical).trim() : '';
     row = {
       name,
       email,
       phone: data.phone ? String(data.phone).trim() : null,
       company: data.gs_business_name ? String(data.gs_business_name).trim() : null,
       service: svc || 'custom-quote',
-      message: `Custom quote from get-started — ${svc || 'service unknown'}`,
+      message: [vert && `vertical:${vert}`, `Custom quote from get-started — ${svc || 'service unknown'}`]
+        .filter(Boolean)
+        .join(' — '),
       status: 'new',
       source: 'getstarted_custom_quote',
     };
@@ -677,7 +853,12 @@ async function persistToConsultationsTable(formName, data) {
     const business = data.business_name ? String(data.business_name).trim() : '';
     const goal = data.goal_main ? String(data.goal_main).trim() : '';
     const broken = data.not_working ? String(data.not_working).trim() : '';
-    const message = [goal, broken].filter(Boolean).join(' — ') || 'Package intake submitted';
+    const web = data.website_url ? String(data.website_url).trim() : '';
+    const slug = data.purchase_service_slug ? String(data.purchase_service_slug).trim() : '';
+    const fn = data.final_notes ? String(data.final_notes).trim() : '';
+    const message = [web && `Website: ${web}`, slug && `service_slug:${slug}`, goal, broken, fn && `More: ${fn}`]
+      .filter(Boolean)
+      .join(' | ') || 'Package intake submitted';
     row = {
       name,
       email,
@@ -685,6 +866,8 @@ async function persistToConsultationsTable(formName, data) {
       company: business || (data.company ? String(data.company).trim() : null),
       service: pkg || 'package',
       message,
+      challenge: broken || null,
+      goals: goal || null,
       status: 'new',
       source: 'package_purchase_kickoff',
     };
@@ -701,12 +884,16 @@ async function persistToConsultationsTable(formName, data) {
     };
   }
 
-  const { error } = await supabase.from('consultations').insert(row);
+  const { data: inserted, error } = await supabase.from('consultations').insert(row).select('id').single();
   if (error) {
     console.error('[send-form-email] consultations insert failed:', error.message || error);
-  } else {
-    console.log('[send-form-email] Stored submission in consultations (source=%s)', row.source);
+    return null;
   }
+  const id = inserted && inserted.id ? String(inserted.id) : null;
+  if (id) {
+    console.log('[send-form-email] Stored submission in consultations id=%s (source=%s)', id, row.source);
+  }
+  return id;
 }
 
 async function appendSubmissionAudit(formName, data, extra = {}) {
@@ -783,8 +970,8 @@ exports.handler = async (event) => {
   }
   console.log('[send-form-email] formName=', formName, 'keys=', Object.keys(data).join(','));
 
-  await appendSubmissionAudit(formName, data);
-  await persistToConsultationsTable(formName, data);
+  const consultationId = await persistToConsultationsTable(formName, data);
+  await appendSubmissionAudit(formName, data, consultationId ? { consultationId } : {});
 
   let subject, html;
   if (formName === 'consultation') {
@@ -837,7 +1024,7 @@ exports.handler = async (event) => {
     subject = built.subject;
     html = built.html;
   } else if (formName === 'package-kickoff') {
-    const built = buildPackageKickoffEmail(data);
+    const built = buildPackageKickoffEmail(data, { consultationId });
     subject = built.subject;
     html = built.html;
   } else if (formName === 'getstarted-product-intake') {
@@ -954,6 +1141,39 @@ exports.handler = async (event) => {
 
     console.log('[send-form-email] Delivered to', TO_EMAIL, 'form=', formName);
 
+    if (formName === 'package-kickoff') {
+      const opsRaw = process.env.ONBOARDING_OPS_EMAIL || '';
+      const seen = new Set();
+      const opsList = [];
+      for (const part of opsRaw.split(/[,;]/)) {
+        const e = part.trim();
+        if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) continue;
+        const lower = e.toLowerCase();
+        if (lower === TO_EMAIL.toLowerCase()) continue;
+        if (seen.has(lower)) continue;
+        seen.add(lower);
+        opsList.push(e);
+      }
+      if (opsList.length) {
+        try {
+          const siteUrl = (process.env.URL || '').trim();
+          const brief = buildPackageKickoffOpsBrief(data, { consultationId, siteUrl });
+          const outOps = await resend.emails.send({
+            from: env.formFromEmail,
+            to: opsList,
+            subject: brief.subject,
+            html: brief.html,
+            replyTo: (data.email || '').trim() || undefined,
+          });
+          if (outOps.error) {
+            console.warn('[send-form-email] ONBOARDING_OPS_EMAIL send failed:', outOps.error);
+          }
+        } catch (opsErr) {
+          console.warn('[send-form-email] ONBOARDING_OPS_EMAIL threw:', opsErr && opsErr.message);
+        }
+      }
+    }
+
     // 2. Send confirmation to customer — must not fail the request if info@ already succeeded
     const customerEmail = (data.email || '').trim();
     if (customerEmail) {
@@ -1003,15 +1223,7 @@ exports.handler = async (event) => {
         `,
                     }
                   : formName === 'package-kickoff'
-                    ? {
-                        subject: "You're in — we received your kickoff details | JL Solutions",
-                        html: `
-          <h2>Hi ${first},</h2>
-          <p>Thank you for completing your post-purchase intake. We will confirm access and next steps within one business day.</p>
-          <p> - The JL Solutions team</p>
-          <p><em>info@jlsolutions.io</em></p>
-        `,
-                      }
+                    ? buildPackageKickoffBuyerConfirmation(data)
                     : formName === 'getstarted-product-intake'
                       ? {
                           subject: 'Continue to checkout — JL Solutions',

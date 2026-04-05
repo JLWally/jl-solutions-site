@@ -1,33 +1,38 @@
 /**
- * /onboarding — post-purchase intake after Stripe (productized packages).
+ * /onboarding — post-purchase kickoff after Stripe (productized packages).
+ *
+ * Query param `service` must match Stripe Payment Link success URLs (set in Stripe Dashboard):
+ *   /onboarding?service=ai-intake | fix-app | scheduling | lead-engine
+ * See also: js/jl-stripe-product-links.js (checkout URLs) and netlify.toml redirects for /onboarding.
  */
 (function () {
   'use strict';
 
+  /** Display timelines (keep aligned with getPurchaseKickoffMeta in send-form-email.js) */
   var POST_SERVICE_CONFIG = {
     'ai-intake': {
       panel: 'ai',
       packageValue: 'AI Intake Form',
       headlineName: 'AI Intake',
-      timeline: '3–7 days',
+      timeline: '3–7 business days',
     },
     'fix-app': {
       panel: 'fix',
       packageValue: 'Fix My App',
       headlineName: 'Fix My App',
-      timeline: '2–5 days',
+      timeline: '2–5 business days',
     },
     scheduling: {
       panel: 'scheduling',
       packageValue: 'Scheduling Setup',
       headlineName: 'Scheduling',
-      timeline: '3–7 days',
+      timeline: '3–7 business days',
     },
     'lead-engine': {
       panel: 'lead',
       packageValue: 'Lead Generation Engine',
       headlineName: 'Lead Engine',
-      timeline: '5–10 days',
+      timeline: '5–10 business days',
     },
   };
 

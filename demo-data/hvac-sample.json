@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "slug": "hvac-sample",
+  "businessName": "Sample HVAC Co.",
+  "industry": "hvac",
+  "industryLabel": "HVAC",
+  "services": [
+    "Emergency repair",
+    "Maintenance / tune-up",
+    "System replacement",
+    "Ductwork / indoor air quality"
+  ],
+  "issueOptions": [
+    "Not cooling",
+    "Not heating",
+    "System won’t turn on",
+    "Strange noise",
+    "Leak or water issue",
+    "Need inspection"
+  ],
+  "ctaService": "ai-intake",
+  "subtext": "Here's what a smarter intake and booking flow could look like for your business.",
+  "headerTitle": "Sample HVAC Co. – Smart Intake Demo",
+  "createdAt": "2026-04-02T00:00:00.000Z"
+}

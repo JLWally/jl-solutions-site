@@ -136,7 +136,7 @@
 }
 
 .jl-services-proof__inner {
-  max-width: 40rem;
+  max-width: 42rem;
   margin: 0 auto;
   text-align: center;
   padding: 0 1rem;
@@ -176,6 +176,17 @@
 
 .jl-services-proof__tail a:hover {
   color: var(--jl-ink, #0a1628);
+}
+
+.jl-services-proof__cred {
+  margin: 1.15rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
 }
 
 /* Featured offers */
@@ -278,6 +289,7 @@
   max-width: 26rem;
   margin-left: 0;
   margin-right: auto;
+  margin-bottom: 1.1rem;
   padding: 1rem 1.15rem 1.1rem 1.1rem;
   background: #fff !important;
   border: 2px solid #0a1628 !important;
@@ -317,8 +329,32 @@
   font-weight: 800;
 }
 
+/* Stronger self-ID block — conversion emphasis */
+.jl-services-for--compact-card.jl-services-for--strong {
+  max-width: 28rem;
+  padding: 1.2rem 1.3rem 1.25rem 1.2rem;
+  border-width: 2px !important;
+  border-left-width: 6px !important;
+  border-left-color: var(--jl-brand-cyan-deep, #0b6579) !important;
+  box-shadow:
+    0 2px 0 rgba(10, 22, 40, 0.08),
+    0 18px 44px rgba(10, 22, 40, 0.14) !important;
+}
+
+.jl-services-for--compact-card.jl-services-for--strong .jl-services-for__title {
+  font-size: clamp(1.08rem, 2.6vw, 1.28rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.65rem;
+}
+
+.jl-services-for--compact-card.jl-services-for--strong .jl-services-for__list {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.52;
+}
+
 .jl-product-cards-section {
-  margin-top: 0.25rem;
+  margin-top: 0;
 }
 
 .jl-services-noscript-packages {
@@ -346,18 +382,17 @@
   .jl-product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.75rem;
-    /* Use full .container width — 68rem left unused space on xl/xxl */
     max-width: 100%;
     margin: 0 auto;
   }
 }
 
+/* Wide viewports: keep 2 columns so each card is wider and less tall (was 4 narrow columns). */
 @media (min-width: 1440px) {
   .jl-product-grid {
-    /* Slightly wider minimum track than equal 1fr quarters on large desktops */
-    grid-template-columns: repeat(4, minmax(15.75rem, 1fr));
+    grid-template-columns: repeat(2, minmax(22rem, 1fr));
+    gap: 2rem;
     max-width: none;
-    gap: 1.5rem;
   }
 }
 
@@ -367,14 +402,15 @@
 }
 
 .jl-service-product-card {
-  border: 1px solid rgba(15, 23, 42, 0.14);
-  padding: 1.25rem 1.4rem 1.35rem;
-  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  padding: 1.5rem 1.35rem 1.35rem;
+  border-radius: 0.75rem;
   background: #fff;
-  box-shadow: 0 6px 22px rgba(10, 22, 40, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(10, 22, 40, 0.08), 0 2px 4px -2px rgba(10, 22, 40, 0.06);
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  height: 100%;
   transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
@@ -382,35 +418,64 @@
 }
 
 .jl-service-product-card:hover {
-  border-color: rgba(11, 101, 121, 0.32);
-  box-shadow: 0 20px 48px rgba(10, 22, 40, 0.14);
+  border-color: var(--jl-brand-cyan-deep, #0b6579);
+  box-shadow:
+    0 4px 0 rgba(11, 101, 121, 0.12),
+    0 26px 56px rgba(10, 22, 40, 0.18);
   transform: translateY(-5px);
 }
 
-.jl-service-product-card__pain {
-  font-size: 0.8125rem;
-  font-weight: 800;
-  color: #b45309;
-  margin: 0 0 0.45rem;
-  line-height: 1.35;
-  letter-spacing: 0.01em;
+.jl-service-product-card__main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
-.jl-service-product-card__title-tag {
-  display: block;
-  font-size: 0.85em;
+.jl-service-product-card__pain {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ea580c;
+  margin: 0 0 0.5rem;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+}
+
+.jl-service-product-card__outcome-title {
+  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+  font-weight: 800;
+  color: #0a1628;
+  margin: 0 0 0.25rem;
+  line-height: 1.28;
+  letter-spacing: -0.02em;
+}
+
+.jl-service-product-card__servicename {
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #475569;
-  margin-top: 0.15rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 1rem;
+  line-height: 1.35;
 }
 
 .jl-service-product-card__transform {
   font-size: 0.9375rem;
   font-weight: 800;
   color: #064e63;
-  margin: 0 0 0.65rem;
+  margin: 0 0 0.6rem;
   line-height: 1.45;
   letter-spacing: -0.01em;
+}
+
+/* Money bridge directly under outcome headline (reference: text-sm body, still emphasized) */
+.jl-service-product-card__bridge {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #475569;
+  margin: 0.15rem 0 0.75rem;
+  line-height: 1.5;
 }
 
 .jl-service-product-card__badge {
@@ -428,15 +493,6 @@
   line-height: 1.2;
 }
 
-.jl-service-product-card__title {
-  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
-  font-weight: 800;
-  color: #0a1628;
-  margin: 0 0 0.65rem;
-  line-height: 1.3;
-  letter-spacing: -0.02em;
-}
-
 .jl-service-product-card__outcome {
   font-size: 1rem;
   line-height: 1.55;
@@ -448,42 +504,45 @@
 .jl-service-product-card__bestfor {
   font-size: 0.8125rem;
   line-height: 1.45;
-  color: #475569;
-  margin: 0 0 0.55rem;
-  font-weight: 600;
+  color: #64748b;
+  margin: 0 0 0.75rem;
+  font-weight: 500;
 }
 
-.jl-service-product-card__bestfor-label {
-  display: block;
-  font-size: 0.75rem;
+.jl-service-product-card__bestfor strong {
   font-weight: 800;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: #033948;
-  margin-bottom: 0.25rem;
+  color: #334155;
 }
 
 .jl-service-product-card__muted {
-  font-size: 0.875rem;
-  color: #1e293b;
-  margin: -0.2rem 0 0.45rem;
+  font-size: 0.8125rem;
+  color: #475569;
+  margin: 0 0 0.5rem;
   font-style: italic;
-  line-height: 1.5;
+  line-height: 1.45;
+}
+
+.jl-service-product-card__priceblock {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem 0.7rem;
+  margin: 0.15rem 0 0.65rem;
 }
 
 .jl-service-product-card__price {
-  font-size: 1.6rem;
+  font-size: 1.55rem;
   font-weight: 800;
   color: #0a1628;
-  margin: 0.1rem 0 0.25rem;
+  margin: 0 0 0.2rem;
   letter-spacing: -0.02em;
 }
 
 .jl-service-product-card__ttv {
-  font-size: 0.875rem;
-  font-weight: 800;
-  color: #033948;
-  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0.15rem 0 0;
   line-height: 1.4;
 }
 
@@ -497,11 +556,11 @@
   vertical-align: middle;
 }
 
-.jl-service-product-card__roi {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #064e63;
-  margin: 0 0 0.55rem;
+.jl-service-product-card__priceblock .jl-service-product-card__roi {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0.35rem 0 0;
   line-height: 1.45;
 }
 
@@ -530,9 +589,13 @@
   font-size: 0.8rem;
 }
 
+.jl-service-product-card__meta {
+  margin-top: 0.15rem;
+}
+
 .jl-service-product-card__overview {
-  margin: -0.15rem 0 0.65rem;
-  font-size: 0.9375rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.875rem;
   font-weight: 700;
   line-height: 1.35;
 }
@@ -548,10 +611,10 @@
 }
 
 .jl-service-product-card__demo {
-  margin: -0.35rem 0 0.5rem;
-  font-size: 0.875rem;
+  margin: 0 0 0;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: #334155;
+  color: #64748b;
   line-height: 1.4;
 }
 
@@ -568,9 +631,10 @@
 .jl-service-product-card__actions {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.45rem;
   margin-top: auto;
-  padding-top: 0.25rem;
+  padding-top: 0.65rem;
+  flex-shrink: 0;
 }
 
 .jl-service-product-card__actions .btn-book-call.jl-service-product-card__btn-primary {
@@ -603,16 +667,19 @@
 
 .jl-service-product-card__tertiary {
   text-align: center;
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: #64748b;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  padding: 0.25rem;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(100, 116, 139, 0.9);
+  padding: 0.2rem 0.25rem 0.15rem;
+  align-self: center;
+  max-width: 100%;
 }
 
 .jl-service-product-card__tertiary:hover {
-  color: #0a1628;
+  color: #334155;
+  border-bottom-color: #64748b;
 }
 
 /* Keep vertical CTA hierarchy: primary → secondary link → tertiary quote */
@@ -983,6 +1050,11 @@
   border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
 
+.jl-custom-solutions--upgrade-path {
+  background: linear-gradient(180deg, #f3fafb 0%, #ffffff 22%);
+  border-top: 2px solid rgba(11, 101, 121, 0.18);
+}
+
 .jl-custom-solutions__title {
   font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 800;
@@ -998,6 +1070,12 @@
   margin: 0 auto 1.5rem;
   font-size: 1.0625rem;
   line-height: 1.65;
+}
+
+.jl-custom-solutions__sub--upgrade {
+  max-width: 38rem;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .jl-custom-list {
@@ -1131,7 +1209,7 @@
   font-weight: 800;
   color: #033948;
   max-width: 36rem;
-  margin: 0 auto 1.75rem;
+  margin: 1.5rem auto 0;
   padding: 0 1rem;
   line-height: 1.45;
 }
@@ -1207,7 +1285,7 @@
 /* Risk reversal (under cards) */
 .jl-services-risk {
   max-width: 38rem;
-  margin: 1.5rem auto 0;
+  margin: 1.25rem auto 0;
   padding: 0 1rem;
   text-align: center;
 }
@@ -1232,6 +1310,21 @@
   line-height: 1.5;
 }
 
+.jl-services-urgency--featured {
+  margin-top: 1.75rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  font-style: normal;
+  color: #0f172a;
+  max-width: 36rem;
+}
+
+.jl-services-urgency--featured strong {
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  font-weight: 800;
+}
+
 /* Demo preview strip */
 .jl-services-demo-strip {
   margin-top: 2.25rem;
@@ -1245,17 +1338,19 @@
 .jl-services-demo-strip__title {
   font-size: clamp(1.2rem, 2.8vw, 1.45rem);
   font-weight: 800;
-  color: #fff;
+  color: #ffffff;
   margin: 0 0 0.45rem;
   letter-spacing: -0.02em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .jl-services-demo-strip__sub {
   font-size: 0.9375rem;
-  color: rgba(255, 255, 255, 0.88);
+  color: #f1f5f9;
   margin: 0 auto 1.15rem;
   max-width: 32rem;
   line-height: 1.55;
+  font-weight: 600;
 }
 
 .jl-services-demo-strip__preview {
@@ -1283,13 +1378,24 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.65);
+  color: #e2e8f0;
 }
 
 .jl-services-demo-strip__cta {
   font-weight: 800;
   padding: 0.65rem 1.5rem;
   border-radius: 10px;
+}
+
+.jl-services-demo-strip__micro {
+  margin: 0.65rem auto 0;
+  max-width: 28rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
 }
 
 /* Why not a basic form? — differentiation */
@@ -1308,24 +1414,21 @@
   letter-spacing: -0.02em;
 }
 
-.jl-services-vs-basic__killer {
+.jl-services-vs-basic__tagline {
   text-align: center;
   font-size: 1.0625rem;
   font-weight: 800;
   color: var(--jl-ink, #0a1628);
-  margin: 0 auto 0.65rem;
+  margin: 0 auto 1.5rem;
   max-width: 36rem;
   line-height: 1.4;
 }
 
-.jl-services-vs-basic__lead {
-  text-align: center;
-  color: #334155;
-  max-width: 36rem;
-  margin: 0 auto 1.75rem;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  font-weight: 600;
+.jl-services-vs-basic__tagline--killer {
+  font-size: clamp(1.0625rem, 2.4vw, 1.1875rem);
+  max-width: 38rem;
+  line-height: 1.45;
+  color: #0a1628;
 }
 
 .jl-services-vs-basic__grid {
@@ -1472,6 +1575,19 @@
   font-style: italic;
 }
 
+.jl-services-cta__risk--after-actions {
+  margin-top: 1rem !important;
+  margin-bottom: 0 !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  opacity: 1;
+  font-style: italic;
+  max-width: min(32rem, 92vw);
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 .jl-services-cta p a.text-white,
 .jl-services-cta__sub a {
   color: #ffffff !important;
@@ -1491,7 +1607,7 @@
   justify-content: center;
   align-items: stretch;
   max-width: 22rem;
-  margin: 0 auto;
+  margin: 1.15rem auto 0;
 }
 
 @media (min-width: 520px) {
@@ -1545,6 +1661,7 @@
 /* Document extraction seller page (/services/document-extraction.html) */
 .jl-doc-seller {
   background: var(--jl-surface-light, #fafbfc);
+  color: var(--jl-text-dark, #1a1a1a);
 }
 
 .jl-doc-seller__hero {
@@ -1580,6 +1697,7 @@
   max-width: 22rem;
   margin: 0 auto 1rem;
   line-height: 1.15;
+  color: var(--jl-white, #fff);
 }
 
 @media (min-width: 576px) {
@@ -1690,6 +1808,7 @@
   font-size: clamp(1.2rem, 3vw, 1.5rem);
   font-weight: 800;
   margin-bottom: 0.5rem;
+  color: #ffffff;
 }
 
 .jl-doc-seller__cta-band p {
@@ -1714,4 +1833,126 @@
 .jl-doc-seller__cta-row .jl-btn-secondary-offer:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
+}
+
+/* --- Industry lander (/hvac-lead-system, …): problem + solution bands --- */
+.jl-industry-problems {
+  padding: clamp(2.25rem, 5vw, 3.25rem) 0;
+  background: var(--jl-surface-warm, #faf9f6);
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.jl-industry-problems__inner {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.jl-industry-problems__title {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.jl-industry-problems__subtitle {
+  font-size: 1.0625rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  line-height: 1.6;
+  margin: 0 0 1.35rem;
+}
+
+.jl-industry-problems__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jl-industry-problems__item {
+  padding: 1rem 1.15rem;
+  background: var(--jl-white, #fff);
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 16px rgba(10, 22, 40, 0.06);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--jl-text-dark, #1a1a1a);
+}
+
+.jl-industry-problems__item-title {
+  display: block;
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+}
+
+.jl-industry-problems__item-body {
+  display: block;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+}
+
+.jl-industry-solutions {
+  padding: clamp(2.25rem, 5vw, 3.25rem) 0;
+  background: var(--jl-white, #fff);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.jl-industry-solutions__inner {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.jl-industry-solutions__title {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin: 0 0 0.65rem;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.jl-industry-solutions__intro {
+  font-size: 1.0625rem;
+  color: var(--jl-text-dark-muted, #4a4a4a);
+  line-height: 1.65;
+  margin: 0 0 1.25rem;
+}
+
+.jl-industry-solutions__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.jl-industry-solutions__item {
+  position: relative;
+  padding: 0.85rem 1rem 0.85rem 1.35rem;
+  font-size: 0.96875rem;
+  line-height: 1.55;
+  color: var(--jl-text-dark, #1a1a1a);
+  background: var(--jl-surface-light, #fafbfc);
+  border-radius: 10px;
+  border: 1px solid rgba(11, 101, 121, 0.15);
+}
+
+.jl-industry-solutions__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.65rem;
+  bottom: 0.65rem;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--jl-brand-cyan-deep, #0b6579);
 }

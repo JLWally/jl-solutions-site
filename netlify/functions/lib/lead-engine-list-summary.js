@@ -2,7 +2,102 @@
  * Slice G: compact summary stats for lead list (pure + small Supabase helpers).
  */
 
+const { buildSearchOrFilter, utcStartOfDayOffsetFromTodayIso } = require('./lead-engine-list-filters');
+
 const VALID_STATUS = ['new', 'analyzed', 'review', 'archived'];
+
+/**
+ * Demo follow-up / outcome counts from an in-memory cohort (prefiltered list path).
+ * @param {object[]} rows — lead rows with demo_followup_due_at, demo_outreach_status
+ */
+function summarizeDemoOutreachQueueFromRows(rows) {
+  const startToday = utcStartOfDayOffsetFromTodayIso(0);
+  const startTomorrow = utcStartOfDayOffsetFromTodayIso(1);
+  let demoFollowupDueToday = 0;
+  let demoFollowupOverdue = 0;
+  let demoOutreachSendFailed = 0;
+  let demoOutreachReplied = 0;
+  let demoOutreachInterested = 0;
+  for (const r of rows || []) {
+    const st = r.demo_outreach_status;
+    if (st === 'send_failed') demoOutreachSendFailed += 1;
+    if (st === 'replied') demoOutreachReplied += 1;
+    if (st === 'interested') demoOutreachInterested += 1;
+    const due = r.demo_followup_due_at;
+    if (due == null) continue;
+    const d = String(due);
+    if (d < startToday) demoFollowupOverdue += 1;
+    else if (d >= startToday && d < startTomorrow) demoFollowupDueToday += 1;
+  }
+  return {
+    demoFollowupDueToday,
+    demoFollowupOverdue,
+    demoOutreachSendFailed,
+    demoOutreachReplied,
+    demoOutreachInterested,
+  };
+}
+
+function applyLeadFiltersToQuery(q, { status, search, optedOut }) {
+  let x = q;
+  if (status) x = x.eq('status', status);
+  if (search) x = x.or(buildSearchOrFilter(search));
+  if (optedOut === true) x = x.eq('email_opted_out', true);
+  if (optedOut === false) x = x.eq('email_opted_out', false);
+  return x;
+}
+
+/**
+ * Global counts for demo queue strip (same Slice G filters as list).
+ */
+async function fetchDemoOutreachQueueCounts(supabase, filterParams) {
+  const startToday = utcStartOfDayOffsetFromTodayIso(0);
+  const startTomorrow = utcStartOfDayOffsetFromTodayIso(1);
+
+  function base() {
+    return applyLeadFiltersToQuery(
+      supabase.from('lead_engine_leads').select('id', { count: 'exact', head: true }),
+      filterParams
+    );
+  }
+
+  const [dueTodayR, overdueR, sendFailedR, repliedR, interestedR] = await Promise.all([
+    base()
+      .not('demo_followup_due_at', 'is', null)
+      .gte('demo_followup_due_at', startToday)
+      .lt('demo_followup_due_at', startTomorrow),
+    base().not('demo_followup_due_at', 'is', null).lt('demo_followup_due_at', startToday),
+    base().eq('demo_outreach_status', 'send_failed'),
+    base().eq('demo_outreach_status', 'replied'),
+    base().eq('demo_outreach_status', 'interested'),
+  ]);
+
+  const errs = [
+    dueTodayR.error,
+    overdueR.error,
+    sendFailedR.error,
+    repliedR.error,
+    interestedR.error,
+  ].filter(Boolean);
+  if (errs.length) {
+    console.error('[lead-engine-list-summary] demo queue counts', errs[0]);
+    return {
+      demoFollowupDueToday: 0,
+      demoFollowupOverdue: 0,
+      demoOutreachSendFailed: 0,
+      demoOutreachReplied: 0,
+      demoOutreachInterested: 0,
+    };
+  }
+
+  return {
+    demoFollowupDueToday: dueTodayR.count ?? 0,
+    demoFollowupOverdue: overdueR.count ?? 0,
+    demoOutreachSendFailed: sendFailedR.count ?? 0,
+    demoOutreachReplied: repliedR.count ?? 0,
+    demoOutreachInterested: interestedR.count ?? 0,
+  };
+}
 
 /**
  * @param {object[]} rows — lead rows with status, email_opted_out, contact_email
@@ -120,16 +215,12 @@ async function buildPipelineCountsForLeads(supabase, leadIds) {
  * Summary when list uses normal PostgREST pagination (no outreach/offer id prefilter).
  */
 async function buildSummaryStandardPath(supabase, { status, search, optedOut, total }) {
-  const { buildSearchOrFilter } = require('./lead-engine-list-filters');
   const { fetchSuppressionLookupForLeads, isLeadGloballySuppressed } = require('./lead-engine-global-suppression');
 
+  const filterParams = { status, search, optedOut };
+
   function applyLeadFilters(q) {
-    let x = q;
-    if (status) x = x.eq('status', status);
-    if (search) x = x.or(buildSearchOrFilter(search));
-    if (optedOut === true) x = x.eq('email_opted_out', true);
-    if (optedOut === false) x = x.eq('email_opted_out', false);
-    return x;
+    return applyLeadFiltersToQuery(q, filterParams);
   }
 
   const byLeadStatus = { new: 0, analyzed: 0, review: 0, archived: 0 };
@@ -188,6 +279,19 @@ async function buildSummaryStandardPath(supabase, { status, search, optedOut, to
     pipelineNote = `Pipeline counts omitted when more than ${cap} leads match; add filters or use per-lead history.`;
   }
 
+  let demoQueue = {
+    demoFollowupDueToday: 0,
+    demoFollowupOverdue: 0,
+    demoOutreachSendFailed: 0,
+    demoOutreachReplied: 0,
+    demoOutreachInterested: 0,
+  };
+  try {
+    demoQueue = await fetchDemoOutreachQueueCounts(supabase, filterParams);
+  } catch (e) {
+    console.error('[lead-engine-list-summary] demoQueue', e);
+  }
+
   return {
     totalMatching: total,
     byLeadStatus,
@@ -198,6 +302,7 @@ async function buildSummaryStandardPath(supabase, { status, search, optedOut, to
     },
     pipeline,
     pipelineNote,
+    demoQueue,
   };
 }
 
@@ -206,5 +311,7 @@ module.exports = {
   buildPipelineCountsForLeads,
   countFailedAnalysisRowsForLeads,
   buildSummaryStandardPath,
+  summarizeDemoOutreachQueueFromRows,
+  fetchDemoOutreachQueueCounts,
   VALID_STATUS,
 };

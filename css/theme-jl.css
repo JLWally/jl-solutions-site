@@ -14,9 +14,9 @@
   --jl-accent-hover: #FFD54F;
   --jl-accent-dark: #FFA726;
   --jl-white: #ffffff;
-  --jl-text: rgba(255, 255, 255, 0.95);
-  --jl-text-muted: rgba(255, 255, 255, 0.82);
-  --jl-text-dim: rgba(255, 255, 255, 0.72);
+  --jl-text: rgba(255, 255, 255, 0.96);
+  --jl-text-muted: rgba(255, 255, 255, 0.9);
+  --jl-text-dim: rgba(255, 255, 255, 0.82);
   --jl-card-icon: var(--jl-brand-cyan);
   --jl-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   /* Light sections - reduce navy overload, add contrast */
@@ -27,7 +27,7 @@
   --jl-surface-warm-alt: #f6f5f1;
   --jl-text-dark: #1a1a1a;
   --jl-text-dark-muted: #4a4a4a;
-  --jl-text-dark-dim: #6b7280;
+  --jl-text-dark-dim: #4b5563;
   /* Section rhythm */
   --section-padding-y: 4rem;
   --section-gap: 1.5rem;
@@ -54,7 +54,7 @@ main#main-content.jl-main-text {
 
 .case-studies-wrap .lead,
 main#main-content.jl-main-text .lead {
-  color: #475569;
+  color: #334155;
 }
 
 .case-studies-wrap h2:not(.case-studies-hero__title) {
@@ -69,8 +69,89 @@ main#main-content.jl-main-text .display-4 {
   color: var(--jl-ink, #0a1628);
 }
 
+/*
+ * Dark / inverted sections nested inside light mains: the rule above must not apply.
+ * Otherwise headings render as ink (#0a1628) on dark gradients (unreadable).
+ */
+main#main-content.jl-main-text .jl-services-demo-strip :is(h1, h2, h3, h4),
+main#main-content.jl-main-text .jl-services-cta :is(h1, h2, h3, h4),
+main#main-content.jl-main-text .jl-footer-cta-section :is(h1, h2, h3, h4),
+main#main-content.jl-main-text .jl-doc-seller__cta-band :is(h1, h2, h3, h4) {
+  color: inherit;
+}
+
 main#main-content.jl-main-text .text-muted {
-  color: #64748b !important;
+  color: #475569 !important;
+}
+
+/* Case studies grid: light wrap + global heading inherit — keep body copy and filters readable */
+.case-studies-wrap {
+  color: var(--jl-text-dark);
+}
+
+.case-studies-wrap h1,
+.case-studies-wrap h2,
+.case-studies-wrap h3,
+.case-studies-wrap h4,
+.case-studies-wrap h5,
+.case-studies-wrap p,
+.case-studies-wrap li {
+  color: var(--jl-text-dark);
+}
+
+.case-studies-wrap .case-study-card,
+.case-studies-wrap .case-study-card h1,
+.case-studies-wrap .case-study-card h2,
+.case-studies-wrap .case-study-card h3,
+.case-studies-wrap .case-study-card h4,
+.case-studies-wrap .case-study-card h5,
+.case-studies-wrap .case-study-card p,
+.case-studies-wrap .case-study-card li {
+  color: var(--jl-text-dark);
+}
+
+.case-studies-wrap .case-study-result,
+.case-studies-wrap .case-study-row--result .case-study-label {
+  color: var(--jl-ink, #0a1628);
+}
+
+/* Resources listing: light layout, ensure unclassed headings never stay “dark page” white */
+.resources-layout {
+  color: var(--jl-text-dark);
+}
+
+.resources-layout h1,
+.resources-layout h2,
+.resources-layout h3,
+.resources-layout h4,
+.resources-layout h5,
+.resources-layout p,
+.resources-layout li {
+  color: var(--jl-text-dark);
+}
+
+.resources-layout .resource-card h4,
+.resources-layout .resource-card .text-muted,
+.resources-layout .resource-card__meta {
+  color: var(--jl-text-dark);
+}
+
+.resources-layout .resource-card .text-muted {
+  color: var(--jl-text-dark-dim) !important;
+}
+
+.resources-layout .resource-type {
+  color: var(--jl-text-dark-dim);
+}
+
+/* Light homepage / marketing bands: explicit ink so headings are not body-white */
+.services-section-home,
+.trust-strip,
+.section-how-we-help,
+.section-industries,
+.cta-section-home,
+.section-testimonials.jl-reviews-section {
+  color: var(--jl-text-dark);
 }
 
 /* Navbar */
@@ -339,6 +420,50 @@ main#main-content.jl-main-text .text-muted {
 }
 
 /* Hero proof strip - compact trust/fit row under CTA */
+/* Custom demo CTA — “See your system before you buy” */
+.hero-custom-demo {
+  margin-top: 1.35rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  max-width: 40rem;
+}
+
+.hero-custom-demo__tagline {
+  margin: 0 0 0.65rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--jl-white);
+  letter-spacing: 0.01em;
+}
+
+.hero-custom-demo__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.85rem 1.5rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0d9488, #0f766e);
+  box-shadow: 0 6px 28px rgba(13, 148, 136, 0.35);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.hero-custom-demo__btn:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(13, 148, 136, 0.42);
+  opacity: 0.98;
+}
+
+.hero-custom-demo__btn:focus-visible {
+  outline: 3px solid var(--jl-accent);
+  outline-offset: 2px;
+}
+
 .hero-proof-strip {
   margin-top: 1.5rem;
   max-width: 40rem;
@@ -1667,6 +1792,11 @@ footer.jl-theme a.footer__cta:hover {
   }
 
   .hero-with-image__cta-secondary {
+    text-align: center;
+  }
+
+  .hero-custom-demo__btn {
+    width: 100%;
     text-align: center;
   }
 

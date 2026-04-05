@@ -57,6 +57,17 @@ Referral partners **do not** get lead engine access unless they are explicitly l
 
 `lead-engine-auth` **POST** (login) returns **403** when disabled and **503** when operators/secret are missing. **DELETE** (logout) follows the same checks.
 
+### `lead-engine-auth` **GET** (session probe)
+
+Used by **`/lead-engine/`**, **`/internal/outreach`**, and **`/internal/demo-builder`** to decide whether to show the app or the login wall.
+
+| Response | Body |
+|----------|------|
+| **200** | `{ "authenticated": true, "username": "<operator>" }` |
+| **401** | `{ "error": "Unauthorized", "authenticated": false }` — no or invalid **`lead_engine_session`** cookie |
+| **403** | `{ "error": "Lead engine is disabled", "authenticated": false }` |
+| **503** | `{ "error": "Lead engine auth is not configured", "authenticated": false }` — missing operators or secret |
+
 ## Supabase (ingest, list, analyze)
 
 | Variable | Purpose |
@@ -80,6 +91,9 @@ If these are missing, **`lead-engine-ingest`**, **`lead-engine-list`**, and **`l
   - `supabase/migrations/20250330120000_lead_engine_global_suppression.sql` — global email suppression table keyed by normalized email for cross-lead send blocking.
   - `supabase/migrations/20250331120000_lead_engine_external_crm_id.sql` — explicit **`external_crm_id`** field/index on leads for CRM record id persistence.
   - `supabase/migrations/20250401120000_lead_engine_events.sql` — append-only internal event/audit log for operator/business actions and reporting.
+  - `supabase/migrations/20260402140000_lead_engine_demo_slug.sql` — optional **`demo_slug`** on leads (custom `/demo/:slug` link).
+  - `supabase/migrations/20260402160000_lead_engine_demo_outreach_status.sql` — **`demo_outreach_status`**, **`demo_outreach_status_at`** on leads for manual composer tracking.
+  - `supabase/migrations/20260403100000_lead_engine_demo_followup_due.sql` — **`demo_followup_due_at`**, **`demo_last_contacted_at`** on leads (filters + reminders).
 
 Tables:
 
@@ -93,6 +107,111 @@ Tables:
 RLS is enabled with **no** policies for site users; the **service role** bypasses RLS.
 
 **Note:** There is no `updated_at` trigger in this repo for other tables; `updated_at` on leads is set explicitly when status moves to `analyzed`.
+
+---
+
+## Go-live checklist: custom demo slice + one-click send
+
+1. **Supabase migrations** (in order on the linked project):  
+   `20260402140000_lead_engine_demo_slug.sql` → `20260402160000_lead_engine_demo_outreach_status.sql` → `20260403100000_lead_engine_demo_followup_due.sql`  
+   Use **`supabase db push`** after **`supabase link`**, or paste each file in the SQL Editor. Confirms **`demo_slug`**, **`demo_outreach_*`**, **`demo_followup_due_at`**, **`demo_last_contacted_at`**.
+
+2. **Stripe Payment Links** — In Dashboard → each link → After payment → success URL must match **`js/jl-stripe-product-links.js`**:  
+   `ai-intake` → `/onboarding?service=ai-intake`; `fix-my-app` → `fix-app`; `scheduling` → `scheduling`; `lead-gen` → `lead-engine`.
+
+3. **Netlify env** — One-click send: **`RESEND_API_KEY`**, **`LEAD_ENGINE_PHYSICAL_ADDRESS`**, **`LEAD_ENGINE_PUBLIC_SITE_URL`**, **`LEAD_ENGINE_OUTREACH_FROM_EMAIL`**, **`FORM_FROM_EMAIL`**. Auth: **`LEAD_ENGINE_ENABLED`**, **`LEAD_ENGINE_OPERATORS`**, **`LEAD_ENGINE_SECRET`**. See **`.env.example`**.
+
+4. **Local/repo verify** — From repo root: **`npm run verify:lead-engine-slice`** (checks migration files on disk, env keys in `.env` without printing values, and key source files).
+
+---
+
+## Internal: custom demo outreach & demo builder
+
+Static pages **`/internal/outreach`** and **`/internal/demo-builder`** use the **same operator session** as `/lead-engine/` (**`GET lead-engine-auth`** to check; login via **`/lead-engine/login.html`**).
+
+### Product defaults (workflow)
+
+| Topic | Behavior |
+|-------|----------|
+| **Follow-up 2** | Not in the main template dropdown; enable under **Advanced templates** on `/internal/outreach`. |
+| **Composer URL** | Query params supported include **`leadId`**, **`businessName`**, **`demoSlug`** / **`demoUrl`**, and **`templateVariant`** (e.g. **`followup_1`**, **`followup_2`**) to preselect the email template when the page loads. **`followup_2`** turns on **Advanced templates** automatically so the option exists in the dropdown. |
+| **Custom opener** | Prepended at the **top** of the body, then template hook + body (never between “Hey —” and the first paragraph). |
+| **Demo builder auth** | **`demo-config` POST** accepts **`lead_engine_session`** when lead engine auth is configured (same model as outreach). **`DEMO_GENERATOR_SECRET`** is optional **`Bearer`** for scripts only—not the browser-only gate. |
+| **Follow-up due** | Column **`demo_followup_due_at`**; after a **successful** composer send it is set from template: **initial / shorter / direct** → +3 business days (UTC, weekdays); **follow-up 1** → +4; **follow-up 2** → cleared. Operators can still edit manually. List filters **`demoFollowupDue`**, **`demoRecentSentDays`**. |
+| **Drafted status** | Never set on page open. Set by **Mark as drafted** or **Copy full email** (linked lead). |
+| **Activity** | **`lead-engine-activity-summary`** operational strip surfaces **`demo_outreach_sent`** and **`demo_outreach_send_failed`** (plus other demo event counts). |
+
+### `demo-config` (Netlify Function)
+
+- **`GET`** — Public read by slug; `?meta=industries` for preset keys (no auth).
+- **`POST`** — Creates a blob-backed demo config. When **`LEAD_ENGINE_ENABLED`** and operator auth env are configured, **`POST` requires** either a valid **`lead_engine_session`** cookie **or** `Authorization: Bearer <DEMO_GENERATOR_SECRET>` if that env is set. If lead engine auth is **not** configured, behavior matches older deploys: optional bearer secret only when `DEMO_GENERATOR_SECRET` is set; otherwise open (typical local dev).
+
+### `lead-engine-demo-outreach-status`
+
+**Methods:** `POST`, `OPTIONS`  
+**Auth:** Valid operator session.
+
+Patches **`lead_engine_leads`** for the custom-demo composer (linked lead via **`?leadId=`** on `/internal/outreach`). At least one of **`status`**, **`demoFollowupDueAt`**, or **`demoLastContactedAt`** must be present in the JSON body.
+
+| Field | Notes |
+|-------|--------|
+| `leadId` | Required UUID. |
+| `status` | Optional. `drafted` \| `copied` \| `sent_manual` \| `send_failed` \| `followup_due` \| `replied` \| `interested` \| `not_interested` \| `null` / empty string to clear. Updates **`demo_outreach_status`** and **`demo_outreach_status_at`**. When set to **`drafted`**, appends **`demo_outreach_drafted`**. When set to **`followup_due`**, appends **`demo_outreach_followup_due`**. (**`send_failed`** is also set automatically when **`lead-engine-demo-outreach-send`** hits Resend failure.) |
+| `demoFollowupDueAt` | Optional ISO timestamp or `null` / `""` to clear **`demo_followup_due_at`**. |
+| `demoLastContactedAt` | Optional ISO or clear; normally set by the server on successful demo send, not by the composer. |
+
+**200** returns **`demo_outreach_status`**, **`demo_outreach_status_at`**, **`demo_followup_due_at`**, **`demo_last_contacted_at`**.
+
+### `lead-engine-demo-outreach-send`
+
+**Methods:** `POST`, `OPTIONS`  
+**Auth:** Valid operator session.
+
+| Field | Required | Notes |
+|-------|----------|--------|
+| `leadId` | Yes | Target lead. |
+| `subject` | Yes | Plain-text subject (preview). |
+| `bodyPlain` | Yes | Plain-text body. |
+| `to` | Yes | Must equal the lead’s **`contact_email`** after trim/normalize. |
+| `templateVariant` | No | Composer template id (`initial`, `followup_1`, `followup_2`, `shorter`, `direct`). Drives **`demo_followup_due_at`** after a successful send (see product defaults table). |
+
+On success: **`demo_outreach_status`** → **`sent_manual`**, **`demo_outreach_status_at`**, **`demo_last_contacted_at`**, **`demo_followup_due_at`** per variant, logs **`demo_outreach_sent`**. **200** body includes **`demo_followup_due_at`**.
+
+On Resend failure: sets **`demo_outreach_status`** → **`send_failed`**, **`demo_outreach_status_at`**, logs **`demo_outreach_send_failed`**. **502**/**503** JSON may include **`demo_outreach_status`** / **`demo_outreach_status_at`** for UI sync.
+
+Same Resend/compliance requirements as main outreach (**`RESEND_API_KEY`**, **`LEAD_ENGINE_PHYSICAL_ADDRESS`**, resolvable public site URL, From).
+
+### List filters (`lead-engine-list`)
+
+Query parameters (in addition to existing Slice G filters):
+
+| Parameter | Values | Effect |
+|-----------|--------|--------|
+| **`demoOutreachStatus`** | `drafted` \| `copied` \| `sent_manual` \| `send_failed` \| `followup_due` \| `replied` \| `interested` \| `not_interested` \| `unset` | Filter leads by **`demo_outreach_status`**; **`unset`** = null/empty (“no outreach yet” for custom demo tracking). Outcome rows (**`replied`**, **`interested`**, **`not_interested`**) are operator-set for lightweight CRM. |
+| **`demoFollowupDue`** | `unset` \| `set` \| `overdue` \| `today` \| `next_2_days` \| `upcoming` | Filter by **`demo_followup_due_at`** (UTC). **`next_2_days`** = due on tomorrow or the next calendar day (exclusive end at start of UTC day+3). **`upcoming`** = any due on or after tomorrow 00:00 UTC. |
+| **`demoQueuePreset`** | `daily_action` | **Union** cohort: demo F/U **overdue** OR demo F/U **due today** (UTC) OR **`demo_outreach_status` = `send_failed`**. When set, **`demoOutreachStatus`** and **`demoFollowupDue`** query params are ignored (preset wins). Still **AND**s with other list filters (lead status, search, outreach, **`demoRecentSentDays`**, etc.). On **`/lead-engine/`**, the UI reads these three keys from the URL on load and updates them with **`history.replaceState`** when the daily queue buttons or demo dropdowns change (shareable / refresh-safe for that slice only). |
+| **`demoRecentSentDays`** | Integer **1–30** | **`sent_manual`** leads whose **`demo_outreach_status_at`** is within the last *N* days (rolling). |
+
+**List summary (`includeSummary=1`):** `summary.demoQueue` includes **`demoFollowupDueToday`**, **`demoFollowupOverdue`**, **`demoOutreachSendFailed`**, **`demoOutreachReplied`**, **`demoOutreachInterested`** for the **same Slice G filters** as the list (status / search / optedOut). With ID-prefilters, counts are computed from the **matching cohort** on the current request.
+
+### Internal tools: auth surface (audit)
+
+Custom-demo pages are static HTML; **authorization is enforced in Netlify Functions**, not by hiding URLs.
+
+| Function | Browser / session |
+|----------|-------------------|
+| **`lead-engine-auth`** | **GET** / **POST** / **DELETE** — gated by **`LEAD_ENGINE_ENABLED`** and operator config. |
+| **`lead-engine-demo-outreach-send`** | **POST** — **`guardLeadEngineRequest`** (session required). |
+| **`lead-engine-demo-outreach-status`** | **POST** — session required. |
+| **`lead-engine-list`** (and other `lead-engine-*` data APIs) | Session required. |
+| **`demo-config` POST** | **`lead_engine_session`** when lead engine auth is configured, else optional **`DEMO_GENERATOR_SECRET`** bearer, else open if neither (local dev). |
+| **`demo-config` GET** | Intentionally public (read demo JSON by slug; no lead PII in response). |
+
+There is **no** alternate public path to send mail or patch lead rows for demo outreach without passing the same checks as above.
+
+### Activity summary (`lead-engine-activity-summary`)
+
+The operational strip on **`/lead-engine/`** counts recent rows in the window. Custom-demo composer event types include **`demo_outreach_sent`**, **`demo_outreach_send_failed`**, **`demo_outreach_drafted`**, and **`demo_outreach_followup_due`** (the latter when status is saved as **follow-up due** via **`lead-engine-demo-outreach-status`**).
 
 ---
 

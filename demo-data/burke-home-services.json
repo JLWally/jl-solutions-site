@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "slug": "burke-home-services",
+  "businessName": "Burke Home Services",
+  "industry": "home-services",
+  "industryLabel": "Home services / cleaning",
+  "services": [
+    "Recurring house cleaning",
+    "Deep clean / move-out",
+    "Post-construction clean",
+    "One-time booking",
+    "Add-on services"
+  ],
+  "issueOptions": [
+    "First-time booking",
+    "Change my recurring schedule",
+    "Move-in or move-out clean",
+    "Post-renovation mess",
+    "Need quote before booking",
+    "Something else"
+  ],
+  "ctaService": "ai-intake",
+  "subtext": "Here's what a smarter intake and booking flow could look like for your business.",
+  "headerTitle": "Burke Home Services – Smart Intake Demo",
+  "createdAt": "2026-04-02T00:00:00.000Z"
+}

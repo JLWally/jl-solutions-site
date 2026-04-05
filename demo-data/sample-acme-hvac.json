@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "slug": "sample-acme-hvac",
+  "businessName": "Acme HVAC",
+  "industry": "hvac",
+  "industryLabel": "HVAC",
+  "services": [
+    "Emergency repair",
+    "Maintenance / tune-up",
+    "System replacement",
+    "Ductwork / indoor air quality"
+  ],
+  "headerTitle": "Acme HVAC – Smart Intake Demo",
+  "createdAt": "2026-04-01T00:00:00.000Z"
+}

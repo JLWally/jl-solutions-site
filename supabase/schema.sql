@@ -195,6 +195,13 @@ CREATE TABLE IF NOT EXISTS lead_engine_leads (
   first_email_subject TEXT,
   first_email_draft TEXT,
   linkedin_dm_draft TEXT,
+  -- Personalized smart demo (lead-engine-generate-demo)
+  demo_slug TEXT,
+  -- Custom-demo email pipeline (internal /internal/outreach); not automated sends
+  demo_outreach_status TEXT,
+  demo_outreach_status_at TIMESTAMPTZ,
+  demo_followup_due_at TIMESTAMPTZ,
+  demo_last_contacted_at TIMESTAMPTZ,
   -- Operator workflow timestamps
   last_reviewed_at TIMESTAMPTZ,
   audited_at TIMESTAMPTZ
@@ -220,6 +227,10 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_lead_engine_leads_source_place_id_unique
 -- Slice B: dedupe + list helpers (same as migrations/20250324120000_lead_engine_slice_b_indexes.sql)
 CREATE INDEX IF NOT EXISTS idx_lead_engine_leads_url_company_created
   ON lead_engine_leads (website_url, company_name, created_at DESC);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_lead_engine_leads_demo_slug
+  ON lead_engine_leads (demo_slug)
+  WHERE demo_slug IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS lead_engine_analysis (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

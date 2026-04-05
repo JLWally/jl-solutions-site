@@ -23,6 +23,10 @@ test('parseListQueryParams defaults', () => {
   assert.equal(r.value.recommendedOffer, null);
   assert.equal(r.value.reviewQueue, null);
   assert.equal(r.value.needsAttentionSend, false);
+  assert.equal(r.value.demoOutreachStatus, null);
+  assert.equal(r.value.demoFollowupDue, null);
+  assert.equal(r.value.demoRecentSentDays, null);
+  assert.equal(r.value.demoQueuePreset, null);
   assert.equal(r.value.includeSummary, false);
 });
 
@@ -113,5 +117,72 @@ test('parseListQueryParams reviewQueue', () => {
 
 test('parseListQueryParams rejects bad reviewQueue', () => {
   const r = parseListQueryParams({ reviewQueue: 'foo' });
+  assert.equal(r.ok, false);
+});
+
+test('parseListQueryParams demoOutreachStatus', () => {
+  const r = parseListQueryParams({ demoOutreachStatus: 'copied' });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.demoOutreachStatus, 'copied');
+  const u = parseListQueryParams({ demoOutreachStatus: 'unset' });
+  assert.equal(u.ok, true);
+  assert.equal(u.value.demoOutreachStatus, 'unset');
+  const bad = parseListQueryParams({ demoOutreachStatus: 'nope' });
+  assert.equal(bad.ok, false);
+});
+
+test('parseListQueryParams demoFollowupDue', () => {
+  const r = parseListQueryParams({ demoFollowupDue: 'overdue' });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.demoFollowupDue, 'overdue');
+  const n2 = parseListQueryParams({ demoFollowupDue: 'next_2_days' });
+  assert.equal(n2.ok, true);
+  assert.equal(n2.value.demoFollowupDue, 'next_2_days');
+  const bad = parseListQueryParams({ demoFollowupDue: 'soon' });
+  assert.equal(bad.ok, false);
+});
+
+test('parseListQueryParams demoRecentSentDays', () => {
+  const r = parseListQueryParams({ demoRecentSentDays: '7' });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.demoRecentSentDays, 7);
+  const bad = parseListQueryParams({ demoRecentSentDays: '99' });
+  assert.equal(bad.ok, false);
+});
+
+test('parseListQueryParams demoOutreachStatus send_failed', () => {
+  const r = parseListQueryParams({ demoOutreachStatus: 'send_failed' });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.demoOutreachStatus, 'send_failed');
+});
+
+test('parseListQueryParams demoOutreachStatus outcomes', () => {
+  const r = parseListQueryParams({ demoOutreachStatus: 'interested' });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.demoOutreachStatus, 'interested');
+});
+
+test('parseListQueryParams demoQueuePreset daily_action', () => {
+  const r = parseListQueryParams({ demoQueuePreset: 'daily_action' });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.demoQueuePreset, 'daily_action');
+  assert.equal(r.value.demoOutreachStatus, null);
+  assert.equal(r.value.demoFollowupDue, null);
+});
+
+test('parseListQueryParams demoQueuePreset clears conflicting demo filters', () => {
+  const r = parseListQueryParams({
+    demoQueuePreset: 'daily_action',
+    demoFollowupDue: 'today',
+    demoOutreachStatus: 'send_failed',
+  });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.demoQueuePreset, 'daily_action');
+  assert.equal(r.value.demoOutreachStatus, null);
+  assert.equal(r.value.demoFollowupDue, null);
+});
+
+test('parseListQueryParams demoQueuePreset invalid', () => {
+  const r = parseListQueryParams({ demoQueuePreset: 'weekly' });
   assert.equal(r.ok, false);
 });

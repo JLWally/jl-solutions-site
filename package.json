@@ -6,7 +6,8 @@
     "dev": "netlify dev",
     "start": "serve -l 3000",
     "images:webp": "node scripts/convert-to-webp.js",
-    "test": "node --test netlify/functions/lib/*.test.js"
+    "test": "node --test netlify/functions/lib/*.test.js",
+    "verify:lead-engine-slice": "node scripts/verify-lead-engine-slice.js"
   },
   "dependencies": {
     "@netlify/blobs": "^6.5.0",

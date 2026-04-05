@@ -149,13 +149,174 @@ async function fetchLeadIdsByGlobalSuppression(supabase, suppressed) {
 }
 
 /**
+ * Custom-demo outreach status (Phase 6) — column on lead_engine_leads.
+ * @param {string} statusKey drafted|copied|sent_manual|followup_due|unset
+ */
+async function fetchLeadIdsByDemoOutreachStatus(supabase, statusKey) {
+  let q = supabase.from('lead_engine_leads').select('id').limit(12000);
+  if (statusKey === 'unset') {
+    q = q.is('demo_outreach_status', null);
+  } else {
+    q = q.eq('demo_outreach_status', statusKey);
+  }
+  const { data, error } = await q;
+  if (error) {
+    console.error('[lead-engine-list-filters] demo outreach status ids', error);
+    return { ok: false, error: 'Failed to apply demo outreach status filter' };
+  }
+  const out = new Set((data || []).map((r) => r.id));
+  if (out.size > MAX_FILTER_LEAD_IDS) {
+    return {
+      ok: false,
+      error: `This filter matches more than ${MAX_FILTER_LEAD_IDS} leads. Narrow with search or lead status, or split the cohort.`,
+    };
+  }
+  return { ok: true, ids: out };
+}
+
+/** UTC midnight for (today + offsetDays) in the calendar sense. */
+function utcStartOfDayOffsetFromTodayIso(offsetDays) {
+  const now = new Date();
+  return new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + offsetDays, 0, 0, 0, 0)
+  ).toISOString();
+}
+
+function utcStartOfTodayIso() {
+  return utcStartOfDayOffsetFromTodayIso(0);
+}
+
+function utcStartOfTomorrowIso() {
+  return utcStartOfDayOffsetFromTodayIso(1);
+}
+
+/**
+ * demo_followup_due_at queue (UTC calendar day boundaries).
+ * @param {string} key unset | overdue | today | next_2_days | upcoming | set
+ */
+async function fetchLeadIdsByDemoFollowupDue(supabase, key) {
+  let q = supabase.from('lead_engine_leads').select('id').limit(12000);
+  const startToday = utcStartOfTodayIso();
+  const startTomorrow = utcStartOfTomorrowIso();
+  const startPlus3 = utcStartOfDayOffsetFromTodayIso(3);
+
+  if (key === 'unset') {
+    q = q.is('demo_followup_due_at', null);
+  } else if (key === 'set') {
+    q = q.not('demo_followup_due_at', 'is', null);
+  } else if (key === 'overdue') {
+    q = q.not('demo_followup_due_at', 'is', null).lt('demo_followup_due_at', startToday);
+  } else if (key === 'today') {
+    q = q
+      .not('demo_followup_due_at', 'is', null)
+      .gte('demo_followup_due_at', startToday)
+      .lt('demo_followup_due_at', startTomorrow);
+  } else if (key === 'next_2_days') {
+    /* Tomorrow and the next calendar day (UTC), exclusive end at start of day+3 */
+    q = q
+      .not('demo_followup_due_at', 'is', null)
+      .gte('demo_followup_due_at', startTomorrow)
+      .lt('demo_followup_due_at', startPlus3);
+  } else if (key === 'upcoming') {
+    q = q.gte('demo_followup_due_at', startTomorrow);
+  } else {
+    return { ok: false, error: 'Invalid demo follow-up due filter' };
+  }
+
+  const { data, error } = await q;
+  if (error) {
+    console.error('[lead-engine-list-filters] demo follow-up due ids', error);
+    return { ok: false, error: 'Failed to apply demo follow-up due filter' };
+  }
+  const out = new Set((data || []).map((r) => r.id));
+  if (out.size > MAX_FILTER_LEAD_IDS) {
+    return {
+      ok: false,
+      error: `This filter matches more than ${MAX_FILTER_LEAD_IDS} leads. Narrow with search or lead status, or split the cohort.`,
+    };
+  }
+  return { ok: true, ids: out };
+}
+
+/**
+ * Custom demo composer: sent_manual with demo_outreach_status_at within the last `days` (rolling window).
+ */
+async function fetchLeadIdsByDemoRecentSent(supabase, days) {
+  const d = Math.max(1, Math.min(30, Number(days) || 0));
+  const cutoffMs = Date.now() - d * 24 * 60 * 60 * 1000;
+  const cutoffIso = new Date(cutoffMs).toISOString();
+  const { data, error } = await supabase
+    .from('lead_engine_leads')
+    .select('id')
+    .eq('demo_outreach_status', 'sent_manual')
+    .not('demo_outreach_status_at', 'is', null)
+    .gte('demo_outreach_status_at', cutoffIso)
+    .limit(12000);
+
+  if (error) {
+    console.error('[lead-engine-list-filters] demo recent sent ids', error);
+    return { ok: false, error: 'Failed to apply demo recent sent filter' };
+  }
+  const out = new Set((data || []).map((r) => r.id));
+  if (out.size > MAX_FILTER_LEAD_IDS) {
+    return {
+      ok: false,
+      error: `This filter matches more than ${MAX_FILTER_LEAD_IDS} leads. Narrow with search or lead status, or split the cohort.`,
+    };
+  }
+  return { ok: true, ids: out };
+}
+
+/**
+ * Demo “daily action” queue: union of F/U overdue, F/U due today (UTC), and demo send_failed.
+ */
+async function fetchLeadIdsForDailyActionQueue(supabase) {
+  const [ov, td, sf] = await Promise.all([
+    fetchLeadIdsByDemoFollowupDue(supabase, 'overdue'),
+    fetchLeadIdsByDemoFollowupDue(supabase, 'today'),
+    fetchLeadIdsByDemoOutreachStatus(supabase, 'send_failed'),
+  ]);
+  if (!ov.ok) return ov;
+  if (!td.ok) return td;
+  if (!sf.ok) return sf;
+  const union = new Set([...ov.ids, ...td.ids, ...sf.ids]);
+  if (union.size > MAX_FILTER_LEAD_IDS) {
+    return {
+      ok: false,
+      error: `This filter matches more than ${MAX_FILTER_LEAD_IDS} leads. Narrow with search or lead status, or split the cohort.`,
+    };
+  }
+  return { ok: true, ids: union };
+}
+
+/**
  * @returns {Promise<{ ok: true, ids: Set<string> } | { ok: false, error: string }>}
  */
 async function resolvePreFilteredLeadIds(
   supabase,
-  { outreachStatus, recommendedOffer, needsAttentionSend, suppressed, reviewQueue }
+  {
+    outreachStatus,
+    recommendedOffer,
+    needsAttentionSend,
+    suppressed,
+    reviewQueue,
+    demoOutreachStatus,
+    demoFollowupDue,
+    demoRecentSentDays,
+    demoQueuePreset,
+  }
 ) {
-  if (!outreachStatus && !recommendedOffer && !needsAttentionSend && suppressed == null && !reviewQueue) {
+  if (
+    !outreachStatus &&
+    !recommendedOffer &&
+    !needsAttentionSend &&
+    suppressed == null &&
+    !reviewQueue &&
+    !demoOutreachStatus &&
+    !demoFollowupDue &&
+    !demoRecentSentDays &&
+    !demoQueuePreset
+  ) {
     return { ok: true, ids: null };
   }
 
@@ -208,6 +369,30 @@ async function resolvePreFilteredLeadIds(
     set = set == null ? oSet : new Set([...set].filter((id) => oSet.has(id)));
   }
 
+  if (demoQueuePreset === 'daily_action') {
+    const daily = await fetchLeadIdsForDailyActionQueue(supabase);
+    if (!daily.ok) return daily;
+    set = set == null ? daily.ids : new Set([...set].filter((id) => daily.ids.has(id)));
+  } else {
+    if (demoOutreachStatus) {
+      const dem = await fetchLeadIdsByDemoOutreachStatus(supabase, demoOutreachStatus);
+      if (!dem.ok) return dem;
+      set = set == null ? dem.ids : new Set([...set].filter((id) => dem.ids.has(id)));
+    }
+
+    if (demoFollowupDue) {
+      const fd = await fetchLeadIdsByDemoFollowupDue(supabase, demoFollowupDue);
+      if (!fd.ok) return fd;
+      set = set == null ? fd.ids : new Set([...set].filter((id) => fd.ids.has(id)));
+    }
+  }
+
+  if (demoRecentSentDays) {
+    const rs = await fetchLeadIdsByDemoRecentSent(supabase, demoRecentSentDays);
+    if (!rs.ok) return rs;
+    set = set == null ? rs.ids : new Set([...set].filter((id) => rs.ids.has(id)));
+  }
+
   if (set.size > MAX_FILTER_LEAD_IDS) {
     return {
       ok: false,
@@ -250,8 +435,15 @@ module.exports = {
   fetchLeadIdsNeedingSendRecovery,
   fetchLeadIdsByReviewQueue,
   fetchLeadIdsByGlobalSuppression,
+  fetchLeadIdsByDemoOutreachStatus,
+  fetchLeadIdsByDemoFollowupDue,
+  fetchLeadIdsByDemoRecentSent,
+  fetchLeadIdsForDailyActionQueue,
   fetchLeadsByIdsChained,
   chunkArray,
   MAX_FILTER_LEAD_IDS,
   IN_CHUNK,
+  utcStartOfDayOffsetFromTodayIso,
+  utcStartOfTodayIso,
+  utcStartOfTomorrowIso,
 };

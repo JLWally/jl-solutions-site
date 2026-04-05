@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
   <style>
-    :root { --primary: #0078D4; --dark: #004298; --bg: #0a0a0a; --card: #1a1a1a; --yellow: #D4A574; }
+    :root { --primary: #0078D4; --dark: #004298; --bg: #0a0a0a; --card: #1a1a1a; --yellow: #D4A574; --success: #00C853; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e0e0e0; }
     .sales-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%); padding: 4rem 0; color: white; text-align: center; }
     .sales-hero h1 { font-weight: 700; margin-bottom: 0.5rem; }
@@ -21,6 +21,55 @@
     .btn-sales:hover { background: var(--dark); color: white; }
     .btn-sales-outline { background: transparent; color: white; border: 2px solid white; padding: 0.75rem 2rem; font-weight: 600; border-radius: 8px; }
     .btn-sales-outline:hover { background: rgba(255,255,255,0.1); color: white; }
+    .sales-loop-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      justify-content: center;
+      gap: 0.5rem 0.35rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.92);
+    }
+    @media (min-width: 768px) {
+      .sales-loop-flow { font-size: 0.85rem; gap: 0.35rem 0.5rem; }
+    }
+    .sales-loop-step {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 0.45rem 0.85rem;
+    }
+    .sales-loop-arrow { opacity: 0.7; padding: 0 0.15rem; user-select: none; }
+    .outbound-card { background: var(--card); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    @media (min-width: 576px) { .outbound-card { padding: 1.75rem; } }
+    .outbound-card h3 { color: var(--yellow); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .outbound-label { font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.75); margin-bottom: 0.35rem; }
+    .outbound-preview {
+      background: #0d0d0d;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-size: 0.85rem;
+      line-height: 1.55;
+      color: #e8e8e8;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 280px;
+      overflow-y: auto;
+      margin-bottom: 0.65rem;
+    }
+    .outbound-subject-line { font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; font-size: 0.9rem; }
+    .outbound-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+    .btn-outbound { font-size: 0.85rem; padding: 0.45rem 0.9rem; border-radius: 8px; font-weight: 600; }
+    .btn-outbound-primary { background: var(--yellow); color: #1a1a1a; border: none; }
+    .btn-outbound-primary:hover { background: #e8b882; color: #1a1a1a; }
+    .btn-outbound-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.35); }
+    .btn-outbound-ghost:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    #outbound-tool-status { font-size: 0.85rem; color: var(--success, #00C853); margin-top: 0.75rem; }
+    .outbound-quick-links a { color: var(--primary); font-weight: 600; text-decoration: none; }
+    .outbound-quick-links a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -55,15 +104,77 @@
     <div class="container">
       <h1>Sales Team Onboarding</h1>
       <p class="lead">Join as a JL Solutions partner. Get your referral code, share with clients, and earn commission.</p>
+      <div class="sales-loop-flow mt-3" aria-label="Outbound sales loop">
+        <span class="sales-loop-step">Find lead</span>
+        <span class="sales-loop-arrow" aria-hidden="true">→</span>
+        <span class="sales-loop-step">Generate demo</span>
+        <span class="sales-loop-arrow" aria-hidden="true">→</span>
+        <span class="sales-loop-step">Send email</span>
+        <span class="sales-loop-arrow" aria-hidden="true">→</span>
+        <span class="sales-loop-step">Demo → Get started</span>
+        <span class="sales-loop-arrow" aria-hidden="true">→</span>
+        <span class="sales-loop-step">Close</span>
+      </div>
       <div class="mt-4">
         <a href="/sales/funnel/" class="btn btn-sales me-2 mb-2">Open Sales Funnel Toolkit</a>
+        <a href="#sales-outbound-loop" class="btn btn-sales me-2 mb-2">Outbound email + demo</a>
         <a href="/referral/signup.html" class="btn btn-sales me-2 mb-2">Sign Up as Sales Agent</a>
         <a href="/referral/login.html" class="btn btn-sales-outline mb-2">Sign In to Dashboard</a>
       </div>
     </div>
   </div>
 
-  <div class="container my-5">
+  <div class="container my-5" id="sales-outbound-loop">
+    <h2 class="text-center mb-2">Outbound system · smart demo loop</h2>
+    <p class="text-center text-muted mb-4 mx-auto" style="max-width: 40rem;">
+      Build a branded intake demo in <a href="/demo/builder" class="text-decoration-none" style="color: var(--primary); font-weight: 600;">Demo builder</a>,
+      paste the share link below, then copy the emails or open your mail app. Prospects land on <strong class="text-white">/demo/…</strong> and can move to
+      <a href="/get-started?service=ai-intake" class="text-decoration-none" style="color: var(--primary); font-weight: 600;">Get started · AI intake</a>.
+    </p>
+
+    <div class="row g-4 mb-5">
+      <div class="col-lg-5">
+        <div class="outbound-card h-100">
+          <h3 class="text-white">Your inputs</h3>
+          <div class="mb-3">
+            <label class="outbound-label" for="outbound-demo-link">Demo link (from builder)</label>
+            <input type="url" class="form-control form-control-lg bg-dark text-white border-secondary" id="outbound-demo-link" placeholder="https://yoursite.com/demo/acme-hvac" autocomplete="url" />
+          </div>
+          <div class="mb-3">
+            <label class="outbound-label" for="outbound-first-name">Their first name <span class="text-white-50 fw-normal">(optional)</span></label>
+            <input type="text" class="form-control bg-dark text-white border-secondary" id="outbound-first-name" placeholder="Jordan" autocomplete="given-name" />
+          </div>
+          <div class="mb-0">
+            <label class="outbound-label" for="outbound-prospect-email">Prospect email <span class="text-white-50 fw-normal">(for “Open in email”)</span></label>
+            <input type="email" class="form-control bg-dark text-white border-secondary" id="outbound-prospect-email" placeholder="prospect@company.com" autocomplete="email" />
+          </div>
+          <p id="outbound-tool-status" class="mb-0" hidden></p>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="outbound-card">
+          <h3 class="text-white">Touch 1 · first send</h3>
+          <p class="outbound-subject-line mb-0">Subject: <span id="outbound-preview-subject-1"></span></p>
+          <div class="outbound-preview" id="outbound-preview-body-1" role="region" aria-label="First email body"></div>
+          <div class="outbound-actions">
+            <button type="button" class="btn btn-outbound btn-outbound-primary" id="outbound-copy-1">Copy subject + body</button>
+            <button type="button" class="btn btn-outbound btn-outbound-ghost" id="outbound-copy-body-1">Copy body only</button>
+            <a class="btn btn-outbound btn-outbound-ghost" id="outbound-mailto-1" href="#">Open in email</a>
+          </div>
+        </div>
+        <div class="outbound-card mb-0">
+          <h3 class="text-white">Touch 2 · follow-up</h3>
+          <p class="outbound-subject-line mb-0">Subject: <span id="outbound-preview-subject-2"></span></p>
+          <div class="outbound-preview" id="outbound-preview-body-2" role="region" aria-label="Follow-up email body"></div>
+          <div class="outbound-actions">
+            <button type="button" class="btn btn-outbound btn-outbound-primary" id="outbound-copy-2">Copy subject + body</button>
+            <button type="button" class="btn btn-outbound btn-outbound-ghost" id="outbound-copy-body-2">Copy body only</button>
+            <a class="btn btn-outbound btn-outbound-ghost" id="outbound-mailto-2" href="#">Open in email</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <h2 class="text-center mb-4">How It Works</h2>
     <div class="row">
       <div class="col-md-4">
@@ -105,6 +216,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/sales-outbound-loop.js" defer></script>
   <script src="/js/chatbot.js" defer></script>
 </body>
 </html>
