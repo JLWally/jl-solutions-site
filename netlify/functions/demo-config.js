@@ -79,6 +79,23 @@ exports.handler = async (event) => {
     return { statusCode: 204, headers: corsHeaders('GET, POST, OPTIONS') };
   }
 
+  /* Static preset list — no Netlify Blobs; must work when getStore is unavailable (e.g. plain static host). */
+  if (event.httpMethod === 'GET' && String(event.queryStringParameters?.meta || '') === 'industries') {
+    const industries = listIndustryKeys().map((key) => {
+      const p = getPreset(key);
+      return {
+        key,
+        label: p.label,
+        defaultServices: p.defaultServices,
+      };
+    });
+    return {
+      statusCode: 200,
+      headers: headersGet,
+      body: JSON.stringify({ industries }),
+    };
+  }
+
   let store;
   try {
     store = getStore(STORE_NAME);
@@ -92,22 +109,6 @@ exports.handler = async (event) => {
   }
 
   if (event.httpMethod === 'GET') {
-    if (String(event.queryStringParameters?.meta || '') === 'industries') {
-      const industries = listIndustryKeys().map((key) => {
-        const p = getPreset(key);
-        return {
-          key,
-          label: p.label,
-          defaultServices: p.defaultServices,
-        };
-      });
-      return {
-        statusCode: 200,
-        headers: headersGet,
-        body: JSON.stringify({ industries }),
-      };
-    }
-
     const slug = (
       event.queryStringParameters?.slug ||
       event.queryStringParameters?.demo ||
