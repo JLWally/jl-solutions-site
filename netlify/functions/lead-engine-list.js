@@ -28,7 +28,10 @@ const {
 } = require('./lib/lead-engine-list-summary');
 const { describeApprovedSendRecovery } = require('./lib/lead-engine-send-recovery');
 const { fetchSuppressionLookupForLeads, isLeadGloballySuppressed } = require('./lib/lead-engine-global-suppression');
-const { supabaseErrorPayload } = require('./lib/lead-engine-supabase-error');
+const {
+  supabaseErrorPayload,
+  isMissingLeadEngineDemoColumnError,
+} = require('./lib/lead-engine-supabase-error');
 
 /** Works on older DBs before demo migrations; list falls back to this if demo columns are missing. */
 const COMPACT_SELECT_BASE =
@@ -48,49 +51,10 @@ function patchLeadDemoFields(row) {
   };
 }
 
-/** Collect all text Supabase/PostgREST may put the failure in (message vs details, wrappers). */
-function flattenSupabaseErrorText(err) {
-  if (!err || typeof err !== 'object') return '';
-  const parts = [
-    err.message,
-    err.details,
-    err.hint,
-    err.code,
-    err.statusText,
-    err.error_description,
-  ];
-  if (err.error && typeof err.error === 'object') {
-    parts.push(err.error.message, err.error.details, err.error.hint, err.error.code);
-  }
-  try {
-    parts.push(JSON.stringify(err));
-  } catch (_e) {
-    /* ignore */
-  }
-  return parts
-    .filter((x) => x != null && String(x).trim() !== '')
-    .map((x) => String(x))
-    .join(' ');
-}
-
-/** PostgREST / Postgres when SELECT references demo columns not yet migrated. */
-function isMissingDemoColumnError(err) {
-  if (typeof err === 'string') {
-    return isMissingDemoColumnError({ message: err });
-  }
-  const t = flattenSupabaseErrorText(err);
-  if (!t) return false;
-  if (/\b42703\b/.test(t)) return true;
-  if (/column .+ does not exist/i.test(t)) return true;
-  if (/does not exist/i.test(t) && /demo_(slug|outreach|followup|last_contacted)/i.test(t)) return true;
-  if (/Could not find the ['"]demo_/i.test(t)) return true;
-  return false;
-}
-
 async function fetchLeadsByIdsWithDemoFallback(supabase, ids) {
   const full = await fetchLeadsByIdsChained(supabase, ids, COMPACT_SELECT);
   if (!full.error) return full;
-  if (!isMissingDemoColumnError(full.error)) return full;
+  if (!isMissingLeadEngineDemoColumnError(full.error)) return full;
   console.warn(
     '[lead-engine-list] demo columns missing on lead_engine_leads; using base select. Apply supabase/migrations/20260402140000_* through 20260403100000_* (or schema.sql).',
     full.error.message || full.error
@@ -295,7 +259,7 @@ exports.handler = async (event) => {
 
     let { data: leads, error, count } = await buildFilteredListQuery(COMPACT_SELECT);
 
-    if (error && isMissingDemoColumnError(error)) {
+    if (error && isMissingLeadEngineDemoColumnError(error)) {
       console.warn(
         '[lead-engine-list] demo columns missing; retrying list with base select. Apply demo migrations in supabase/migrations/.',
         error.message || error

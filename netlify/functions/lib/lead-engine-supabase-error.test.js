@@ -2,21 +2,18 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { supabaseErrorPayload } = require('./lead-engine-supabase-error');
+const { isMissingLeadEngineDemoColumnError } = require('./lead-engine-supabase-error');
 
-test('supabaseErrorPayload maps PGRST205 to setup hint', () => {
-  const p = supabaseErrorPayload(
-    { code: 'PGRST205', message: "Could not find the table 'public.lead_engine_leads' in the schema cache" },
-    'Failed to list leads'
+test('isMissingLeadEngineDemoColumnError matches demo_slug in details', () => {
+  assert.equal(
+    isMissingLeadEngineDemoColumnError({
+      message: 'Failed to list leads',
+      details: 'column lead_engine_leads.demo_slug does not exist',
+    }),
+    true
   );
-  assert.match(p.error, /missing/i);
-  assert.equal(p.code, 'PGRST205');
-  assert.match(p.details, /schema\.sql|migrations/i);
 });
 
-test('supabaseErrorPayload passes through other messages', () => {
-  const p = supabaseErrorPayload({ code: 'XX', message: 'Something else' }, 'Fallback');
-  assert.equal(p.error, 'Fallback');
-  assert.equal(p.code, 'XX');
-  assert.equal(p.details, 'Something else');
+test('isMissingLeadEngineDemoColumnError false for unrelated', () => {
+  assert.equal(isMissingLeadEngineDemoColumnError({ message: 'timeout' }), false);
 });

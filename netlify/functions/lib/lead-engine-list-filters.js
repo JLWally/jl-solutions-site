@@ -1,6 +1,7 @@
 /**
  * Slice G: optional list filters (outreach status, recommended offer) + in-memory row matching.
  */
+const { isMissingLeadEngineDemoColumnError } = require('./lead-engine-supabase-error');
 const { normalizeEmailForSuppression } = require('./lead-engine-email-normalize');
 const {
   summarizeOutreachRowsForReview,
@@ -161,6 +162,12 @@ async function fetchLeadIdsByDemoOutreachStatus(supabase, statusKey) {
   }
   const { data, error } = await q;
   if (error) {
+    if (isMissingLeadEngineDemoColumnError(error)) {
+      console.warn(
+        '[lead-engine-list-filters] demo_outreach_* columns missing; skipping demo outreach status filter. Apply 20260402160000_lead_engine_demo_outreach_status.sql.'
+      );
+      return { ok: true, ids: new Set(), skipFilter: true };
+    }
     console.error('[lead-engine-list-filters] demo outreach status ids', error);
     return { ok: false, error: 'Failed to apply demo outreach status filter' };
   }
@@ -225,6 +232,12 @@ async function fetchLeadIdsByDemoFollowupDue(supabase, key) {
 
   const { data, error } = await q;
   if (error) {
+    if (isMissingLeadEngineDemoColumnError(error)) {
+      console.warn(
+        '[lead-engine-list-filters] demo_followup_due_at missing; skipping demo follow-up due filter. Apply 20260403100000_lead_engine_demo_followup_due.sql.'
+      );
+      return { ok: true, ids: new Set(), skipFilter: true };
+    }
     console.error('[lead-engine-list-filters] demo follow-up due ids', error);
     return { ok: false, error: 'Failed to apply demo follow-up due filter' };
   }
@@ -254,6 +267,12 @@ async function fetchLeadIdsByDemoRecentSent(supabase, days) {
     .limit(12000);
 
   if (error) {
+    if (isMissingLeadEngineDemoColumnError(error)) {
+      console.warn(
+        '[lead-engine-list-filters] demo outreach timestamp columns missing; skipping demo recent sent filter.'
+      );
+      return { ok: true, ids: new Set(), skipFilter: true };
+    }
     console.error('[lead-engine-list-filters] demo recent sent ids', error);
     return { ok: false, error: 'Failed to apply demo recent sent filter' };
   }
@@ -279,7 +298,10 @@ async function fetchLeadIdsForDailyActionQueue(supabase) {
   if (!ov.ok) return ov;
   if (!td.ok) return td;
   if (!sf.ok) return sf;
-  const union = new Set([...ov.ids, ...td.ids, ...sf.ids]);
+  const union = new Set();
+  if (!ov.skipFilter) for (const id of ov.ids) union.add(id);
+  if (!td.skipFilter) for (const id of td.ids) union.add(id);
+  if (!sf.skipFilter) for (const id of sf.ids) union.add(id);
   if (union.size > MAX_FILTER_LEAD_IDS) {
     return {
       ok: false,
@@ -377,20 +399,32 @@ async function resolvePreFilteredLeadIds(
     if (demoOutreachStatus) {
       const dem = await fetchLeadIdsByDemoOutreachStatus(supabase, demoOutreachStatus);
       if (!dem.ok) return dem;
-      set = set == null ? dem.ids : new Set([...set].filter((id) => dem.ids.has(id)));
+      if (dem.skipFilter) {
+        if (set == null) set = new Set();
+      } else {
+        set = set == null ? dem.ids : new Set([...set].filter((id) => dem.ids.has(id)));
+      }
     }
 
     if (demoFollowupDue) {
       const fd = await fetchLeadIdsByDemoFollowupDue(supabase, demoFollowupDue);
       if (!fd.ok) return fd;
-      set = set == null ? fd.ids : new Set([...set].filter((id) => fd.ids.has(id)));
+      if (fd.skipFilter) {
+        if (set == null) set = new Set();
+      } else {
+        set = set == null ? fd.ids : new Set([...set].filter((id) => fd.ids.has(id)));
+      }
     }
   }
 
   if (demoRecentSentDays) {
     const rs = await fetchLeadIdsByDemoRecentSent(supabase, demoRecentSentDays);
     if (!rs.ok) return rs;
-    set = set == null ? rs.ids : new Set([...set].filter((id) => rs.ids.has(id)));
+    if (rs.skipFilter) {
+      if (set == null) set = new Set();
+    } else {
+      set = set == null ? rs.ids : new Set([...set].filter((id) => rs.ids.has(id)));
+    }
   }
 
   if (set.size > MAX_FILTER_LEAD_IDS) {
