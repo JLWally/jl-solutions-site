@@ -190,37 +190,61 @@
   margin: 0;
 }
 
-/* Who this is for — qualify leads before the grid */
+/* Who this is for — high self-ID, stands out from the grid */
 .jl-services-for {
-  max-width: 40rem;
-  margin: 0 auto 1.75rem;
-  padding: 1rem 1.25rem;
-  background: #fff;
-  border: 1px solid rgba(11, 101, 121, 0.2);
-  border-radius: 12px;
-  box-shadow: 0 4px 18px rgba(10, 22, 40, 0.04);
+  max-width: 42rem;
+  margin: 0 auto 1.85rem;
+  padding: 1.15rem 1.35rem 1.2rem 1.25rem;
+  background: linear-gradient(135deg, #fffef8 0%, #fff 45%, #f0f9fb 100%);
+  border: 2px solid rgba(255, 193, 7, 0.65);
+  border-left-width: 6px;
+  border-left-color: var(--jl-accent, #ffc107);
+  border-radius: 14px;
+  box-shadow:
+    0 4px 0 rgba(11, 101, 121, 0.06),
+    0 16px 40px rgba(10, 22, 40, 0.08);
 }
 
 .jl-services-for__title {
-  font-size: 0.8125rem;
+  font-size: clamp(1.05rem, 2.8vw, 1.2rem);
   font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #033948;
-  margin: 0 0 0.65rem;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: var(--jl-ink, #0a1628);
+  margin: 0 0 0.75rem;
+  line-height: 1.25;
 }
 
 .jl-services-for__list {
+  list-style: none;
   margin: 0;
-  padding-left: 1.2rem;
+  padding: 0;
   color: #0f172a;
-  font-size: 0.9375rem;
+  font-size: 0.96875rem;
   line-height: 1.55;
   font-weight: 600;
 }
 
 .jl-services-for__list li {
-  margin-bottom: 0.35rem;
+  position: relative;
+  padding-left: 1.1rem;
+  margin-bottom: 0.45rem;
+}
+
+.jl-services-for__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--jl-brand-cyan-deep, #0b6579);
+}
+
+.jl-services-for__list strong {
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
 }
 
 .jl-product-grid {
@@ -300,6 +324,15 @@
   margin-top: 0.15rem;
 }
 
+.jl-service-product-card__transform {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: #064e63;
+  margin: 0 0 0.65rem;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+
 .jl-service-product-card__badge {
   display: inline-block;
   align-self: flex-start;
@@ -364,10 +397,6 @@
   color: #0a1628;
   margin: 0.1rem 0 0.25rem;
   letter-spacing: -0.02em;
-}
-
-.jl-service-product-card__price-emoji {
-  margin-right: 0.15rem;
 }
 
 .jl-service-product-card__ttv {
@@ -1012,8 +1041,19 @@
   font-weight: 800;
   color: var(--jl-ink, #0a1628);
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.65rem;
   letter-spacing: -0.02em;
+}
+
+.jl-services-hiw__ease {
+  text-align: center;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: #033948;
+  max-width: 36rem;
+  margin: 0 auto 1.75rem;
+  padding: 0 1rem;
+  line-height: 1.45;
 }
 
 .jl-services-hiw__steps {
@@ -1097,6 +1137,18 @@
   font-weight: 700;
   color: #334155;
   margin: 0;
+  line-height: 1.5;
+}
+
+.jl-services-urgency {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #475569;
+  margin: 1.35rem auto 0;
+  max-width: 34rem;
+  padding: 0 1rem;
   line-height: 1.5;
 }
 
@@ -1333,11 +1385,19 @@
 }
 
 .jl-services-cta__risk {
-  margin-bottom: 1.25rem !important;
+  margin-bottom: 0.75rem !important;
   font-size: 0.9375rem !important;
   font-weight: 600;
   opacity: 0.9;
   font-style: italic;
+}
+
+.jl-services-cta__urgency {
+  margin-bottom: 1.15rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 600;
+  font-style: italic;
+  opacity: 0.88;
 }
 
 .jl-services-cta p a.text-white,
