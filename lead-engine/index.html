@@ -99,6 +99,7 @@
           <div class="card card-dark p-3">
             <h2 class="h6 text-secondary mb-2">Leads</h2>
             <p class="small text-muted mb-2 mb-lg-1 le-readable-hint"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
+            <p class="small le-operator-guide mb-2"><strong>Custom demo email:</strong> In each row use <strong class="text-white">Email sent</strong> or the <strong class="text-white">Demo outreach</strong> dropdown → “Email sent (manual)”. <strong>Follow-up:</strong> <strong class="text-white">Mark F/U due</strong> sets status + a due date (+3 business days UTC), or use <strong class="text-white">Open outreach</strong> / the <strong class="text-white">F/U due</strong> column. <strong>Edit lead:</strong> <strong class="text-white">Edit lead</strong> updates company, URL, and contact email.</p>
             <div id="leDailyActionSummaryBar" class="le-daily-action-summary mb-2" style="display: none" aria-live="polite"></div>
             <div class="le-daily-queue mb-2 p-2 rounded" role="region" aria-label="Demo outreach daily queue">
               <div class="d-flex flex-wrap align-items-center gap-2">
@@ -296,6 +297,37 @@
       </div>
     </div>
   </div>
+
+  <div id="leadEditBackdrop" class="le-edit-backdrop" hidden>
+    <div class="le-edit-dialog card card-dark" role="dialog" aria-modal="true" aria-labelledby="leadEditTitle">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="h6 mb-0" id="leadEditTitle">Edit lead</h2>
+        <button type="button" class="btn-close le-edit-close-icon" id="leadEditCloseX" aria-label="Close"></button>
+      </div>
+      <p class="small le-edit-lead-hint mb-3">Change company name, website, or contact email. Saves immediately to the database.</p>
+      <form id="leadEditForm">
+        <input type="hidden" id="leadEditId" />
+        <div class="mb-2">
+          <label class="form-label small" for="leadEditCompany">Company name</label>
+          <input class="form-control form-control-sm bg-dark text-light border-secondary" id="leadEditCompany" required autocomplete="organization" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label small" for="leadEditUrl">Website URL</label>
+          <input class="form-control form-control-sm bg-dark text-light border-secondary" id="leadEditUrl" required placeholder="https:// or example.com" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label small" for="leadEditEmail">Contact email</label>
+          <input class="form-control form-control-sm bg-dark text-light border-secondary" id="leadEditEmail" type="email" autocomplete="off" placeholder="Optional — needed for Send" />
+        </div>
+        <p id="leadEditErr" class="small mb-2 le-edit-err" style="display:none;" role="alert"></p>
+        <div class="d-flex gap-2 justify-content-end flex-wrap">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="leadEditCancel">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" id="leadEditSave">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     function show(id) {
       ['loading', 'gate', 'ok'].forEach(function (x) {
@@ -385,7 +417,7 @@
       var t = new Date(lc);
       if (!Number.isFinite(t.getTime())) return '';
       return (
-        '<div class="small text-muted mt-1 le-followup-sub" title="' +
+        '<div class="small mt-1 le-followup-sub le-followup-meta" title="' +
         escapeAttr(String(lc)) +
         '">Last contact: ' +
         escapeHtml(t.toLocaleString()) +
@@ -397,11 +429,11 @@
       var raw = r.demo_followup_due_at;
       var main;
       if (!raw) {
-        main = '<span class="text-muted small">—</span>';
+        main = '<span class="small le-fu-empty">—</span>';
       } else {
         var d = new Date(raw);
         if (!Number.isFinite(d.getTime())) {
-          main = '<span class="text-muted small">—</span>';
+          main = '<span class="small le-fu-empty">—</span>';
         } else {
           var now = new Date();
           var startUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
@@ -492,12 +524,12 @@
     function formatDemoOutreachSelect(r) {
       var cur = r.demo_outreach_status ? String(r.demo_outreach_status) : '';
       var opts = [
-        { v: '', l: '—' },
+        { v: '', l: '— status —' },
         { v: 'drafted', l: 'Drafted' },
         { v: 'copied', l: 'Copied' },
-        { v: 'sent_manual', l: 'Sent' },
+        { v: 'sent_manual', l: 'Email sent (manual)' },
         { v: 'send_failed', l: 'Send failed' },
-        { v: 'followup_due', l: 'F/U due' },
+        { v: 'followup_due', l: 'Follow-up due' },
         { v: 'replied', l: 'Replied' },
         { v: 'interested', l: 'Interested' },
         { v: 'not_interested', l: 'Not int.' },
@@ -538,6 +570,14 @@
         '<a class="btn btn-outline-info btn-sm py-0 px-1 small" href="' +
         escapeAttr(href) +
         '" target="_blank" rel="noopener">Open outreach</a>';
+      var markEmailSent =
+        '<button type="button" class="btn btn-outline-success btn-sm py-0 px-1 small le-demo-mark-sent fw-semibold" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" title="Mark custom demo email as sent (same as Demo outreach → Email sent)">Email sent</button>';
+      var markFuDue =
+        '<button type="button" class="btn btn-outline-warning btn-sm py-0 px-1 small text-dark le-demo-mark-followup fw-semibold" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" title="Set follow-up due status and due date (+3 business days UTC)">Mark F/U due</button>';
       var sendFu1 = '';
       if (shouldShowSendFollowup1QuickAction(r)) {
         var qFu1 = q + '&templateVariant=' + encodeURIComponent('followup_1');
@@ -584,7 +624,9 @@
             '">Clear failed</button>'
           : '';
       return (
-        '<div class="d-flex flex-wrap gap-1 align-items-center le-demo-quick-actions">' +
+        '<div class="d-flex flex-wrap gap-1 align-items-center le-demo-quick-actions" role="group" aria-label="Demo outreach quick actions">' +
+        markEmailSent +
+        markFuDue +
         openA +
         sendFu1 +
         sendFu2 +
@@ -1464,11 +1506,16 @@
               '<button type="button" class="btn btn-outline-secondary btn-sm history-btn" data-lead-id="' +
               escapeAttr(r.id) +
               '">History</button>';
+            var editLeadBtn =
+              '<button type="button" class="btn btn-outline-primary btn-sm le-edit-lead-btn" data-lead-id="' +
+              escapeAttr(r.id) +
+              '" title="Edit company, website URL, contact email">Edit lead</button>';
             var syncBtn = '<button type="button" class="btn btn-outline-light btn-sm sync-crm-btn" data-lead-id="' + escapeAttr(r.id) + '">CRM</button>';
             var demoQuick = formatDemoQuickActions(r);
             var actionsStack =
               '<div class="lead-actions-stack">' +
               demoQuick +
+              editLeadBtn +
               analyzeBtn +
               scoreBtn +
               draftBtn +
@@ -1532,6 +1579,34 @@
     }
     function escapeAttr(s) {
       return escapeHtml(s).replace(/'/g, '&#39;');
+    }
+
+    /** +N weekdays in UTC (Mon–Fri), same idea as composer follow-up offsets. */
+    function addUtcBusinessDays(start, businessDays) {
+      var d = new Date(start.getTime());
+      var left = Math.max(0, Math.floor(Number(businessDays) || 0));
+      while (left > 0) {
+        d.setUTCDate(d.getUTCDate() + 1);
+        var day = d.getUTCDay();
+        if (day !== 0 && day !== 6) left -= 1;
+      }
+      return d.toISOString();
+    }
+
+    function openLeadEditModal(row) {
+      document.getElementById('leadEditId').value = row.id || '';
+      document.getElementById('leadEditCompany').value = row.company_name || '';
+      document.getElementById('leadEditUrl').value = row.website_url || '';
+      document.getElementById('leadEditEmail').value = row.contact_email || '';
+      var errEl = document.getElementById('leadEditErr');
+      errEl.style.display = 'none';
+      errEl.textContent = '';
+      document.getElementById('leadEditBackdrop').hidden = false;
+      document.getElementById('leadEditCompany').focus();
+    }
+
+    function closeLeadEditModal() {
+      document.getElementById('leadEditBackdrop').hidden = true;
     }
 
     function getOutreachSummary(r) {
@@ -1821,7 +1896,9 @@
           });
           genDemoBtn.disabled = false;
           if (!demOut.res.ok) {
-            window.alert(demOut.data.error || 'Generate demo failed');
+            var demErr = demOut.data.error || 'Generate demo failed';
+            if (demOut.data.details) demErr += '\n\n' + demOut.data.details;
+            window.alert(demErr);
             return;
           }
           leadDemoUrlByLeadId[gdid] = demOut.data.url || '';
@@ -2117,6 +2194,67 @@
       });
 
       document.getElementById('leadsTableWrap').addEventListener('click', async function (ev) {
+        var markS = ev.target.closest('.le-demo-mark-sent');
+        if (markS) {
+          var lids = markS.getAttribute('data-lead-id');
+          if (!lids) return;
+          markS.disabled = true;
+          try {
+            var outS = await api('lead-engine-demo-outreach-status', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ leadId: lids, status: 'sent_manual' }),
+            });
+            if (!outS.res.ok) {
+              window.alert(outS.data.error || outS.data.details || 'Could not mark email sent');
+            } else {
+              loadList(false);
+            }
+          } finally {
+            markS.disabled = false;
+          }
+          return;
+        }
+        var markF = ev.target.closest('.le-demo-mark-followup');
+        if (markF) {
+          var lidf = markF.getAttribute('data-lead-id');
+          if (!lidf) return;
+          markF.disabled = true;
+          try {
+            var dueIso = addUtcBusinessDays(new Date(), 3);
+            var outF = await api('lead-engine-demo-outreach-status', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                leadId: lidf,
+                status: 'followup_due',
+                demoFollowupDueAt: dueIso,
+              }),
+            });
+            if (!outF.res.ok) {
+              window.alert(outF.data.error || outF.data.details || 'Could not set follow-up');
+            } else {
+              loadList(false);
+            }
+          } finally {
+            markF.disabled = false;
+          }
+          return;
+        }
+        var editB = ev.target.closest('.le-edit-lead-btn');
+        if (editB) {
+          var lidE = editB.getAttribute('data-lead-id');
+          if (!lidE) return;
+          var rowE = (currentListRows || []).find(function (x) {
+            return x.id === lidE;
+          });
+          if (!rowE) {
+            window.alert('Lead not in current page — refresh or change filters.');
+            return;
+          }
+          openLeadEditModal(rowE);
+          return;
+        }
         var copyBtn = ev.target.closest('.le-demo-copy-url');
         if (copyBtn) {
           var u = copyBtn.getAttribute('data-demo-url') || '';
@@ -2426,6 +2564,45 @@
           '.';
         okEl.style.display = 'block';
         loadList(true);
+      };
+
+      document.getElementById('leadEditCancel').onclick = closeLeadEditModal;
+      document.getElementById('leadEditCloseX').onclick = closeLeadEditModal;
+      document.getElementById('leadEditBackdrop').onclick = function () {
+        closeLeadEditModal();
+      };
+      document.querySelector('.le-edit-dialog').addEventListener('click', function (e) {
+        e.stopPropagation();
+      });
+      document.getElementById('leadEditForm').onsubmit = async function (e) {
+        e.preventDefault();
+        var errEl = document.getElementById('leadEditErr');
+        errEl.style.display = 'none';
+        errEl.textContent = '';
+        var id = document.getElementById('leadEditId').value.trim();
+        var payload = {
+          leadId: id,
+          company_name: document.getElementById('leadEditCompany').value,
+          website_url: document.getElementById('leadEditUrl').value,
+          contact_email: document.getElementById('leadEditEmail').value,
+        };
+        var btn = document.getElementById('leadEditSave');
+        btn.disabled = true;
+        var out = await api('lead-engine-lead-update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        btn.disabled = false;
+        if (!out.res.ok) {
+          var m = out.data.error || 'Update failed';
+          if (out.data.errors && out.data.errors.length) m = out.data.errors.join('; ');
+          errEl.textContent = m;
+          errEl.style.display = 'block';
+          return;
+        }
+        closeLeadEditModal();
+        loadList(false);
       };
 
       hydrateDailyQueueFromUrl();

@@ -8,6 +8,28 @@ body.lead-engine-surface {
   line-height: 1.55;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  --bs-body-color: #e8eaed;
+  --bs-body-bg: #121212;
+  --bs-secondary-color: #b0bec8;
+  --bs-secondary-color-rgb: 176, 190, 200;
+  --bs-tertiary-color: #94a4b0;
+  --bs-heading-color: #f8fafc;
+  --bs-border-color: #3f3f46;
+}
+
+.lead-engine-surface h1,
+.lead-engine-surface .h1,
+.lead-engine-surface h2,
+.lead-engine-surface .h2,
+.lead-engine-surface h3,
+.lead-engine-surface .h3,
+.lead-engine-surface h4,
+.lead-engine-surface .h4,
+.lead-engine-surface h5,
+.lead-engine-surface .h5,
+.lead-engine-surface h6,
+.lead-engine-surface .h6 {
+  color: #f8fafc !important;
 }
 
 .lead-engine-surface .navbar.bg-dark {
@@ -64,7 +86,7 @@ body.lead-engine-surface {
 }
 
 .lead-engine-surface .table-dark-ish th {
-  color: #d1d5db;
+  color: #e4e4e7 !important;
   font-weight: 650;
   font-size: 0.8125rem;
   letter-spacing: 0.03em;
@@ -76,7 +98,7 @@ body.lead-engine-surface {
 }
 
 .lead-engine-surface .text-muted {
-  color: #a8b0bd !important;
+  color: #b8c2ce !important;
 }
 
 .lead-engine-surface .text-secondary {
@@ -107,7 +129,7 @@ body.lead-engine-surface {
 }
 
 .lead-engine-surface .form-control::placeholder {
-  color: #8b95a5;
+  color: #9aa8b8;
   opacity: 1;
 }
 
@@ -149,6 +171,120 @@ body.lead-engine-surface {
 }
 .lead-engine-surface .link-info:hover {
   color: #bae6fd !important;
+}
+
+.lead-engine-surface .link-light {
+  color: #e2e8f0 !important;
+}
+
+.lead-engine-surface .link-light:hover,
+.lead-engine-surface .link-light:focus-visible {
+  color: #f8fafc !important;
+}
+
+.lead-engine-surface .text-warning {
+  color: #fcd34d !important;
+}
+
+.lead-engine-surface .text-info {
+  color: #7dd3fc !important;
+}
+
+.lead-engine-surface .text-white {
+  color: #ffffff !important;
+}
+
+.lead-engine-surface .text-light {
+  color: #f1f5f9 !important;
+}
+
+/* Primary / danger / success solids & outlines on dark tool UI */
+.lead-engine-surface .btn-primary {
+  color: #0f172a !important;
+  background-color: #facc15 !important;
+  border-color: #eab308 !important;
+  font-weight: 700;
+}
+
+.lead-engine-surface .btn-primary:hover,
+.lead-engine-surface .btn-primary:focus-visible {
+  color: #0f172a !important;
+  background-color: #fde047 !important;
+  border-color: #facc15 !important;
+}
+
+.lead-engine-surface .btn-success {
+  color: #052e16 !important;
+  background-color: #4ade80 !important;
+  border-color: #22c55e !important;
+  font-weight: 700;
+}
+
+.lead-engine-surface .btn-success:hover,
+.lead-engine-surface .btn-success:focus-visible {
+  color: #052e16 !important;
+  background-color: #86efac !important;
+  border-color: #4ade80 !important;
+}
+
+.lead-engine-surface .btn-outline-danger {
+  color: #fca5a5 !important;
+  border-color: #f87171 !important;
+  font-weight: 600;
+}
+
+.lead-engine-surface .btn-outline-danger:hover,
+.lead-engine-surface .btn-outline-danger:focus-visible {
+  color: #450a0a !important;
+  background-color: #fca5a5 !important;
+  border-color: #fca5a5 !important;
+}
+
+.lead-engine-surface .btn-outline-warning {
+  color: #fde68a !important;
+  border-color: #fbbf24 !important;
+  font-weight: 600;
+}
+
+.lead-engine-surface .btn-outline-warning:hover,
+.lead-engine-surface .btn-outline-warning:focus-visible {
+  color: #1c1917 !important;
+  background-color: #fde68a !important;
+  border-color: #fbbf24 !important;
+}
+
+.lead-engine-surface .badge.bg-primary {
+  background-color: #facc15 !important;
+  color: #0f172a !important;
+  font-weight: 700;
+}
+
+/* Badges in data tables — avoid muddy grays */
+.lead-engine-surface .table-dark-ish .badge.bg-secondary {
+  background-color: #52525b !important;
+  color: #fafafa !important;
+  font-weight: 600;
+}
+
+.lead-engine-surface .table-dark-ish .badge.bg-info.text-dark {
+  background-color: #38bdf8 !important;
+  color: #0f172a !important;
+}
+
+.lead-engine-surface .table-dark-ish .badge.bg-success {
+  background-color: #22c55e !important;
+  color: #052e16 !important;
+  font-weight: 650;
+}
+
+.lead-engine-surface .table-dark-ish .badge.bg-danger {
+  background-color: #ef4444 !important;
+  color: #fffbeb !important;
+  font-weight: 650;
+}
+
+.lead-engine-surface .table-dark-ish tbody td {
+  color: #e8eaed;
 }
 
 /* Main leads table: comfortable scanning */
@@ -200,13 +336,13 @@ body.lead-engine-surface {
 }
 
 .lead-engine-surface .le-actions-col {
-  width: 9.25rem;
-  min-width: 8.5rem;
-  max-width: 11rem;
+  width: 10.5rem;
+  min-width: 9.75rem;
+  max-width: 13rem;
 }
 
 .lead-engine-surface .le-pipeline-hint {
-  color: #fde047;
+  color: #fff1a8;
   font-size: 0.8125rem;
   line-height: 1.4;
   max-height: 4rem;
@@ -277,12 +413,27 @@ body.lead-engine-surface {
 .lead-engine-surface .le-readable-hint {
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #b8c0cc !important;
+  color: #c4ccd6 !important;
 }
 
 .lead-engine-surface .le-readable-hint strong {
   color: #e8eaed;
   font-weight: 650;
+}
+
+.lead-engine-surface .le-operator-guide {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #d2dae3 !important;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lead-engine-surface .le-operator-guide strong.text-white {
+  color: #f8fafc !important;
+  font-weight: 700;
 }
 
 .lead-engine-surface .lead-history-row td {
@@ -292,7 +443,7 @@ body.lead-engine-surface {
 
 .lead-engine-surface .list-summary-bar {
   font-size: 0.875rem;
-  color: #d0d5dd;
+  color: #dde2e9;
   line-height: 1.55;
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.12) !important;
@@ -338,18 +489,122 @@ body.lead-engine-surface {
   max-width: 7.5rem;
 }
 
-.lead-engine-surface .le-followup-due-stack .le-followup-sub {
-  font-size: 0.7rem;
-  line-height: 1.3;
-  opacity: 0.92;
+/* Custom-demo outreach status (Phase 6) — readable labels on dark */
+.lead-engine-surface .le-demo-outreach-col .form-select,
+.lead-engine-surface .demo-outreach-status-select {
+  min-width: 9.5rem;
+  max-width: 13rem;
+  font-size: 0.8125rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  color: #f1f5f9 !important;
+  background-color: #111827 !important;
+  border-color: #64748b !important;
 }
 
-/* Custom-demo outreach status (Phase 6) */
-.lead-engine-surface .le-demo-outreach-col .form-select {
-  max-width: 7.25rem;
-  font-size: 0.75rem;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+.lead-engine-surface .le-demo-outreach-col .form-select:focus,
+.lead-engine-surface .demo-outreach-status-select:focus {
+  border-color: #93c5fd !important;
+  box-shadow: 0 0 0 0.2rem rgba(147, 197, 253, 0.2) !important;
+}
+
+.lead-engine-surface .le-fu-empty {
+  color: #aab6c5 !important;
+}
+
+.lead-engine-surface .le-followup-meta,
+.lead-engine-surface .le-followup-due-stack .le-followup-sub {
+  color: #c8d4e2 !important;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  opacity: 1;
+}
+
+.lead-engine-surface .btn-outline-info {
+  color: #7dd3fc !important;
+  border-color: #38bdf8 !important;
+  font-weight: 600;
+}
+
+.lead-engine-surface .btn-outline-info:hover,
+.lead-engine-surface .btn-outline-info:focus-visible {
+  color: #0f172a !important;
+  background-color: #7dd3fc !important;
+  border-color: #7dd3fc !important;
+}
+
+.lead-engine-surface .btn-outline-success {
+  color: #86efac !important;
+  border-color: #4ade80 !important;
+  font-weight: 600;
+}
+
+.lead-engine-surface .btn-outline-success:hover,
+.lead-engine-surface .btn-outline-success:focus-visible {
+  color: #052e16 !important;
+  background-color: #86efac !important;
+  border-color: #4ade80 !important;
+}
+
+.lead-engine-surface .btn-outline-primary {
+  color: #93c5fd !important;
+  border-color: #60a5fa !important;
+  font-weight: 600;
+}
+
+.lead-engine-surface .btn-outline-primary:hover,
+.lead-engine-surface .btn-outline-primary:focus-visible {
+  color: #0f172a !important;
+  background-color: #93c5fd !important;
+  border-color: #93c5fd !important;
+}
+
+/* Edit lead modal */
+.le-edit-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.le-edit-backdrop[hidden] {
+  display: none !important;
+}
+
+.le-edit-dialog {
+  width: 100%;
+  max-width: 26rem;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+}
+
+.le-edit-dialog h2,
+.le-edit-dialog .h6 {
+  color: #f8fafc !important;
+}
+
+.le-edit-lead-hint {
+  color: #c4cad4 !important;
+  line-height: 1.5;
+}
+
+.le-edit-err {
+  color: #fecaca !important;
+  font-weight: 600;
+}
+
+.le-edit-close-icon {
+  filter: invert(1);
+  opacity: 0.85;
+}
+
+.le-edit-close-icon:hover {
+  opacity: 1;
 }
 
 .lead-engine-surface .le-daily-queue {
@@ -367,9 +622,14 @@ body.lead-engine-surface {
   background: rgba(30, 41, 59, 0.45);
 }
 
+.lead-engine-surface .le-daily-action-summary__label {
+  color: #d4dae3 !important;
+}
+
 .lead-engine-surface .le-daily-action-summary__chip {
   font-size: 0.8125rem;
   white-space: nowrap;
+  color: #e8eaed;
 }
 
 .lead-engine-surface .le-daily-action-summary__chip strong {

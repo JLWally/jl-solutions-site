@@ -1,0 +1,40 @@
+'use strict';
+
+const { getStore } = require('@netlify/blobs');
+
+function trimEnv(v) {
+  if (v == null) return '';
+  return String(v).trim();
+}
+
+function isMissingBlobsEnvError(err) {
+  if (!err) return false;
+  if (err.name === 'MissingBlobsEnvironmentError') return true;
+  return /MissingBlobsEnvironmentError|not been configured to use Netlify Blobs/i.test(String(err.message || ''));
+}
+
+/**
+ * Named Netlify Blob store. Uses injected NETLIFY_BLOBS_CONTEXT on deploy and in
+ * most `netlify dev` runs. If that is missing (wrong `netlify link` site, CLI
+ * quirks), falls back to NETLIFY_SITE_ID + NETLIFY_AUTH_TOKEN from the environment.
+ *
+ * @param {string} name - Store name (e.g. smart-demos, referrals)
+ * @returns {import('@netlify/blobs').Store}
+ */
+function getNamedBlobStore(name) {
+  const storeName = String(name || '').trim();
+  if (!storeName) {
+    throw new Error('getNamedBlobStore: store name is required');
+  }
+  try {
+    return getStore(storeName);
+  } catch (err) {
+    if (!isMissingBlobsEnvError(err)) throw err;
+    const siteID = trimEnv(process.env.NETLIFY_SITE_ID || process.env.SITE_ID);
+    const token = trimEnv(process.env.NETLIFY_AUTH_TOKEN);
+    if (!siteID || !token) throw err;
+    return getStore({ name: storeName, siteID, token });
+  }
+}
+
+module.exports = { getNamedBlobStore, isMissingBlobsEnvError };

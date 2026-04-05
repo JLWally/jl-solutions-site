@@ -898,8 +898,8 @@ async function persistToConsultationsTable(formName, data) {
 
 async function appendSubmissionAudit(formName, data, extra = {}) {
   try {
-    const { getStore } = require('@netlify/blobs');
-    const store = getStore('consultation-leads');
+    const { getNamedBlobStore } = require('./lib/get-blob-store');
+    const store = getNamedBlobStore('consultation-leads');
     const raw = await store.get('all', { type: 'json' });
     const list = raw == null ? [] : (Array.isArray(raw) ? raw : []);
     list.push({

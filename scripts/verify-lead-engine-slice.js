@@ -82,6 +82,7 @@ function main() {
     ['outreach Advanced templates', fs.readFileSync(path.join(root, 'internal-outreach.html'), 'utf8').includes('ioShowAdvancedTemplates')],
     ['Mark as drafted UI', fs.readFileSync(path.join(root, 'internal-outreach.html'), 'utf8').includes('ioMarkDrafted')],
     ['Activity demo_outreach_sent counts', fs.readFileSync(path.join(root, 'netlify', 'functions', 'lib', 'lead-engine-activity-report.js'), 'utf8').includes("'demo_outreach_sent'")],
+    ['lead-engine-lead-update for Edit lead', fs.existsSync(path.join(root, 'netlify', 'functions', 'lead-engine-lead-update.js'))],
   ];
   for (const [label, pass] of checks) {
     console.log(pass ? `  OK  ${label}` : `  FAIL ${label}`);

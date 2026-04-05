@@ -25,6 +25,8 @@ const EVENT_TYPES = {
   DEMO_OUTREACH_SEND_FAILED: 'demo_outreach_send_failed',
   DEMO_OUTREACH_DRAFTED: 'demo_outreach_drafted',
   DEMO_OUTREACH_FOLLOWUP_DUE: 'demo_outreach_followup_due',
+  /** Operator updated company / URL / contact on lead_engine_leads */
+  LEAD_FIELDS_UPDATED: 'lead_fields_updated',
 };
 
 async function logLeadEngineEvent(supabase, event) {

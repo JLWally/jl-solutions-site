@@ -8,7 +8,7 @@
  * - Else if DEMO_GENERATOR_SECRET is set: Authorization: Bearer <secret> (scripts / CI).
  * - Else if lead engine is not configured: open POST (local dev); if lead engine is configured, session or bearer is required.
  */
-const { getStore } = require('@netlify/blobs');
+const { getNamedBlobStore } = require('./lib/get-blob-store');
 const { getLeadEngineSession } = require('./lib/lead-engine-session');
 const { isLeadEngineEnabled, isLeadEngineAuthConfigured } = require('./lib/lead-engine-config');
 const {
@@ -21,6 +21,7 @@ const { insertJlDemoConfig } = require('./lib/demo-config-supabase');
 const {
   STORE_NAME,
   DEFAULT_DEMO_SUBTEXT,
+  BLOB_UNAVAILABLE_DETAILS,
   slugifyBusinessName,
   normalizeRequestedSlug,
   isSlugAvailable,
@@ -98,13 +99,17 @@ exports.handler = async (event) => {
 
   let store;
   try {
-    store = getStore(STORE_NAME);
+    store = getNamedBlobStore(STORE_NAME);
   } catch (e) {
     console.error('[demo-config] getStore failed', e);
     return {
       statusCode: 503,
       headers: headersGet,
-      body: JSON.stringify({ error: 'Storage unavailable' }),
+      body: JSON.stringify({
+        error: 'Demo storage is not available in this environment.',
+        code: 'BLOB_UNAVAILABLE',
+        details: BLOB_UNAVAILABLE_DETAILS,
+      }),
     };
   }
 

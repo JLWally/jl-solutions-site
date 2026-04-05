@@ -1,6 +1,6 @@
 'use strict';
 
-const { getStore } = require('@netlify/blobs');
+const { getNamedBlobStore } = require('./get-blob-store');
 const {
   getPreset,
   normalizeServices,
@@ -10,6 +10,7 @@ const { insertJlDemoConfig } = require('./demo-config-supabase');
 const {
   STORE_NAME,
   DEFAULT_DEMO_SUBTEXT,
+  BLOB_UNAVAILABLE_DETAILS,
   isSlugAvailableOrOwnedByLead,
   sanitizeCtaService,
   originFromEvent,
@@ -80,14 +81,15 @@ async function appendDemoLinkToLatestDraft(supabase, leadId, pathUrl, publicUrl)
 async function runLeadEngineDemoGenerate({ supabase, leadId, event, actor }) {
   let store;
   try {
-    store = getStore(STORE_NAME);
+    store = getNamedBlobStore(STORE_NAME);
   } catch (e) {
     console.error('[lead-engine-demo-generate] getStore', e);
     return {
       ok: false,
       statusCode: 503,
       code: 'BLOB_UNAVAILABLE',
-      error: 'Demo storage unavailable',
+      error: 'Demo storage is not available in this environment.',
+      details: BLOB_UNAVAILABLE_DETAILS,
     };
   }
 

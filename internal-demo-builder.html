@@ -34,6 +34,9 @@
       <p class="internal-demo-lead">
         Create a personalized <code class="text-secondary">/demo/:slug</code> intake preview. Config is stored in Netlify Blobs; optional copy in Supabase table <code class="text-secondary">jl_demo_configs</code> when DB env vars are set.
       </p>
+      <p class="internal-demo-dev-hint" role="note">
+        <strong>Local:</strong> run <code class="text-secondary">npm run dev</code> from the repo after <code class="text-secondary">netlify link</code>. Plain static hosting cannot save demos (you’ll see a storage error).
+      </p>
 
       <form id="internalDemoBuilderForm" novalidate>
         <div class="mb-3">

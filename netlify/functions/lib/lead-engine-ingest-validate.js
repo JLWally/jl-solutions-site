@@ -2,6 +2,8 @@
  * Manual ingest validation, string sanitization, and website URL normalization.
  */
 
+const { UUID_RE } = require('./lead-engine-analyze-validate');
+
 const MAX_COMPANY = 200;
 const MAX_URL = 2048;
 const MAX_EMAIL = 254;
@@ -146,6 +148,46 @@ function dedupeCutoffIso() {
   return d.toISOString();
 }
 
+/**
+ * PATCH-style update for an existing lead (operator UI).
+ * @returns {{ ok: true, value: { leadId: string, patch: object } } | { ok: false, errors: string[] }}
+ */
+function validateLeadUpdateBody(body) {
+  const errors = [];
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { ok: false, errors: ['Request body must be a JSON object'] };
+  }
+  const leadId = body.leadId != null ? String(body.leadId).trim() : '';
+  if (!leadId) errors.push('leadId is required');
+  else if (!UUID_RE.test(leadId)) errors.push('leadId must be a valid UUID');
+
+  const patch = {};
+  if (Object.prototype.hasOwnProperty.call(body, 'company_name')) {
+    const c = sanitizeCompanyName(body.company_name);
+    if (!c.ok) errors.push(c.error);
+    else patch.company_name = c.value;
+  }
+  if (Object.prototype.hasOwnProperty.call(body, 'website_url')) {
+    const u = normalizeWebsiteUrl(body.website_url);
+    if (!u.ok) errors.push(u.error);
+    else patch.website_url = u.value;
+  }
+  if (Object.prototype.hasOwnProperty.call(body, 'contact_email')) {
+    const e = normalizeOptionalEmail(body.contact_email);
+    if (!e.ok) errors.push(e.error);
+    else patch.contact_email = e.value;
+  }
+
+  if (errors.length) return { ok: false, errors };
+  if (Object.keys(patch).length === 0) {
+    return {
+      ok: false,
+      errors: ['Provide at least one of: company_name, website_url, contact_email'],
+    };
+  }
+  return { ok: true, value: { leadId, patch } };
+}
+
 module.exports = {
   collapseWhitespace,
   sanitizeCompanyName,
@@ -154,6 +196,7 @@ module.exports = {
   normalizeIdempotencyKey,
   normalizeSource,
   validateManualIngestBody,
+  validateLeadUpdateBody,
   dedupeCutoffIso,
   DEDUPE_WINDOW_DAYS,
   MAX_COMPANY,

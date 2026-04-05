@@ -26,6 +26,18 @@
     .demo-quick-card h1 { font-size: 1.35rem; font-weight: 800; color: var(--jl-ink, #0a1628); margin: 0 0 0.35rem; }
     @media (min-width: 576px) { .demo-quick-card h1 { font-size: 1.5rem; } }
     .demo-quick-lead { font-size: 0.9375rem; color: #64748b; margin: 0 0 1.25rem; line-height: 1.5; }
+    .demo-quick-dev-hint {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      color: #475569;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      margin: -0.5rem 0 1rem;
+    }
+    .demo-quick-dev-hint code { font-size: 0.9em; color: #334155; background: #fff; padding: 0.1rem 0.3rem; border-radius: 0.25rem; border: 1px solid #e2e8f0; }
+    .demo-quick-dev-hint strong { color: #0f172a; }
     .demo-quick-progress { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0d9488; margin-bottom: 1rem; }
     .demo-quick-actions { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.25rem; }
     @media (min-width: 480px) {
@@ -44,7 +56,17 @@
     .btn-demo-quick-primary:disabled { opacity: 0.65; }
     #dq-loading { text-align: center; padding: 1.5rem 0.5rem; }
     #dq-loading .spinner-border { width: 2.5rem; height: 2.5rem; color: #0d9488; }
-    #dq-error { color: #b91c1c; font-size: 0.875rem; margin-top: 0.75rem; }
+    #dq-error {
+      color: #991b1b;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      white-space: pre-line;
+      margin-top: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 0.5rem;
+    }
     .demo-quick-team { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
     .demo-quick-team summary { cursor: pointer; font-size: 0.8125rem; color: #64748b; }
   </style>
@@ -71,6 +93,7 @@
     <div class="demo-quick-card">
       <h1>See your system before you buy</h1>
       <p class="demo-quick-lead">We’ll spin up a branded smart intake preview for your business. Two quick questions, then you’re in.</p>
+      <p class="demo-quick-dev-hint" role="note"><strong>Developers:</strong> creating a demo needs Netlify Functions + Blobs — use <code>npm run dev</code> (not static <code>serve</code> alone).</p>
       <p class="demo-quick-progress" id="dq-progress">Step 1 of 2</p>
 
       <div id="dq-step-1">

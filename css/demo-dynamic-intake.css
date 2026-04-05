@@ -416,11 +416,90 @@
   overflow: hidden;
 }
 
-/* Builder page */
+/*
+ * Light demo shells load style.css, which sets body { color: … !important } for the
+ * global dark site. These pages use a light card; without matching !important,
+ * copy inherits near-white text and looks “empty” on white/light gray.
+ */
+body.demo-quick-body {
+  color: rgb(15 23 42) !important;
+  background: rgb(248 250 252) !important;
+  --bs-body-color: rgb(15 23 42);
+  --bs-body-bg: rgb(248 250 252);
+  --bs-secondary-color: rgb(71 85 105);
+  --bs-secondary-color-rgb: 71, 85, 105;
+}
+
+body.demo-quick-body .demo-quick-lead,
+body.demo-quick-body .demo-quick-progress,
+body.demo-quick-body .demo-quick-team summary {
+  color: rgb(51 65 85) !important;
+}
+
+body.demo-quick-body .form-text,
+body.demo-quick-body .text-muted,
+body.demo-quick-body .text-secondary {
+  color: rgb(71 85 105) !important;
+}
+
+body.demo-quick-body .form-control,
+body.demo-quick-body .form-select {
+  color: rgb(15 23 42) !important;
+  background-color: #fff !important;
+}
+
+body.demo-quick-body .form-control::placeholder,
+body.demo-quick-body .form-select::placeholder {
+  color: rgb(100 116 139) !important;
+  opacity: 1;
+}
+
+body.demo-builder-body.demo-builder-page {
+  color: rgb(15 23 42) !important;
+  background: rgb(248 250 252) !important;
+  --bs-body-color: rgb(15 23 42);
+  --bs-body-bg: rgb(248 250 252);
+  --bs-secondary-color: rgb(71 85 105);
+  --bs-secondary-color-rgb: 71, 85, 105;
+}
+
+/* Builder page — beat style.css body { background !important }; keep nav inheriting global light text */
 .demo-builder-page {
   min-height: 100vh;
-  background: rgb(248 250 252);
-  color: rgb(15 23 42);
+  background: rgb(248 250 252) !important;
+}
+
+.demo-builder-page main {
+  color: rgb(15 23 42) !important;
+}
+
+.demo-builder-page .form-label,
+.demo-builder-page .form-control,
+.demo-builder-page .form-select,
+.demo-builder-page textarea.form-control {
+  color: rgb(15 23 42) !important;
+}
+
+.demo-builder-page .form-control::placeholder,
+.demo-builder-page textarea::placeholder {
+  color: rgb(100 116 139) !important;
+  opacity: 1;
+}
+
+.demo-builder-page .form-text,
+.demo-builder-page .text-muted {
+  color: rgb(51 65 85) !important;
+}
+
+.demo-builder-page .btn-outline-secondary {
+  color: rgb(30 41 59) !important;
+  border-color: rgb(148 163 184) !important;
+}
+
+.demo-builder-page .btn-outline-secondary:hover {
+  color: rgb(15 23 42) !important;
+  background-color: rgb(241 245 249) !important;
+  border-color: rgb(100 116 139) !important;
 }
 
 .demo-builder-shell {
@@ -453,14 +532,47 @@
   font-size: 1.5rem;
   font-weight: 800;
   margin: 0 0 0.5rem;
-  color: var(--jl-ink, #0a1628);
+  color: rgb(10 22 40) !important;
+}
+
+.demo-builder-dev-hint {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgb(30 41 59) !important;
+  background: rgb(241 245 249) !important;
+  border: 1px solid rgb(203 213 225) !important;
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  margin: -0.35rem 0 1.15rem;
+}
+
+.demo-builder-dev-hint code {
+  font-size: 0.9em;
+  color: rgb(15 23 42) !important;
+  background: rgb(255 255 255) !important;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgb(203 213 225);
+}
+
+.demo-builder-dev-hint strong {
+  color: rgb(15 23 42) !important;
 }
 
 .demo-builder-card .demo-builder-lead {
   margin: 0 0 1.25rem;
   font-size: 0.9375rem;
   line-height: 1.55;
-  color: rgb(71 85 105);
+  color: rgb(51 65 85) !important;
+}
+
+.demo-builder-card .demo-builder-lead code {
+  color: rgb(15 23 42) !important;
+  background: rgb(241 245 249) !important;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgb(226 232 240);
+  font-size: 0.9em;
 }
 
 .demo-builder-services {
@@ -484,6 +596,11 @@
   cursor: pointer;
   padding: 0.15rem 0.35rem;
   border-radius: 0.35rem;
+  color: rgb(15 23 42) !important;
+}
+
+.demo-builder-services label span {
+  color: rgb(15 23 42) !important;
 }
 
 .demo-builder-services label:hover {
@@ -501,11 +618,19 @@
   border-top: 1px solid rgb(241 245 249);
 }
 
+.demo-builder-result {
+  color: rgb(15 23 42) !important;
+}
+
+.demo-builder-result .fw-semibold {
+  color: rgb(15 23 42) !important;
+}
+
 .demo-builder-result a {
   word-break: break-all;
   font-size: 0.875rem;
   font-weight: 600;
-  color: rgb(13 148 136);
+  color: rgb(13 116 104) !important;
 }
 
 .demo-builder-copy-row {
@@ -522,12 +647,22 @@
   }
 }
 
-.demo-builder-msg {
+.demo-builder-page main .demo-builder-msg {
   margin-top: 0.75rem;
-  font-size: 0.875rem;
-  color: rgb(220 38 38);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  font-weight: 500;
+  white-space: pre-line;
+  color: rgb(127 29 29) !important;
+  background: rgb(255 247 237) !important;
+  border: 1px solid rgb(251 146 60) !important;
+  padding: 0.85rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
 }
 
-.demo-builder-msg--ok {
-  color: rgb(22 101 52);
+.demo-builder-page main .demo-builder-msg--ok {
+  color: rgb(20 83 45) !important;
+  background: rgb(240 253 244) !important;
+  border-color: rgb(74 222 128) !important;
 }

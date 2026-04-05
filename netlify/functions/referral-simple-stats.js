@@ -3,7 +3,7 @@
  * Reads session from cookie, fetches referrals from Netlify Blobs.
  */
 const crypto = require('crypto');
-const { getStore } = require('@netlify/blobs');
+const { getNamedBlobStore } = require('./lib/get-blob-store');
 const { envVarFromB64 } = require('./lib/runtime-process-env');
 
 const headers = {
@@ -54,7 +54,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const store = getStore('referrals');
+    const store = getNamedBlobStore('referrals');
     const raw = await store.get('all', { type: 'json' });
     const referrals = raw == null ? [] : (Array.isArray(raw) ? raw : raw?.referrals || []);
 
@@ -76,7 +76,7 @@ exports.handler = async (event) => {
       source: r.source || 'unknown',
     }));
 
-    const leadsStore = getStore('consultation-leads');
+    const leadsStore = getNamedBlobStore('consultation-leads');
     const leadsRaw = await leadsStore.get('all', { type: 'json' });
     const leadsList = leadsRaw == null ? [] : (Array.isArray(leadsRaw) ? leadsRaw : []);
     const leadSubmissions = leadsList

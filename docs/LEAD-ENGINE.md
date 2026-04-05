@@ -18,7 +18,7 @@ AI-assisted lead research and outreach **drafts** for JL Solutions operators. Th
 
 - **UI:** Static HTML under `/lead-engine/` (Bootstrap, same patterns as `referral-dashboard/`). The browser **never** calls Supabase directly for lead data.
 - **API:** Netlify Functions at `/.netlify/functions/lead-engine-*`.
-- **Data:** **Supabase only** for lead engine rows (no Netlify Blobs). Functions use **`SUPABASE_SERVICE_ROLE_KEY`** (bypasses RLS).
+- **Data:** **Supabase** for lead engine rows. **Netlify Blobs** (store **`smart-demos`**) for per-slug smart demo configs created via **`demo-config`** / **`lead-engine-generate-demo`** (not for core lead list/ingest). Functions use **`SUPABASE_SERVICE_ROLE_KEY`** (bypasses RLS).
 - **Auth:** HMAC-signed cookie `lead_engine_session`, signed with `LEAD_ENGINE_SECRET`. Operators are listed in `LEAD_ENGINE_OPERATORS` (separate from `REFERRAL_AGENTS`).
 - **Shared crypto:** `netlify/functions/lib/hmac-session.js` implements sign/verify only; **secrets and allowlists stay feature-specific**.
 - **HTML parsing (Slice C):** `node-html-parser` in Netlify Functions only — used for deterministic signal extraction (not a crawler).
@@ -146,6 +146,14 @@ Static pages **`/internal/outreach`** and **`/internal/demo-builder`** use the *
 - **`GET`** — Public read by slug; `?meta=industries` for preset keys (no auth).
 - **`POST`** — Creates a blob-backed demo config. When **`LEAD_ENGINE_ENABLED`** and operator auth env are configured, **`POST` requires** either a valid **`lead_engine_session`** cookie **or** `Authorization: Bearer <DEMO_GENERATOR_SECRET>` if that env is set. If lead engine auth is **not** configured, behavior matches older deploys: optional bearer secret only when `DEMO_GENERATOR_SECRET` is set; otherwise open (typical local dev).
 
+#### Local development (Netlify Blobs)
+
+Creating or loading demos by slug needs **Netlify Blobs**. On production, Netlify injects context automatically. **Locally**, run **`npm run dev`** from the repo root after **`netlify link`** to the **Netlify site that deploys this repo** (if the CLI says you are linked to a different project—e.g. the academy—run **`netlify unlink`** and link again).
+
+If functions log **`MissingBlobsEnvironmentError`**, add **`NETLIFY_SITE_ID`** and **`NETLIFY_AUTH_TOKEN`** to **`.env`** as a fallback (site ID in Site configuration → Site details; personal access token in User settings → Applications). Code uses **`getNamedBlobStore`** in **`netlify/functions/lib/get-blob-store.js`** to try injected context first, then those variables.
+
+**`npm start`** / plain static servers cannot **`POST`** demos; **`GET ?meta=industries`** still works without Blobs.
+
 ### `lead-engine-demo-outreach-status`
 
 **Methods:** `POST`, `OPTIONS`  
@@ -203,6 +211,7 @@ Custom-demo pages are static HTML; **authorization is enforced in Netlify Functi
 | **`lead-engine-auth`** | **GET** / **POST** / **DELETE** — gated by **`LEAD_ENGINE_ENABLED`** and operator config. |
 | **`lead-engine-demo-outreach-send`** | **POST** — **`guardLeadEngineRequest`** (session required). |
 | **`lead-engine-demo-outreach-status`** | **POST** — session required. |
+| **`lead-engine-lead-update`** | **POST** — session required; patches **`company_name`**, **`website_url`**, **`contact_email`** (at least one field). Used by **Edit lead** on **`/lead-engine/`**. |
 | **`lead-engine-list`** (and other `lead-engine-*` data APIs) | Session required. |
 | **`demo-config` POST** | **`lead_engine_session`** when lead engine auth is configured, else optional **`DEMO_GENERATOR_SECRET`** bearer, else open if neither (local dev). |
 | **`demo-config` GET** | Intentionally public (read demo JSON by slug; no lead PII in response). |

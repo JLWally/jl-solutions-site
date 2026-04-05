@@ -2,11 +2,11 @@
  * Appends a referral to Netlify Blobs storage.
  * Used by stripe-webhook and send-form-email when REFERRAL_USE_SIMPLE_AUTH is set.
  */
-const { getStore } = require('@netlify/blobs');
+const { getNamedBlobStore } = require('./lib/get-blob-store');
 const crypto = require('crypto');
 
 async function appendReferral(data) {
-  const store = getStore('referrals');
+  const store = getNamedBlobStore('referrals');
   const raw = await store.get('all', { type: 'json' });
   const list = raw == null ? [] : (Array.isArray(raw) ? raw : raw?.referrals || []);
   const entry = {

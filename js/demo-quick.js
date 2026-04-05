@@ -112,7 +112,9 @@
             }
             if (!x.ok) {
               showStep(2);
-              setErr((x.body && x.body.error) || 'Could not create demo. Try again.');
+              var qe = (x.body && x.body.error) || 'Could not create demo. Try again.';
+              if (x.body && x.body.details) qe += '\n\n' + x.body.details;
+              setErr(qe);
               return;
             }
             var url = x.body.url;

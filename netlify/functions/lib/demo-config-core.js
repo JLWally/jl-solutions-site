@@ -34,6 +34,10 @@ const STATIC_BUNDLED_DEMO_SLUGS = new Set([
 const DEFAULT_DEMO_SUBTEXT =
   "Here's what a smarter intake and booking flow could look like for your business.";
 
+/** Shown when Netlify Blobs cannot be opened (local static preview, missing Blobs context, etc.). */
+const BLOB_UNAVAILABLE_DETAILS =
+  'Demos use Netlify Blob storage. Run `netlify dev` from this repo and run `netlify link` to the Netlify site that deploys this project (not a different site). If Blobs still fail locally, set NETLIFY_SITE_ID (Site configuration → Site details) and NETLIFY_AUTH_TOKEN (User settings → Personal access tokens) in `.env`. Production deploys inject Blobs automatically.';
+
 function slugifyBusinessName(name) {
   const s = String(name || '')
     .toLowerCase()
@@ -113,6 +117,7 @@ module.exports = {
   RESERVED_SLUGS,
   STATIC_BUNDLED_DEMO_SLUGS,
   DEFAULT_DEMO_SUBTEXT,
+  BLOB_UNAVAILABLE_DETAILS,
   slugifyBusinessName,
   normalizeRequestedSlug,
   isSlugAvailable,

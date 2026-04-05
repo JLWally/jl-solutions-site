@@ -3,7 +3,7 @@
  * Aggregates from Supabase consultations table (when configured)
  * plus Netlify Blobs fallback audit stream from send-form-email.
  */
-const { getStore } = require('@netlify/blobs');
+const { getNamedBlobStore } = require('./lib/get-blob-store');
 const { guardLeadEngineRequest, withCors } = require('./lib/lead-engine-guard');
 const { getLeadEngineSupabase } = require('./lib/lead-engine-supabase');
 
@@ -76,7 +76,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const store = getStore('consultation-leads');
+    const store = getNamedBlobStore('consultation-leads');
     const all = await store.get('all', { type: 'json' });
     const fallback = await store.get('fallback', { type: 'json' });
     const allList = all == null ? [] : (Array.isArray(all) ? all : []);

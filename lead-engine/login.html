@@ -29,8 +29,8 @@
         <button type="button" class="btn btn-outline-light w-100 mt-2" id="quickBtn">Quick sign in (local dev)</button>
       </form>
     </div>
-    <p class="small mt-3 mb-1" style="color:#94a3b8;">Internal use only. Access is separate from the referral dashboard.</p>
-    <p class="small mb-0" style="color:#64748b; line-height:1.45;"><strong>Local testing:</strong> run <code style="color:#cbd5e1;">npx netlify dev</code> from the repo root so <code style="color:#cbd5e1;">.env</code> loads. On Netlify, set <code style="color:#cbd5e1;">LEAD_ENGINE_SECRET</code> and <code style="color:#cbd5e1;">LEAD_ENGINE_OPERATORS</code> for scope <strong style="color:#94a3b8;">Functions</strong> (or All contexts).</p>
+    <p class="small mt-3 mb-1 text-secondary">Internal use only. Access is separate from the referral dashboard.</p>
+    <p class="small mb-0 text-muted lh-sm"><strong class="text-secondary">Local testing:</strong> run <code>npx netlify dev</code> from the repo root so <code>.env</code> loads. On Netlify, set <code>LEAD_ENGINE_SECRET</code> and <code>LEAD_ENGINE_OPERATORS</code> for scope <strong class="text-secondary">Functions</strong> (or All contexts).</p>
   </div>
   <script>
     document.getElementById('form').addEventListener('submit', async function (e) {

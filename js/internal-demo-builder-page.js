@@ -99,6 +99,12 @@
     el.hidden = !text;
   }
 
+  function formatDemoConfigError(body, status) {
+    var err = (body && body.error) || 'HTTP ' + status;
+    if (body && body.details) err += '\n\n' + body.details;
+    return err;
+  }
+
   document.addEventListener('DOMContentLoaded', async function () {
     var sess = await checkLeadEngineSession();
     if (!sess.ok) {
@@ -236,7 +242,7 @@
               throw new Error((x.body && x.body.error) || 'That slug is already taken or reserved.');
             }
             if (!x.ok) {
-              throw new Error((x.body && x.body.error) || 'HTTP ' + x.status);
+              throw new Error(formatDemoConfigError(x.body, x.status));
             }
             var url = x.body.url;
             if (!url && x.body.path) {

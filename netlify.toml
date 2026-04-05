@@ -1,3 +1,8 @@
+# Smart demos (demo-config, lead-engine generate-demo) and some referral paths use Netlify Blobs
+# (store name "smart-demos" in code). Locally: `npm run dev` after `netlify link` to THIS site.
+# If the CLI shows "linked to" the wrong project, run `netlify unlink` then link again. Optional:
+# NETLIFY_SITE_ID + NETLIFY_AUTH_TOKEN in .env for local Blob API access when context is not injected.
+
 [build]
   publish = "."
   functions = "netlify/functions"

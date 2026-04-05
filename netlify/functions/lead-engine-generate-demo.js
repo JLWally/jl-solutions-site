@@ -71,6 +71,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         error: out.error,
         code: out.code,
+        ...(out.details ? { details: out.details } : {}),
       }),
     };
   }

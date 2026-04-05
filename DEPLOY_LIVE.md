@@ -1,5 +1,14 @@
 # Deploy Sales Funnel to jlsolutions.io
 
+## Live revenue & automation (current site)
+
+For **Stripe live mode**, **webhooks**, **Payment Link success URLs**, **Resend**, and **post-purchase `/onboarding`**, use the operator checklist:
+
+- **`docs/LIVE-REVENUE.md`**
+- Local mirror check (`.env` must not be committed): **`npm run verify:live-revenue`**
+
+---
+
 ## What’s in this branch
 
 Your **feature/azure-aws-cloud-migration-page** branch (pushed to GitHub) includes:
