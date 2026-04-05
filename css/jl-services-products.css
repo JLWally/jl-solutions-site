@@ -1385,19 +1385,11 @@
 }
 
 .jl-services-cta__risk {
-  margin-bottom: 0.75rem !important;
+  margin-bottom: 1.25rem !important;
   font-size: 0.9375rem !important;
   font-weight: 600;
   opacity: 0.9;
   font-style: italic;
-}
-
-.jl-services-cta__urgency {
-  margin-bottom: 1.15rem !important;
-  font-size: 0.875rem !important;
-  font-weight: 600;
-  font-style: italic;
-  opacity: 0.88;
 }
 
 .jl-services-cta p a.text-white,
