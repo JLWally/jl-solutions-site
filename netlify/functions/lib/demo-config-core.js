@@ -36,7 +36,10 @@ const DEFAULT_DEMO_SUBTEXT =
 
 /** Shown when Netlify Blobs cannot be opened (local static preview, missing Blobs context, etc.). */
 const BLOB_UNAVAILABLE_DETAILS =
-  'Demos use Netlify Blob storage. Run `netlify dev` from this repo and run `netlify link` to the Netlify site that deploys this project (not a different site). If Blobs still fail locally, set NETLIFY_SITE_ID (Site configuration → Site details) and NETLIFY_AUTH_TOKEN (User settings → Personal access tokens) in `.env`. Production deploys inject Blobs automatically.';
+  'Demos use Netlify Blob storage.\n\n' +
+  'Run `npm run dev` or `netlify dev` from this repo, and `netlify link` to the Netlify site that deploys this project (not a different site).\n\n' +
+  'If Blobs still fail locally, set NETLIFY_SITE_ID (Site configuration → Site details) and NETLIFY_AUTH_TOKEN (User settings → Personal access tokens) in `.env`. NETLIFY_API_TOKEN is accepted as an alias for the token.\n\n' +
+  'Production deploys on Netlify inject Blobs automatically.';
 
 function slugifyBusinessName(name) {
   const s = String(name || '')
