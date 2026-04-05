@@ -30,8 +30,47 @@ const { describeApprovedSendRecovery } = require('./lib/lead-engine-send-recover
 const { fetchSuppressionLookupForLeads, isLeadGloballySuppressed } = require('./lib/lead-engine-global-suppression');
 const { supabaseErrorPayload } = require('./lib/lead-engine-supabase-error');
 
-const COMPACT_SELECT =
-  'id, company_name, website_url, contact_email, email_opted_out, status, source, created_at, created_by, external_crm_id, crm_source, sync_status, last_synced_at, sync_error, demo_slug, demo_outreach_status, demo_outreach_status_at, demo_followup_due_at, demo_last_contacted_at';
+/** Works on older DBs before demo migrations; list falls back to this if demo columns are missing. */
+const COMPACT_SELECT_BASE =
+  'id, company_name, website_url, contact_email, email_opted_out, status, source, created_at, created_by, external_crm_id, crm_source, sync_status, last_synced_at, sync_error';
+
+const COMPACT_SELECT = `${COMPACT_SELECT_BASE}, demo_slug, demo_outreach_status, demo_outreach_status_at, demo_followup_due_at, demo_last_contacted_at`;
+
+function patchLeadDemoFields(row) {
+  if (!row || typeof row !== 'object') return row;
+  return {
+    ...row,
+    demo_slug: row.demo_slug ?? null,
+    demo_outreach_status: row.demo_outreach_status ?? null,
+    demo_outreach_status_at: row.demo_outreach_status_at ?? null,
+    demo_followup_due_at: row.demo_followup_due_at ?? null,
+    demo_last_contacted_at: row.demo_last_contacted_at ?? null,
+  };
+}
+
+/** PostgREST / Postgres when SELECT references columns not yet migrated. */
+function isMissingDemoColumnError(err) {
+  if (!err || typeof err !== 'object') return false;
+  const code = String(err.code || '');
+  const msg = String(err.message || '');
+  if (code === '42703') return true;
+  if (/column .* does not exist/i.test(msg)) return true;
+  if (/Could not find the 'demo_/i.test(msg)) return true;
+  return false;
+}
+
+async function fetchLeadsByIdsWithDemoFallback(supabase, ids) {
+  const full = await fetchLeadsByIdsChained(supabase, ids, COMPACT_SELECT);
+  if (!full.error) return full;
+  if (!isMissingDemoColumnError(full.error)) return full;
+  console.warn(
+    '[lead-engine-list] demo columns missing on lead_engine_leads; using base select. Apply supabase/migrations/20260402140000_* through 20260403100000_* (or schema.sql).',
+    full.error.message || full.error
+  );
+  const leg = await fetchLeadsByIdsChained(supabase, ids, COMPACT_SELECT_BASE);
+  if (leg.error) return leg;
+  return { data: (leg.data || []).map(patchLeadDemoFields), error: null };
+}
 
 function emptyDemoQueue() {
   return {
@@ -154,10 +193,9 @@ exports.handler = async (event) => {
       total = 0;
       if (includeSummary) summaryPayload = emptySummary();
     } else {
-      const { data: batchRows, error: batchErr } = await fetchLeadsByIdsChained(
+      const { data: batchRows, error: batchErr } = await fetchLeadsByIdsWithDemoFallback(
         supabase,
-        idList,
-        COMPACT_SELECT
+        idList
       );
       if (batchErr) {
         console.error('[lead-engine-list] batch by ids', batchErr);
@@ -207,29 +245,41 @@ exports.handler = async (event) => {
       }
     }
   } else {
-    let query = supabase
-      .from('lead_engine_leads')
-      .select(COMPACT_SELECT, { count: 'exact' })
-      .order('created_at', { ascending: false });
+    const buildFilteredListQuery = (selectCols) => {
+      let q = supabase
+        .from('lead_engine_leads')
+        .select(selectCols, { count: 'exact' })
+        .order('created_at', { ascending: false });
+      if (status) {
+        q = q.eq('status', status);
+      }
+      if (search) {
+        q = q.or(buildSearchOrFilter(search));
+      }
+      if (optedOut === true) {
+        q = q.eq('email_opted_out', true);
+      }
+      if (optedOut === false) {
+        q = q.eq('email_opted_out', false);
+      }
+      return q.range(rangeFrom, rangeTo);
+    };
 
-    if (status) {
-      query = query.eq('status', status);
+    let { data: leads, error, count } = await buildFilteredListQuery(COMPACT_SELECT);
+
+    if (error && isMissingDemoColumnError(error)) {
+      console.warn(
+        '[lead-engine-list] demo columns missing; retrying list with base select. Apply demo migrations in supabase/migrations/.',
+        error.message || error
+      );
+      const retry = await buildFilteredListQuery(COMPACT_SELECT_BASE);
+      leads = retry.data;
+      error = retry.error;
+      count = retry.count;
+      if (!error && leads) {
+        leads = leads.map(patchLeadDemoFields);
+      }
     }
-
-    if (search) {
-      query = query.or(buildSearchOrFilter(search));
-    }
-
-    if (optedOut === true) {
-      query = query.eq('email_opted_out', true);
-    }
-    if (optedOut === false) {
-      query = query.eq('email_opted_out', false);
-    }
-
-    query = query.range(rangeFrom, rangeTo);
-
-    const { data: leads, error, count } = await query;
 
     if (error) {
       console.error('[lead-engine-list]', error);
