@@ -1,5 +1,5 @@
 /**
- * Plumbing industry lander — /plumbing-lead-system
+ * Plumbing industry lander, /plumbing-lead-system
  */
 (function (global) {
   'use strict';
@@ -17,7 +17,7 @@
     headline: 'Stop losing plumbing jobs to slow follow-ups and bad leads',
 
     heroLead:
-      'We build intake, booking, and lead systems that help plumbing companies capture better jobs and book faster—without the back-and-forth.',
+      'We build intake, booking, and lead systems that help plumbing companies capture better jobs and book faster - without the back-and-forth.',
 
     ctaPrimaryLabel: CTA,
     ctaSecondaryLabel: 'Talk it through first',
@@ -33,10 +33,10 @@
       title: 'Sound familiar?',
       subtitle: '',
       items: [
-        'Homeowners call several plumbers—you’re not first to respond',
+        'Homeowners call several plumbers - you’re not first to respond',
         '“Emergency leak” texts with no address, photos, or shutoff status',
         'Techs wait while you chase vague or low-fit calls',
-        'Dispatch lives in calls, texts, and sticky notes—not one system',
+        'Dispatch lives in calls, texts, and sticky notes - not one system',
       ],
     },
 
@@ -44,23 +44,23 @@
       headingId: 'plumbing-solutions-heading',
       title: 'Turn plumbing leads into booked jobs automatically',
       introHtml:
-        '<strong>Same AI Intake + Scheduling combo</strong> as our core packages—<strong>plumbing language</strong> here, same systems underneath.',
+        '<strong>Same AI Intake + Scheduling combo</strong> as our core packages - <strong>plumbing language</strong> here, same systems underneath.',
       systems: [
         {
           lineHtml:
-            '<strong>Capture full job details upfront</strong> — Issue type, location, photos when it helps, and emergency vs. routine.',
+            '<strong>Capture full job details upfront</strong>, Issue type, location, photos when it helps, and emergency vs. routine.',
         },
         {
           lineHtml:
-            '<strong>Filter out tire-kickers</strong> — So your crew isn’t running free estimates for every wrong-fit lead.',
+            '<strong>Filter out tire-kickers</strong>, So your crew isn’t running free estimates for every wrong-fit lead.',
         },
         {
           lineHtml:
-            '<strong>Route jobs to the right tech</strong> — Service area, license tier, and job type to the right truck.',
+            '<strong>Route jobs to the right tech</strong>, Service area, license tier, and job type to the right truck.',
         },
         {
           lineHtml:
-            '<strong>Let customers book instantly</strong> — Windows that respect drive time and on-call rules.',
+            '<strong>Let customers book instantly</strong>, Windows that respect drive time and on-call rules.',
         },
       ],
     },
@@ -79,9 +79,9 @@
     featuredOffers: {
       headingId: 'plumbing-featured-heading',
       kicker: 'Fixed-price systems',
-      title: 'Same packages—reframed for plumbing',
+      title: 'Same packages - reframed for plumbing',
       subHtml:
-        'Pick your bottleneck—then <a href="' +
+        'Pick your bottleneck - then <a href="' +
         GS +
         '?from=plumbing">' +
         CTA +
@@ -104,7 +104,7 @@
     demo: {
       headingId: 'plumbing-demo-heading',
       title: 'See the flow your customers would hit',
-      subHtml: 'Try the live demo—then start your plumbing setup.',
+      subHtml: 'Try the live demo - then start your plumbing setup.',
       ctaLabel: 'Try the live demo',
       micro: 'Same demo every industry lander uses.',
     },
@@ -140,7 +140,7 @@
     productOverlays: {
       'fix-app': {
         primaryHref: '/get-started?from=plumbing&service=fix-app',
-        eyebrow: 'They clicked “call plumber”—then left your site',
+        eyebrow: 'They clicked “call plumber” - then left your site',
         outcomeTitle: 'More completed service requests from search traffic',
         transformLine:
           'Mobile-first paths for emergency vs. install vs. maintenance so visitors actually submit.',
@@ -157,7 +157,7 @@
         eyebrow: 'Leads arrive vague, incomplete, or wrong-fit',
         outcomeTitle: 'Qualified plumbing tickets before dispatch',
         transformLine:
-          'Capture full job details upfront; filter tire-kickers—AI Intake tuned for plumbing.',
+          'Capture full job details upfront; filter tire-kickers - AI Intake tuned for plumbing.',
         bullets: [
           'Issue type, zip, urgency, property type',
           'Photo upload when it helps',
@@ -171,7 +171,7 @@
         eyebrow: 'Booking is still phone tag',
         outcomeTitle: 'Book the right tech without the spiral',
         transformLine:
-          'Self-serve windows, routing by area and skill—Scheduling for plumbing dispatch.',
+          'Self-serve windows, routing by area and skill - Scheduling for plumbing dispatch.',
         bullets: [
           'Capacity-aware booking',
           'Drive-time–friendly windows',

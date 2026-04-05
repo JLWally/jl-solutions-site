@@ -148,7 +148,7 @@
           <button type="button" class="btn-jl-payment-submit" data-pay-to-review disabled>Review payment</button>
         </div>
 
-        <!-- Strategy session — option values must match stripe-checkout.js keys; data-usd + labels must match PAY_STRATEGY_*_USD defaults (or .env overrides) -->
+        <!-- Strategy session, option values must match stripe-checkout.js keys; data-usd + labels must match PAY_STRATEGY_*_USD defaults (or .env overrides) -->
         <div class="jl-pay-form-panel d-none" data-pay-form-panel="strategy_session" id="panel-strategy">
           <h2 class="jl-payment-title jl-payment-title--section">Strategy session details</h2>
           <p class="jl-pay-helper">After payment, we’ll send your next steps and booking details by email.</p>
@@ -156,9 +156,9 @@
             <label class="form-label" for="strSessionType">Session type <span class="text-danger" aria-hidden="true">*</span></label>
             <select class="form-select" id="strSessionType" required aria-required="true">
               <option value="" data-usd="0">Select a session…</option>
-              <option value="strategy_60" data-usd="350">60-minute strategy session — $350</option>
-              <option value="strategy_audit" data-usd="750">Audit + recommendations — $750</option>
-              <option value="strategy_technical" data-usd="950">Technical planning session — $950</option>
+              <option value="strategy_60" data-usd="350">60-minute strategy session, $350</option>
+              <option value="strategy_audit" data-usd="750">Audit + recommendations, $750</option>
+              <option value="strategy_technical" data-usd="950">Technical planning session, $950</option>
             </select>
           </div>
           <div class="mb-3">
@@ -175,7 +175,7 @@
           </div>
           <div class="mb-4">
             <label class="form-label">Session price <span class="text-danger" aria-hidden="true">*</span></label>
-            <p class="jl-pay-session-price-note mb-0">Choose a session type above — the price is fixed for that option.</p>
+            <p class="jl-pay-session-price-note mb-0">Choose a session type above, the price is fixed for that option.</p>
           </div>
           <button type="button" class="btn-jl-payment-submit" data-pay-to-review disabled>Review payment</button>
         </div>
@@ -222,11 +222,11 @@
           <h2 class="jl-payment-title jl-payment-title--section" id="pay-review-heading">Review your payment</h2>
           <p class="jl-pay-review__intro">Please confirm the details below before continuing to secure Stripe checkout.</p>
           <dl class="jl-pay-review__dl">
-            <div><dt>Payment type</dt><dd id="reviewType">—</dd></div>
-            <div><dt>Description</dt><dd id="reviewDesc">—</dd></div>
-            <div><dt>Email for receipt</dt><dd id="reviewEmail">—</dd></div>
-            <div><dt>Amount</dt><dd id="reviewAmount">—</dd></div>
-            <div><dt>Optional reference</dt><dd id="reviewRef">—</dd></div>
+            <div><dt>Payment type</dt><dd id="reviewType">-</dd></div>
+            <div><dt>Description</dt><dd id="reviewDesc">-</dd></div>
+            <div><dt>Email for receipt</dt><dd id="reviewEmail">-</dd></div>
+            <div><dt>Amount</dt><dd id="reviewAmount">-</dd></div>
+            <div><dt>Optional reference</dt><dd id="reviewRef">-</dd></div>
           </dl>
           <ul class="jl-pay-checkout-assurances" role="list" aria-label="Before you check out">
             <li>Secure payment via Stripe</li>

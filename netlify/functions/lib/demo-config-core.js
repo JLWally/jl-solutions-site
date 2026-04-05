@@ -22,7 +22,7 @@ const RESERVED_SLUGS = new Set([
   'internal',
 ]);
 
-/** Shipped under /demo-data/*.json — block overwriting via blob so static fallback stays predictable */
+/** Shipped under /demo-data/*.json, block overwriting via blob so static fallback stays predictable */
 const STATIC_BUNDLED_DEMO_SLUGS = new Set([
   'airlok-hvac',
   'a1-hvac-and-plumbing',

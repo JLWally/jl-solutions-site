@@ -317,7 +317,7 @@
         </div>
         <div class="mb-3">
           <label class="form-label small" for="leadEditEmail">Contact email</label>
-          <input class="form-control form-control-sm bg-dark text-light border-secondary" id="leadEditEmail" type="email" autocomplete="off" placeholder="Optional — needed for Send" />
+          <input class="form-control form-control-sm bg-dark text-light border-secondary" id="leadEditEmail" type="email" autocomplete="off" placeholder="Optional, needed for Send" />
         </div>
         <p id="leadEditErr" class="small mb-2 le-edit-err" style="display:none;" role="alert"></p>
         <div class="d-flex gap-2 justify-content-end flex-wrap">
@@ -363,7 +363,7 @@
       'lead-engine-batch-score': [],
       'lead-engine-batch-draft': [],
     };
-    /** Draft text for History "Copy email" — never put full body in HTML attributes (truncation / parse bugs). */
+    /** Draft text for History "Copy email", never put full body in HTML attributes (truncation / parse bugs). */
     var draftClipboardByKey = Object.create(null);
     /** Last absolute demo URL returned by lead-engine-generate-demo (until history refresh). */
     var leadDemoUrlByLeadId = Object.create(null);
@@ -429,11 +429,11 @@
       var raw = r.demo_followup_due_at;
       var main;
       if (!raw) {
-        main = '<span class="small le-fu-empty">—</span>';
+        main = '<span class="small le-fu-empty">-</span>';
       } else {
         var d = new Date(raw);
         if (!Number.isFinite(d.getTime())) {
-          main = '<span class="small le-fu-empty">—</span>';
+          main = '<span class="small le-fu-empty">-</span>';
         } else {
           var now = new Date();
           var startUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
@@ -481,7 +481,7 @@
     }
 
     /**
-     * Second follow-up template — stricter than F/U 1: must be due now (UTC) and past a first send / F/U 1 stage
+     * Second follow-up template, stricter than F/U 1: must be due now (UTC) and past a first send / F/U 1 stage
      * (we approximate with sent_manual or followup_due; no per-template send log on the lead).
      */
     function shouldShowSendFollowup2QuickAction(r) {
@@ -524,7 +524,7 @@
     function formatDemoOutreachSelect(r) {
       var cur = r.demo_outreach_status ? String(r.demo_outreach_status) : '';
       var opts = [
-        { v: '', l: '— status —' },
+        { v: '', l: '(any status)' },
         { v: 'drafted', l: 'Drafted' },
         { v: 'copied', l: 'Copied' },
         { v: 'sent_manual', l: 'Email sent (manual)' },
@@ -1114,7 +1114,7 @@
             .map(function (x) {
               return (
                 '<li>' +
-                (x.fit_score != null ? x.fit_score + '/100' : '—') +
+                (x.fit_score != null ? x.fit_score + '/100' : ' - ') +
                 ' · ' +
                 escapeHtml(x.recommended_offer || '') +
                 ' · ' +
@@ -1399,7 +1399,7 @@
       var out = await api(path);
       if (!out.res.ok) {
         var lerr = out.data.error || out.data.errors || 'List failed';
-        if (out.data.details) lerr += ' — ' + out.data.details;
+        if (out.data.details) lerr += ', ' + out.data.details;
         document.getElementById('listErr').textContent = lerr;
         document.getElementById('listErr').style.display = 'block';
         document.getElementById('listSummary').style.display = 'none';
@@ -1428,7 +1428,7 @@
       } else {
         tbody.innerHTML = rows
           .map(function (r) {
-            var dt = r.created_at ? new Date(r.created_at).toLocaleString() : '—';
+            var dt = r.created_at ? new Date(r.created_at).toLocaleString() : ' - ';
             var url = r.website_url || '';
             var urlShort = url.length > 36 ? url.slice(0, 34) + '…' : url;
             var la = r.latest_analysis;
@@ -1471,7 +1471,7 @@
                 : !apr
                   ? 'Send blocked: need Apr outreach row'
                   : activeSendLock
-                    ? 'Send in progress — open History to mark sent / release lock if stuck'
+                    ? 'Send in progress, open History to mark sent / release lock if stuck'
                     : '';
             var sendBtn = canSend
               ? '<button type="button" class="btn btn-outline-danger btn-sm send-btn" data-lead-id="' + escapeAttr(r.id) + '" data-outreach-id="' + escapeAttr(apr.id) + '">Send</button>'
@@ -1624,7 +1624,7 @@
       o = o || getOutreachSummary(r);
       function sub(label, row, badgeClass) {
         if (!row) {
-          return '<div class="mb-1"><span class="badge ' + badgeClass + '">' + label + '</span> <span class="text-muted small">—</span></div>';
+          return '<div class="mb-1"><span class="badge ' + badgeClass + '">' + label + '</span> <span class="text-muted small">-</span></div>';
         }
         var subj = (row.draft_subject || '(no subject)').slice(0, 34);
         var more = (row.draft_subject || '').length > 34 ? '…' : '';
@@ -1670,10 +1670,10 @@
             '<div class="small text-danger mb-0 fw-semibold">Needs attention: send in flight / not finalized</div>';
         } else if (sr.stale_lock) {
           bits +=
-            '<div class="small text-warning mb-0 fw-semibold">Needs attention: stale lock — reconcile in History</div>';
+            '<div class="small text-warning mb-0 fw-semibold">Needs attention: stale lock, reconcile in History</div>';
         }
       }
-      return bits || '<span class="text-muted">—</span>';
+      return bits || '<span class="text-muted">-</span>';
     }
 
     function formatCrmSyncCell(r) {
@@ -1695,10 +1695,10 @@
         return '<span class="text-muted">No audit data</span>';
       }
       if (latestAnalysis.summary.success === false) {
-        return '<span class="audit-fail-banner">Audit failed — score unavailable</span>';
+        return '<span class="audit-fail-banner">Audit failed, score unavailable</span>';
       }
       if (!latestAnalysis.scoring) {
-        return '<span class="text-warning">Not scored yet — run Score</span>';
+        return '<span class="text-warning">Not scored yet, run Score</span>';
       }
       var s = latestAnalysis.scoring;
       var ppRaw = s.pain_points;
@@ -1744,7 +1744,7 @@
 
     function formatSummaryCell(latestAnalysis) {
       if (!latestAnalysis || !latestAnalysis.summary) {
-        return '<span class="text-muted">No audit yet — run Analyze</span>';
+        return '<span class="text-muted">No audit yet, run Analyze</span>';
       }
       var s = latestAnalysis.summary;
       if (!s.success && s.failure) {
@@ -2161,7 +2161,7 @@
             return;
           }
           if (sendBtn && out.data.idempotentReplay) {
-            window.alert(out.data.message || 'Already sent — no duplicate email.');
+            window.alert(out.data.message || 'Already sent, no duplicate email.');
           }
           if (syncCrmBtn) {
             var crmMsg = out.data.action === 'created' ? 'CRM record created.' : 'CRM record updated.';
@@ -2249,7 +2249,7 @@
             return x.id === lidE;
           });
           if (!rowE) {
-            window.alert('Lead not in current page — refresh or change filters.');
+            window.alert('Lead not in current page, refresh or change filters.');
             return;
           }
           openLeadEditModal(rowE);
@@ -2340,7 +2340,7 @@
         if (!out.res.ok) {
           var msg = out.data.error || 'Request failed';
           if (out.data.errors && out.data.errors.length) msg = out.data.errors.join('; ');
-          if (out.data.details) msg += ' — ' + out.data.details;
+          if (out.data.details) msg += ', ' + out.data.details;
           errEl.textContent = msg;
           errEl.style.display = 'block';
           return;

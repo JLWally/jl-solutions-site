@@ -198,7 +198,7 @@ exports.handler = async (event) => {
     const baseUrl = (process.env['URL'] || 'http://localhost:8888').replace(/\/$/, '');
 
     // Productized packages use Stripe Payment Links (see jl-stripe-product-links.js) with success URL /onboarding?service=…
-    // This API checkout is for invoices, deposits, strategy sessions, etc. — not the main package flow.
+    // This API checkout is for invoices, deposits, strategy sessions, etc., not the main package flow.
     const sessionConfig = {
       mode: 'payment',
       automatic_payment_methods: { enabled: true },
@@ -246,19 +246,19 @@ exports.handler = async (event) => {
     if (pt === 'invoice') {
       const inv = invoiceNumber != null ? String(invoiceNumber).trim() : '';
       lineTitle = inv ? `Invoice ${inv}` : 'Invoice payment';
-      lineDescription = inv ? `Invoice ${inv} — JL Solutions` : 'Invoice payment — JL Solutions';
+      lineDescription = inv ? `Invoice ${inv}, JL Solutions` : 'Invoice payment, JL Solutions';
     } else if (pt === 'deposit') {
       const pn = projectName != null ? String(projectName).trim() : '';
       lineTitle = pn ? `Project deposit: ${pn}` : 'Project deposit';
-      lineDescription = 'Project deposit — JL Solutions';
+      lineDescription = 'Project deposit, JL Solutions';
     } else if (pt === 'strategy_session') {
       const st = sessionTypeLabel != null ? String(sessionTypeLabel).trim() : '';
       lineTitle = st ? `Strategy session: ${st}` : 'Paid strategy session';
-      lineDescription = 'Strategy session — JL Solutions';
+      lineDescription = 'Strategy session, JL Solutions';
     } else if (pt === 'custom') {
       const cd = customDescription != null ? String(customDescription).trim() : '';
       lineTitle = cd ? cd.slice(0, 120) : 'Custom payment';
-      lineDescription = cd ? cd.slice(0, 500) : 'Custom payment — JL Solutions';
+      lineDescription = cd ? cd.slice(0, 500) : 'Custom payment, JL Solutions';
     } else if (description) {
       lineTitle = String(description).trim().slice(0, 120) || lineTitle;
       lineDescription = String(description).trim().slice(0, 500) || lineDescription;

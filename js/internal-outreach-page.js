@@ -1,6 +1,6 @@
 /**
- * /internal/outreach — lead-engine auth gate, compose, copy, status, Resend send.
- * Query: businessName, demoUrl, demoSlug, leadId, templateVariant (e.g. followup_1, followup_2 — enables Advanced templates)
+ * /internal/outreach, lead-engine auth gate, compose, copy, status, Resend send.
+ * Query: businessName, demoUrl, demoSlug, leadId, templateVariant (e.g. followup_1, followup_2, enables Advanced templates)
  *
  * Outreach status pipeline (lead_engine_leads.demo_outreach_status when ?leadId=):
  *   (empty) | drafted | copied | sent_manual | followup_due | replied | interested | not_interested
@@ -528,7 +528,7 @@
         }
         setMsg(
           msg,
-          'Sent. Resend id: ' + (out.data.resendMessageId || '—') + '. Next follow-up due is set from the template you sent (see below).',
+          'Sent. Resend id: ' + (out.data.resendMessageId || ' - ') + '. Next follow-up due is set from the template you sent (see below).',
           true
         );
         var stSel = $('ioLeadDemoStatus');

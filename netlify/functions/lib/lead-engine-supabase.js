@@ -1,5 +1,5 @@
 /**
- * Lead engine Supabase client (service role only — same pattern as consultation.js).
+ * Lead engine Supabase client (service role only, same pattern as consultation.js).
  */
 const { createClient } = require('@supabase/supabase-js');
 

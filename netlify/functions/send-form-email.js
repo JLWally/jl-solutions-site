@@ -175,7 +175,7 @@ function buildPackageKickoffBuyerConfirmation(data) {
       <h3 style="margin-top:1.25em;font-size:1.05em;">Expected turnaround</h3>
       <p style="margin:0.35em 0 0;">Once your intake is confirmed, most packages progress on a <strong>${timeline}</strong> timeline. We will flag anything that needs a different schedule.</p>
       <p style="margin-top:1.25em;">Questions or something urgent? Reply to this email. For urgent items, include <strong>URGENT</strong> in the subject line.</p>
-      <p style="margin-top:1.5em;"> — The JL Solutions team</p>
+      <p style="margin-top:1.5em;">, The JL Solutions team</p>
       <p><em>info@jlsolutions.io</em></p>
     `,
   };
@@ -186,7 +186,7 @@ function buildPackageKickoffOpsBrief(data, { consultationId, siteUrl }) {
   const email = (data.email || '').trim() || '(not provided)';
   const business = (data.business_name || '').trim() || '(not provided)';
   const pkg = (data.package_name || '').trim() || '(not specified)';
-  const website = (data.website_url || '').trim() || '—';
+  const website = (data.website_url || '').trim() || ' - ';
   const slug = (data.purchase_service_slug || '').trim();
   const mainNotes = collectPackageKickoffMainNotes(data);
   const base = (siteUrl || '').replace(/\/+$/, '');
@@ -196,7 +196,7 @@ function buildPackageKickoffOpsBrief(data, { consultationId, siteUrl }) {
        <p>Table <strong>consultations</strong>, source <code>package_purchase_kickoff</code>.</p>`
     : '<p><em>No Supabase row id (not configured or insert failed). Full intake is in the message to info@jlsolutions.io.</em></p>';
   return {
-    subject: `[JL Ops] New kickoff — ${business} — ${pkg}`,
+    subject: `[JL Ops] New kickoff, ${business}, ${pkg}`,
     html: `
       <h2>New post-purchase onboarding</h2>
       <table style="border-collapse:collapse;margin-bottom:12px;">
@@ -207,7 +207,7 @@ function buildPackageKickoffOpsBrief(data, { consultationId, siteUrl }) {
         <tr><td style="padding:4px 16px 4px 0;"><strong>Website</strong></td><td>${escapeHtml(website)}</td></tr>
       </table>
       <h3 style="margin-top:0.75em;font-size:1.05em;">Main notes / onboarding details</h3>
-      <pre style="white-space:pre-wrap;font-family:inherit;background:#f5f5f5;padding:12px;border-radius:8px;font-size:0.95em;">${escapeHtml(mainNotes || '—')}</pre>
+      <pre style="white-space:pre-wrap;font-family:inherit;background:#f5f5f5;padding:12px;border-radius:8px;font-size:0.95em;">${escapeHtml(mainNotes || ' - ')}</pre>
       ${refBlock}
       <p><strong>Onboarding form URL:</strong> <a href="${escapeHtml(onboardingLink)}">${escapeHtml(onboardingLink)}</a> <span style="color:#555;">(Stripe success should use <code>?service=ai-intake</code> etc.)</span></p>
       <p style="margin-top:1em;color:#555;font-size:0.9em;">A complete section-by-section copy is emailed to info@jlsolutions.io.</p>
@@ -229,7 +229,7 @@ function collectPackageKickoffMainNotes(data) {
   const ab = (data.access_backend || '').trim();
   const pl = (data.platform || '').trim();
   if (ab || pl) {
-    parts.push(`Access & platform\nBackend access: ${ab || '—'}\nPlatform: ${pl || '—'}`);
+    parts.push(`Access & platform\nBackend access: ${ab || ' - '}\nPlatform: ${pl || ' - '}`);
   }
   push('Login details', data.login_details);
 
@@ -300,7 +300,7 @@ function buildPackageKickoffEmail(data, opts = {}) {
   html += `<tr><td style="padding:5px 12px 5px 0;vertical-align:top;"><strong>Website</strong></td><td style="padding:5px 0;">${escapeHtml(website)}</td></tr>`;
   html += `</table>`;
   html += `<h4 style="margin:14px 0 6px;font-size:0.98em;">Main notes / onboarding details</h4>`;
-  html += `<pre style="margin:0;white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:0.88em;background:#fff;padding:12px;border-radius:8px;border:1px solid #e2e8f0;">${escapeHtml(mainNotesBlock || '—')}</pre>`;
+  html += `<pre style="margin:0;white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:0.88em;background:#fff;padding:12px;border-radius:8px;border:1px solid #e2e8f0;">${escapeHtml(mainNotesBlock || ' - ')}</pre>`;
   html += `</div>`;
   if (consultationId) {
     html += `<p style="margin-bottom:1em;padding:10px 12px;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd;"><strong>Consultation ID:</strong> <code>${escapeHtml(consultationId)}</code> (Supabase <code>consultations</code>)</p>`;
@@ -366,7 +366,7 @@ function buildPackageKickoffEmail(data, opts = {}) {
   html += `<p style="margin-top:1.25em;color:#555;"><em>From /onboarding (post-purchase)</em></p>`;
 
   return {
-    subject: `[JL Solutions] Kickoff intake — ${business} — ${pkg}`,
+    subject: `[JL Solutions] Kickoff intake, ${business}, ${pkg}`,
     html,
   };
 }
@@ -431,7 +431,7 @@ function buildGetstartedProductIntakeEmail(data) {
   html += `<p style="margin-top:1.25em;color:#555;"><em>From /get-started (pre-checkout)</em></p>`;
 
   return {
-    subject: `[JL Solutions] Pre-checkout intake — ${contactName} (${product})`,
+    subject: `[JL Solutions] Pre-checkout intake, ${contactName} (${product})`,
     html,
   };
 }
@@ -475,7 +475,7 @@ function buildGetstartedCustomQuoteEmail(data) {
   html += `<p style="margin-top:1.25em;color:#555;"><em>From /get-started</em></p>`;
 
   return {
-    subject: `[JL Solutions] Custom quote request — ${contactName} (${svc})`,
+    subject: `[JL Solutions] Custom quote request, ${contactName} (${svc})`,
     html,
   };
 }
@@ -611,9 +611,9 @@ function buildOnboardPaymentEmail(data) {
     .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
     .join('');
   return {
-    subject: `[JL Solutions Checkout] ${name} — $${escapeHtml(amt)}`,
+    subject: `[JL Solutions Checkout] ${name}, $${escapeHtml(amt)}`,
     html: `
-      <h2>Onboarding wizard — proceeding to Stripe</h2>
+      <h2>Onboarding wizard, proceeding to Stripe</h2>
       <p>They clicked <strong>Proceed to checkout</strong> with this info:</p>
       <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
       <p><em>Sent from jlsolutions.io /onboard/ payment step</em></p>
@@ -644,9 +644,9 @@ function buildPayCheckoutEmail(data) {
     .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
     .join('');
   return {
-    subject: `[JL Solutions Pay Page] ${email} — $${escapeHtml(amt)}`,
+    subject: `[JL Solutions Pay Page] ${email}, $${escapeHtml(amt)}`,
     html: `
-      <h2>Pay page — proceeding to Stripe</h2>
+      <h2>Pay page, proceeding to Stripe</h2>
       <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
       <p><em>Sent from jlsolutions.io checkout intent</em></p>
     `,
@@ -768,7 +768,7 @@ async function persistToConsultationsTable(formName, data) {
       source: 'roi_calculator',
     };
   } else if (formName === 'ai-intake-demo') {
-    const need = [data.demoNeedLabel, data.demoOther, data.demoDesc].filter((x) => x && String(x).trim()).join(' — ');
+    const need = [data.demoNeedLabel, data.demoOther, data.demoDesc].filter((x) => x && String(x).trim()).join(', ');
     const slug = data.demoSlug ? String(data.demoSlug).trim() : '';
     const biz = data.demoBusinessName ? String(data.demoBusinessName).trim() : '';
     const ind = data.demoIndustry ? String(data.demoIndustry).trim() : '';
@@ -778,7 +778,7 @@ async function persistToConsultationsTable(formName, data) {
       email,
       phone: data.phone ? String(data.phone).trim() : null,
       service: data.demoNeed ? String(data.demoNeed).trim() : 'ai-intake-demo',
-      message: [meta, need].filter(Boolean).join(' — ') || 'AI intake demo',
+      message: [meta, need].filter(Boolean).join(', ') || 'AI intake demo',
       status: 'new',
       source: 'ai_intake_demo',
     };
@@ -790,7 +790,7 @@ async function persistToConsultationsTable(formName, data) {
       phone: data.phone ? String(data.phone).trim() : null,
       company: data.company ? String(data.company).trim() : null,
       service: data.service ? String(data.service).trim() : null,
-      message: `Payment intent: $${data.paymentAmount || '?'} — ${data.paymentDescription || ''}`,
+      message: `Payment intent: $${data.paymentAmount || '?'}, ${data.paymentDescription || ''}`,
       challenge: data.challenge ? String(data.challenge) : null,
       goals: data.goals ? String(data.goals) : null,
       referral_code: ref || null,
@@ -804,7 +804,7 @@ async function persistToConsultationsTable(formName, data) {
     row = {
       name,
       email,
-      message: `Pay [${ptype || 'payment'}]: $${data.paymentAmount || '?'} — ${summary}${ref ? ` (ref ${ref})` : ''}`,
+      message: `Pay [${ptype || 'payment'}]: $${data.paymentAmount || '?'}, ${summary}${ref ? ` (ref ${ref})` : ''}`,
       referral_code: ref || null,
       status: 'new',
       source: 'pay_page_intent',
@@ -829,7 +829,7 @@ async function persistToConsultationsTable(formName, data) {
       phone: data.phone ? String(data.phone).trim() : null,
       company: data.gs_business_name ? String(data.gs_business_name).trim() : null,
       service: prod || 'getstarted-product',
-      message: bits.join(' — ') || 'Get started pre-checkout intake',
+      message: bits.join(', ') || 'Get started pre-checkout intake',
       status: 'new',
       source: 'getstarted_precheckout',
     };
@@ -842,9 +842,9 @@ async function persistToConsultationsTable(formName, data) {
       phone: data.phone ? String(data.phone).trim() : null,
       company: data.gs_business_name ? String(data.gs_business_name).trim() : null,
       service: svc || 'custom-quote',
-      message: [vert && `vertical:${vert}`, `Custom quote from get-started — ${svc || 'service unknown'}`]
+      message: [vert && `vertical:${vert}`, `Custom quote from get-started, ${svc || 'service unknown'}`]
         .filter(Boolean)
-        .join(' — '),
+        .join(', '),
       status: 'new',
       source: 'getstarted_custom_quote',
     };
@@ -1079,7 +1079,7 @@ exports.handler = async (event) => {
       return jsonFail(
         503,
         'MISSING_RESEND',
-        'Email delivery is not configured. Your details were saved — please email info@jlsolutions.io so we can follow up.'
+        'Email delivery is not configured. Your details were saved, please email info@jlsolutions.io so we can follow up.'
       );
     }
     return redirectSuccess();
@@ -1120,7 +1120,7 @@ exports.handler = async (event) => {
           'RESEND_ERROR',
           hint
             ? `Email could not be sent (${hint}). Please email info@jlsolutions.io or try again.`
-            : 'We could not send email right now. Your details may be saved — please email info@jlsolutions.io.'
+            : 'We could not send email right now. Your details may be saved, please email info@jlsolutions.io.'
         );
       }
       return redirectSuccess();
@@ -1133,7 +1133,7 @@ exports.handler = async (event) => {
         return jsonFail(
           502,
           'RESEND_ERROR',
-          'We could not send email right now. Your details were saved — please email info@jlsolutions.io or try again shortly.'
+          'We could not send email right now. Your details were saved, please email info@jlsolutions.io or try again shortly.'
         );
       }
       return redirectSuccess();
@@ -1174,7 +1174,7 @@ exports.handler = async (event) => {
       }
     }
 
-    // 2. Send confirmation to customer — must not fail the request if info@ already succeeded
+    // 2. Send confirmation to customer, must not fail the request if info@ already succeeded
     const customerEmail = (data.email || '').trim();
     if (customerEmail) {
       try {
@@ -1226,7 +1226,7 @@ exports.handler = async (event) => {
                     ? buildPackageKickoffBuyerConfirmation(data)
                     : formName === 'getstarted-product-intake'
                       ? {
-                          subject: 'Continue to checkout — JL Solutions',
+                          subject: 'Continue to checkout, JL Solutions',
                           html: `
           <h2>Hi ${first},</h2>
           <p>We saved your intake. Complete payment on the Stripe page that opens next.</p>
@@ -1236,7 +1236,7 @@ exports.handler = async (event) => {
                         }
                       : formName === 'getstarted-custom-quote'
                         ? {
-                            subject: 'We received your custom quote request — JL Solutions',
+                            subject: 'We received your custom quote request, JL Solutions',
                             html: `
           <h2>Hi ${first},</h2>
           <p>Thanks for the details. We will review scope and reply with next steps, usually within one business day.</p>

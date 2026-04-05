@@ -20,22 +20,22 @@
       industryName: 'HVAC',
       heroHeadline: 'Stop losing HVAC jobs to bad leads, slow follow-up, and scheduling friction',
       heroSubheadline:
-        'We build intake, booking, and lead systems so you capture real job details, respond faster, and book more work—without the phone tag.',
+        'We build intake, booking, and lead systems so you capture real job details, respond faster, and book more work - without the phone tag.',
       problemSectionTitle: 'Sound familiar?',
       problemBullets: [
         'Bad leads and vague inquiries burn dispatch time',
         'Slow follow-up means homeowners already booked someone else',
-        'Scheduling friction—calls, texts, double-books, and no-shows',
+        'Scheduling friction - calls, texts, double-books, and no-shows',
         'Booked jobs slip through when confirmations and reminders are not systematic',
       ],
       solutionSectionTitle: 'Turn HVAC leads into booked jobs',
       solutionIntroHtml:
-        '<strong>Same AI Intake + Scheduling stack</strong> as our core packages—<strong>HVAC language</strong> here, identical systems underneath.',
+        '<strong>Same AI Intake + Scheduling stack</strong> as our core packages - <strong>HVAC language</strong> here, identical systems underneath.',
       solutionBullets: [
         'Capture equipment, location, urgency, and homeowner vs. commercial before the first callback',
         'Qualify and filter so dispatch sees real jobs, not tire-kickers',
         'Route to the right tech or territory with capacity in mind',
-        'Let customers book windows that work—and cut no-shows with reminders',
+        'Let customers book windows that work - and cut no-shows with reminders',
       ],
       demoPath: '/demo/hvac-sample',
       ctaGetStartedHref: GS,
@@ -48,7 +48,7 @@
       productOverlays: {
         'fix-app': {
           primaryHref: '/get-started?industry=hvac&service=fix-app',
-          eyebrow: 'They found you online—then bounced before booking',
+          eyebrow: 'They found you online - then bounced before booking',
           outcomeTitle: 'More “Book service” completions on mobile',
           transformLine:
             'Emergency and tune-up searches are on phones; your path to a completed request should be obvious and fast.',
@@ -56,7 +56,7 @@
             'Mobile-first fixes for forms and CTAs',
             'Clear repair vs. maintenance vs. install paths',
             'Less drop-off before intake ever starts',
-            'Ship in days—not a full site rewrite',
+            'Ship in days - not a full site rewrite',
           ],
           bestFor: 'traffic without conversions, clunky mobile, weak booking CTAs',
         },

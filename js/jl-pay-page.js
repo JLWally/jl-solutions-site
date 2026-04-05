@@ -19,7 +19,7 @@
 
   function money(n) {
     var x = Number(n);
-    if (!Number.isFinite(x)) return '—';
+    if (!Number.isFinite(x)) return ' - ';
     return x.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   }
 
@@ -80,14 +80,14 @@
       return (
         'Invoice #' +
         s.invoiceNumber +
-        (s.company ? ' — ' + s.company : '')
+        (s.company ? ', ' + s.company : '')
       );
     }
     if (s.type === 'deposit') {
       return 'Project deposit: ' + s.projectName + (s.company ? ' (' + s.company + ')' : '');
     }
     if (s.type === 'strategy_session') {
-      return s.sessionTypeLabel + ' — ' + s.customerName;
+      return s.sessionTypeLabel + ', ' + s.customerName;
     }
     if (s.type === 'custom') {
       return s.customDescription;
@@ -96,11 +96,11 @@
   }
 
   function optionalRef(s) {
-    if (s.type === 'invoice') return s.invoiceNumber ? 'Invoice #' + s.invoiceNumber : '—';
-    if (s.type === 'deposit') return s.projectName || '—';
-    if (s.type === 'strategy_session') return s.sessionTypeLabel || '—';
-    if (s.type === 'custom') return s.customDescription.slice(0, 80) + (s.customDescription.length > 80 ? '…' : '') || '—';
-    return '—';
+    if (s.type === 'invoice') return s.invoiceNumber ? 'Invoice #' + s.invoiceNumber : ' - ';
+    if (s.type === 'deposit') return s.projectName || ' - ';
+    if (s.type === 'strategy_session') return s.sessionTypeLabel || ' - ';
+    if (s.type === 'custom') return s.customDescription.slice(0, 80) + (s.customDescription.length > 80 ? '…' : '') || ' - ';
+    return ' - ';
   }
 
   function isValid(s) {
@@ -221,9 +221,9 @@
     var rEmail = $('reviewEmail');
     var rAmt = $('reviewAmount');
     var rRef = $('reviewRef');
-    if (rType) rType.textContent = TYPE_LABELS[s.type] || '—';
-    if (rDesc) rDesc.textContent = buildSummary(s) || '—';
-    if (rEmail) rEmail.textContent = s.email || '—';
+    if (rType) rType.textContent = TYPE_LABELS[s.type] || ' - ';
+    if (rDesc) rDesc.textContent = buildSummary(s) || ' - ';
+    if (rEmail) rEmail.textContent = s.email || ' - ';
     if (rAmt) rAmt.textContent = money(s.amount);
     if (rRef) rRef.textContent = optionalRef(s);
   }

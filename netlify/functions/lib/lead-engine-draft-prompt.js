@@ -1,5 +1,5 @@
 /**
- * Outreach draft prompts (Slice E). Input is structured data only — no raw HTML.
+ * Outreach draft prompts (Slice E). Input is structured data only, no raw HTML.
  */
 
 function buildDraftSystemPrompt() {
@@ -17,7 +17,7 @@ function buildDraftSystemPrompt() {
     '  • AI Intake Form Setup → invite them to improve intake / qualification / confirmations.',
     '  • Website Redesign → invite them to improve homepage / conversion / mobile / trust.',
     '  • Fix My App → invite them to fix specific app, portal, or embedded-tool flows.',
-    '- Optional soft CTA (e.g. open to a brief call) — not pushy.',
+    '- Optional soft CTA (e.g. open to a brief call), not pushy.',
     '',
     'Return a single JSON object only (no markdown fences) with keys:',
     '- subject: string, email subject line, under 120 characters',

@@ -27,7 +27,7 @@ const STRIPE_WEBHOOK_ENV_NAMES = [
 
 let dotenvLoaded = false;
 
-/** Netlify Functions run on AWS Lambda — use platform env only; never load .env from disk or override injected secrets. */
+/** Netlify Functions run on AWS Lambda, use platform env only; never load .env from disk or override injected secrets. */
 function isLambdaRuntime() {
   return Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
 }
@@ -85,7 +85,7 @@ function tryLoadDotenvFromProjectRoot() {
     if (!root) return;
     const envPath = path.join(root, ".env");
     const localPath = path.join(root, ".env.local");
-    // Do not use override: true — it can wipe Netlify-injected secrets if a .env exists in the bundle.
+    // Do not use override: true, it can wipe Netlify-injected secrets if a .env exists in the bundle.
     if (fs.existsSync(envPath)) {
       dotenv.config({ path: envPath, override: false });
     }
@@ -105,7 +105,7 @@ function trim(v) {
   return s.replace(/^['"]|['"]$/g, "");
 }
 
-/** Stripe secret keys must be one token — strip accidental spaces / newlines */
+/** Stripe secret keys must be one token, strip accidental spaces / newlines */
 function normalizeStripeSecret(v) {
   return trim(v).replace(/\s+/g, "");
 }

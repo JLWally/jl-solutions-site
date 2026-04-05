@@ -84,7 +84,7 @@ main#main-content.jl-main-text .text-muted {
   color: #475569 !important;
 }
 
-/* Case studies grid: light wrap + global heading inherit — keep body copy and filters readable */
+/* Case studies grid: light wrap + global heading inherit, keep body copy and filters readable */
 .case-studies-wrap {
   color: var(--jl-text-dark);
 }
@@ -186,7 +186,7 @@ main#main-content.jl-main-text .text-muted {
   min-width: 0;
   object-fit: contain;
   object-position: left center;
-  /* phones / small tablets — larger than 44px, capped so the bar + menu still fit */
+  /* phones / small tablets, larger than 44px, capped so the bar + menu still fit */
   height: clamp(52px, 15vw, 84px);
   max-width: min(82vw, 260px);
 }
@@ -420,7 +420,7 @@ main#main-content.jl-main-text .text-muted {
 }
 
 /* Hero proof strip - compact trust/fit row under CTA */
-/* Custom demo CTA — “See your system before you buy” */
+/* Custom demo CTA, “See your system before you buy” */
 .hero-custom-demo {
   margin-top: 1.35rem;
   padding-top: 1.15rem;
@@ -1329,8 +1329,8 @@ main#main-content.jl-main-text .text-muted {
   gap: 1rem;
 }
 
-/* Testimonials — compact Google-style review grid */
-/* Global style.css sets p, li (and blockquote) for dark pages; this band is light — force readable colors. */
+/* Testimonials, compact Google-style review grid */
+/* Global style.css sets p, li (and blockquote) for dark pages; this band is light, force readable colors. */
 .section-testimonials.jl-reviews-section {
   background: #f1f5f9;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
@@ -1841,4 +1841,9 @@ footer.jl-theme a.footer__cta:hover {
   .section-testimonials {
     padding: 3rem 0;
   }
+}
+
+/* Bootstrap .text-white-50 (~50% white) is often too dim on JL dark blue (#1A253A) heroes and nav */
+body .text-white-50 {
+  color: rgba(255, 255, 255, 0.82) !important;
 }

@@ -1,5 +1,5 @@
 /**
- * Productized services page (/services/) — featured offers, custom grid, how-it-works.
+ * Productized services page (/services/), featured offers, custom grid, how-it-works.
  * Uses JL theme variables from theme-jl.css
  */
 
@@ -227,7 +227,7 @@
   margin: 0;
 }
 
-/* Who this is for — high self-ID, stands out from the grid */
+/* Who this is for, high self-ID, stands out from the grid */
 .jl-services-for {
   max-width: 42rem;
   margin: 0 auto 1.85rem;
@@ -329,7 +329,7 @@
   font-weight: 800;
 }
 
-/* Stronger self-ID block — conversion emphasis */
+/* Stronger self-ID block, conversion emphasis */
 .jl-services-for--compact-card.jl-services-for--strong {
   max-width: 28rem;
   padding: 1.2rem 1.3rem 1.25rem 1.2rem;
@@ -396,7 +396,7 @@
   }
 }
 
-/* Productized offer cards — /services featured four */
+/* Productized offer cards, /services featured four */
 .jl-service-product-grid {
   grid-auto-rows: 1fr;
 }
@@ -1186,7 +1186,7 @@
   margin-top: 0.5rem;
 }
 
-/* How it works (simple 3-step) — clean band + heavier cards */
+/* How it works (simple 3-step), clean band + heavier cards */
 .jl-services-hiw {
   padding: clamp(2.75rem, 5vw, 3.75rem) 0;
   background: linear-gradient(180deg, #e8f0f3 0%, var(--jl-surface, #f0f3f6) 28%, #eef1f4 100%);
@@ -1398,7 +1398,7 @@
   letter-spacing: 0.01em;
 }
 
-/* Why not a basic form? — differentiation */
+/* Why not a basic form?, differentiation */
 .jl-services-vs-basic {
   padding: clamp(2.5rem, 5vw, 3.5rem) 0;
   background: var(--jl-white, #fff);
@@ -1480,7 +1480,7 @@
   margin-bottom: 0.45rem;
 }
 
-/* Not sure which package — guided path */
+/* Not sure which package, guided path */
 .jl-services-guided {
   padding: clamp(2.25rem, 4.5vw, 3rem) 0;
   background: linear-gradient(180deg, #f1f5f9 0%, var(--jl-surface-light, #fafbfc) 100%);

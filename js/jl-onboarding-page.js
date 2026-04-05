@@ -1,5 +1,5 @@
 /**
- * /onboarding — post-purchase kickoff after Stripe (productized packages).
+ * /onboarding, post-purchase kickoff after Stripe (productized packages).
  *
  * Query param `service` must match Stripe Payment Link success URLs (set in Stripe Dashboard):
  *   /onboarding?service=ai-intake | fix-app | scheduling | lead-engine

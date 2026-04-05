@@ -259,7 +259,7 @@ body.lead-engine-surface {
   font-weight: 700;
 }
 
-/* Badges in data tables — avoid muddy grays */
+/* Badges in data tables, avoid muddy grays */
 .lead-engine-surface .table-dark-ish .badge.bg-secondary {
   background-color: #52525b !important;
   color: #fafafa !important;
@@ -489,7 +489,7 @@ body.lead-engine-surface {
   max-width: 7.5rem;
 }
 
-/* Custom-demo outreach status (Phase 6) — readable labels on dark */
+/* Custom-demo outreach status (Phase 6), readable labels on dark */
 .lead-engine-surface .le-demo-outreach-col .form-select,
 .lead-engine-surface .demo-outreach-status-select {
   min-width: 9.5rem;
@@ -637,7 +637,7 @@ body.lead-engine-surface {
   font-variant-numeric: tabular-nums;
 }
 
-/* Daily queue quick filters — active = matches current list query */
+/* Daily queue quick filters, active = matches current list query */
 .lead-engine-surface .le-daily-queue-btn.le-daily-queue-btn--active.btn-warning {
   box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.45);
   outline: 1px solid rgba(15, 23, 42, 0.35);

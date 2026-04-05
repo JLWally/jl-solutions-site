@@ -32,14 +32,14 @@
         <div class="jl-pay-result-details text-start d-none" id="successDetails">
           <h2 class="h6 text-uppercase text-muted mb-3">Payment details</h2>
           <dl class="jl-pay-review__dl jl-pay-review__dl--compact mb-0">
-            <div><dt>Receipt sent to</dt><dd id="detailEmail">—</dd></div>
-            <div><dt>Payment for</dt><dd id="detailFor">—</dd></div>
-            <div><dt>Amount paid</dt><dd id="detailAmount">—</dd></div>
+            <div><dt>Receipt sent to</dt><dd id="detailEmail">-</dd></div>
+            <div><dt>Payment for</dt><dd id="detailFor">-</dd></div>
+            <div><dt>Amount paid</dt><dd id="detailAmount">-</dd></div>
           </dl>
         </div>
 
         <p class="jl-payment-lead text-start mt-4 mb-4" id="successNext">
-          A member of JL Solutions will follow up if any project, invoice, or onboarding action is needed—the same standard we use for messages through our contact page (we reply within one business day when a reply is needed).
+          A member of JL Solutions will follow up if any project, invoice, or onboarding action is needed - the same standard we use for messages through our contact page (we reply within one business day when a reply is needed).
         </p>
 
         <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
@@ -61,7 +61,7 @@
 
       function formatMoney(cents, currency) {
         var c = Number(cents);
-        if (!Number.isFinite(c)) return '—';
+        if (!Number.isFinite(c)) return ' - ';
         var cur = (currency || 'usd').toUpperCase();
         try {
           return new Intl.NumberFormat('en-US', {
@@ -84,7 +84,7 @@
       }
 
       function buildFor(meta) {
-        if (!meta) return '—';
+        if (!meta) return ' - ';
         var pt = meta.paymentType || '';
         if (pt === 'invoice' && meta.invoiceNumber) {
           return 'Invoice #' + meta.invoiceNumber;
@@ -123,7 +123,7 @@
             return;
           }
           detailBox.classList.remove('d-none');
-          emailEl.textContent = j.customer_email || '—';
+          emailEl.textContent = j.customer_email || ' - ';
           forEl.textContent = buildFor(j.metadata || {});
           amtEl.textContent = formatMoney(j.amount_total, j.currency);
         })

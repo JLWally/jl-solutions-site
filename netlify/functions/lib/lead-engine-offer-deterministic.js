@@ -27,7 +27,7 @@ const DRAFT_ANGLE_BY_OFFER = {
   [OFFERS.WEBSITE]:
     'Emphasize homepage and conversion improvements (clarity, mobile experience, trust, CTAs) rather than backend tools.',
   [OFFERS.FIX_MY_APP]:
-    'Emphasize fixing specific broken or confusing flows in their existing app, portal, or embedded tool — not a full site redesign.',
+    'Emphasize fixing specific broken or confusing flows in their existing app, portal, or embedded tool, not a full site redesign.',
 };
 
 const HVAC_CORPUS_RE = /\b(hvac|h\.?v\.?a\.?c\.?|heating|cooling|air conditioning|air\s*conditioning|furnace|a\/c\b|\bac\b repair|heat pump|ductwork|duct work|boiler|mini[-\s]?split|central air|refrigeration)\b/i;

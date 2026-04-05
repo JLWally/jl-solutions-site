@@ -1,6 +1,6 @@
 /**
  * Smart demo: multi-step intake wizard + CTAs (JSON / demo-config).
- * Fallback issue lists — keep in sync with netlify/functions/lib/demo-industry-presets.js
+ * Fallback issue lists, keep in sync with netlify/functions/lib/demo-industry-presets.js
  */
 (function () {
   'use strict';
@@ -288,7 +288,7 @@
       '<button type="submit" class="jl-demo-wizard__btn jl-demo-wizard__btn--primary" id="jl-dyn-submit" hidden>Submit</button>' +
       '</div></form>' +
       '<div id="jl-dynamic-demo-thanks" class="jl-dynamic-demo-thanks" hidden>' +
-      '<p>Thanks — we received your submission.</p>' +
+      '<p>Thanks, we received your submission.</p>' +
       '<p class="jl-dynamic-demo-sub" style="margin:0">We’ll follow up by email.</p>' +
       '</div></div>' +
       '<div class="jl-dynamic-demo-cta" id="jl-dynamic-demo-final-cta" hidden>' +

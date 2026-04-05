@@ -1,12 +1,12 @@
 /**
- * /get-started — guided funnel
+ * /get-started, guided funnel
  *
  * 1. Problem selection (card UI) → maps to service via PAIN_TO_SERVICE
  * 2. Recommendation panel (fit, benefits, price, CTAs)
  * 3. Confirm → short intake form
  * 4. Submit → Stripe Payment Link (productized) OR consultation / quote (complex)
  *
- * Complex workflow (`custom`): no Stripe — intake then Book consultation (primary)
+ * Complex workflow (`custom`): no Stripe, intake then Book consultation (primary)
  * or request quote. Post-purchase intake: /onboarding?service=… (Stripe Dashboard success URL on each Payment Link must match jl-stripe-product-links.js + jl-onboarding-page.js).
  */
 (function () {
@@ -247,7 +247,7 @@
     } else if (mode === 'call') {
       primary.textContent = 'Talk it through first';
       if (reassure) reassure.classList.add('d-none');
-      if (note) note.textContent = 'Book a call—we’ll confirm fit before checkout.';
+      if (note) note.textContent = 'Book a call. We will confirm fit before checkout.';
       if (secondary) {
         secondary.textContent = 'Need a quote instead? Contact us';
         secondary.setAttribute('href', '/contact.html');

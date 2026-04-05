@@ -415,7 +415,7 @@
 
   /**
    * Industry lander: problem list (HVAC, clinics, etc.)
-   * p.title, p.subtitle?, p.headingId, p.items[] — each item: lineHtml | string | { title, body }
+   * p.title, p.subtitle?, p.headingId, p.items[], each item: lineHtml | string | { title, body }
    */
   function renderIndustryProblemsSection(p) {
     if (!p || !p.title) return '';
@@ -465,7 +465,7 @@
 
   /**
    * Industry lander: map JL packages to industry context
-   * s.title, s.intro, s.headingId, s.systems[] — each: lineHtml | { systemName, line }
+   * s.title, s.intro, s.headingId, s.systems[], each: lineHtml | { systemName, line }
    */
   function renderIndustrySolutionsSection(s) {
     if (!s || !s.title) return '';

@@ -340,7 +340,7 @@
         <div>
           <p class="consultation-hero__eyebrow">Book a Free Call</p>
           <h1 id="consultation-hero-heading" class="consultation-hero__title">See how your systems could run smoother.</h1>
-          <p class="consultation-hero__subline">Pick a time that works for you and we’ll walk through where leads, intake, scheduling, and follow-up are costing you time or opportunities—the same operational layers we design around every day.</p>
+          <p class="consultation-hero__subline">Pick a time that works for you and we’ll walk through where leads, intake, scheduling, and follow-up are costing you time or opportunities - the same operational layers we design around every day.</p>
           <p class="consultation-hero__support">You’ll leave with a clear next step, not a sales script. This call is focused on understanding your operations and where automation can actually help.</p>
         </div>
         <aside class="consultation-hero__summary-card" aria-label="Consultation overview">
@@ -439,7 +439,7 @@
               <textarea class="form-control" id="goals" name="goals" rows="3" placeholder="What would success look like for your organization?"></textarea>
             </div>
             
-            <p class="small text-muted mb-2" id="slotHint" role="status">Pick a time above, or use “No slot works” under the calendar — then complete the form and submit.</p>
+            <p class="small text-muted mb-2" id="slotHint" role="status">Pick a time above, or use “No slot works” under the calendar, then complete the form and submit.</p>
             <button type="submit" class="btn btn-book w-100" id="submitBtn" disabled aria-describedby="slotHint">
               Select a time to book
             </button>
@@ -626,7 +626,7 @@
     function selectFlexibleTime() {
       document.querySelectorAll('.time-slot.selected').forEach((slot) => slot.classList.remove('selected'));
       selectedTimeSlot = null;
-      document.getElementById('selectedDateTime').value = 'Flexible — we will email to schedule';
+      document.getElementById('selectedDateTime').value = 'Flexible, we will email to schedule';
       const flexBtn = document.getElementById('flexibleTimeBtn');
       if (flexBtn) flexBtn.classList.add('active');
       const btn = document.getElementById('submitBtn');

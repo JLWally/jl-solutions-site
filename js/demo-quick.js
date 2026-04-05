@@ -1,5 +1,5 @@
 /**
- * /demo/quick — business name → industry → POST demo-config → redirect to demo URL.
+ * /demo/quick, business name → industry → POST demo-config → redirect to demo URL.
  */
 (function () {
   'use strict';

@@ -31,7 +31,7 @@
     hero: {
       title: 'Stop losing leads. Start converting them automatically.',
       lead:
-        'We build smart intake, booking, and lead systems that qualify customers before you ever respond—so you make more money from the traffic and reputation you already have.',
+        'We build smart intake, booking, and lead systems that qualify customers before you ever respond - so you make more money from the traffic and reputation you already have.',
       primaryHref: GS,
       secondaryHref: BC,
       tertiaryHref: '#product-cards-section',
@@ -93,14 +93,14 @@
       text:
         'We only take on a limited number of builds at a time to ensure fast delivery.',
       html:
-        '<strong>Limited availability.</strong> We only take on a limited number of builds at a time to ensure fast delivery—spots fill quickly.',
+        '<strong>Limited availability.</strong> We only take on a limited number of builds at a time to ensure fast delivery - spots fill quickly.',
     },
 
     demo: {
       headingId: 'demo-strip-heading',
       title: 'See exactly how your leads would flow',
       subHtml:
-        'This is the exact flow your customers would go through—start to finish.',
+        'This is the exact flow your customers would go through - start to finish.',
       previewAria: 'Product preview placeholder',
       previewLabel: 'Interactive demo',
       ctaHref: R.demo,
@@ -113,7 +113,7 @@
       headingId: 'vs-basic-heading',
       title: 'Basic forms cost you real money',
       tagline:
-        'Every incomplete submission is a lost customer—not just a missed form.',
+        'Every incomplete submission is a lost customer - not just a missed form.',
       failColumn: {
         title: 'Why basic forms fail',
         items: [
@@ -143,7 +143,7 @@
         {
           title: 'Choose your system',
           bodyHtml:
-            'Pick the setup that matches your biggest bottleneck—then open a <strong>service overview</strong> if you want the full picture.',
+            'Pick the setup that matches your biggest bottleneck - then open a <strong>service overview</strong> if you want the full picture.',
         },
         {
           title: 'We map your workflow',
@@ -153,7 +153,7 @@
         {
           title: 'We build + launch fast',
           bodyHtml:
-            'Live in days, not weeks—ready to convert. <a href="' +
+            'Live in days, not weeks - ready to convert. <a href="' +
             GS +
             '">Start now</a> or <a href="' +
             BC +
@@ -166,7 +166,7 @@
       headingId: 'custom-heading',
       title: 'Need something more advanced? We build full revenue systems.',
       subHtml:
-        'When your workflow gets complex, we design systems that handle everything automatically—end to end.',
+        'When your workflow gets complex, we design systems that handle everything automatically - end to end.',
       links: [
         { href: '/services/eligibility-wizard.html', label: 'Multi-step applications' },
         { href: '/services/document-extraction.html', label: 'AI-powered document processing' },
@@ -192,7 +192,7 @@
       headingId: 'services-cta-heading',
       title: 'Stop losing leads. Start converting them this week.',
       lead:
-        'Fixed-price systems built to turn demand into revenue—start now or talk it through first.',
+        'Fixed-price systems built to turn demand into revenue - start now or talk it through first.',
       subHtml:
         'Need a larger build or more complexity? <a href="' +
         BC +

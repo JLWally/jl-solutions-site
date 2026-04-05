@@ -150,7 +150,7 @@ async function fetchLeadIdsByGlobalSuppression(supabase, suppressed) {
 }
 
 /**
- * Custom-demo outreach status (Phase 6) — column on lead_engine_leads.
+ * Custom-demo outreach status (Phase 6), column on lead_engine_leads.
  * @param {string} statusKey drafted|copied|sent_manual|followup_due|unset
  */
 async function fetchLeadIdsByDemoOutreachStatus(supabase, statusKey) {

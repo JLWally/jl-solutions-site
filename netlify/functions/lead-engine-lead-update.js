@@ -1,6 +1,6 @@
 /**
  * Operator PATCH for core lead fields (company, website, contact email).
- * POST JSON: { leadId, company_name?, website_url?, contact_email? } — at least one field besides leadId.
+ * POST JSON: { leadId, company_name?, website_url?, contact_email? }, at least one field besides leadId.
  */
 const { guardLeadEngineRequest, withCors } = require('./lib/lead-engine-guard');
 const { getLeadEngineSupabase } = require('./lib/lead-engine-supabase');

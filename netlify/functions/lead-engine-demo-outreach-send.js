@@ -1,7 +1,7 @@
 /**
  * One-click send from /internal/outreach: Resend + CAN-SPAM footer + lead_engine_events + demo columns.
- * POST JSON: { leadId, subject, bodyPlain, to?, templateVariant? } — recipient must match lead.contact_email (normalized).
- * templateVariant: initial | followup_1 | followup_2 | shorter | direct — sets demo_followup_due_at after success.
+ * POST JSON: { leadId, subject, bodyPlain, to?, templateVariant? }, recipient must match lead.contact_email (normalized).
+ * templateVariant: initial | followup_1 | followup_2 | shorter | direct, sets demo_followup_due_at after success.
  */
 const { guardLeadEngineRequest, withCors } = require('./lib/lead-engine-guard');
 const { getLeadEngineSupabase } = require('./lib/lead-engine-supabase');

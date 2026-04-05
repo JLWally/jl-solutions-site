@@ -41,9 +41,9 @@
      * @param {object} opts
      * @param {string} [opts.baseUrl]
      * @param {URLSearchParams|Record<string,string>} opts.notifyParams
-     * @param {object} opts.stripePayload — JSON body for stripe-checkout
+     * @param {object} opts.stripePayload, JSON body for stripe-checkout
      * @param {HTMLButtonElement} [opts.button]
-     * @param {HTMLButtonElement[]} [opts.extraButtons] — same disabled/label treatment as button
+     * @param {HTMLButtonElement[]} [opts.extraButtons], same disabled/label treatment as button
      * @param {string} [opts.submitLabel]
      * @param {string} [opts.redirectingLabel]
      * @param {boolean} [opts.requireNotify=true]

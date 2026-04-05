@@ -1,5 +1,5 @@
 /**
- * Internal /internal/demo-builder — POST demo-config, show live URL, copy link.
+ * Internal /internal/demo-builder, POST demo-config, show live URL, copy link.
  * Auth: same lead_engine_session as /internal/outreach (see demo-config POST rules).
  */
 (function () {
@@ -259,7 +259,7 @@
           .then(function (x) {
             if (x.status === 401) {
               throw new Error(
-                'Unauthorized — sign in via lead engine, or use Bearer DEMO_GENERATOR_SECRET from a script.'
+                'Unauthorized, sign in via lead engine, or use Bearer DEMO_GENERATOR_SECRET from a script.'
               );
             }
             if (x.status === 409) {

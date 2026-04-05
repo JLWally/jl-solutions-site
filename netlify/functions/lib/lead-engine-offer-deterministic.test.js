@@ -30,10 +30,10 @@ function page(overrides) {
 }
 
 /**
- * Example 1 — Typical residential HVAC: no online booking, emergency/same-day language,
+ * Example 1, Typical residential HVAC: no online booking, emergency/same-day language,
  * repair + maintenance, service area, phone-heavy. Expect Scheduling over AI Intake.
  */
-test('HVAC example 1: residential — Scheduling & Resource Routing (not AI Intake)', () => {
+test('HVAC example 1: residential, Scheduling & Resource Routing (not AI Intake)', () => {
   const lead = { company_name: 'Summit Heating & Cooling', website_url: 'https://summithvac.example' };
   const signals = {
     success: true,
@@ -85,10 +85,10 @@ test('HVAC example 1: residential — Scheduling & Resource Routing (not AI Inta
 });
 
 /**
- * Example 2 — HVAC with weak scheduling signals but very weak forms; deterministic scores
+ * Example 2, HVAC with weak scheduling signals but very weak forms; deterministic scores
  * tie or favor intake before HVAC rule; rule should still prefer Scheduling when sched >= ai.
  */
-test('HVAC example 2: tie-bias — Scheduling preferred when scheduling score >= AI Intake', () => {
+test('HVAC example 2: tie-bias, Scheduling preferred when scheduling score >= AI Intake', () => {
   const lead = { company_name: 'Polar Air HVAC', website_url: 'https://polarair.example' };
   const signals = {
     success: true,
@@ -97,7 +97,7 @@ test('HVAC example 2: tie-bias — Scheduling preferred when scheduling score >=
         page_title: 'Polar Air',
         h1: 'Same-day HVAC repair and installation',
         meta_description:
-          'Emergency heating and cooling. We serve multiple counties — call for maintenance or replacement.',
+          'Emergency heating and cooling. We serve multiple counties, call for maintenance or replacement.',
         forms_count: 0,
         ctas: [{ text: 'Contact', href: 'https://polarair.example/contact' }],
         tel_count: 1,
@@ -140,10 +140,10 @@ function hrefCorpus(signals) {
 }
 
 /**
- * Example 3 — HVAC with booking + customer portal + chat: Scheduling points are low;
+ * Example 3, HVAC with booking + customer portal + chat: Scheduling points are low;
  * PSI skipped so Website does not dominate; Fix My App wins on portal/tool + friction signals.
  */
-test('HVAC example 3: portal/login + booking — Fix My App when app signals dominate', () => {
+test('HVAC example 3: portal/login + booking, Fix My App when app signals dominate', () => {
   const lead = { company_name: 'Metro Comfort HVAC', website_url: 'https://metrocomfort.example' };
   const signals = {
     success: true,

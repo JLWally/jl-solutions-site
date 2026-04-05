@@ -1,6 +1,6 @@
 /**
  * Deterministic HTML signal extraction for lead engine website audit (Slice C).
- * Uses node-html-parser — regex-only parsing is too brittle for CTAs and structure.
+ * Uses node-html-parser, regex-only parsing is too brittle for CTAs and structure.
  */
 const { parse } = require('node-html-parser');
 

@@ -365,7 +365,7 @@
         });
         const outcome = await window.jlSendFormEmail.handleResponse(res);
         if (outcome.ok) {
-          alert('Thanks! You\'re subscribed — check your inbox for a quick confirmation.');
+          alert('Thanks! You\'re subscribed, check your inbox for a quick confirmation.');
           form.reset();
         } else {
           alert(outcome.message || 'Something went wrong. Email us at info@jlsolutions.io.');

@@ -1,10 +1,10 @@
 /**
  * Canonical “which audit / score” logic for lead engine (Slice H).
  *
- * **List / display:** `pickPreferredAnalysisRow` — newest successful audit by `created_at`;
+ * **List / display:** `pickPreferredAnalysisRow`, newest successful audit by `created_at`;
  * if none, the newest row (so operators still see failed runs).
  *
- * **Score / draft:** `pickNewestSuccessfulAnalysisRow` — newest successful only; `null` if none.
+ * **Score / draft:** `pickNewestSuccessfulAnalysisRow`, newest successful only; `null` if none.
  *
  * **Scoring payload:** Prefer `lead_engine_ai_scores` for the preferred audit’s id; else legacy
  * columns on `lead_engine_analysis` (pre–Slice D data only). See `resolveScoringPayloadForPreferredAnalysis`.

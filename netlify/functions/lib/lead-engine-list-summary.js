@@ -8,7 +8,7 @@ const VALID_STATUS = ['new', 'analyzed', 'review', 'archived'];
 
 /**
  * Demo follow-up / outcome counts from an in-memory cohort (prefiltered list path).
- * @param {object[]} rows — lead rows with demo_followup_due_at, demo_outreach_status
+ * @param {object[]} rows, lead rows with demo_followup_due_at, demo_outreach_status
  */
 function summarizeDemoOutreachQueueFromRows(rows) {
   const startToday = utcStartOfDayOffsetFromTodayIso(0);
@@ -100,7 +100,7 @@ async function fetchDemoOutreachQueueCounts(supabase, filterParams) {
 }
 
 /**
- * @param {object[]} rows — lead rows with status, email_opted_out, contact_email
+ * @param {object[]} rows, lead rows with status, email_opted_out, contact_email
  */
 function summarizeLeadRowsCore(rows) {
   const byLeadStatus = { new: 0, analyzed: 0, review: 0, archived: 0 };

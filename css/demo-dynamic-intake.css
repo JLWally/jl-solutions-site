@@ -463,7 +463,7 @@ body.demo-builder-body.demo-builder-page {
   --bs-secondary-color-rgb: 71, 85, 105;
 }
 
-/* Builder page — beat style.css body { background !important }; keep nav inheriting global light text */
+/* Builder page, beat style.css body { background !important }; keep nav inheriting global light text */
 .demo-builder-page {
   min-height: 100vh;
   background: rgb(248 250 252) !important;

@@ -1,38 +1,38 @@
 /**
  * Reusable industry landing pages (same conversion shell as /services).
  *
- * Option A — registry: set window.JL_INDUSTRY_LANDER_SLUG, load jl-industry-lander-registry.js
+ * Option A, registry: set window.JL_INDUSTRY_LANDER_SLUG, load jl-industry-lander-registry.js
  *   + jl-industry-lander-bootstrap.js (see hvac-lead-system.html).
- * Option B — assign window.JL_INDUSTRY_LANDER_CONFIG directly (see jl-industry-config-plumbing.js).
+ * Option B, assign window.JL_INDUSTRY_LANDER_CONFIG directly (see jl-industry-config-plumbing.js).
  *
  * Config shape (all string fields escaped at render time except lineHtml):
- *   industryName       — short label (SEO, proof copy)
- *   headline           — hero H1 (maps to hero.title)
- *   heroLead           — hero subcopy
- *   ctaPrimaryLabel    — primary CTA (hero, cards, footer)
- *   ctaSecondaryLabel  — optional; default Talk it through first
- *   heroTrustItems     — optional string[] for hero pills
+ *   industryName, short label (SEO, proof copy)
+ *   headline, hero H1 (maps to hero.title)
+ *   heroLead, hero subcopy
+ *   ctaPrimaryLabel, primary CTA (hero, cards, footer)
+ *   ctaSecondaryLabel, optional; default Talk it through first
+ *   heroTrustItems, optional string[] for hero pills
  *
- *   industryProblems   — { headingId?, title, subtitle?, items[] }
- *   solutionMap        — { headingId?, title, intro?, introHtml?, systems[] }
+ *   industryProblems, { headingId?, title, subtitle?, items[] }
+ *   solutionMap, { headingId?, title, intro?, introHtml?, systems[] }
  *
- *   proof              — partial JL_SERVICES_PAGE.proof
- *   featuredOffers     — partial featuredOffers
- *   audienceFit        — partial audienceFit
- *   demo               — partial demo
- *   urgency            — partial { text | html }
- *   risk               — partial { text }
- *   footerCta          — partial footerCta (title, lead, subHtml, …)
- *   cardCtaLabels      — partial { primary, secondary, tertiary }
+ *   proof, partial JL_SERVICES_PAGE.proof
+ *   featuredOffers, partial featuredOffers
+ *   audienceFit, partial audienceFit
+ *   demo, partial demo
+ *   urgency, partial { text | html }
+ *   risk, partial { text }
+ *   footerCta, partial footerCta (title, lead, subHtml, …)
+ *   cardCtaLabels, partial { primary, secondary, tertiary }
  *
- *   heroPrimaryHref    — optional override for hero primary CTA URL
- *   heroSecondaryHref  — optional “talk first” URL (default from JL_SERVICES_PAGE routes)
- *   heroTertiaryHref   — optional “view packages” anchor href
+ *   heroPrimaryHref, optional override for hero primary CTA URL
+ *   heroSecondaryHref, optional “talk first” URL (default from JL_SERVICES_PAGE routes)
+ *   heroTertiaryHref, optional “view packages” anchor href
  *
  *   buildFromPublicTemplate({ industrySlug, industryName, heroHeadline, … })
- *   — see jl-industry-lander-registry.js; returns this same config shape.
+ *, see jl-industry-lander-registry.js; returns this same config shape.
  *
- *   productOverlays    — { [slug]: { eyebrow?, outcomeTitle?, bullets?, … } }
+ *   productOverlays, { [slug]: { eyebrow?, outcomeTitle?, bullets?, … } }
  *                      shallow-merge onto JL_SERVICE_PRODUCTS by slug
  */
 (function (global) {
@@ -141,27 +141,27 @@
   }
 
   /**
-   * Public template for vertical landers — maps a small schema to JL_INDUSTRY_LANDER_CONFIG.
+   * Public template for vertical landers, maps a small schema to JL_INDUSTRY_LANDER_CONFIG.
    *
    * @param {object} t
-   * @param {string} t.industrySlug — URL key (e.g. hvac); used in ?industry= and package anchor id
-   * @param {string} t.industryName — Display name (e.g. HVAC)
+   * @param {string} t.industrySlug, URL key (e.g. hvac); used in ?industry= and package anchor id
+   * @param {string} t.industryName, Display name (e.g. HVAC)
    * @param {string} t.heroHeadline
    * @param {string} t.heroSubheadline
    * @param {string[]} t.problemBullets
-   * @param {string[]} t.solutionBullets — plain text lines (escaped when rendered)
-   * @param {string} t.demoPath — e.g. /demo/hvac-sample
-   * @param {string} [t.ctaGetStartedHref] — default /get-started?industry={slug}
-   * @param {string} [t.ctaTalkHref] — default /book-consultation
+   * @param {string[]} t.solutionBullets, plain text lines (escaped when rendered)
+   * @param {string} t.demoPath, e.g. /demo/hvac-sample
+   * @param {string} [t.ctaGetStartedHref], default /get-started?industry={slug}
+   * @param {string} [t.ctaTalkHref], default /book-consultation
    * @param {string} [t.ctaPrimaryLabel]
    * @param {string} [t.ctaSecondaryLabel]
    * @param {string} [t.demoCtaLabel]
    * @param {string} [t.demoTitle] [t.demoSubHtml] [t.demoMicro]
    * @param {string} [t.problemSectionTitle] [t.solutionSectionTitle] [t.solutionIntroHtml]
-   * @param {string} [t.packagesSectionId] — default "{slug}-packages"
+   * @param {string} [t.packagesSectionId], default "{slug}-packages"
    * @param {string[]} [t.heroTrustItems]
    * @param {object} [t.proof] [t.featuredOffers] [t.audienceFit] [t.urgency] [t.risk] [t.footerCta]
-   * @param {object} [t.productOverlays] — same shape as today (slug → fields)
+   * @param {object} [t.productOverlays], same shape as today (slug → fields)
    */
   function buildFromPublicTemplate(t) {
     t = t || {};
@@ -229,7 +229,7 @@
         introHtml:
           t.solutionIntroHtml != null
             ? String(t.solutionIntroHtml)
-            : '<strong>Same core packages</strong> as our main services page—<strong>tuned for ' +
+            : '<strong>Same core packages</strong> as our main services page - <strong>tuned for ' +
               name +
               '</strong> on this page.',
         systems: systems,
@@ -260,7 +260,7 @@
               kicker: 'Fixed-price systems',
               title: 'Packages reframed for ' + name,
               subHtml:
-                'Pick your bottleneck—then <a href="' +
+                'Pick your bottleneck - then <a href="' +
                 GS +
                 '">' +
                 primaryLabel +
@@ -292,7 +292,7 @@
           subHtml:
             t.demoSubHtml != null
               ? String(t.demoSubHtml)
-              : 'Walk the same path your customers would—then start your ' + name + ' setup.',
+              : 'Walk the same path your customers would - then start your ' + name + ' setup.',
           ctaHref: demoPath,
           ctaLabel: t.demoCtaLabel != null ? String(t.demoCtaLabel) : 'Try the demo',
           micro:
@@ -310,7 +310,7 @@
           ? t.urgency
           : {
               html:
-                '<strong>Limited build slots.</strong> We cap concurrent installs so delivery stays fast—busy seasons fill quickly.',
+                '<strong>Limited build slots.</strong> We cap concurrent installs so delivery stays fast - busy seasons fill quickly.',
             },
 
       risk:

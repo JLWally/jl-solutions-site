@@ -11,7 +11,7 @@
   var SUBJECT_2 = 'Re: quick example';
 
   function bodyTouch1(demoLink, firstName) {
-    var greet = firstName ? 'Hey ' + firstName + ' —' : 'Hey —';
+    var greet = firstName ? 'Hey ' + firstName + ',' : 'Hey,';
     var link = (demoLink || '').trim() || '[INSERT DEMO LINK]';
     return (
       greet +
@@ -24,7 +24,7 @@
       '• capture better job details upfront\n' +
       '• filter out low-quality leads\n' +
       '• and book faster without back-and-forth\n\n' +
-      "No pitch—just a working example.\n\n" +
+      "No pitch - just a working example.\n\n" +
       "If this is close to what you'd want, I can tailor it to your exact setup.\n\n" +
       'What do you think?'
     );
@@ -32,7 +32,7 @@
 
   function bodyTouch2() {
     return (
-      'Just wanted to bump this — curious if you had a chance to check it out.\n\n' +
+      'Just wanted to bump this, curious if you had a chance to check it out.\n\n' +
       'Even small changes to intake and booking can make a big difference in how many jobs actually get scheduled.\n\n' +
       'Happy to walk through it with you if helpful.'
     );

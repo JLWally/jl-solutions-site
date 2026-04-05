@@ -91,7 +91,7 @@ function normalizeLeadBusinessName(lead) {
 }
 
 /**
- * Stable slug per lead — avoids collisions and supports idempotent upserts.
+ * Stable slug per lead, avoids collisions and supports idempotent upserts.
  * @param {string} leadId
  */
 function leadEngineDemoSlug(leadId) {
@@ -134,7 +134,7 @@ function getServicesAndIssuesForDemoIndustry(industryKey) {
 }
 
 /**
- * @param {object} lead — expects niche, company_name, business_name, website_url optional
+ * @param {object} lead, expects niche, company_name, business_name, website_url optional
  * @returns {string} industry key present in demo-industry-presets
  */
 /** Appended to email drafts when a personalized demo exists */

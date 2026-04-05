@@ -1,6 +1,6 @@
 /**
  * Public GET: opt a lead out of lead-engine outreach email (token in query).
- * Does not require operator auth or LEAD_ENGINE_ENABLED — token is the credential.
+ * Does not require operator auth or LEAD_ENGINE_ENABLED, token is the credential.
  */
 const { getLeadEngineSupabase } = require('./lib/lead-engine-supabase');
 const {

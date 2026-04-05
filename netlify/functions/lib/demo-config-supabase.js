@@ -13,7 +13,7 @@ function isJlDemoSupabaseConfigured() {
 
 /**
  * @param {string} slug
- * @returns {Promise<boolean>} true if a row exists (or query failed — pessimistic)
+ * @returns {Promise<boolean>} true if a row exists (or query failed, pessimistic)
  */
 async function isSlugTakenInJlDemoConfigs(slug) {
   const supabase = getLeadEngineSupabase();

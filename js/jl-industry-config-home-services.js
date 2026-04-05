@@ -1,5 +1,5 @@
 /**
- * Cleaning & home services industry lander — /home-services-lead-system
+ * Cleaning & home services industry lander, /home-services-lead-system
  * (maids, residential cleaning, handyman-style home service brands)
  */
 (function (global) {
@@ -18,7 +18,7 @@
     headline: 'Stop losing home-service jobs to slow follow-ups and bad leads',
 
     heroLead:
-      'We build intake, booking, and lead systems that help cleaning and home service companies capture better jobs and book faster—without the back-and-forth.',
+      'We build intake, booking, and lead systems that help cleaning and home service companies capture better jobs and book faster - without the back-and-forth.',
 
     ctaPrimaryLabel: CTA,
     ctaSecondaryLabel: 'Talk it through first',
@@ -34,10 +34,10 @@
       title: 'Sound familiar?',
       subtitle: '',
       items: [
-        'Prospects message 3 companies—you reply too late',
+        'Prospects message 3 companies - you reply too late',
         '“How much for a clean?” with no sq ft, frequency, or address',
         'Crews sit idle while you chase unclear or low-fit leads',
-        'Booking lives in DMs, texts, and email—not one reliable flow',
+        'Booking lives in DMs, texts, and email - not one reliable flow',
       ],
     },
 
@@ -45,30 +45,30 @@
       headingId: 'home-services-solutions-heading',
       title: 'Turn home-service leads into booked jobs automatically',
       introHtml:
-        '<strong>Same AI Intake + Scheduling combo</strong> as our core packages—<strong>home services language</strong> here, same systems underneath.',
+        '<strong>Same AI Intake + Scheduling combo</strong> as our core packages - <strong>home services language</strong> here, same systems underneath.',
       systems: [
         {
           lineHtml:
-            '<strong>Capture full job details upfront</strong> — Home size, service type, frequency, pets, supplies, and access notes.',
+            '<strong>Capture full job details upfront</strong>, Home size, service type, frequency, pets, supplies, and access notes.',
         },
         {
           lineHtml:
-            '<strong>Filter out tire-kickers</strong> — So you’re not quoting deep cleans for shoppers who ghost.',
+            '<strong>Filter out tire-kickers</strong>, So you’re not quoting deep cleans for shoppers who ghost.',
         },
         {
           lineHtml:
-            '<strong>Route jobs to the right crew</strong> — Team, neighborhood, or specialty (move-out, post-construction, etc.).',
+            '<strong>Route jobs to the right crew</strong>, Team, neighborhood, or specialty (move-out, post-construction, etc.).',
         },
         {
           lineHtml:
-            '<strong>Let customers book instantly</strong> — Real windows that match your routes and capacity.',
+            '<strong>Let customers book instantly</strong>, Real windows that match your routes and capacity.',
         },
       ],
     },
 
     proof: {
       lead:
-        'Built for home service brands that win on fast, clear booking—not endless DMs.',
+        'Built for home service brands that win on fast, clear booking - not endless DMs.',
       micro: 'Same guided funnel: get started → short intake → checkout → kickoff.',
       tailHtml:
         'Tie campaigns and referrals into one path: <a href="' +
@@ -81,9 +81,9 @@
     featuredOffers: {
       headingId: 'home-services-featured-heading',
       kicker: 'Fixed-price systems',
-      title: 'Same packages—reframed for cleaning & home services',
+      title: 'Same packages - reframed for cleaning & home services',
       subHtml:
-        'Pick where you’re leaking revenue—then <a href="' +
+        'Pick where you’re leaking revenue - then <a href="' +
         GS +
         '?from=home-services">' +
         CTA +
@@ -99,14 +99,14 @@
         { lineHtml: 'You run <strong>recurring cleans</strong>, <strong>one-time</strong>, or <strong>both</strong>' },
         { lineHtml: 'You lose gigs to whoever answers <strong>Instagram or SMS</strong> first' },
         { lineHtml: 'Your <strong>website</strong> doesn’t turn visitors into booked jobs' },
-        { lineHtml: 'You want <strong>fixed pricing</strong> on the build—not open-ended agency hours' },
+        { lineHtml: 'You want <strong>fixed pricing</strong> on the build - not open-ended agency hours' },
       ],
     },
 
     demo: {
       headingId: 'home-services-demo-heading',
       title: 'See the flow your customers would hit',
-      subHtml: 'Try the live demo—then start your home-service setup.',
+      subHtml: 'Try the live demo - then start your home-service setup.',
       ctaLabel: 'Try the live demo',
       micro: 'Same demo hub; your funnel still ends at get started + checkout.',
     },
@@ -142,10 +142,10 @@
     productOverlays: {
       'fix-app': {
         primaryHref: '/get-started?from=home-services&service=fix-app',
-        eyebrow: 'They found you on Google—then didn’t book',
+        eyebrow: 'They found you on Google - then didn’t book',
         outcomeTitle: 'More booked cleans from the same traffic',
         transformLine:
-          'Simplify mobile booking for one-time vs. recurring—so visitors finish a request.',
+          'Simplify mobile booking for one-time vs. recurring - so visitors finish a request.',
         bullets: [
           'Fast paths for quote vs. book-now',
           'Trust and clarity on pricing steps',
@@ -159,7 +159,7 @@
         eyebrow: 'Leads are vague (“small house”, “regular clean”)',
         outcomeTitle: 'Complete job specs before you quote',
         transformLine:
-          'Capture bedrooms, baths, frequency, add-ons—AI Intake for home services.',
+          'Capture bedrooms, baths, frequency, add-ons - AI Intake for home services.',
         bullets: [
           'Structured questions = fewer surprises on site',
           'Filter time-wasters automatically where it helps',
@@ -172,7 +172,7 @@
         eyebrow: 'Scheduling is still manual calendar Tetris',
         outcomeTitle: 'Let customers grab real slots on your routes',
         transformLine:
-          'Route jobs to crews and neighborhoods—Scheduling built for route density.',
+          'Route jobs to crews and neighborhoods - Scheduling built for route density.',
         bullets: [
           'Self-serve that respects drive time',
           'Team or zone assignment',

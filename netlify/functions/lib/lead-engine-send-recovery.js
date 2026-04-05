@@ -5,7 +5,7 @@
 const { isStaleSendClaim } = require('./lead-engine-send-state');
 
 /**
- * @param {{ status?: string, send_started_at?: string|null }|null|undefined} approvedRow — latest approved outreach compact row
+ * @param {{ status?: string, send_started_at?: string|null }|null|undefined} approvedRow, latest approved outreach compact row
  * @returns {null | { stale_lock: boolean, active_lock: boolean, reasons: string[] }}
  */
 function describeApprovedSendRecovery(approvedRow) {

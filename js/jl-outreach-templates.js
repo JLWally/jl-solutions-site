@@ -1,5 +1,5 @@
 /**
- * Phase 6 — Custom-demo outbound copy (config-driven).
+ * Phase 6, Custom-demo outbound copy (config-driven).
  * Placeholders: {{businessName}}, {{demoUrl}}
  *
  * Default subjects (initial / follow-up 1):
@@ -40,13 +40,13 @@
       subject: 'Quick idea for {{businessName}}',
       hooks: {
         default:
-          'Hey —\n\n' +
+          'Hey,\n\n' +
           "I took a quick look at {{businessName}}'s site and noticed your current setup makes it easy for people to reach out, but not easy to qualify or book quickly.",
         warmer:
-          'Hey —\n\n' +
-          "I spent a few minutes on {{businessName}}'s site — you have made it easy for people to reach out, which is great. The piece I would tighten next is how quickly you can qualify a lead and get a real job on the calendar.",
+          'Hey,\n\n' +
+          "I spent a few minutes on {{businessName}}'s site. You have made it easy for people to reach out, which is great. The piece I would tighten next is how quickly you can qualify a lead and get a real job on the calendar.",
         crisper:
-          'Hey —\n\n' +
+          'Hey,\n\n' +
           "{{businessName}}'s site makes outreach easy; qualification and fast booking still look like the bottleneck.",
       },
       standardBody:
@@ -56,7 +56,7 @@
         '• capture better job details upfront\n' +
         '• filter out low-quality leads\n' +
         '• and make booking faster without all the back-and-forth\n\n' +
-        "No pitch—just a working example.\n\n" +
+        "No pitch - just a working example.\n\n" +
         "If this is close to what you'd want, I can tailor it to your actual workflow.\n\n" +
         'What do you think?',
     },
@@ -65,9 +65,9 @@
       label: 'Follow-up 1',
       subject: 'Re: quick example for {{businessName}}',
       hooks: {
-        default: 'Hey —',
-        warmer: 'Hey — hope you are doing well.',
-        crisper: 'Hey —',
+        default: 'Hey,',
+        warmer: 'Hey, hope you are doing well.',
+        crisper: 'Hey,',
       },
       standardBody:
         'Just wanted to bump this in case you missed it.\n\n' +
@@ -80,12 +80,12 @@
       label: 'Follow-up 2',
       subject: 'Wanted to bubble this up',
       hooks: {
-        default: 'Hey —',
-        warmer: 'Hey — quick nudge from me.',
+        default: 'Hey,',
+        warmer: 'Hey, quick nudge from me.',
         crisper: '',
       },
       standardBody:
-        'Bubbling this once more — here is the demo link again:\n\n' +
+        'Bubbling this once more, here is the demo link again:\n\n' +
         '{{demoUrl}}\n\n' +
         "If it is not a fit, no worries. If you want it aligned to how you actually operate, I can adjust it.\n\n" +
         'Either way, thanks for reading.',
@@ -96,12 +96,12 @@
       subject: 'Built a quick example for {{businessName}}',
       hooks: {
         default:
-          'Hey —\n\n' +
+          'Hey,\n\n' +
           "I sketched a lightweight intake + booking flow for {{businessName}} so you can see it, not just read about it.",
         warmer:
-          'Hey —\n\n' +
-          'Sharing something concrete — a tight intake + booking example tailored to {{businessName}}.',
-        crisper: 'Hey —\n\n' + 'Quick example for {{businessName}} (intake -> qualify -> book):',
+          'Hey,\n\n' +
+          'Sharing something concrete, a tight intake + booking example tailored to {{businessName}}.',
+        crisper: 'Hey,\n\n' + 'Quick example for {{businessName}} (intake -> qualify -> book):',
       },
       standardBody:
         '{{demoUrl}}\n\n' +
@@ -114,17 +114,17 @@
       subject: 'A smarter intake flow for {{businessName}}',
       hooks: {
         default:
-          'Hey —\n\n' +
+          'Hey,\n\n' +
           'Your site gets inquiries; it does not yet force clarity before the conversation. That costs time.',
         warmer:
-          'Hey —\n\n' +
+          'Hey,\n\n' +
           "I will be direct: {{businessName}} is easy to contact, but the path from contact to qualified to booked still looks heavy.",
         crisper:
-          'Hey —\n\n' + '{{businessName}}: more inbound, not enough structure before the call. Here is a fix in practice:',
+          'Hey,\n\n' + '{{businessName}}: more inbound, not enough structure before the call. Here is a fix in practice:',
       },
       standardBody:
         '{{demoUrl}}\n\n' +
-        "That is a working preview — not a deck.\n\n" +
+        "That is a working preview, not a deck.\n\n" +
         'If the direction is right, I will tailor the steps and fields to how you actually run jobs.\n\n' +
         'Reply yes/no and we go from there.',
     },
@@ -167,7 +167,7 @@
     });
   }
 
-  /** Extra templates (e.g. follow-up 2) — show only when “Advanced” is on in the composer UI. */
+  /** Extra templates (e.g. follow-up 2), show only when “Advanced” is on in the composer UI. */
   function jlGetOutreachAdvancedVariantList() {
     return ['followup_2'].map(function (id) {
       var v = JL_OUTREACH_VARIANTS[id];
@@ -183,7 +183,7 @@
     return 'Subject: ' + String(subject || '').trim() + '\n\n' + String(body || '');
   }
 
-  /** @deprecated Use jlRenderOutreachEmail — kept for older callers */
+  /** @deprecated Use jlRenderOutreachEmail, kept for older callers */
   function jlRenderOutreachPack(vars) {
     var a = jlRenderOutreachEmail('initial', 'default', vars);
     var b = jlRenderOutreachEmail('followup_1', 'default', vars);

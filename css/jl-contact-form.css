@@ -23,7 +23,7 @@
   color: var(--jl-ink, #0a1628);
 }
 
-/* Body on onboarding/get-started is light-on-dark; cards are white — never inherit white onto card text */
+/* Body on onboarding/get-started is light-on-dark; cards are white, never inherit white onto card text */
 .jl-welcome-purchase .jl-payment-card .form-check-label,
 .jl-welcome-purchase .jl-payment-card .form-check-label.small {
   color: #0a1628;

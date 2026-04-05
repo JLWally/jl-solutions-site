@@ -1,6 +1,6 @@
 /**
  * Patch custom-demo outreach fields on a lead.
- * POST JSON: { leadId, status? } — status drafted|copied|sent_manual|followup_due|null (omit status to leave unchanged)
+ * POST JSON: { leadId, status? }, status drafted|copied|sent_manual|followup_due|null (omit status to leave unchanged)
  * Optional: demoFollowupDueAt (ISO string | null | ""), demoLastContactedAt (ISO | null | "")
  */
 const { guardLeadEngineRequest, withCors } = require('./lib/lead-engine-guard');

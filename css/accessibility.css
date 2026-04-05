@@ -135,7 +135,7 @@ footer[role="contentinfo"] {
   outline: none;
 }
 
-/* Visually hidden live regions only — do not target every status/alert on the site */
+/* Visually hidden live regions only, do not target every status/alert on the site */
 .sr-live-region[role="status"],
 .sr-live-region[role="alert"] {
   position: absolute;
