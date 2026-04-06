@@ -150,7 +150,9 @@ main#main-content.jl-main-text .text-muted {
 .section-how-we-help,
 .section-industries,
 .cta-section-home,
-.section-testimonials.jl-reviews-section {
+.section-testimonials.jl-reviews-section,
+.jl-home-mission-section,
+.jl-home-about-section {
   color: var(--jl-text-dark);
 }
 
@@ -672,6 +674,127 @@ main#main-content.jl-main-text .text-muted {
 }
 
 /* Services - light band; white cards with strong definition sit on it */
+/* Homepage: mission + founder story (after hero, before services) */
+.jl-home-mission-section {
+  padding: calc(var(--section-padding-y) * 0.95) 0;
+  background: var(--jl-surface);
+  border-top: 1px solid rgba(15, 23, 42, 0.07);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.jl-home-mission-section__title {
+  text-align: center;
+  color: #0f172a;
+  font-size: clamp(1.625rem, 3vw, 2.125rem);
+  font-weight: 800;
+  margin: 0 0 1.25rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.jl-home-mission-section__lead {
+  margin: 0 auto;
+  max-width: 40rem;
+  font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+  line-height: 1.7;
+  color: #334155;
+  font-weight: 500;
+}
+
+.jl-home-about-section {
+  padding: var(--section-padding-y) 0;
+  background: linear-gradient(180deg, var(--jl-surface-warm-alt) 0%, var(--jl-surface-warm) 100%);
+  border-top: 2px solid rgba(255, 193, 7, 0.22);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.jl-home-about-section__title {
+  color: #0f172a;
+  font-size: clamp(1.625rem, 3vw, 2rem);
+  font-weight: 800;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+@media (min-width: 992px) {
+  .jl-home-about-section__title {
+    margin-bottom: 0;
+  }
+}
+
+.jl-home-about-section__accent {
+  width: 3rem;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--jl-accent) 0%, var(--jl-brand-cyan-deep) 100%);
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 992px) {
+  .jl-home-about-section__accent {
+    margin-top: 1.25rem;
+  }
+}
+
+.jl-home-about-section__card {
+  background: var(--jl-white);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: var(--card-radius);
+  box-shadow: 0 12px 40px rgba(10, 22, 40, 0.07), 0 1px 3px rgba(0, 0, 0, 0.04);
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border-left: 4px solid var(--jl-brand-cyan-deep);
+}
+
+.jl-home-about-section__prose p {
+  margin-bottom: 1.1rem;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #1e293b;
+}
+
+.jl-home-about-section__prose p:last-child {
+  margin-bottom: 0;
+}
+
+.jl-home-about-section__cta-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 1.5rem;
+}
+
+.jl-home-about-section__cta-primary {
+  min-height: 52px;
+}
+
+.jl-home-about-section__cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--jl-brand-cyan-deep);
+  text-decoration: none;
+  padding: 0.65rem 0.25rem;
+  border-bottom: 2px solid rgba(11, 101, 121, 0.35);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.jl-home-about-section__cta-secondary:hover {
+  color: var(--jl-ink);
+  border-bottom-color: var(--jl-accent-dark);
+}
+
+.jl-home-about-section__cta-secondary:focus-visible {
+  outline: 3px solid var(--jl-brand-cyan-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 .feature-cards-section.services-section-home {
   background: var(--jl-surface-light);
   padding: var(--section-padding-y) 0;
