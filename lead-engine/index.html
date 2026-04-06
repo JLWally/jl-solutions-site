@@ -1512,19 +1512,33 @@
               '" title="Edit company, website URL, contact email">Edit lead</button>';
             var syncBtn = '<button type="button" class="btn btn-outline-light btn-sm sync-crm-btn" data-lead-id="' + escapeAttr(r.id) + '">CRM</button>';
             var demoQuick = formatDemoQuickActions(r);
-            var actionsStack =
-              '<div class="lead-actions-stack">' +
-              demoQuick +
-              editLeadBtn +
+            var pipelineRow =
+              '<div class="le-action-row le-action-row--pipeline" role="group" aria-label="Analyze, score, draft, review, history">' +
               analyzeBtn +
               scoreBtn +
               draftBtn +
               reviewLatestBtn +
               histBtn +
-              approveBtn +
-              sendBtn +
-              hintHtml +
+              '</div>';
+            var approveSendRow =
+              approveBtn || sendBtn
+                ? '<div class="le-action-row le-action-row--approve-send" role="group" aria-label="Approve and send">' +
+                  approveBtn +
+                  sendBtn +
+                  '</div>'
+                : '';
+            var metaRow =
+              '<div class="le-action-row le-action-row--meta" role="group" aria-label="Edit and CRM">' +
+              editLeadBtn +
               syncBtn +
+              '</div>';
+            var actionsStack =
+              '<div class="lead-actions-stack">' +
+              pipelineRow +
+              approveSendRow +
+              metaRow +
+              demoQuick +
+              hintHtml +
               '</div>';
             var mainRow =
               '<tr data-lead-row="' +

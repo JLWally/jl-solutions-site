@@ -336,9 +336,39 @@ body.lead-engine-surface {
 }
 
 .lead-engine-surface .le-actions-col {
-  width: 10.5rem;
-  min-width: 9.75rem;
-  max-width: 13rem;
+  width: 11.5rem;
+  min-width: 10.5rem;
+  max-width: 15rem;
+}
+
+/* Pipeline first: compact row(s) at top; full-width stack below for demo + hints */
+.lead-engine-surface .lead-actions-stack .le-action-row--pipeline,
+.lead-engine-surface .lead-actions-stack .le-action-row--approve-send,
+.lead-engine-surface .lead-actions-stack .le-action-row--meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.lead-engine-surface .lead-actions-stack .le-action-row--pipeline .btn,
+.lead-engine-surface .lead-actions-stack .le-action-row--approve-send .btn,
+.lead-engine-surface .lead-actions-stack .le-action-row--meta .btn {
+  width: auto;
+  flex: 1 1 calc(50% - 0.2rem);
+  min-width: 4.25rem;
+  max-width: 100%;
+  margin-bottom: 0;
+}
+
+.lead-engine-surface .lead-actions-stack .le-demo-quick-actions {
+  margin-top: 0.15rem;
+}
+
+.lead-engine-surface .lead-actions-stack .le-demo-quick-actions .btn {
+  width: auto;
+  margin-bottom: 0.25rem;
 }
 
 .lead-engine-surface .le-pipeline-hint {
@@ -358,7 +388,7 @@ body.lead-engine-surface {
   line-height: 1.25;
   margin-bottom: 0.3rem;
 }
-.lead-engine-surface .lead-actions-stack .btn:last-child {
+.lead-engine-surface .lead-actions-stack .le-pipeline-hint:last-child {
   margin-bottom: 0;
 }
 
