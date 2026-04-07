@@ -120,6 +120,8 @@
 
   function formatDemoConfigError(body, status) {
     var err = (body && body.error) || 'HTTP ' + status;
+    if (body && body.code) err += '\n\nCode: ' + body.code;
+    if (body && body.slug) err += '\nSlug: ' + body.slug;
     var details = (body && body.details) || '';
     if (details) err += '\n\n' + details;
     if (body && body.diagnostics) err += formatDiagnosticsLine(body.diagnostics);
@@ -216,7 +218,7 @@
           return;
         }
 
-        var slugRaw = $('idbSlug') && $('idbSlug').value.trim();
+        var slugRaw = ($('idbSlug') && $('idbSlug').value) || '';
         var services = linesToList($('idbServices'));
         var issueOptions = linesToList($('idbIssues'));
         var ctaSvcEl = $('idbCtaService');
@@ -238,6 +240,7 @@
           source: 'internal-demo-builder',
         };
         if (slugRaw) payload.slug = slugRaw;
+        console.debug('[internal-demo-builder] creating demo slug=', slugRaw || '(auto)');
 
         var btn = $('idbSubmit');
         if (btn) {
@@ -263,7 +266,7 @@
               );
             }
             if (x.status === 409) {
-              throw new Error((x.body && x.body.error) || 'That slug is already taken or reserved.');
+              throw new Error(formatDemoConfigError(x.body, x.status));
             }
             if (!x.ok) {
               throw new Error(formatDemoConfigError(x.body, x.status));

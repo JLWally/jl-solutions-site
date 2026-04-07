@@ -20,7 +20,7 @@ const {
 const {
   insertJlDemoConfig,
   isJlDemoSupabaseConfigured,
-  isSlugTakenInJlDemoConfigs,
+  checkSlugInJlDemoConfigs,
   fetchJlDemoConfigBySlug,
 } = require('./lib/demo-config-supabase');
 const {
@@ -143,17 +143,56 @@ function storageUnavailableResponse(headers, diag) {
   };
 }
 
-/** Slug reserved/static, present in Blob, or present in jl_demo_configs */
-async function isSlugTaken(store, slug) {
-  if (RESERVED_SLUGS.has(slug) || STATIC_BUNDLED_DEMO_SLUGS.has(slug)) return true;
+/**
+ * Slug conflict source detection for explicit 409 responses.
+ * @returns {Promise<{ taken: boolean, code: string|null, details?: string, diagnostics?: object }>}
+ */
+async function checkSlugConflict(store, slug) {
+  if (RESERVED_SLUGS.has(slug) || STATIC_BUNDLED_DEMO_SLUGS.has(slug)) {
+    return {
+      taken: true,
+      code: 'SLUG_RESERVED',
+      details: 'Slug is reserved for static routes or bundled demos.',
+    };
+  }
   if (store) {
-    const existing = await store.get(slug, { type: 'json' });
-    if (existing != null) return true;
+    try {
+      const existing = await store.get(slug, { type: 'json' });
+      if (existing != null) {
+        return {
+          taken: true,
+          code: 'SLUG_EXISTS_BLOBS',
+          details: 'Slug already exists in Blob storage.',
+        };
+      }
+    } catch (e) {
+      return {
+        taken: true,
+        code: 'SLUG_CONFLICT_UNKNOWN',
+        details: 'Could not verify slug uniqueness in Blob storage.',
+        diagnostics: { blobCheckError: String(e && e.message ? e.message : e).slice(0, 240) },
+      };
+    }
   }
   if (isJlDemoSupabaseConfigured()) {
-    if (await isSlugTakenInJlDemoConfigs(slug)) return true;
+    const db = await checkSlugInJlDemoConfigs(slug);
+    if (db.error) {
+      return {
+        taken: true,
+        code: 'SLUG_CONFLICT_UNKNOWN',
+        details: 'Could not verify slug uniqueness in Supabase.',
+        diagnostics: { supabaseCheckError: db.error.slice(0, 240) },
+      };
+    }
+    if (db.exists) {
+      return {
+        taken: true,
+        code: 'SLUG_EXISTS_SUPABASE',
+        details: 'Slug already exists in Supabase.',
+      };
+    }
   }
-  return false;
+  return { taken: false, code: null };
 }
 
 async function allocateSlugHybrid(store, base) {
@@ -162,7 +201,8 @@ async function allocateSlugHybrid(store, base) {
   let candidate = b;
   let i = 0;
   while (i < 80) {
-    if (!(await isSlugTaken(store, candidate))) return candidate;
+    const conflict = await checkSlugConflict(store, candidate);
+    if (!conflict.taken) return candidate;
     i += 1;
     candidate = `${b}-${i}`;
   }
@@ -341,13 +381,46 @@ exports.handler = async (event) => {
           }),
         };
       }
-      if (await isSlugTaken(store, requested)) {
+      const conflict = await checkSlugConflict(store, requested);
+      if (conflict.taken) {
+        console.warn(
+          '[demo-config] POST slug_conflict',
+          JSON.stringify({
+            slug: requested,
+            code: conflict.code || 'SLUG_CONFLICT_UNKNOWN',
+            reservedCheck:
+              conflict.code === 'SLUG_RESERVED'
+                ? 'hit'
+                : RESERVED_SLUGS.has(requested) || STATIC_BUNDLED_DEMO_SLUGS.has(requested)
+                  ? 'hit'
+                  : 'clear',
+            blobCheck:
+              conflict.code === 'SLUG_EXISTS_BLOBS'
+                ? 'exists'
+                : conflict.diagnostics && conflict.diagnostics.blobCheckError
+                  ? 'error'
+                  : store
+                    ? 'clear'
+                    : 'skipped',
+            dbCheck:
+              conflict.code === 'SLUG_EXISTS_SUPABASE'
+                ? 'exists'
+                : conflict.diagnostics && conflict.diagnostics.supabaseCheckError
+                  ? 'error'
+                  : isJlDemoSupabaseConfigured()
+                    ? 'clear'
+                    : 'skipped',
+          })
+        );
         return {
           statusCode: 409,
           headers: headersPost,
           body: JSON.stringify({
-            error: 'Slug already in use or reserved',
+            error: 'Slug conflict',
+            code: conflict.code || 'SLUG_CONFLICT_UNKNOWN',
             slug: requested,
+            details: conflict.details || 'Slug is unavailable.',
+            diagnostics: conflict.diagnostics || undefined,
           }),
         };
       }

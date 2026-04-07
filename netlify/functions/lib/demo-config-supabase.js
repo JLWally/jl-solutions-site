@@ -13,17 +13,26 @@ function isJlDemoSupabaseConfigured() {
 
 /**
  * @param {string} slug
- * @returns {Promise<boolean>} true if a row exists (or query failed, pessimistic)
+ * @returns {Promise<{ exists: boolean, error: string|null }>}
  */
-async function isSlugTakenInJlDemoConfigs(slug) {
+async function checkSlugInJlDemoConfigs(slug) {
   const supabase = getLeadEngineSupabase();
-  if (!supabase || !slug) return false;
+  if (!supabase || !slug) return { exists: false, error: null };
   const { data, error } = await supabase.from('jl_demo_configs').select('slug').eq('slug', slug).maybeSingle();
   if (error) {
     console.warn('[demo-config-supabase] slug existence check failed:', error.message);
-    return true;
+    return { exists: false, error: String(error.message || 'unknown error') };
   }
-  return data != null;
+  return { exists: data != null, error: null };
+}
+
+/**
+ * @param {string} slug
+ * @returns {Promise<boolean>} true only when a row exists
+ */
+async function isSlugTakenInJlDemoConfigs(slug) {
+  const out = await checkSlugInJlDemoConfigs(slug);
+  return out.exists;
 }
 
 /**
@@ -96,5 +105,6 @@ module.exports = {
   insertJlDemoConfig,
   isJlDemoSupabaseConfigured,
   isSlugTakenInJlDemoConfigs,
+  checkSlugInJlDemoConfigs,
   fetchJlDemoConfigBySlug,
 };
