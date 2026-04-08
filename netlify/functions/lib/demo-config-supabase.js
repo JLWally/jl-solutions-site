@@ -101,10 +101,41 @@ async function insertJlDemoConfig(payload) {
   return { ok: true };
 }
 
+/**
+ * When Netlify Blobs are unavailable, lead-engine still needs slug ownership checks against jl_demo_configs.
+ * @param {string} slug
+ * @param {string} leadEngineLeadId
+ * @returns {Promise<{ ok: boolean, available?: boolean, error?: string }>}
+ */
+async function isJlDemoSlugFreeOrOwnedByLead(slug, leadEngineLeadId) {
+  const supabase = getLeadEngineSupabase();
+  if (!supabase || !slug || !leadEngineLeadId) {
+    return { ok: false, error: 'Supabase not configured' };
+  }
+  const { data, error } = await supabase
+    .from('jl_demo_configs')
+    .select('config_json')
+    .eq('slug', slug)
+    .maybeSingle();
+  if (error) {
+    console.warn('[demo-config-supabase] slug ownership check failed:', error.message);
+    return { ok: false, error: String(error.message || 'query failed') };
+  }
+  if (!data) return { ok: true, available: true };
+  const cfg = data.config_json;
+  const ownerId =
+    cfg && typeof cfg === 'object'
+      ? cfg.leadEngineLeadId || cfg.lead_engine_lead_id || null
+      : null;
+  if (ownerId === leadEngineLeadId) return { ok: true, available: true };
+  return { ok: true, available: false };
+}
+
 module.exports = {
   insertJlDemoConfig,
   isJlDemoSupabaseConfigured,
   isSlugTakenInJlDemoConfigs,
   checkSlugInJlDemoConfigs,
   fetchJlDemoConfigBySlug,
+  isJlDemoSlugFreeOrOwnedByLead,
 };

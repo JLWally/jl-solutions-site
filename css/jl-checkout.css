@@ -1,0 +1,84 @@
+/**
+ * /checkout — contrast and light-band text (body uses global dark-theme defaults).
+ */
+body.jl-checkout-page main#main-content .feature-cards-section.services-section-home {
+  color: var(--jl-text-dark);
+}
+
+body.jl-checkout-page .feature-cards-section.services-section-home .feature-card-jl li {
+  color: #1e293b;
+}
+
+body.jl-checkout-page .feature-cards-section.services-section-home .feature-card-jl .small,
+body.jl-checkout-page .feature-cards-section.services-section-home .feature-card-jl small {
+  color: #475569 !important;
+}
+
+/* Urgency callout: dark amber text on light warm ground (replaces white text on pale tint) */
+body.jl-checkout-page .jl-checkout-urgency {
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  border-radius: 0.75rem;
+  background: #fffbeb;
+  border: 1px solid #f59e0b;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+body.jl-checkout-page .jl-checkout-urgency p {
+  color: #78350f !important;
+}
+
+body.jl-checkout-page .jl-checkout-urgency__title {
+  margin-bottom: 0.25rem;
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #78350f !important;
+}
+
+body.jl-checkout-page .jl-checkout-urgency__sub {
+  margin-bottom: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #92400e !important;
+}
+
+/* Stripe assurances strip: ink on white for maximum contrast */
+body.jl-checkout-page .jl-checkout-trust {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  color: #0f172a;
+}
+
+body.jl-checkout-page .jl-checkout-trust p {
+  margin-bottom: 0.25rem;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+body.jl-checkout-page .jl-checkout-trust p:last-child {
+  margin-bottom: 0;
+}
+
+/* Hero lead: explicit light-on-dark (inherits body white can be inconsistent across browsers) */
+body.jl-checkout-page .hero-with-image.jl-theme .hero-with-image__lead {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1.4vw, 1.2rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.94);
+  max-width: 42ch;
+}
+
+/* Primary CTA on white cards: stronger focus ring for keyboard users */
+body.jl-checkout-page .feature-cards-section .btn-cta-primary:focus-visible {
+  outline: 3px solid #0f172a;
+  outline-offset: 3px;
+}

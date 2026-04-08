@@ -10,6 +10,13 @@ test('validateDraftBody defaults channel to email', () => {
   const r = validateDraftBody({ leadId: UUID });
   assert.equal(r.ok, true);
   assert.equal(r.value.channel, 'email');
+  assert.equal(r.value.operatorIntent, 'new');
+});
+
+test('validateDraftBody accepts operatorIntent regenerate', () => {
+  const r = validateDraftBody({ leadId: UUID, operatorIntent: 'regenerate' });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.operatorIntent, 'regenerate');
 });
 
 test('validateDraftBody rejects non-email channel', () => {

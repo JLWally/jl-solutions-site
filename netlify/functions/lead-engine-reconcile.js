@@ -8,6 +8,7 @@ const { guardLeadEngineRequest, withCors } = require('./lib/lead-engine-guard');
 const { getLeadEngineSupabase } = require('./lib/lead-engine-supabase');
 const { validateReconcileBody } = require('./lib/lead-engine-outreach-actions-validate');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lib/lead-engine-audit-log');
+const { logNativeLeadOutcome, NATIVE_SOURCES } = require('./lib/lead-engine-native-outcome-log');
 
 exports.handler = async (event) => {
   const headers = withCors('POST, OPTIONS');
@@ -158,6 +159,15 @@ exports.handler = async (event) => {
       event_type: EVENT_TYPES.RECONCILE_MARK_SENT,
       actor: operator || null,
       message: 'Reconcile action: mark_sent',
+    });
+    await logNativeLeadOutcome(supabase, {
+      leadId,
+      outreachId,
+      outcome_code: 'email_delivered',
+      native_source: NATIVE_SOURCES.OPERATOR_RECONCILE_MARK_SENT,
+      context: 'reconcile_mark_sent',
+      evidence: { sent_at: upd.sent_at || null },
+      actor: operator ? `operator:${operator}` : 'operator:reconcile',
     });
 
     return {

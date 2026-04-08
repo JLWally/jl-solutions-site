@@ -28,6 +28,7 @@ const {
 } = require('./lib/lead-engine-list-summary');
 const { describeApprovedSendRecovery } = require('./lib/lead-engine-send-recovery');
 const { fetchSuppressionLookupForLeads, isLeadGloballySuppressed } = require('./lib/lead-engine-global-suppression');
+const { fetchLatestFeedbackByLeadIds } = require('./lib/lead-engine-lead-quality-feedback');
 const {
   supabaseErrorPayload,
   isMissingLeadEngineDemoColumnError,
@@ -400,6 +401,19 @@ exports.handler = async (event) => {
               },
         };
       });
+    }
+  }
+
+  if (outLeads.length > 0) {
+    try {
+      const leadIdsForFb = outLeads.map((l) => l.id);
+      const fbMap = await fetchLatestFeedbackByLeadIds(supabase, leadIdsForFb);
+      outLeads = outLeads.map((l) => ({
+        ...l,
+        latest_quality_feedback: fbMap[l.id] || null,
+      }));
+    } catch (e) {
+      console.error('[lead-engine-list] quality feedback', e);
     }
   }
 

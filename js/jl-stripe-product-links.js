@@ -1,5 +1,6 @@
 /**
  * Central Stripe Payment Link URLs (product slug → checkout).
+ * Customer-facing offer names (use consistently on site copy): Quick Setup, Priority Quick Setup, Full System Deposit.
  * Used by /get-started after pre-checkout intake; keep in sync with Stripe Dashboard.
  *
  * After purchase, buyers must land on post-purchase intake. In Stripe Dashboard → each Payment Link

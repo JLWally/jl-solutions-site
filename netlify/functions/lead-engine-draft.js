@@ -81,9 +81,11 @@ exports.handler = async (event) => {
     };
   }
 
-  const { leadId, channel } = validated.value;
+  const { leadId, channel, operatorIntent } = validated.value;
 
-  const out = await runDraftForLead(supabase, leadId, channel, g.session.username);
+  const out = await runDraftForLead(supabase, leadId, channel, g.session.username, {
+    operatorIntent,
+  });
   if (!out.ok) {
     if ((out.statusCode || 500) >= 500) {
       await logLeadEngineEvent(supabase, {

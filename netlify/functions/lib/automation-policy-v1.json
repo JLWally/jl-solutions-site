@@ -1,0 +1,47 @@
+{
+  "version": "automation-policy-v1",
+  "allow_auto_send": false,
+  "budgets": {
+    "scout_max_detail_calls_per_tick": 36,
+    "qualifier_max_prospects_per_tick": 200,
+    "pipeline_max_leads_per_tick": 6,
+    "enrichment_max_prospects_per_tick": 12,
+    "enrichment_cooldown_hours": 6
+  },
+  "scout_query_guardrails": {
+    "max_detail_calls_per_query_per_day": 400,
+    "pause_after_consecutive_zero_yield_runs": 8,
+    "pause_duration_hours": 3,
+    "max_duplicate_ratio_for_auto_pause": 0.94
+  },
+  "calibration_v1": {
+    "minimum_zero_yield_runs_for_escalation": 3,
+    "rolling_outcome_window_hours": 168,
+    "minimum_outcome_events_for_trend": 5,
+    "notes": "Zero-yield scout escalation applies only after minimum_zero_yield_runs_for_escalation in the 7d bucket. Outcome trend gates are advisory for future send-trust work."
+  },
+  "trust_ladder_v1": {
+    "document": "docs/lead-engine-trust-ladder.md",
+    "configured_level": "draft_plus_demo_auto",
+    "allow_auto_send": false
+  },
+  "trust_policy_v1": {
+    "rolling_feedback_window_hours": 168,
+    "minimum_feedback_events_for_enforcement": 8,
+    "warning_bad_or_duplicate_rate": 0.3,
+    "throttle_bad_or_duplicate_rate": 0.45,
+    "pause_bad_or_duplicate_rate": 0.6,
+    "pause_duration_hours": 6,
+    "warning_not_enough_data_rate": 0.4,
+    "throttle_wrong_vertical_or_offer_rate": 0.35,
+    "warning_zero_yield_runs_7d": 4,
+    "throttle_zero_yield_runs_7d": 8,
+    "pause_zero_yield_runs_7d": 12,
+    "warn_drafts_without_positive_outcome_ratio": 0.85
+  },
+  "pipeline": {
+    "max_leads_per_tick": 5,
+    "max_prospects_qualify_per_tick": 200,
+    "demo_when_lead_score_at_least": 55
+  }
+}

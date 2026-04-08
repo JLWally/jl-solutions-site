@@ -45,7 +45,7 @@ function buildDraftUserContent(lead, signals, aiScoreRow) {
     offer_scores: sc.offer_scores || null,
     top_supporting_signals: sc.top_supporting_signals || [],
     draft_angle: sc.draft_angle || null,
-    is_hvac_niche: sc.is_hvac_niche,
+    vertical_intel: sc.vertical_intel || null,
     model_version: aiScoreRow.model_version,
     ai_score_id: aiScoreRow.id,
   };

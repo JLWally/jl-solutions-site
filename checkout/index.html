@@ -11,10 +11,11 @@
   <link rel="stylesheet" href="/css/theme-jl.css">
   <link rel="stylesheet" href="/css/responsive.css">
   <link rel="stylesheet" href="/css/accessibility.css">
+  <link rel="stylesheet" href="/css/jl-checkout.css">
   <link rel="icon" href="/assets/images/jlsolutions-logo.png" type="image/png">
   <meta name="description" content="Choose your JL Solutions setup package and pay securely through Stripe.">
 </head>
-<body>
+<body class="jl-checkout-page">
   <nav class="navbar navbar-expand-lg navbar-dark jl-theme" role="navigation" aria-label="Main navigation">
     <div class="container">
       <a class="navbar-brand" href="/index.html">
@@ -42,7 +43,7 @@
         <div class="hero-with-image__content">
           <p class="hero-with-image__eyebrow">Secure checkout</p>
           <h1 id="checkout-heading" class="hero-with-image__title">Start your setup now</h1>
-          <p>Choose the option that fits your timeline and budget. Secure checkout takes about a minute, and we follow up fast so work can start.</p>
+          <p class="hero-with-image__lead">Choose the option that fits your timeline and budget. Secure checkout takes about a minute, and we follow up fast so work can start.</p>
         </div>
         <div class="hero-with-image__visual">
           <img src="/assets/images/hero-home-welcome.png" alt="JL Solutions setup and delivery support" class="hero-with-image__img" loading="eager" width="1024" height="682">
@@ -53,9 +54,9 @@
     <section class="feature-cards-section services-section-home" aria-labelledby="checkout-options-heading">
       <div class="container">
         <h2 id="checkout-options-heading" class="services-section-home__title text-center">Choose your setup option</h2>
-        <div class="jl-checkout-urgency rounded-3 px-3 py-3 mb-4 mx-auto text-center" style="max-width: 40rem; background: rgba(212, 165, 116, 0.18); border: 1px solid rgba(212, 165, 116, 0.55);" role="status">
-          <p class="mb-1 fw-bold text-white"><span class="me-1" aria-hidden="true">⚠️</span>Only 3 Quick Setup spots available this week</p>
-          <p class="mb-0 small text-white-50">Most are taken within 48 hours.</p>
+        <div class="jl-checkout-urgency mb-4" role="status">
+          <p class="jl-checkout-urgency__title"><span class="me-1" aria-hidden="true">⚠️</span>Only 3 Quick Setup spots available this week</p>
+          <p class="jl-checkout-urgency__sub">Most are taken within 48 hours.</p>
         </div>
         <div class="row g-4 mt-1">
           <div class="col-lg-4">
@@ -75,9 +76,9 @@
           </div>
           <div class="col-lg-4">
             <article class="feature-card-jl service-card h-100">
-              <h3>Skip the Line (Priority Setup)</h3>
+              <h3>Priority Quick Setup</h3>
               <p class="mb-2"><strong>$1,000</strong></p>
-              <p class="mb-2">VIP lane: faster scheduling, stronger routing, and an extra optimization pass so you move ahead of the queue.</p>
+              <p class="mb-2">Priority Quick Setup adds faster scheduling, stronger routing, and an extra optimization pass so you move ahead of the queue.</p>
               <ul>
                 <li>Everything in Quick Setup</li>
                 <li>Priority scheduling</li>
@@ -85,7 +86,7 @@
                 <li>Extra optimization pass</li>
               </ul>
               <p class="mb-3"><strong>Timeline:</strong> Priority this week</p>
-              <a href="https://buy.stripe.com/bJedR26245IMa3Abwj3Ru05" class="btn-cta-primary">Skip the Line</a>
+              <a href="https://buy.stripe.com/bJedR26245IMa3Abwj3Ru05" class="btn-cta-primary">Start Priority Quick Setup</a>
             </article>
           </div>
           <div class="col-lg-4">
@@ -104,10 +105,10 @@
             </article>
           </div>
         </div>
-        <div class="text-center mt-4 p-3 rounded-3" style="background: var(--jl-surface); border: 1px solid rgba(148, 163, 184, 0.45);">
-          <p class="mb-1"><strong>Secure checkout via Stripe</strong></p>
-          <p class="mb-1"><strong>We'll contact you within 24 hours</strong></p>
-          <p class="mb-0"><strong>No long onboarding process to get started</strong></p>
+        <div class="jl-checkout-trust">
+          <p>Secure checkout via Stripe</p>
+          <p>We’ll contact you within 24 hours</p>
+          <p>No long onboarding process to get started</p>
         </div>
       </div>
     </section>

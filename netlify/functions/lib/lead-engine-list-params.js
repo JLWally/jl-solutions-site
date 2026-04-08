@@ -4,17 +4,11 @@
 
 const VALID_STATUS = new Set(['new', 'analyzed', 'review', 'archived']);
 const VALID_OUTREACH_STATUS = new Set(['draft', 'approved', 'sent', 'cancelled']);
-const VALID_DEMO_OUTREACH_STATUS = new Set([
-  'drafted',
-  'copied',
-  'sent_manual',
-  'followup_due',
-  'send_failed',
-  'replied',
-  'interested',
-  'not_interested',
-  'unset',
-]);
+const {
+  DEMO_OUTREACH_STATUS_SET,
+  allowedDemoOutreachStatusesHumanList,
+} = require('./lead-engine-demo-outreach-contract');
+const VALID_DEMO_OUTREACH_STATUS = new Set([...DEMO_OUTREACH_STATUS_SET, 'unset']);
 const MIN_DEMO_RECENT_SENT_DAYS = 1;
 const MAX_DEMO_RECENT_SENT_DAYS = 30;
 const VALID_DEMO_FOLLOWUP_DUE = new Set([
@@ -144,7 +138,7 @@ function parseListQueryParams(qs) {
       return {
         ok: false,
         errors: [
-          'demoOutreachStatus must be one of: drafted, copied, sent_manual, followup_due, send_failed, replied, interested, not_interested, unset',
+          `demoOutreachStatus must be one of: ${allowedDemoOutreachStatusesHumanList()}, unset`,
         ],
       };
     }

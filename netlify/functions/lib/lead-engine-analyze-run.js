@@ -10,11 +10,12 @@ const {
   buildFailureSignalBundle,
   buildCompactSummary,
 } = require('./lead-engine-audit-signals');
+const { attachVerticalIntelligenceToSignalBundle } = require('./lead-engine-vertical-intelligence');
 const { runPageSpeedForUrls, buildPsiSignalBundle } = require('./lead-engine-psi');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lead-engine-audit-log');
 const { isLeadEnginePsiExtended } = require('./lead-engine-config');
 
-const LEAD_SELECT = 'id, company_name, website_url, status';
+const LEAD_SELECT = 'id, company_name, business_name, website_url, status, niche, source';
 
 async function runAnalyzeForLead(supabase, leadId, actor) {
   const { data: lead, error: leadErr } = await supabase
@@ -137,6 +138,8 @@ async function runAnalyzeForLead(supabase, leadId, actor) {
       reason: 'missing_GOOGLE_PAGESPEED_API_KEY',
     };
   }
+
+  attachVerticalIntelligenceToSignalBundle(signalBundle, lead);
 
   const { data: analysisRow, error: insErr } = await supabase
     .from('lead_engine_analysis')

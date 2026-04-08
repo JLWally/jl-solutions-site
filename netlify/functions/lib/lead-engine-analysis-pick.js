@@ -43,15 +43,21 @@ function pickNewestSuccessfulAnalysisRow(rows) {
 function buildScoringPayloadFromAiRow(aiRow) {
   if (!aiRow || !aiRow.scores || typeof aiRow.scores !== 'object') return null;
   if (aiRow.scores.fit_score == null && !aiRow.recommended_offer) return null;
+  const s = aiRow.scores;
   return {
-    fit_score: aiRow.scores.fit_score,
-    confidence: aiRow.scores.confidence,
-    pain_points: aiRow.scores.pain_points || [],
-    outreach_angle: aiRow.scores.outreach_angle,
+    fit_score: s.fit_score,
+    confidence: s.confidence,
+    pain_points: s.pain_points || [],
+    outreach_angle: s.outreach_angle,
+    offer_rationale: s.offer_rationale || null,
     recommended_offer: aiRow.recommended_offer || null,
     model_version: aiRow.model_version || null,
     ai_score_id: aiRow.id,
     scored_at: aiRow.created_at,
+    offer_scores: s.offer_scores || null,
+    top_supporting_signals: s.top_supporting_signals || null,
+    vertical_intel: s.vertical_intel || null,
+    scheduling_context_weight: s.scheduling_context_weight ?? null,
   };
 }
 

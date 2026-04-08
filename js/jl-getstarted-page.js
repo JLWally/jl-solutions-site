@@ -16,14 +16,70 @@
 
   var PAIN_TO_SERVICE = {
     'not-enough-leads': 'lead-engine',
-    'bad-leads': 'ai-intake',
-    'manual-followup': 'ai-intake',
+    'bad-leads': 'quick-setup',
+    'manual-followup': 'quick-setup',
     'booking-messy': 'scheduling',
     'site-not-converting': 'fix-app',
     'workflow-complex': 'custom',
   };
 
   var SERVICES = {
+    'quick-setup': {
+      id: 'quick-setup',
+      stripeSlug: 'quick-setup',
+      landingPage: '/checkout/',
+      cardTitle: 'Quick Setup',
+      recTitle: 'Quick Setup',
+      recFitHeadline: 'Quick Setup is the fastest fit',
+      outcome:
+        'When leads are slipping through weak capture or messy follow-up, Quick Setup gets smarter intake and qualification live in days.',
+      benefits: [
+        'Smart intake flow',
+        'Better capture and qualification',
+        'Routing and notifications',
+        'Mobile-friendly setup',
+      ],
+      price: '$750 fixed',
+      timeline: 'Live in 1–3 days',
+      isCustom: false,
+    },
+    'priority-quick-setup': {
+      id: 'priority-quick-setup',
+      stripeSlug: 'priority-quick-setup',
+      landingPage: '/checkout/',
+      cardTitle: 'Priority Quick Setup',
+      recTitle: 'Priority Quick Setup',
+      recFitHeadline: 'Priority Quick Setup is the right fit',
+      outcome:
+        'Priority Quick Setup includes everything in Quick Setup, plus priority scheduling, stronger routing, and an extra optimization pass when speed matters.',
+      benefits: [
+        'Everything in Quick Setup',
+        'Priority scheduling',
+        'Stronger routing flow',
+        'Extra optimization pass',
+      ],
+      price: '$1,000 fixed',
+      timeline: 'Priority this week',
+      isCustom: false,
+    },
+    'full-system-deposit': {
+      id: 'full-system-deposit',
+      stripeSlug: 'full-system-deposit',
+      landingPage: '/checkout/',
+      cardTitle: 'Full System Deposit',
+      recTitle: 'Full System Deposit',
+      recFitHeadline: 'Full System Deposit is the right fit',
+      outcome:
+        'For a full intake + routing + conversion upgrade. Total system cost is scoped after kickoff; this deposit secures your build and locks your timeline.',
+      benefits: [
+        'Deposit toward full system build',
+        'Kickoff + scoped implementation',
+        'Intake, routing, and optimization planning',
+      ],
+      price: '$1,500 deposit',
+      timeline: 'Kickoff within 1 business day',
+      isCustom: false,
+    },
     'fix-app': {
       id: 'fix-app',
       stripeSlug: 'fix-my-app',
@@ -162,6 +218,9 @@
       'fix-my-app': 'fix-app',
       fixmyapp: 'fix-app',
       'ai-intake': 'ai-intake',
+      'quick-setup': 'quick-setup',
+      'priority-quick-setup': 'priority-quick-setup',
+      'full-system-deposit': 'full-system-deposit',
       'lead-gen': 'lead-engine',
       leadgen: 'lead-engine',
       scheduling: 'scheduling',
@@ -278,7 +337,12 @@
 
   function inferRecommendationMode(serviceId) {
     if (serviceId === 'custom') return 'custom-final';
-    if (serviceId === 'ai-intake') {
+    if (
+      serviceId === 'ai-intake' ||
+      serviceId === 'quick-setup' ||
+      serviceId === 'priority-quick-setup' ||
+      serviceId === 'full-system-deposit'
+    ) {
       var leadState = getVal('jl_gs_ai_lead_questions');
       var qual = getRadio('gs_ai_filter_qualify');
       var aiDest = getVal('jl_gs_ai_dest');
@@ -403,8 +467,16 @@
     showPanel(document.getElementById('jl-start-intake'), false);
     showPanel(document.getElementById('jl-start-cta-block'), false);
 
+    var panelMatch = id;
+    if (
+      id === 'quick-setup' ||
+      id === 'priority-quick-setup' ||
+      id === 'full-system-deposit'
+    ) {
+      panelMatch = 'ai-intake';
+    }
     document.querySelectorAll('.jl-start-intake-panel').forEach(function (p) {
-      p.classList.toggle('is-visible', !svc.isCustom && p.getAttribute('data-panel') === id);
+      p.classList.toggle('is-visible', !svc.isCustom && p.getAttribute('data-panel') === panelMatch);
     });
 
     var customCb = document.getElementById('jl_gs_custom_scope');
@@ -462,7 +534,12 @@
       if (id === 'fix-app') {
         if (!req('#jl_gs_fix_breaking', 'What is breaking conversions right now?')) return false;
         if (!req('#jl_gs_fix_platform', 'What platform are you on?')) return false;
-      } else if (id === 'ai-intake') {
+      } else if (
+        id === 'ai-intake' ||
+        id === 'quick-setup' ||
+        id === 'priority-quick-setup' ||
+        id === 'full-system-deposit'
+      ) {
         if (!req('#jl_gs_ai_lead_questions', 'What happens to new leads now?')) return false;
         if (!getRadio('gs_ai_filter_qualify')) {
           window.alert('Please choose whether you need qualification logic.');

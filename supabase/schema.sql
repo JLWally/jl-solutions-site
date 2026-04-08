@@ -141,6 +141,12 @@ CREATE TRIGGER on_auth_user_created
 --   supabase/migrations/20250401120000_lead_engine_events.sql
 --   supabase/migrations/20250402120000_lead_engine_leads_extended.sql
 --   supabase/migrations/20250403120000_lead_engine_source_place_id_unique.sql
+--   supabase/migrations/20260402140000_lead_engine_demo_slug.sql
+--   supabase/migrations/20260402160000_lead_engine_demo_outreach_status.sql
+--   supabase/migrations/20260403100000_lead_engine_demo_followup_due.sql
+--   supabase/migrations/20260407180000_lead_engine_demo_outreach_status_expand.sql
+--   supabase/migrations/20260407193000_lead_engine_automation_orchestration.sql
+--   supabase/migrations/20260408120000_lead_engine_scout_strategy_and_prospect_branches.sql
 -- ---------------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS lead_engine_leads (
@@ -231,6 +237,28 @@ CREATE INDEX IF NOT EXISTS idx_lead_engine_leads_url_company_created
 CREATE UNIQUE INDEX IF NOT EXISTS idx_lead_engine_leads_demo_slug
   ON lead_engine_leads (demo_slug)
   WHERE demo_slug IS NOT NULL;
+
+ALTER TABLE lead_engine_leads
+  DROP CONSTRAINT IF EXISTS chk_lead_demo_outreach_status;
+
+ALTER TABLE lead_engine_leads
+  ADD CONSTRAINT chk_lead_demo_outreach_status CHECK (
+    demo_outreach_status IS NULL
+    OR demo_outreach_status IN (
+      'drafted',
+      'copied',
+      'sent_manual',
+      'followup_due',
+      'send_failed',
+      'replied',
+      'interested',
+      'not_interested'
+    )
+  );
+
+CREATE INDEX IF NOT EXISTS idx_lead_engine_leads_demo_outreach_status
+  ON lead_engine_leads (demo_outreach_status)
+  WHERE demo_outreach_status IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS lead_engine_analysis (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

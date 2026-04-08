@@ -189,6 +189,64 @@
   letter-spacing: -0.01em;
 }
 
+/* Promo bridge: checkout vs full services (above featured grid) */
+.jl-services-promo-bridge-region {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.jl-services-promo-bridge {
+  text-align: center;
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  padding: clamp(1.25rem, 3vw, 1.85rem) clamp(1rem, 3vw, 1.5rem);
+  background: linear-gradient(
+    135deg,
+    rgba(6, 78, 99, 0.07) 0%,
+    rgba(15, 23, 42, 0.04) 100%
+  );
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+}
+
+.jl-services-promo-bridge__title {
+  font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.jl-services-promo-bridge__sub {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: #334155;
+  margin-bottom: 1rem;
+}
+
+.jl-services-promo-bridge__sub a {
+  font-weight: 700;
+  color: #0c4a6e;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.jl-services-promo-bridge__sub a:hover {
+  color: #075985;
+}
+
+.jl-services-promo-bridge__checkout-link {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #0c4a6e;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.jl-services-promo-bridge__checkout-link:hover {
+  color: #075985;
+}
+
 /* Featured offers */
 .jl-featured-offers {
   padding: clamp(2rem, 5vw, 3.5rem) 0;
@@ -1530,6 +1588,22 @@
 
 .jl-services-guided__actions .jl-btn-secondary-offer {
   min-width: 12rem;
+}
+
+.jl-services-guided__actions .jl-services-guided__checkout {
+  min-width: 12rem;
+  font-weight: 700;
+}
+
+.navbar.jl-theme .jl-nav-actions__secondary {
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.navbar.jl-theme .jl-nav-actions__secondary:hover {
+  color: #1a1a1a;
+  background: #fff;
+  border-color: #fff !important;
 }
 
 /* Bottom CTA band */

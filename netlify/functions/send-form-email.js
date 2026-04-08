@@ -141,7 +141,7 @@ function getPurchaseKickoffMeta(data) {
   const slug = data.purchase_service_slug ? String(data.purchase_service_slug).trim().toLowerCase() : '';
   const bySlug = {
     'quick-setup': { label: 'Quick Setup', timeline: '1–3 business days' },
-    'priority-quick-setup': { label: 'Skip the Line (Priority Setup)', timeline: 'Priority this week' },
+    'priority-quick-setup': { label: 'Priority Quick Setup', timeline: 'Priority this week' },
     'full-system-deposit': {
       label: 'Full System Deposit',
       timeline: 'Kickoff within 1 business day; full timeline after scoping',
@@ -157,8 +157,8 @@ function getPurchaseKickoffMeta(data) {
   if (lower.includes('full system') && lower.includes('deposit')) return bySlug['full-system-deposit'];
   if (
     lower.includes('skip the line') ||
-    (lower.includes('priority') && lower.includes('quick')) ||
-    (lower.includes('priority') && lower.includes('setup') && !lower.includes('full system'))
+    lower.includes('priority quick setup') ||
+    (lower.includes('priority setup') && !lower.includes('quick'))
   ) {
     return bySlug['priority-quick-setup'];
   }
@@ -256,6 +256,7 @@ function collectPackageKickoffMainNotes(data) {
     push('Success vision after deposit phase', data.fullsys_success_vision);
   } else if (
     pkg.includes('quick setup') ||
+    pkg.includes('priority quick setup') ||
     pkg.includes('skip the line') ||
     pkg.includes('ai intake') ||
     pkg.includes('intake form')
@@ -361,6 +362,7 @@ function buildPackageKickoffEmail(data, opts = {}) {
     ]);
   } else if (
     pkgNorm.includes('quick setup') ||
+    pkgNorm.includes('priority quick setup') ||
     pkgNorm.includes('skip the line') ||
     pkgNorm.includes('ai intake') ||
     pkgNorm.includes('intake form')

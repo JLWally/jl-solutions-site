@@ -16,6 +16,7 @@ const {
 const { getLeadEnginePublicSiteUrl } = require('./lib/lead-engine-public-site-url');
 const { sendLeadEngineOutreachEmail } = require('./lib/lead-engine-resend-outreach');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lib/lead-engine-audit-log');
+const { logNativeLeadOutcome, NATIVE_SOURCES, looksLikeEmailHardFailure } = require('./lib/lead-engine-native-outcome-log');
 const { envVarFromB64 } = require('./lib/runtime-process-env');
 const { computeDemoFollowupDueAfterSend } = require('./lib/lead-engine-demo-followup-schedule');
 
@@ -250,6 +251,12 @@ exports.handler = async (event) => {
       subject: htmlSubject,
       html,
       replyTo: DEFAULT_REPLY_TO,
+      tags: [
+        {
+          name: 'lead_engine_lead_id',
+          value: String(leadId).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 256) || 'x',
+        },
+      ],
     });
   } catch (e) {
     console.error('[lead-engine-demo-outreach-send] Resend', e);
@@ -276,6 +283,18 @@ exports.handler = async (event) => {
         templateVariant: templateVariant || null,
       },
     });
+    const failMsg = e.message || 'Send failed';
+    if (looksLikeEmailHardFailure(failMsg)) {
+      await logNativeLeadOutcome(supabase, {
+        leadId,
+        outcome_code: 'bounced',
+        native_source: NATIVE_SOURCES.DEMO_OUTREACH_COMPOSER,
+        context: 'demo_send_hard_fail',
+        note: failMsg.slice(0, 240),
+        evidence: { provider: 'resend', templateVariant: templateVariant || null },
+        actor: g.session.username ? `operator:${g.session.username}` : 'operator:demo_send',
+      });
+    }
     const msg =
       e.code === 'NO_RESEND'
         ? 'Email provider not configured'
@@ -332,6 +351,14 @@ exports.handler = async (event) => {
       templateVariant: templateVariant || null,
       demo_followup_due_at: clearDue ? null : dueAt || null,
     },
+  });
+  await logNativeLeadOutcome(supabase, {
+    leadId,
+    outcome_code: 'email_delivered',
+    native_source: NATIVE_SOURCES.DEMO_OUTREACH_COMPOSER,
+    context: 'demo_composer_send_ok',
+    evidence: { resendMessageId: resendMessageId || null, templateVariant: templateVariant || null },
+    actor: g.session.username ? `operator:${g.session.username}` : 'operator:demo_send',
   });
 
   return {

@@ -6,7 +6,7 @@ const { getLeadEngineOutreachFromEmail, DEFAULT_REPLY_TO } = require('./lead-eng
 const { envVarFromB64 } = require('./runtime-process-env');
 
 /**
- * @param {{ to: string, subject: string, html: string, replyTo?: string }} opts
+ * @param {{ to: string, subject: string, html: string, replyTo?: string, tags?: Array<{ name: string, value: string }> }} opts
  * @returns {Promise<object>} Resend API data on success
  */
 async function sendLeadEngineOutreachEmail(opts) {
@@ -19,13 +19,17 @@ async function sendLeadEngineOutreachEmail(opts) {
   const { Resend } = require('resend');
   const resend = new Resend(key);
   const from = getLeadEngineOutreachFromEmail();
-  const { data, error } = await resend.emails.send({
+  const payload = {
     from,
     to: [opts.to],
     subject: opts.subject,
     html: opts.html,
     replyTo: opts.replyTo || DEFAULT_REPLY_TO,
-  });
+  };
+  if (opts.tags && Array.isArray(opts.tags) && opts.tags.length) {
+    payload.tags = opts.tags.slice(0, 10);
+  }
+  const { data, error } = await resend.emails.send(payload);
   if (error) {
     const e = new Error(error.message || 'Resend send failed');
     e.code = 'RESEND_ERROR';

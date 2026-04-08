@@ -44,4 +44,17 @@ function getNamedBlobStore(name) {
   }
 }
 
-module.exports = { getNamedBlobStore, isMissingBlobsEnvError };
+/**
+ * Open a named store or return null if Blobs cannot be initialized (never throws).
+ * @param {string} name
+ * @returns {{ store: import('@netlify/blobs').Store | null, error: Error | null }}
+ */
+function openNamedBlobStoreOrNull(name) {
+  try {
+    return { store: getNamedBlobStore(name), error: null };
+  } catch (err) {
+    return { store: null, error: err };
+  }
+}
+
+module.exports = { getNamedBlobStore, isMissingBlobsEnvError, openNamedBlobStoreOrNull };

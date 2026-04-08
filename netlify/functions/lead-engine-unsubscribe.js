@@ -8,6 +8,7 @@ const {
   isEmailGloballySuppressed,
 } = require('./lib/lead-engine-global-suppression');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lib/lead-engine-audit-log');
+const { logNativeLeadOutcome, NATIVE_SOURCES } = require('./lib/lead-engine-native-outcome-log');
 
 function htmlPage(title, bodyHtml) {
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${title}</title>
@@ -125,6 +126,15 @@ exports.handler = async (event) => {
     actor: 'public_unsubscribe',
     message: 'Recipient unsubscribed via link',
   });
+  if (lead.email_opted_out !== true) {
+    await logNativeLeadOutcome(supabase, {
+      leadId: lead.id,
+      outcome_code: 'unsubscribed',
+      native_source: NATIVE_SOURCES.UNSUBSCRIBE_LINK,
+      context: 'unsubscribe_link',
+      actor: 'public_unsubscribe',
+    });
+  }
   if (!globalBefore.error && !globalBefore.suppressed && !gs.skipped) {
     await logLeadEngineEvent(supabase, {
       lead_id: lead.id,

@@ -90,6 +90,12 @@ function isLeadEnginePsiExtended() {
   return isTruthyEnv(envVarFromB64('TEVBRF9FTkdJTkVfUFNJX0VYVEVOREVE'));
 }
 
+/** Optional shared secret for scheduled automation tick (HTTP trigger) — not the operator session secret. */
+function getLeadEngineAutomationSecret() {
+  const s = envVarFromB64('TEVBRF9FTkdJTkVfQVVUT01BVElPTl9TRUNSRVQ=');
+  return s == null ? '' : String(s).trim();
+}
+
 module.exports = {
   isLeadEngineEnabled,
   isLeadEngineOpenAiAllowed,
@@ -98,4 +104,5 @@ module.exports = {
   getLeadEngineSecret,
   isLeadEngineAuthConfigured,
   isLeadEnginePsiExtended,
+  getLeadEngineAutomationSecret,
 };

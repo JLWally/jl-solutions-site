@@ -111,6 +111,18 @@ async function findHubspotContactIdByEmail(email) {
   return row && row.id ? String(row.id) : null;
 }
 
+async function fetchHubspotContactLifecycleSnapshot(crmId) {
+  if (!crmId) return { lifecyclestage: null, hs_lead_status: null };
+  const data = await hubspotRequest(
+    `/crm/v3/objects/contacts/${encodeURIComponent(String(crmId).trim())}?properties=lifecyclestage,hs_lead_status`
+  );
+  const props = (data && data.properties) || {};
+  return {
+    lifecyclestage: props.lifecyclestage != null ? String(props.lifecyclestage) : null,
+    hs_lead_status: props.hs_lead_status != null ? String(props.hs_lead_status) : null,
+  };
+}
+
 async function upsertHubspotContact({ externalCrmId, payload }) {
   let crmId = externalCrmId ? String(externalCrmId).trim() : '';
   if (crmId) {
@@ -142,5 +154,6 @@ module.exports = {
   hasHubspotConfig,
   buildHubspotContactPayload,
   upsertHubspotContact,
+  fetchHubspotContactLifecycleSnapshot,
 };
 

@@ -77,11 +77,11 @@ test('HVAC example 1: residential, Scheduling & Resource Routing (not AI Intake)
     },
   };
   const r = computeDeterministicOfferSelection(lead, signals);
-  assert.equal(r.is_hvac, true);
+  assert.equal(r.industry_inference.profile_id, 'home_services_trade');
   assert.equal(r.selected_offer, OFFERS.SCHEDULING);
   assert.ok(r.offer_scores[OFFERS.SCHEDULING].total >= r.offer_scores[OFFERS.AI_INTAKE].total);
   assert.ok(r.top_supporting_signals.length >= 1);
-  assert.ok(r.draft_angle.includes('scheduling'));
+  assert.ok(/request|appointment|time|service/i.test(r.draft_angle));
 });
 
 /**
@@ -124,7 +124,7 @@ test('HVAC example 2: tie-bias, Scheduling preferred when scheduling score >= AI
     psi: { primary_scores: { performance_score: 70, best_practices_score: 80 } },
   };
   const r = computeDeterministicOfferSelection(lead, signals);
-  assert.equal(r.is_hvac, true);
+  assert.equal(r.industry_inference.profile_id, 'home_services_trade');
   assert.equal(r.selected_offer, OFFERS.SCHEDULING);
 });
 
@@ -181,13 +181,13 @@ test('HVAC example 3: portal/login + booking, Fix My App when app signals domina
     psi: { skipped: true, reason: 'test_fixture' },
   };
   const r = computeDeterministicOfferSelection(lead, signals);
-  assert.equal(r.is_hvac, true);
+  assert.equal(r.industry_inference.profile_id, 'home_services_trade');
   assert.equal(r.fix_my_app_eligible, true);
   assert.equal(r.selected_offer, OFFERS.FIX_MY_APP);
   assert.ok(buildCorpus(signals).includes('portal') || hrefCorpus(signals).includes('portal'));
 });
 
-test('non-HVAC: weak site + no booking → scheduling still in mix', () => {
+test('Plumbing trade: weak site + no booking → scheduling still in mix', () => {
   const lead = { company_name: 'Generic Plumbing Co', website_url: 'https://genericplumb.example' };
   const signals = {
     success: true,
@@ -221,6 +221,6 @@ test('non-HVAC: weak site + no booking → scheduling still in mix', () => {
     psi: { skipped: true },
   };
   const r = computeDeterministicOfferSelection(lead, signals);
-  assert.equal(r.is_hvac, false);
+  assert.equal(r.industry_inference.profile_id, 'home_services_trade');
   assert.ok([OFFERS.SCHEDULING, OFFERS.AI_INTAKE].includes(r.selected_offer));
 });

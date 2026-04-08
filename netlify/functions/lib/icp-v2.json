@@ -1,0 +1,62 @@
+{
+  "version": "icp-v2",
+  "rules": {
+    "require_https": true,
+    "min_company_name_len": 2,
+    "max_company_name_len": 200,
+    "blocked_host_substrings": [
+      "wikipedia.org",
+      "facebook.com",
+      "linkedin.com/company",
+      "google.com/maps",
+      "yelp.com/biz"
+    ],
+    "blocked_url_substrings": [],
+    "allowed_url_protocols": ["https:", "http:"],
+    "blocked_url_regex": []
+  },
+  "tiers": {
+    "default_pass_tier": "standard",
+    "strong_signals": []
+  },
+  "geography": {
+    "allowed_countries": [],
+    "allowed_us_states": [],
+    "blocked_address_substrings": [],
+    "blocked_us_states": []
+  },
+  "industry": {
+    "blocked_google_type_substrings": [],
+    "required_google_type_substrings": [],
+    "blocked_company_name_regex": [],
+    "blocked_industry_groups": [],
+    "allowed_industry_groups": [],
+    "group_prefixes": {
+      "legal": ["lawyer", "attorney", "legal"],
+      "medical_provider": ["hospital", "doctor", "physician", "dental", "medical"],
+      "financial_services": ["bank", "accounting", "insurance_agency"]
+    }
+  },
+  "compliance": {
+    "block_sensitive_industry": false,
+    "sensitive_company_regex": [
+      "\\b(medicaid|medicare)\\b",
+      "\\b(hipaa\\s+protected)\\b",
+      "\\b(attorney[-\\s]client)\\b"
+    ],
+    "sensitive_type_substrings": ["hospital", "lawyer"]
+  },
+  "signals": {
+    "minimum_scout_rating": null,
+    "minimum_user_ratings_total": null,
+    "require_scout_types_match_one_of": []
+  },
+  "source_weights": {
+    "scout_google_places": 1,
+    "scout_mvp_json": 0.5
+  },
+  "source_policy": {
+    "minimum_weight": 0.01,
+    "block_zero_weight_sources": true
+  }
+}

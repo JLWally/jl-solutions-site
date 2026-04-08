@@ -24,9 +24,11 @@ function shapeScoreListItem(row) {
     selected_offer: sc.selected_offer || row.recommended_offer || null,
     offer_scores: sc.offer_scores || null,
     top_supporting_signals: sc.top_supporting_signals || null,
+    offer_rationale: sc.offer_rationale || null,
     draft_angle: sc.draft_angle || null,
     fit_score: sc.fit_score != null ? sc.fit_score : null,
     confidence: sc.confidence || null,
+    vertical_intel: sc.vertical_intel || null,
   };
 }
 

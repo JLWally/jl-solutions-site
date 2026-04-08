@@ -12,7 +12,7 @@ const OFFER_LINE = [
 ].join(' | ');
 
 /**
- * @param {{ selected_offer: string, offer_scores?: object, is_hvac?: boolean }} deterministic
+ * @param {{ selected_offer: string, offer_scores?: object, industry_inference?: object }} deterministic
  */
 function buildScoreSystemPrompt(deterministic) {
   const sel = deterministic && deterministic.selected_offer ? deterministic.selected_offer : 'Scheduling & Resource Routing';
@@ -24,8 +24,9 @@ function buildScoreSystemPrompt(deterministic) {
     '- If audit_signals.success is false, or pages are empty, or signals are very sparse, set confidence to "low" and use a conservative fit_score.',
     '- pain_points: at most 5 short strings. Each MUST directly support the pre-selected offer below (scheduling friction, intake gaps, site/CTA issues, or broken app flows, match the offer). Do not list unrelated problems.',
     '- outreach_angle: one short internal sentence; factual tone; must align with the pre-selected offer; no fake metrics or visitor counts.',
+    '- vertical_intelligence (if present) describes an inferred business vertical for context only; offers are chosen from website signals, not from the vertical label alone.',
     '',
-    'IMPORTANT, Offer selection is already decided by deterministic scoring (including HVAC trade rules). You do NOT choose a different offer.',
+    'IMPORTANT: Offer selection is already decided by deterministic signal scoring (booking, forms, performance, portal/tool hints, etc.). You do NOT choose a different offer.',
     `- The pre-selected offer is: "${sel}"`,
     '- Set recommended_offer to exactly this same string (character-for-character match).',
     '- offer_rationale: 2–4 sentences explaining why this pre-selected offer fits the audit_signals (no alternative offers; no "you could also").',
@@ -59,8 +60,10 @@ function buildScoreUserContent(lead, signals, deterministic) {
       offer_scores: deterministic.offer_scores,
       top_supporting_signals: deterministic.top_supporting_signals,
       draft_angle: deterministic.draft_angle,
-      is_hvac_niche: deterministic.is_hvac,
       fix_my_app_eligible: deterministic.fix_my_app_eligible,
+      scheduling_context_weight: deterministic.scheduling_context_weight,
+      industry_inference: deterministic.industry_inference,
+      normalized_signals: deterministic.normalized_signals,
     };
   }
   return JSON.stringify(payload, null, 2);

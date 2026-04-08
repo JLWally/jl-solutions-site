@@ -72,7 +72,7 @@ function supabaseErrorPayload(supabaseError, fallbackError) {
       error: 'Database schema is behind this deploy (missing column on lead_engine_leads).',
       code,
       details:
-        'Run newer migrations in Supabase SQL Editor, e.g. supabase/migrations/20260402140000_lead_engine_demo_slug.sql, 20260402160000_lead_engine_demo_outreach_status.sql, and 20260403100000_lead_engine_demo_followup_due.sql (or refresh from supabase/schema.sql). Then reload the lead engine.',
+        'Run newer migrations in Supabase SQL Editor, e.g. supabase/migrations/20260402140000_lead_engine_demo_slug.sql, 20260402160000_lead_engine_demo_outreach_status.sql, 20260403100000_lead_engine_demo_followup_due.sql, 20260407180000_lead_engine_demo_outreach_status_expand.sql (or refresh from supabase/schema.sql). Then reload the lead engine.',
     };
   }
   const short = msg.length <= 500 ? msg : msg.slice(0, 497) + '…';

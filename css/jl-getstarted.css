@@ -67,6 +67,36 @@
   color: var(--jl-ink, #0a1628);
 }
 
+.jl-start-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.jl-start-header__checkout {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--jl-accent, #ffc107);
+  color: var(--jl-ink, #0a1628) !important;
+  border: 2px solid var(--jl-accent, #ffc107);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.jl-start-header__checkout:hover {
+  background: var(--jl-accent-hover, #ffd54f);
+  color: var(--jl-ink, #0a1628) !important;
+}
+
+.jl-start-header__cta--hero {
+  margin-bottom: 0;
+}
+
 .jl-start-header__secondary:hover {
   opacity: 1 !important;
   text-decoration: underline;
@@ -103,8 +133,119 @@
   font-size: clamp(1rem, 2.5vw, 1.0625rem);
   line-height: 1.65;
   color: #ffffff;
-  max-width: min(36rem, 92vw);
-  margin: 0 auto 1.1rem;
+  max-width: min(40rem, 92vw);
+  margin: 0 auto 0.85rem;
+}
+
+.jl-start-hero__direct {
+  max-width: min(40rem, 92vw);
+  margin: 0 auto 1.15rem;
+  line-height: 1.55;
+}
+
+.jl-start-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.65rem;
+  max-width: min(36rem, 100%);
+  margin: 0 auto;
+  padding: 0 0.25rem;
+}
+
+.jl-start-promo-explainer {
+  padding: 1.35rem 1rem 1.5rem;
+  background: rgba(8, 20, 36, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.jl-start-promo-explainer__inner {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.jl-start-promo-explainer__title {
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  margin: 0 0 0.35rem;
+}
+
+.jl-start-promo-explainer__lead {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.9375rem;
+  margin: 0 0 1.15rem;
+  line-height: 1.55;
+}
+
+.jl-start-promo-explainer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+@media (min-width: 768px) {
+  .jl-start-promo-explainer__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+.jl-start-promo-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1rem 1.1rem;
+  text-align: left;
+}
+
+.jl-start-promo-card__name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 0.25rem;
+}
+
+.jl-start-promo-card__price {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--jl-accent, #ffc107);
+  margin: 0 0 0.5rem;
+}
+
+.jl-start-promo-card__txt {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 0 0.75rem;
+}
+
+.jl-start-promo-card__link {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #b8f6ff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.jl-start-promo-card__link:hover {
+  color: #d8fbff;
+}
+
+.jl-start-advanced-note {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0.85rem 1rem 0.25rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.55;
+}
+
+.jl-start-advanced-note a {
+  color: #b8f6ff;
+  font-weight: 700;
 }
 
 .jl-start-pills {

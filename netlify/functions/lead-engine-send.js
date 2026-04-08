@@ -19,6 +19,7 @@ const {
   finalizeOutreachSentWithRetries,
 } = require('./lib/lead-engine-send-state');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lib/lead-engine-audit-log');
+const { logNativeLeadOutcome, NATIVE_SOURCES, looksLikeEmailHardFailure } = require('./lib/lead-engine-native-outcome-log');
 const { envVarFromB64 } = require('./lib/runtime-process-env');
 
 const LEAD_SEND_SELECT =
@@ -385,6 +386,13 @@ exports.handler = async (event) => {
       subject,
       html,
       replyTo: DEFAULT_REPLY_TO,
+      tags: [
+        { name: 'lead_engine_lead_id', value: String(leadId).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 256) || 'x' },
+        {
+          name: 'lead_engine_outreach_id',
+          value: String(targetOutreachId).replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 256) || 'x',
+        },
+      ],
     });
   } catch (e) {
     console.error('[lead-engine-send] Resend', e);
@@ -393,6 +401,18 @@ exports.handler = async (event) => {
       e.code === 'NO_RESEND'
         ? 'Email provider not configured'
         : e.message || 'Send failed';
+    if (looksLikeEmailHardFailure(msg)) {
+      await logNativeLeadOutcome(supabase, {
+        leadId,
+        outreachId: targetOutreachId,
+        outcome_code: 'bounced',
+        native_source: NATIVE_SOURCES.RESEND_SEND_ERROR,
+        context: 'send_hard_fail',
+        note: msg.slice(0, 240),
+        evidence: { provider: 'resend' },
+        actor: 'native_pipeline',
+      });
+    }
     return {
       statusCode: e.code === 'NO_RESEND' ? 503 : 502,
       headers,
@@ -439,6 +459,15 @@ exports.handler = async (event) => {
     actor: g.session.username || null,
     message: 'Outreach sent successfully',
     metadata_json: { recipient, resendMessageId: resendMessageId || null },
+  });
+  await logNativeLeadOutcome(supabase, {
+    leadId,
+    outreachId: fin.data.id,
+    outcome_code: 'email_delivered',
+    native_source: NATIVE_SOURCES.RESEND_SEND_OK,
+    context: 'send_ok',
+    evidence: { resendMessageId: resendMessageId || null },
+    actor: g.session.username ? `operator_send:${g.session.username}` : 'operator_send',
   });
 
   return {

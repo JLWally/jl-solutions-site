@@ -22,7 +22,16 @@ function validateDraftBody(body) {
     };
   }
 
-  return { ok: true, value: { leadId: base.value.leadId, channel } };
+  let operatorIntent = 'new';
+  if (body.operatorIntent != null && String(body.operatorIntent).trim() !== '') {
+    const raw = String(body.operatorIntent).trim().toLowerCase();
+    if (raw === 'regenerate' || raw === 'new') operatorIntent = raw;
+    else {
+      return { ok: false, errors: ['operatorIntent must be "new" or "regenerate" when provided'] };
+    }
+  }
+
+  return { ok: true, value: { leadId: base.value.leadId, channel, operatorIntent } };
 }
 
 module.exports = { validateDraftBody };

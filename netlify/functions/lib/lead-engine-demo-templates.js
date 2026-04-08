@@ -1,73 +1,12 @@
 /**
- * Lead engine ↔ smart demo: niche → industry, template lists, CTA mapping.
- * Align with demo-industry-presets.js (especially `cleaning`) when changing copy.
+ * Lead engine ↔ smart demo: vertical profile → demo lists, CTA mapping.
+ * Industry is inferred from audit + lead fields; offers are scored separately (signal-based).
  */
+'use strict';
+
 const { getPreset, listIndustryKeys } = require('./demo-industry-presets');
-
-const industryTemplates = {
-  hvac: {
-    services: [
-      'AC Repair',
-      'Heating Repair',
-      'Installation',
-      'Maintenance',
-      'Emergency Service',
-    ],
-    issues: [
-      'Not cooling',
-      'Not heating',
-      'System won’t turn on',
-      'Strange noise',
-      'Leak or water issue',
-    ],
-  },
-  plumbing: {
-    services: [
-      'Leak Repair',
-      'Drain Cleaning',
-      'Water Heater',
-      'Installation',
-      'Emergency Service',
-    ],
-    issues: ['Leak', 'Clog', 'No hot water', 'Low pressure', 'Pipe issue'],
-  },
-  cleaning: {
-    services: [
-      'House Cleaning',
-      'Deep Cleaning',
-      'Move-In/Out',
-      'Commercial Cleaning',
-      'Recurring Service',
-    ],
-    issues: ['One-time clean', 'Recurring service', 'Urgent clean', 'Estimate request'],
-  },
-};
-
-/** Map lead niche / site vertical to demo-industry-presets key */
-const nicheToDemoIndustry = {
-  hvac: 'hvac',
-  'hvac-plumbing': 'hvac',
-  'air-conditioning': 'hvac',
-  heating: 'hvac',
-  plumbing: 'plumbing',
-  plumber: 'plumbing',
-  cleaning: 'cleaning',
-  'home-cleaning': 'cleaning',
-  maid: 'cleaning',
-  janitorial: 'cleaning',
-  'home-services': 'home-services',
-  roofing: 'roofing',
-  electrical: 'electrical',
-  healthcare: 'healthcare',
-  professional: 'professional',
-  generic: 'generic',
-};
-
-const KEYWORD_RULES = [
-  { re: /\b(hvac|heating|cooling|furnace|air conditioning|a\/c|ac repair|heat pump)\b/i, key: 'hvac' },
-  { re: /\b(plumb|drain|sewer|water heater|pipe|leak repair)\b/i, key: 'plumbing' },
-  { re: /\b(clean|maid|janitorial|housekeeping|sanitize|pressure wash)\b/i, key: 'cleaning' },
-];
+const { inferIndustryProfile } = require('./lead-engine-industry-inference');
+const { resolveProfileIdFromNiche, getProfile } = require('./industry-profiles');
 
 const OFFER_TO_CTA = {
   'ai-intake': 'ai-intake',
@@ -115,17 +54,12 @@ function mapRecommendedOfferToCtaService(offer) {
 }
 
 /**
- * @param {string} industryKey
+ * @param {string} profileId - industry-profiles id
  * @returns {{ services: string[], issues: string[] }}
  */
-function getServicesAndIssuesForDemoIndustry(industryKey) {
-  const key = String(industryKey || 'generic').toLowerCase();
-  if (industryTemplates[key]) {
-    return {
-      services: industryTemplates[key].services.slice(),
-      issues: industryTemplates[key].issues.slice(),
-    };
-  }
+function getServicesAndIssuesForDemoIndustry(profileId) {
+  const valid = new Set(listIndustryKeys());
+  const key = valid.has(profileId) ? profileId : 'unknown';
   const preset = getPreset(key);
   return {
     services: (preset.defaultServices || []).slice(),
@@ -133,55 +67,65 @@ function getServicesAndIssuesForDemoIndustry(industryKey) {
   };
 }
 
-/**
- * @param {object} lead, expects niche, company_name, business_name, website_url optional
- * @returns {string} industry key present in demo-industry-presets
- */
 /** Appended to email drafts when a personalized demo exists */
 function buildOutreachDemoFooter(pathUrl, absoluteUrl) {
   const link = absoluteUrl || pathUrl;
   return `\n\n---\nPersonalized intake demo (preview): ${link}\n`;
 }
 
-function resolveDemoIndustryForLead(lead) {
+/**
+ * Resolve demo preset key (industry-profiles id) for personalized demo content.
+ * @param {object} lead - niche, company_name, business_name, website_url
+ * @param {object|null} signals - optional audit bundle (with or without vertical_intelligence)
+ * @returns {string} profile id for getPreset()
+ */
+function resolveDemoIndustryForLead(lead, signals) {
   const valid = new Set(listIndustryKeys());
-  const nicheRaw = lead.niche != null ? String(lead.niche).trim() : '';
-  if (nicheRaw) {
-    const parts = nicheRaw.split(/[,;/|]+/).map((s) => s.trim().toLowerCase()).filter(Boolean);
-    for (const p of parts) {
-      const mapped = nicheToDemoIndustry[p];
-      if (mapped && valid.has(mapped)) return mapped;
-    }
-    const slug = nicheRaw.toLowerCase().replace(/\s+/g, '-');
-    if (nicheToDemoIndustry[slug] && valid.has(nicheToDemoIndustry[slug])) {
-      return nicheToDemoIndustry[slug];
-    }
-    const hay = nicheRaw.toLowerCase();
-    for (const { re, key } of KEYWORD_RULES) {
-      if (re.test(hay) && valid.has(key)) return key;
-    }
+
+  if (signals && signals.vertical_intelligence && signals.vertical_intelligence.industry_inference) {
+    const pid = signals.vertical_intelligence.industry_inference.profile_id;
+    if (pid && valid.has(pid)) return pid;
   }
+
+  const fromSignals = signals && signals.success === true ? inferIndustryProfile({ lead, signals }) : null;
+  if (fromSignals && fromSignals.profile_id && valid.has(fromSignals.profile_id)) {
+    return fromSignals.profile_id;
+  }
+
+  const fromNiche = resolveProfileIdFromNiche(lead && lead.niche != null ? String(lead.niche) : '');
+  if (fromNiche && valid.has(fromNiche)) return fromNiche;
 
   const blob = [
     normalizeLeadBusinessName(lead),
-    lead.company_name,
-    lead.business_name,
-    lead.website_url,
+    lead && lead.company_name,
+    lead && lead.business_name,
+    lead && lead.website_url,
   ]
     .filter(Boolean)
     .join(' ')
     .toLowerCase();
 
-  for (const { re, key } of KEYWORD_RULES) {
-    if (re.test(blob) && valid.has(key)) return key;
+  let bestId = 'unknown';
+  let bestHits = 0;
+  for (const id of listIndustryKeys()) {
+    if (id === 'unknown') continue;
+    const prof = getProfile(id);
+    const kws = (prof.inference && prof.inference.keywords) || [];
+    let hits = 0;
+    for (const kw of kws) {
+      if (blob.includes(String(kw).toLowerCase())) hits += 1;
+    }
+    if (hits > bestHits) {
+      bestHits = hits;
+      bestId = id;
+    }
   }
+  if (bestHits >= 1 && valid.has(bestId)) return bestId;
 
-  return 'generic';
+  return 'unknown';
 }
 
 module.exports = {
-  industryTemplates,
-  nicheToDemoIndustry,
   normalizeLeadBusinessName,
   leadEngineDemoSlug,
   mapRecommendedOfferToCtaService,

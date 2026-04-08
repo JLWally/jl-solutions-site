@@ -1,5 +1,5 @@
 /**
- * /demo/quick, business name → industry → POST demo-config → redirect to demo URL.
+ * Quick demo wizard (demo-quick.html). Pretty URL /demo/quick is disabled in netlify.toml until launch.
  */
 (function () {
   'use strict';

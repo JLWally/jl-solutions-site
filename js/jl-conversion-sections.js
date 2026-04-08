@@ -200,6 +200,29 @@
     );
   }
 
+  function renderPromoBridge(pb, routes) {
+    if (!pb || (!pb.title && !pb.subHtml)) return '';
+    routes = routes || {};
+    var ch = pb.checkoutHref || routes.checkout || '/checkout/';
+    var checkoutText = pb.checkoutLinkText || 'Just want the fastest path? Start with Quick Setup.';
+    return (
+      '<div class="jl-services-promo-bridge">' +
+      (pb.title
+        ? '<h2 class="jl-services-promo-bridge__title">' + esc(pb.title) + '</h2>'
+        : '') +
+      (pb.subHtml
+        ? '<p class="jl-services-promo-bridge__sub">' + pb.subHtml + '</p>'
+        : '') +
+      '<p class="jl-services-promo-bridge__checkout mb-0">' +
+      '<a href="' +
+      esc(ch) +
+      '" class="jl-services-promo-bridge__checkout-link">' +
+      esc(checkoutText) +
+      '</a></p>' +
+      '</div>'
+    );
+  }
+
   function renderFeaturedOffersHead(f) {
     return (
       '<p class="jl-featured-offers__kicker">' +
@@ -409,7 +432,15 @@
       esc(d.secondaryHref || routes.bookConsultation || '/book-consultation') +
       '" class="jl-btn-secondary-offer">' +
       esc(d.secondaryLabel || 'Talk it through first') +
-      '</a></div>'
+      '</a>' +
+      (d.tertiaryHref && d.tertiaryLabel
+        ? '<a href="' +
+          esc(d.tertiaryHref) +
+          '" class="btn btn-outline-dark jl-services-guided__checkout">' +
+          esc(d.tertiaryLabel) +
+          '</a>'
+        : '') +
+      '</div>'
     );
   }
 
@@ -552,6 +583,7 @@
     renderProductCard: renderProductCard,
     renderHero: renderHero,
     renderProofStrip: renderProofStrip,
+    renderPromoBridge: renderPromoBridge,
     renderFeaturedOffersHead: renderFeaturedOffersHead,
     renderAudienceFit: renderAudienceFit,
     renderRiskAside: renderRiskAside,

@@ -27,6 +27,18 @@ const EVENT_TYPES = {
   DEMO_OUTREACH_FOLLOWUP_DUE: 'demo_outreach_followup_due',
   /** Operator updated company / URL / contact on lead_engine_leads */
   LEAD_FIELDS_UPDATED: 'lead_fields_updated',
+  /** Operator changed custom demo pipeline fields (stage and/or reminder date) — learning / QA trail */
+  OPERATOR_DEMO_PIPELINE_EDIT: 'operator_demo_pipeline_edit',
+  /** Operator explicitly regenerated email draft (vs first-time draft from row toolbar) */
+  OPERATOR_DRAFT_REGENERATED: 'operator_draft_regenerated',
+  /** Scout / qualifier automation promoted a prospect into lead_engine_leads */
+  AUTOMATION_LEAD_PROMOTED: 'automation_lead_promoted',
+  /** Operator quality label on a lead (learning / validation; metadata_json.feedback_code) */
+  LEAD_QUALITY_FEEDBACK: 'lead_quality_feedback',
+  /** Closed-loop lead outcome (metadata_json.outcome_code) */
+  LEAD_OUTCOME: 'lead_outcome',
+  /** Scout query / source guardrail health transition (metadata_json.scope, from, to) */
+  GUARDRAIL_STATUS_CHANGED: 'guardrail_status_changed',
 };
 
 async function logLeadEngineEvent(supabase, event) {

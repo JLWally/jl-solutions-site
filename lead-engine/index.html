@@ -39,6 +39,59 @@
         <div id="activitySummary" class="small text-muted mb-2 mt-2">Loading…</div>
         <div id="activityRecent" class="small text-light"></div>
       </details>
+      <details class="card card-dark p-3 mb-2 le-panel" id="leCommandCenterPanel">
+        <summary class="mb-0">Automation command center (24/7)</summary>
+        <p class="small text-muted mt-2 mb-2">
+          Worker health, latest runs, failures, retry queue, prospect funnel, and hot leads (UTC day). Scheduled tick runs hourly when deployed on Netlify.
+        </p>
+        <button type="button" class="btn btn-outline-light btn-sm mb-2" id="cmdCenterRefresh">Refresh</button>
+        <div id="cmdCenterRoot" class="small text-light"></div>
+        <details class="mt-2">
+          <summary class="small text-muted">Raw JSON</summary>
+          <pre id="cmdCenterJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 280px; overflow: auto;"></pre>
+        </details>
+      </details>
+      <details class="card card-dark p-3 mb-2 le-panel" id="leHotLeadsPanel">
+        <summary class="mb-0">Best leads (hot ranking)</summary>
+        <p class="small text-muted mt-2 mb-2">
+          Composite score from fit, website, demo, draft, ICP tier hint, recency (7-day updated window). Not auto-send.
+          Use <strong class="text-light">Quality</strong> to log good/bad signals (feeds validation report).
+          <button type="button" class="btn btn-outline-light btn-sm py-0 ms-1" id="hotLeadsRefresh">Refresh</button>
+        </p>
+        <div id="hotLeadsBody" class="small text-light">Open this panel and click Refresh to load.</div>
+      </details>
+      <details class="card card-dark p-3 mb-2 le-panel" id="leValidationPanel">
+        <summary class="mb-0">MVP validation &amp; quality (24h / 7d UTC)</summary>
+        <p class="small text-muted mt-2 mb-2">
+          Funnel, scout health, duplicate ratio by query, operator feedback rollups. Pair with lead quality ratings on the list and hot panel.
+        </p>
+        <button type="button" class="btn btn-outline-light btn-sm mb-2" id="validationReportRefresh">Refresh</button>
+        <div id="validationReportRoot" class="small text-light">Open and refresh to load.</div>
+        <details class="mt-2">
+          <summary class="small text-muted">Raw JSON</summary>
+          <pre id="validationReportJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 220px; overflow: auto;"></pre>
+        </details>
+      </details>
+      <details class="card card-dark p-3 mb-2 le-panel" id="leValidationModePanel">
+        <summary class="mb-0">Validation mode (7d / 30d)</summary>
+        <p class="small text-muted mt-2 mb-2">
+          Native vs manual <code class="text-secondary">lead_outcome</code> events, positive rates by query/source, guardrail transitions, recovery playbook tallies, hot-panel usefulness. For wiring downstream signals see
+          <code class="text-secondary">docs/lead-engine-pipeline-signals.md</code>.
+        </p>
+        <button type="button" class="btn btn-outline-light btn-sm mb-2" id="validationModeRefresh">Refresh</button>
+        <div id="validationModeRoot" class="small text-light">Open and refresh to load.</div>
+        <details class="mt-2">
+          <summary class="small text-muted">Raw JSON</summary>
+          <pre id="validationModeJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 260px; overflow: auto;"></pre>
+        </details>
+      </details>
+      <details class="card card-dark p-3 mb-2 le-panel" id="leProfileReferencePanel">
+        <summary class="mb-0">Industry profile reference</summary>
+        <p class="small text-muted mb-2 mt-2 mb-lg-1">
+          Taxonomy used for demo defaults and vertical context. Offers still follow <strong class="text-light">audit signals</strong>, not the label alone.
+        </p>
+        <div id="leProfileReferenceBody" class="small text-muted">Loading…</div>
+      </details>
 
       <div class="row g-2">
         <div class="col-lg-5">
@@ -98,8 +151,8 @@
         <div class="col-12">
           <div class="card card-dark p-3">
             <h2 class="h6 text-secondary mb-2">Leads</h2>
-            <p class="small text-muted mb-2 mb-lg-1 le-readable-hint"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
-            <p class="small le-operator-guide mb-2"><strong>Custom demo email:</strong> In each row use <strong class="text-white">Email sent</strong> or the <strong class="text-white">Demo outreach</strong> dropdown → “Email sent (manual)”. <strong>Follow-up:</strong> <strong class="text-white">Mark F/U due</strong> sets status + a due date (+3 business days UTC), or use <strong class="text-white">Open outreach</strong> / the <strong class="text-white">F/U due</strong> column. <strong>Edit lead:</strong> <strong class="text-white">Edit lead</strong> updates company, URL, and contact email.</p>
+            <p class="small text-muted mb-2 mb-lg-1 le-readable-hint"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest <em>email</em> outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
+            <p class="small le-operator-guide mb-2"><strong>Demo email vs reminder date:</strong> <strong class="text-white">Demo stage</strong> (dropdown) is where this lead is in <em>your</em> custom-demo email workflow. <strong class="text-white">Remind on</strong> (column) is only the calendar date for the next nudge—it does not replace stage. Use <strong class="text-white">Email sent</strong> or the stage dropdown → “Marked sent (manual)” when they got the demo link. <strong class="text-white">Set reminder</strong> sets stage to “Follow-up needed” <em>and</em> a due date (+3 business days UTC). <strong class="text-white">Open outreach</strong> opens the email composer. <strong class="text-white">Edit lead</strong> updates company, URL, and contact email.</p>
             <div id="leDailyActionSummaryBar" class="le-daily-action-summary mb-2" style="display: none" aria-live="polite"></div>
             <div class="le-daily-queue mb-2 p-2 rounded" role="region" aria-label="Demo outreach daily queue">
               <div class="d-flex flex-wrap align-items-center gap-2">
@@ -133,13 +186,13 @@
                 </select>
               </div>
               <div class="col-6 col-md-2">
-                <label class="form-label small mb-0" for="filterOutreach">Outreach</label>
+                <label class="form-label small mb-0" for="filterOutreach" title="Filters the main email outreach pipeline (draft/approve/send), not the demo stage">Email outreach</label>
                 <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterOutreach">
                   <option value="">Any</option>
-                  <option value="draft">has draft</option>
-                  <option value="approved">has approved</option>
-                  <option value="sent">has sent</option>
-                  <option value="cancelled">has cancelled</option>
+                  <option value="draft">Has draft</option>
+                  <option value="approved">Has approved</option>
+                  <option value="sent">Has sent</option>
+                  <option value="cancelled">Has cancelled</option>
                 </select>
               </div>
               <div class="col-6 col-md-2">
@@ -188,16 +241,16 @@
             </div>
             <div class="row g-2 mb-2 le-filter-bar">
               <div class="col-12 col-md-4">
-                <label class="form-label small mb-0" for="filterDemoOutreach">Demo outreach</label>
+                <label class="form-label small mb-0" for="filterDemoOutreach" title="Stage of your custom demo email process (stored on the lead)">Demo email stage</label>
                 <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterDemoOutreach">
-                  <option value="">Any</option>
-                  <option value="unset">No outreach yet</option>
-                  <option value="drafted">Drafted</option>
-                  <option value="copied">Copied</option>
-                  <option value="sent_manual">Sent (manual)</option>
+                  <option value="">Any stage</option>
+                  <option value="unset">Not started</option>
+                  <option value="drafted">Draft ready</option>
+                  <option value="copied">Copied to clipboard</option>
+                  <option value="sent_manual">Marked sent (manual)</option>
                   <option value="send_failed">Send failed</option>
-                  <option value="followup_due">Follow-up due (status)</option>
-                  <option value="replied">Replied</option>
+                  <option value="followup_due">Follow-up needed (stage)</option>
+                  <option value="replied">They replied</option>
                   <option value="interested">Interested</option>
                   <option value="not_interested">Not interested</option>
                 </select>
@@ -212,14 +265,14 @@
                 </select>
               </div>
               <div class="col-12 col-md-4">
-                <label class="form-label small mb-0" for="filterDemoFollowupDue">Demo F/U date</label>
+                <label class="form-label small mb-0" for="filterDemoFollowupDue" title="Filter by the reminder date on the lead, independent of demo stage">Remind on (date)</label>
                 <select class="form-select form-select-sm bg-dark text-light border-secondary" id="filterDemoFollowupDue">
-                  <option value="">Any</option>
-                  <option value="unset">No date set</option>
-                  <option value="set">Has due date</option>
+                  <option value="">Any date</option>
+                  <option value="unset">No reminder date</option>
+                  <option value="set">Has a reminder date</option>
                   <option value="overdue">Overdue (UTC)</option>
                   <option value="today">Due today (UTC)</option>
-                  <option value="next_2_days">Due next 2 days (UTC)</option>
+                  <option value="next_2_days">Due in next 2 days (UTC)</option>
                   <option value="upcoming">Due after today (UTC)</option>
                 </select>
               </div>
@@ -268,6 +321,7 @@
               </table>
             </div>
             <div id="listSummary" class="list-summary-bar mb-2 p-2 rounded border border-secondary" style="display:none;"></div>
+            <div id="leToastHost" class="le-toast-host" aria-live="polite" aria-atomic="true"></div>
             <p id="listErr" class="text-danger small" style="display:none; white-space: pre-wrap; word-break: break-word;"></p>
             <div class="table-responsive" id="leadsTableWrap">
               <table class="table table-dark-ish table-hover mb-0 w-100 le-leads-table">
@@ -281,9 +335,9 @@
                     <th>CRM sync</th>
                     <th>Latest audit</th>
                     <th>AI fit</th>
-                    <th>Demo outreach</th>
-                    <th>F/U due</th>
-                    <th>Outreach</th>
+                    <th>Demo stage</th>
+                    <th>Remind on</th>
+                    <th>Email outreach</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -358,6 +412,23 @@
     var importPreviewReadyCount = 0;
     var latestActivityData = null;
     var BATCH_CHUNK_SIZE = 10;
+    /** [code, short label] for lead_engine_events.lead_quality_feedback */
+    var LE_QUALITY_FEEDBACK_OPTIONS = [
+      ['good_lead', 'Good lead'],
+      ['bad_lead', 'Bad lead'],
+      ['wrong_vertical', 'Wrong vertical'],
+      ['wrong_offer', 'Wrong offer'],
+      ['not_enough_data', 'Not enough data'],
+      ['duplicate_junk', 'Duplicate / junk'],
+    ];
+    var LE_OUTCOME_OPTIONS = [
+      ['bounced', 'Bounced'],
+      ['replied', 'Replied'],
+      ['interested', 'Interested'],
+      ['meeting_booked', 'Meeting booked'],
+      ['not_a_fit', 'Not a fit'],
+      ['converted_opportunity', 'Converted opportunity'],
+    ];
     var lastBatchFailedByAction = {
       'lead-engine-batch-analyze': [],
       'lead-engine-batch-score': [],
@@ -367,6 +438,206 @@
     var draftClipboardByKey = Object.create(null);
     /** Last absolute demo URL returned by lead-engine-generate-demo (until history refresh). */
     var leadDemoUrlByLeadId = Object.create(null);
+
+    function pipelineToastLines(msg) {
+      return String(msg || '')
+        .split('\n')
+        .map(function (L) {
+          return escapeHtml(L);
+        })
+        .join('<br>');
+    }
+
+    function showPipelineError(title, message) {
+      showLeToast(
+        '<strong>' + escapeHtml(title) + '</strong><div class="small mt-1">' + pipelineToastLines(message) + '</div>',
+        'danger',
+        16000
+      );
+    }
+
+    function showLeToast(messageHtml, variant, ttlMs) {
+      var host = document.getElementById('leToastHost');
+      if (!host) return;
+      var wrap = document.createElement('div');
+      wrap.className = 'le-toast-item le-toast-item--' + (variant || 'info');
+      wrap.setAttribute('role', 'status');
+      var inner = document.createElement('div');
+      inner.className = 'le-toast-item__body';
+      inner.innerHTML = messageHtml;
+      var close = document.createElement('button');
+      close.type = 'button';
+      close.className = 'btn-close btn-close-white le-toast-item__close';
+      close.setAttribute('aria-label', 'Dismiss');
+      close.onclick = function () {
+        wrap.remove();
+      };
+      wrap.appendChild(inner);
+      wrap.appendChild(close);
+      host.appendChild(wrap);
+      var t = ttlMs !== undefined ? ttlMs : 8000;
+      if (t > 0) {
+        setTimeout(function () {
+          if (wrap.parentNode) wrap.remove();
+        }, t);
+      }
+    }
+
+    function setLeadRowFeedbackHtml(leadId, html, variant) {
+      var el = document.querySelector('[data-le-feedback="' + leadId + '"]');
+      if (!el) return;
+      el.className =
+        'le-row-feedback small mt-1' + (variant ? ' le-row-feedback--' + variant : '');
+      if (html) {
+        el.removeAttribute('hidden');
+        el.innerHTML = html;
+      } else {
+        el.setAttribute('hidden', '');
+        el.innerHTML = '';
+      }
+    }
+
+    function clearLeadRowFeedback(leadId) {
+      setLeadRowFeedbackHtml(leadId, '', '');
+    }
+
+    async function submitLeadQualityFeedbackFromSelect(sel) {
+      var leadId = sel.getAttribute('data-lead-id');
+      var code = sel.value;
+      if (!leadId || !code) {
+        sel.selectedIndex = 0;
+        return;
+      }
+      var ctx = sel.getAttribute('data-feedback-context') || 'lead_list';
+      var body = { leadId: leadId, feedback_code: code, context: ctx };
+      var hr = sel.getAttribute('data-hot-rank');
+      var hs = sel.getAttribute('data-hot-score');
+      if (hr) {
+        var nr = parseInt(hr, 10);
+        if (Number.isFinite(nr)) body.hot_rank = nr;
+      }
+      if (hs) {
+        var nf = parseFloat(hs);
+        if (Number.isFinite(nf)) body.hot_score = nf;
+      }
+      sel.disabled = true;
+      var out = await api('lead-engine-lead-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      sel.disabled = false;
+      sel.selectedIndex = 0;
+      if (!out.res.ok) {
+        showLeToast(
+          '<strong>Feedback failed</strong><div class="small">' +
+            escapeHtml((out.data && out.data.error) || 'Error') +
+            '</div>',
+          'danger',
+          6000
+        );
+        return;
+      }
+      showLeToast('Saved: <strong>' + escapeHtml(code) + '</strong>', 'success', 4000);
+      if (ctx === 'lead_list') setLeadRowFeedbackHtml(leadId, 'Saved: ' + escapeHtml(code), 'ok');
+    }
+
+    async function submitLeadOutcomeFromSelect(sel) {
+      var leadId = sel.getAttribute('data-lead-id');
+      var code = sel.value;
+      if (!leadId || !code) {
+        sel.selectedIndex = 0;
+        return;
+      }
+      var ctx = sel.getAttribute('data-outcome-context') || 'lead_list';
+      var body = {
+        leadId: leadId,
+        outcome_code: code,
+        context: ctx,
+      };
+      sel.disabled = true;
+      var out = await api('lead-engine-lead-outcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      sel.disabled = false;
+      sel.selectedIndex = 0;
+      if (!out.res.ok) {
+        showLeToast(
+          '<strong>Outcome save failed</strong><div class="small">' +
+            escapeHtml((out.data && out.data.error) || 'Error') +
+            '</div>',
+          'danger',
+          6000
+        );
+        return;
+      }
+      showLeToast('Outcome saved: <strong>' + escapeHtml(code) + '</strong>', 'success', 4000);
+      if (ctx === 'lead_list') setLeadRowFeedbackHtml(leadId, 'Outcome: ' + escapeHtml(code), 'ok');
+    }
+
+    document.addEventListener('change', function (ev) {
+      var t = ev.target;
+      if (!t || !t.classList || !t.classList.contains('le-quality-fb-select')) return;
+      submitLeadQualityFeedbackFromSelect(t);
+    });
+    document.addEventListener('change', function (ev) {
+      var t = ev.target;
+      if (!t || !t.classList || !t.classList.contains('le-outcome-select')) return;
+      submitLeadOutcomeFromSelect(t);
+    });
+
+    function formatGenerateDemoFailure(demOut) {
+      var d = demOut.data || {};
+      var code = d.code || '';
+      var err = d.error || 'Could not generate demo';
+      var details = String(d.details || '').trim();
+      var lines = [];
+      if (details) lines.push(details);
+      if (code === 'UNAUTHORIZED' || demOut.res.status === 401) {
+        lines.push('Try signing out and signing back in.');
+      }
+      if (code === 'SUPABASE_NOT_CONFIGURED' || code === 'LEAD_ENGINE_AUTH_NOT_CONFIGURED') {
+        lines.push(
+          'Operator: confirm Netlify env includes SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, and lead-engine auth secrets.'
+        );
+      }
+      if (/blob|Blobs|NETLIFY/i.test(details + err)) {
+        lines.push(
+          'If Blobs fail, demos can still persist via Supabase (jl_demo_configs) when migrations are applied.'
+        );
+      }
+      if (d.readiness && d.readiness.demo_slug_column_ok === false) {
+        lines.push('Apply the demo_slug column migration on leads so the slug can be saved on the row.');
+      }
+      return { title: err, lines: lines };
+    }
+
+    function demoNextStepHint(r) {
+      var st = r.demo_outreach_status ? String(r.demo_outreach_status) : '';
+      var hasSlug = !!(r.demo_slug && String(r.demo_slug).trim());
+      if (!hasSlug) return '<span class="le-next-step text-muted">Next: <strong>Generate demo</strong> (History)</span>';
+      if (!st || st === 'drafted' || st === 'copied') {
+        return '<span class="le-next-step text-info">Next: send demo email, then <strong>Marked sent</strong></span>';
+      }
+      if (st === 'sent_manual' || st === 'send_failed') {
+        return '<span class="le-next-step text-warning">Next: <strong>Set reminder</strong> or log outcome</span>';
+      }
+      if (st === 'followup_due') {
+        if (shouldShowSendFollowup1QuickAction(r)) {
+          return '<span class="le-next-step text-warning">Next: <strong>Send follow-up 1</strong> or adjust date</span>';
+        }
+        return '<span class="le-next-step text-muted">Next: follow up when due, or clear reminder</span>';
+      }
+      if (st === 'replied') {
+        return '<span class="le-next-step text-success">Next: mark <strong>Interested</strong> or <strong>Not interested</strong></span>';
+      }
+      if (st === 'interested' || st === 'not_interested') {
+        return '<span class="le-next-step text-muted">Closed loop — update if needed</span>';
+      }
+      return '';
+    }
 
     function formatDraftEmailClip(subject, body) {
       var subj = String(subject || '').trim() || '(no subject)';
@@ -524,15 +795,15 @@
     function formatDemoOutreachSelect(r) {
       var cur = r.demo_outreach_status ? String(r.demo_outreach_status) : '';
       var opts = [
-        { v: '', l: '(any status)' },
-        { v: 'drafted', l: 'Drafted' },
-        { v: 'copied', l: 'Copied' },
-        { v: 'sent_manual', l: 'Email sent (manual)' },
+        { v: '', l: 'Clear stage' },
+        { v: 'drafted', l: 'Draft ready' },
+        { v: 'copied', l: 'Copied to clipboard' },
+        { v: 'sent_manual', l: 'Marked sent (manual)' },
         { v: 'send_failed', l: 'Send failed' },
-        { v: 'followup_due', l: 'Follow-up due' },
-        { v: 'replied', l: 'Replied' },
+        { v: 'followup_due', l: 'Follow-up needed' },
+        { v: 'replied', l: 'They replied' },
         { v: 'interested', l: 'Interested' },
-        { v: 'not_interested', l: 'Not int.' },
+        { v: 'not_interested', l: 'Not interested' },
       ];
       var inner = opts
         .map(function (o) {
@@ -550,7 +821,7 @@
       return (
         '<select class="form-select form-select-sm bg-dark text-light border-secondary demo-outreach-status-select" data-lead-id="' +
         escapeAttr(r.id) +
-        '" aria-label="Demo outreach status">' +
+        '" aria-label="Demo email stage">' +
         inner +
         '</select>'
       );
@@ -573,11 +844,11 @@
       var markEmailSent =
         '<button type="button" class="btn btn-outline-success btn-sm py-0 px-1 small le-demo-mark-sent fw-semibold" data-lead-id="' +
         escapeAttr(r.id) +
-        '" title="Mark custom demo email as sent (same as Demo outreach → Email sent)">Email sent</button>';
+        '" title="Same as stage → Marked sent (manual)">Marked sent</button>';
       var markFuDue =
         '<button type="button" class="btn btn-outline-warning btn-sm py-0 px-1 small text-dark le-demo-mark-followup fw-semibold" data-lead-id="' +
         escapeAttr(r.id) +
-        '" title="Set follow-up due status and due date (+3 business days UTC)">Mark F/U due</button>';
+        '" title="Sets stage to Follow-up needed and reminder date +3 business days UTC">Set reminder</button>';
       var sendFu1 = '';
       if (shouldShowSendFollowup1QuickAction(r)) {
         var qFu1 = q + '&templateVariant=' + encodeURIComponent('followup_1');
@@ -585,7 +856,7 @@
         sendFu1 =
           '<a class="btn btn-warning btn-sm py-0 px-1 small text-dark fw-semibold" href="' +
           escapeAttr(hrefFu1) +
-          '" target="_blank" rel="noopener" title="Composer with Follow-up 1 template (demo send)">Send F/U 1</a>';
+          '" target="_blank" rel="noopener" title="Open composer with first follow-up template">Follow-up 1</a>';
       }
       var sendFu2 = '';
       if (shouldShowSendFollowup2QuickAction(r)) {
@@ -594,7 +865,7 @@
         sendFu2 =
           '<a class="btn btn-outline-warning btn-sm py-0 px-1 small" href="' +
           escapeAttr(hrefFu2) +
-          '" target="_blank" rel="noopener" title="Composer with Follow-up 2 template (Advanced; second nudge)">Send F/U 2</a>';
+          '" target="_blank" rel="noopener" title="Second nudge template">Follow-up 2</a>';
       }
       var copyB = demoUrl
         ? '<button type="button" class="btn btn-outline-secondary btn-sm py-0 px-1 small le-demo-copy-url" data-demo-url="' +
@@ -605,18 +876,18 @@
         '<span class="le-demo-outcome-group d-inline-flex flex-wrap gap-1 align-items-center" role="group" aria-label="Mark outcome">' +
         '<button type="button" class="btn btn-outline-info btn-sm py-0 px-1 small le-demo-outcome" data-lead-id="' +
         escapeAttr(r.id) +
-        '" data-demo-outcome="replied" title="Set demo status: replied">Replied</button>' +
+        '" data-demo-outcome="replied" title="They responded">Replied</button>' +
         '<button type="button" class="btn btn-outline-success btn-sm py-0 px-1 small le-demo-outcome" data-lead-id="' +
         escapeAttr(r.id) +
-        '" data-demo-outcome="interested" title="Set demo status: interested">Interested</button>' +
+        '" data-demo-outcome="interested" title="Positive outcome">Interested</button>' +
         '<button type="button" class="btn btn-outline-secondary btn-sm py-0 px-1 small le-demo-outcome" data-lead-id="' +
         escapeAttr(r.id) +
-        '" data-demo-outcome="not_interested" title="Set demo status: not interested">Not int.</button>' +
+        '" data-demo-outcome="not_interested" title="Declined or not a fit">Not interested</button>' +
         '</span>';
       var noFu =
         '<button type="button" class="btn btn-outline-warning btn-sm py-0 px-1 small le-demo-nofollowup" data-lead-id="' +
         escapeAttr(r.id) +
-        '" title="Clear follow-up due date">No F/U needed</button>';
+        '" title="Remove reminder date only (stage unchanged)">Clear date</button>';
       var clr =
         r.demo_outreach_status === 'send_failed'
           ? '<button type="button" class="btn btn-outline-success btn-sm py-0 px-1 small le-demo-clearfail" data-lead-id="' +
@@ -624,7 +895,7 @@
             '">Clear failed</button>'
           : '';
       return (
-        '<div class="d-flex flex-wrap gap-1 align-items-center le-demo-quick-actions" role="group" aria-label="Demo outreach quick actions">' +
+        '<div class="d-flex flex-wrap gap-1 align-items-center le-demo-quick-actions" role="group" aria-label="Demo email quick actions">' +
         markEmailSent +
         markFuDue +
         openA +
@@ -829,7 +1100,7 @@
     function downloadCurrentLeadsCsv() {
       var rows = currentListRows || [];
       if (!rows.length) {
-        window.alert('No leads to export on this page.');
+        showLeToast('No leads on this page to export.', 'warning', 6000);
         return;
       }
       var records = rows.map(leadRowToCsvRecord);
@@ -1015,6 +1286,836 @@
       renderActivitySummary(out.data);
     }
 
+    function renderAutomationCommandCenter(d) {
+      var root = document.getElementById('cmdCenterRoot');
+      if (!root) return;
+      var st = d.stats_today_utc || {};
+      var parts = [];
+      parts.push('<div class="row g-2 mb-3">');
+      [
+        ['New prospects (created today, UTC)', st.prospects_created_any_status],
+        ['ICP → promoted to leads', st.icp_promoted_to_leads],
+        ['ICP blocked (prospects)', st.icp_blocked_prospects],
+        ['Drafted (distinct leads)', st.drafted_leads_distinct],
+      ].forEach(function (row) {
+        parts.push(
+          '<div class="col-6 col-md-3"><div class="border border-secondary rounded p-2 h-100"><div class="text-secondary small">' +
+            escapeHtml(row[0]) +
+            '</div><div class="fs-5 fw-semibold">' +
+            escapeHtml(String(row[1] != null ? row[1] : '—')) +
+            '</div></div></div>'
+        );
+      });
+      parts.push('</div>');
+      if (st.qualified_today_note) {
+        parts.push(
+          '<p class="text-muted small mb-2">' + escapeHtml(st.qualified_today_note) + '</p>'
+        );
+      }
+
+      var pcs = d.prospect_counts_by_source || {};
+      var funnel = { no_website: 0, weak_web_presence: 0, alternate_enrichment_needed: 0, raw: 0 };
+      Object.keys(pcs).forEach(function (sk) {
+        var o = pcs[sk];
+        funnel.no_website += o.no_website || 0;
+        funnel.weak_web_presence += o.weak_web_presence || 0;
+        funnel.alternate_enrichment_needed += o.alternate_enrichment_needed || 0;
+        funnel.raw += o.raw || 0;
+      });
+      parts.push(
+        '<h3 class="h6 text-secondary mt-2">Prospect funnel (sampled)</h3><p class="small mb-2">raw ' +
+          escapeHtml(String(funnel.raw)) +
+          ' · no_website ' +
+          escapeHtml(String(funnel.no_website)) +
+          ' · weak_web ' +
+          escapeHtml(String(funnel.weak_web_presence)) +
+          ' · needs enrichment ' +
+          escapeHtml(String(funnel.alternate_enrichment_needed)) +
+          '</p>'
+      );
+
+      var ebc = d.enrichment_branch_counts || {};
+      parts.push(
+        '<h3 class="h6 text-secondary mt-2">Enrichment queue (exact counts)</h3>' +
+          '<p class="small mb-2">Re-fetch runs on the downstream tick; prospects stay out of ICP until status is <code>raw</code>. · no_website ' +
+          escapeHtml(String(ebc.no_website != null ? ebc.no_website : 0)) +
+          ' · weak_web_presence ' +
+          escapeHtml(String(ebc.weak_web_presence != null ? ebc.weak_web_presence : 0)) +
+          ' · alternate_enrichment_needed ' +
+          escapeHtml(String(ebc.alternate_enrichment_needed != null ? ebc.alternate_enrichment_needed : 0)) +
+          '</p>'
+      );
+      parts.push(
+        tableSection('Latest enrichment attempts', d.enrichment_recent_events || [], [
+          { label: 'when', cell: function (r) { return escapeHtml((r.created_at || '').slice(0, 19)); } },
+          { label: 'branch', cell: function (r) { return escapeHtml(r.branch || ''); } },
+          { label: 'outcome', cell: function (r) { return escapeHtml(r.outcome || ''); } },
+          {
+            label: 'detail',
+            cell: function (r) {
+              if (!r.detail || typeof r.detail !== 'object') return '—';
+              return escapeHtml(JSON.stringify(r.detail).slice(0, 80));
+            },
+          },
+        ])
+      );
+
+      var sq = d.scout_queries || [];
+      if (sq.length) {
+        parts.push(
+          '<h3 class="h6 text-secondary mt-2">Scout queries (operations)</h3>' +
+            '<p class="text-muted small mb-2">Edits persist in Supabase (<code>lead_engine_scout_query_operational</code>). <strong>Run</strong> bypasses cooldown but not pause or daily detail caps. Split schedules: see netlify.toml. Strategy version ' +
+            escapeHtml(String(d.scout_query_strategy_version || '—')) +
+            '.</p>'
+        );
+        parts.push('<div class="table-responsive mb-3"><table class="table table-sm table-dark-ish mb-0"><thead><tr>');
+        ['query_id', 'label', 'on', 'priority', 'cooldown_s', 'last_run', 'dup%', 'details today', 'actions'].forEach(
+          function (h) {
+            parts.push('<th class="small">' + escapeHtml(h) + '</th>');
+          }
+        );
+        parts.push('</tr></thead><tbody>');
+        sq.slice(0, 24).forEach(function (q) {
+          var qid = q.query_id || '';
+          var dup =
+            q.duplicate_ratio_last != null && typeof q.duplicate_ratio_last === 'number'
+              ? Math.round(q.duplicate_ratio_last * 1000) / 10
+              : '—';
+          var det =
+            (q.detail_calls_today != null ? String(q.detail_calls_today) : '0') +
+            '/' +
+            (q.detail_calls_daily_cap != null ? String(q.detail_calls_daily_cap) : '');
+          parts.push('<tr>');
+          parts.push('<td class="small"><code>' + escapeHtml(qid) + '</code></td>');
+          parts.push('<td class="small">' + escapeHtml(q.label || '') + '</td>');
+          parts.push(
+            '<td class="small"><input type="checkbox" class="form-check-input" data-scout-enabled="' +
+              escapeAttr(qid) +
+              '"' +
+              (q.effective_enabled ? ' checked' : '') +
+              ' title="Effective enabled" /></td>'
+          );
+          parts.push(
+            '<td class="small" style="min-width:4rem"><input type="number" class="form-control form-control-sm py-0 px-1" data-scout-priority="' +
+              escapeAttr(qid) +
+              '" value="' +
+              escapeAttr(String(q.priority != null ? q.priority : 0)) +
+              '" /></td>'
+          );
+          parts.push(
+            '<td class="small" style="min-width:5rem"><input type="number" class="form-control form-control-sm py-0 px-1" data-scout-cooldown="' +
+              escapeAttr(qid) +
+              '" value="' +
+              escapeAttr(String(q.cooldown_seconds != null ? q.cooldown_seconds : 3600)) +
+              '" /></td>'
+          );
+          parts.push('<td class="small">' + escapeHtml((q.last_run_at || '').slice(0, 19) || '—') + '</td>');
+          parts.push('<td class="small">' + escapeHtml(String(dup)) + '</td>');
+          parts.push('<td class="small">' + escapeHtml(det) + '</td>');
+          parts.push(
+            '<td class="small text-nowrap"><button type="button" class="btn btn-outline-secondary btn-sm py-0 me-1" data-scout-apply="' +
+              escapeAttr(qid) +
+              '">Apply</button><button type="button" class="btn btn-outline-info btn-sm py-0" data-scout-run="' +
+              escapeAttr(qid) +
+              '">Run</button></td>'
+          );
+          parts.push('</tr>');
+        });
+        parts.push('</tbody></table></div>');
+      }
+
+      var ssc = d.guardrail_source_scorecard || [];
+      if (ssc.length) {
+        parts.push('<h3 class="h6 text-secondary mt-2">Source guardrails scorecard (7d)</h3>');
+        parts.push('<div class="table-responsive mb-3"><table class="table table-sm table-dark-ish mb-0"><thead><tr>');
+        ['source', 'found', 'promoted', 'blocked', 'good%', 'bad%', 'dup%', 'status', 'reason', 'override'].forEach(
+          function (h) {
+            parts.push('<th class="small">' + escapeHtml(h) + '</th>');
+          }
+        );
+        parts.push('</tr></thead><tbody>');
+        ssc.slice(0, 20).forEach(function (s) {
+          var fb = s.feedback || {};
+          var rt = fb.rates || {};
+          parts.push('<tr>');
+          parts.push('<td class="small"><code>' + escapeHtml(s.source_key || '') + '</code></td>');
+          parts.push('<td class="small">' + escapeHtml(String(s.prospects_found_7d || 0)) + '</td>');
+          parts.push('<td class="small">' + escapeHtml(String(s.promoted_7d || 0)) + '</td>');
+          parts.push('<td class="small">' + escapeHtml(String(s.blocked_7d || 0)) + '</td>');
+          parts.push('<td class="small">' + escapeHtml(String(Math.round((rt.good_lead || 0) * 1000) / 10)) + '</td>');
+          parts.push('<td class="small">' + escapeHtml(String(Math.round((rt.bad_lead || 0) * 1000) / 10)) + '</td>');
+          parts.push('<td class="small">' + escapeHtml(String(Math.round((rt.duplicate_junk || 0) * 1000) / 10)) + '</td>');
+          parts.push('<td class="small"><span class="badge bg-secondary">' + escapeHtml(s.latest_health_status || 'healthy') + '</span></td>');
+          parts.push('<td class="small">' + escapeHtml(String(s.latest_health_reason || '').slice(0, 120)) + '</td>');
+          parts.push(
+            '<td class="small text-nowrap"><button type="button" class="btn btn-outline-success btn-sm py-0 me-1" data-guardrail-healthy="' +
+              escapeAttr(s.source_key || '') +
+              '">Healthy</button><button type="button" class="btn btn-outline-danger btn-sm py-0" data-guardrail-pause="' +
+              escapeAttr(s.source_key || '') +
+              '">Pause</button></td>'
+          );
+          parts.push('</tr>');
+        });
+        parts.push('</tbody></table></div>');
+      }
+
+      var qsc = d.guardrail_query_scorecard || [];
+      if (qsc.length) {
+        parts.push(
+          tableSection('Query guardrails scorecard (7d)', qsc, [
+            { label: 'query', cell: function (r) { return '<code>' + escapeHtml(r.query_id || '') + '</code>'; } },
+            { label: 'found', cell: function (r) { return escapeHtml(String(r.prospects_found_7d || 0)); } },
+            { label: 'promoted', cell: function (r) { return escapeHtml(String(r.promoted_7d || 0)); } },
+            {
+              label: 'dup%',
+              cell: function (r) {
+                var d7 = r.duplicate_ratio_7d;
+                if (d7 == null || !Number.isFinite(Number(d7))) return '—';
+                return escapeHtml(String(Math.round(Number(d7) * 1000) / 10));
+              },
+            },
+            { label: 'zero', cell: function (r) { return escapeHtml(String(r.zero_yield_runs_7d || 0)); } },
+            { label: 'status', cell: function (r) { return escapeHtml(r.latest_health_status || 'healthy'); } },
+          ])
+        );
+      }
+
+      var gl = d.guardrail_learning_summary || {};
+      parts.push(
+        '<h3 class="h6 text-secondary mt-2">Learning signals</h3><p class="small mb-2">drafts 7d ' +
+          escapeHtml(String(gl.drafts_generated_7d != null ? gl.drafts_generated_7d : '—')) +
+          ' · positive outcomes 7d ' +
+          escapeHtml(String(gl.positive_outcomes_7d != null ? gl.positive_outcomes_7d : '—')) +
+          ' · drafts without positive outcome ratio ' +
+          escapeHtml(
+            gl.drafts_without_positive_outcome_ratio_7d != null
+              ? String(Math.round(Number(gl.drafts_without_positive_outcome_ratio_7d) * 1000) / 10) + '%'
+              : '—'
+          ) +
+          (gl.drafts_warning ? ' · <span class="text-warning">warning threshold exceeded</span>' : '') +
+          '</p>'
+      );
+
+      parts.push(
+        tableSection('Scout query rotation (state)', d.scout_query_state || [], [
+          { label: 'query_id', cell: function (r) { return escapeHtml(r.query_id || ''); } },
+          { label: 'last_run', cell: function (r) { return escapeHtml((r.last_run_at || '').slice(0, 19)); } },
+          {
+            label: 'last summary',
+            cell: function (r) {
+              var s = r.last_result_summary;
+              if (!s || typeof s !== 'object') return '—';
+              return escapeHtml(
+                JSON.stringify({
+                  inserted_raw: s.inserted_raw,
+                  inserted_branch: s.inserted_branch,
+                  dup_ratio: s.duplicate_ratio,
+                }).slice(0, 120)
+              );
+            },
+          },
+        ])
+      );
+
+      var sh = d.source_health || {};
+      var shKeys = Object.keys(sh);
+      if (shKeys.length) {
+        parts.push('<h3 class="h6 text-secondary mt-2">Source health (Scout)</h3>');
+        parts.push('<ul class="small mb-3 ps-3">');
+        shKeys.forEach(function (k) {
+          var x = sh[k] || {};
+          var rs = x.last_result_summary;
+          var ir = rs && rs.inserted_raw != null ? rs.inserted_raw : null;
+          var ib = rs && rs.inserted_branch != null ? rs.inserted_branch : null;
+          var ins =
+            ir != null || ib != null
+              ? 'raw+' + String(ir != null ? ir : 0) + ' branch+' + String(ib != null ? ib : 0)
+              : rs && rs.inserted != null
+                ? String(rs.inserted)
+                : '—';
+          var tot = rs && rs.results_from_search != null ? rs.results_from_search : '—';
+          var qid = rs && rs.query_id ? rs.query_id : '';
+          parts.push(
+            '<li><strong class="text-light">' +
+              escapeHtml(k) +
+              '</strong> · last status ' +
+              escapeHtml(x.last_status || '—') +
+              (qid ? ' · query <code class="text-secondary">' + escapeHtml(qid) + '</code>' : '') +
+              ' · inserts ' +
+              escapeHtml(String(ins)) +
+              ' (search results ' +
+              escapeHtml(String(tot)) +
+              ')' +
+              (x.last_error ? ' · <span class="text-warning">' + escapeHtml(String(x.last_error).slice(0, 120)) + '</span>' : '') +
+              '</li>'
+          );
+        });
+        parts.push('</ul>');
+      }
+
+      function tableSection(title, rows, cols) {
+        if (!rows || !rows.length) {
+          return '<h3 class="h6 text-secondary mt-2">' + escapeHtml(title) + '</h3><p class="text-muted small">None.</p>';
+        }
+        var h = '<h3 class="h6 text-secondary mt-2">' + escapeHtml(title) + '</h3>';
+        h += '<div class="table-responsive mb-3"><table class="table table-sm table-dark-ish mb-0"><thead><tr>';
+        cols.forEach(function (c) {
+          h += '<th class="small">' + escapeHtml(c.label) + '</th>';
+        });
+        h += '</tr></thead><tbody>';
+        rows.slice(0, 15).forEach(function (r) {
+          h += '<tr>';
+          cols.forEach(function (c) {
+            h += '<td class="small">' + c.cell(r) + '</td>';
+          });
+          h += '</tr>';
+        });
+        h += '</tbody></table></div>';
+        return h;
+      }
+
+      parts.push(
+        tableSection('Latest worker runs', d.latest_runs, [
+          { label: 'When', cell: function (r) { return escapeHtml((r.created_at || '').slice(0, 19)); } },
+          { label: 'Worker', cell: function (r) { return escapeHtml(r.worker_name || ''); } },
+          { label: 'Status', cell: function (r) { return escapeHtml(r.status || ''); } },
+          {
+            label: 'tick',
+            cell: function (r) {
+              var rs = r.result_summary;
+              var tp = rs && rs.automation_tick_profile ? String(rs.automation_tick_profile) : '';
+              return escapeHtml(tp || '—');
+            },
+          },
+          { label: 'Error', cell: function (r) { return escapeHtml((r.error_message || '').slice(0, 80)); } },
+        ])
+      );
+      parts.push(
+        tableSection('Failed / dead-letter runs', d.failed_runs, [
+          { label: 'Finished', cell: function (r) { return escapeHtml((r.finished_at || '').slice(0, 19)); } },
+          { label: 'Worker', cell: function (r) { return escapeHtml(r.worker_name || ''); } },
+          { label: 'Status', cell: function (r) { return escapeHtml(r.status || ''); } },
+          { label: 'Error', cell: function (r) { return escapeHtml((r.error_message || '').slice(0, 120)); } },
+        ])
+      );
+      parts.push(
+        tableSection('Retry queue (failed / retry_scheduled, 7d)', d.retry_queue, [
+          { label: 'Worker', cell: function (r) { return escapeHtml(r.worker_name || ''); } },
+          { label: 'Status', cell: function (r) { return escapeHtml(r.status || ''); } },
+          { label: 'Retries', cell: function (r) { return escapeHtml(String(r.retry_count != null ? r.retry_count : '')); } },
+          { label: 'Error', cell: function (r) { return escapeHtml((r.error_message || '').slice(0, 100)); } },
+        ])
+      );
+
+      var fpl = d.failed_pipeline_leads || [];
+      if (fpl.length) {
+        parts.push('<h3 class="h6 text-secondary mt-2">Failed automation pipeline (retry)</h3>');
+        parts.push('<div class="table-responsive mb-3"><table class="table table-sm table-dark-ish mb-0"><thead><tr>');
+        parts.push(
+          '<th class="small">Company</th><th class="small">Source</th><th class="small">Updated</th><th class="small"></th></tr></thead><tbody>'
+        );
+        fpl.forEach(function (L) {
+          var id = L.id ? String(L.id) : '';
+          parts.push(
+            '<tr><td class="small">' +
+              escapeHtml(L.company_name || '') +
+              '</td><td class="small">' +
+              escapeHtml(L.source || '') +
+              '</td><td class="small">' +
+              escapeHtml((L.updated_at || '').slice(0, 19)) +
+              '</td><td class="small"><button type="button" class="btn btn-outline-warning btn-sm py-0" data-lead-retry="' +
+              escapeAttr(id) +
+              '">Queue retry</button></td></tr>'
+          );
+        });
+        parts.push('</tbody></table></div>');
+      } else {
+        parts.push(
+          '<h3 class="h6 text-secondary mt-2">Failed automation pipeline</h3><p class="text-muted small">None.</p>'
+        );
+      }
+
+      root.innerHTML = parts.join('');
+    }
+
+    async function loadHotLeadsRanked() {
+      var el = document.getElementById('hotLeadsBody');
+      if (!el) return;
+      el.innerHTML = '<span class="text-muted">Loading…</span>';
+      var out = await api('lead-engine-hot-leads');
+      if (!out.res.ok) {
+        el.innerHTML = '<span class="text-danger">' + escapeHtml((out.data && out.data.error) || 'Failed') + '</span>';
+        return;
+      }
+      var leads = (out.data && out.data.leads) || [];
+      if (!leads.length) {
+        el.innerHTML = '<span class="text-muted">No leads in window.</span>';
+        return;
+      }
+      var rows =
+        '<div class="table-responsive"><table class="table table-sm table-dark-ish mb-0"><thead><tr>' +
+        '<th class="small">#</th><th class="small">Score</th><th class="small">Company</th><th class="small">Fit</th><th class="small">Demo</th><th class="small">Updated</th><th class="small">Last FB</th><th class="small">Quality</th><th class="small">Outcome</th>' +
+        '</tr></thead><tbody>';
+      leads.slice(0, 25).forEach(function (L) {
+        var lqf = L.latest_quality_feedback;
+        var lastFb = lqf && lqf.feedback_code ? escapeHtml(lqf.feedback_code) : '—';
+        var hotRank = L.hot_rank != null ? String(L.hot_rank) : '';
+        var hotScore = L.hot_score != null ? String(L.hot_score) : '';
+        var qSel =
+          '<select class="form-select form-select-sm le-quality-fb-select py-0" style="max-width:11rem" data-lead-id="' +
+          escapeAttr(L.id) +
+          '" data-feedback-context="hot_leads_panel" data-hot-rank="' +
+          escapeAttr(hotRank) +
+          '" data-hot-score="' +
+          escapeAttr(hotScore) +
+          '" aria-label="Hot list quality">' +
+          '<option value="">Rate…</option>' +
+          LE_QUALITY_FEEDBACK_OPTIONS.map(function (pair) {
+            return '<option value="' + escapeAttr(pair[0]) + '">' + escapeHtml(pair[1]) + '</option>';
+          }).join('') +
+          '</select>';
+        var oSel =
+          '<select class="form-select form-select-sm le-outcome-select py-0" style="max-width:11rem" data-lead-id="' +
+          escapeAttr(L.id) +
+          '" data-outcome-context="hot_leads_panel" aria-label="Hot list outcome">' +
+          '<option value="">Outcome…</option>' +
+          LE_OUTCOME_OPTIONS.map(function (pair) {
+            return '<option value="' + escapeAttr(pair[0]) + '">' + escapeHtml(pair[1]) + '</option>';
+          }).join('') +
+          '</select>';
+        rows +=
+          '<tr><td class="small text-muted">' +
+          escapeHtml(hotRank) +
+          '</td><td class="small fw-semibold">' +
+          escapeHtml(String(L.hot_score != null ? L.hot_score : '')) +
+          '</td><td class="small">' +
+          escapeHtml(L.company_name || '') +
+          '</td><td class="small">' +
+          escapeHtml(L.lead_score != null ? String(L.lead_score) : '—') +
+          '</td><td class="small">' +
+          (L.demo_slug ? '<span class="text-success">yes</span>' : '—') +
+          '</td><td class="small">' +
+          escapeHtml((L.updated_at || '').slice(0, 16)) +
+          '</td><td class="small text-muted">' +
+          lastFb +
+          '</td><td class="small">' +
+          qSel +
+          '</td><td class="small">' +
+          oSel +
+          '</td></tr>';
+      });
+      rows += '</tbody></table></div>';
+      el.innerHTML = rows;
+    }
+
+    function renderValidationReport(d) {
+      var root = document.getElementById('validationReportRoot');
+      var rawEl = document.getElementById('validationReportJson');
+      if (rawEl) rawEl.textContent = JSON.stringify(d, null, 2);
+      if (!root) return;
+      if (!d || d.error) {
+        root.innerHTML = '<p class="text-danger small">' + escapeHtml((d && d.error) || 'Failed') + '</p>';
+        return;
+      }
+      function row(label, v24, v7) {
+        return (
+          '<tr><td class="small">' +
+          escapeHtml(label) +
+          '</td><td class="small fw-semibold">' +
+          escapeHtml(String(v24 != null ? v24 : '—')) +
+          '</td><td class="small fw-semibold">' +
+          escapeHtml(String(v7 != null ? v7 : '—')) +
+          '</td></tr>'
+        );
+      }
+      var pf = d.prospects_found || {};
+      var pl = d.promoted_leads_automation || {};
+      var bl = d.prospects_blocked_touched || {};
+      var dg = d.drafts_generated || {};
+      var hl = d.hot_leads_score_ge_70_touched || {};
+      var snap = d.enrichment_branch_snapshot || {};
+      var br24 = (d.prospects_created_into_branch && d.prospects_created_into_branch.hours_24) || {};
+      var br7 = (d.prospects_created_into_branch && d.prospects_created_into_branch.hours_168) || {};
+      var of24 = (d.operator_feedback && d.operator_feedback.hours_24 && d.operator_feedback.hours_24.by_code) || {};
+      var of7 = (d.operator_feedback && d.operator_feedback.hours_168 && d.operator_feedback.hours_168.by_code) || {};
+      var hp24 = (d.operator_feedback && d.operator_feedback.hours_24 && d.operator_feedback.hours_24.hot_leads_panel) || {};
+      var hp7 = (d.operator_feedback && d.operator_feedback.hours_168 && d.operator_feedback.hours_168.hot_leads_panel) || {};
+      var sh = d.source_health_summary || {};
+      var scout7 = (d.scout_source_health && d.scout_source_health.hours_168) || {};
+      var dup = scout7.duplicate_ratio_by_query || {};
+
+      var parts = [];
+      parts.push('<p class="small text-muted mb-2">' + escapeHtml(d.generated_at || '') + ' · windows UTC</p>');
+      parts.push('<div class="table-responsive mb-3"><table class="table table-sm table-dark-ish mb-0"><thead><tr>');
+      parts.push(
+        '<th class="small">Metric</th><th class="small">24h</th><th class="small">7d</th></tr></thead><tbody>'
+      );
+      parts.push(row('Prospects found (created)', pf.hours_24, pf.hours_168));
+      parts.push(row('Promoted leads (automation)', pl.hours_24, pl.hours_168));
+      parts.push(row('Blocked prospects (touched)', bl.hours_24, bl.hours_168));
+      parts.push(row('Drafts generated', dg.hours_24, dg.hours_168));
+      parts.push(row('Hot leads (score ≥70, touched)', hl.hours_24, hl.hours_168));
+      parts.push('</tbody></table></div>');
+
+      parts.push('<h3 class="h6 text-secondary mt-2">Enrichment branches (snapshot)</h3>');
+      parts.push(
+        '<p class="small mb-2">no_website ' +
+          escapeHtml(String(snap.no_website != null ? snap.no_website : 0)) +
+          ' · weak_web_presence ' +
+          escapeHtml(String(snap.weak_web_presence != null ? snap.weak_web_presence : 0)) +
+          ' · alternate_enrichment_needed ' +
+          escapeHtml(String(snap.alternate_enrichment_needed != null ? snap.alternate_enrichment_needed : 0)) +
+          '</p>'
+      );
+      parts.push('<h3 class="h6 text-secondary mt-2">New prospects created into branch</h3>');
+      parts.push(
+        '<p class="small mb-2"><strong>24h</strong> nw ' +
+          escapeHtml(String(br24.no_website != null ? br24.no_website : 0)) +
+          ' · weak ' +
+          escapeHtml(String(br24.weak_web_presence != null ? br24.weak_web_presence : 0)) +
+          ' · alt ' +
+          escapeHtml(String(br24.alternate_enrichment_needed != null ? br24.alternate_enrichment_needed : 0)) +
+          ' · <strong>7d</strong> nw ' +
+          escapeHtml(String(br7.no_website != null ? br7.no_website : 0)) +
+          ' · weak ' +
+          escapeHtml(String(br7.weak_web_presence != null ? br7.weak_web_presence : 0)) +
+          ' · alt ' +
+          escapeHtml(String(br7.alternate_enrichment_needed != null ? br7.alternate_enrichment_needed : 0)) +
+          '</p>'
+      );
+
+      parts.push('<h3 class="h6 text-secondary mt-2">Scout / source health</h3>');
+      parts.push(
+        '<p class="small mb-2"><strong>24h</strong> ' + escapeHtml(sh.hours_24 || '—') + '</p>'
+      );
+      parts.push(
+        '<p class="small mb-2"><strong>7d</strong> ' + escapeHtml(sh.hours_168 || '—') + '</p>'
+      );
+      parts.push(
+        '<p class="small mb-2">7d zero-yield runs: ' +
+          escapeHtml(String(scout7.scout_runs_zero_yield_count != null ? scout7.scout_runs_zero_yield_count : '—')) +
+          ' · queries w/ any zero-yield: ' +
+          escapeHtml(String(scout7.scout_queries_with_any_zero_yield_run != null ? scout7.scout_queries_with_any_zero_yield_run : '—')) +
+          '</p>'
+      );
+
+      var dupKeys = Object.keys(dup);
+      if (dupKeys.length) {
+        parts.push('<h3 class="h6 text-secondary mt-2">Duplicate ratio by query (7d scout runs, avg)</h3>');
+        parts.push('<ul class="small ps-3 mb-2">');
+        dupKeys.slice(0, 24).forEach(function (k) {
+          var ratio = dup[k];
+          var pct = typeof ratio === 'number' ? Math.round(ratio * 1000) / 10 : ratio;
+          parts.push(
+            '<li><code>' + escapeHtml(k) + '</code> · ' + escapeHtml(String(pct)) + '% dup</li>'
+          );
+        });
+        parts.push('</ul>');
+      } else {
+        parts.push('<p class="small text-muted mb-2">No duplicate_ratio data in scout runs for 7d.</p>');
+      }
+
+      function fmtCodes(m) {
+        var keys = Object.keys(m || {});
+        if (!keys.length) return '—';
+        return keys
+          .map(function (k) {
+            return k + ':' + m[k];
+          })
+          .join(', ');
+      }
+      parts.push('<h3 class="h6 text-secondary mt-2">Operator feedback (all contexts)</h3>');
+      parts.push(
+        '<p class="small mb-2"><strong>24h</strong> ' + escapeHtml(fmtCodes(of24)) + '</p>'
+      );
+      parts.push('<p class="small mb-2"><strong>7d</strong> ' + escapeHtml(fmtCodes(of7)) + '</p>');
+      parts.push('<h3 class="h6 text-secondary mt-2">Hot ranking review (feedback from hot panel)</h3>');
+      parts.push(
+        '<p class="small mb-2"><strong>24h</strong> good ' +
+          escapeHtml(String(hp24.good_lead != null ? hp24.good_lead : 0)) +
+          ' · bad ' +
+          escapeHtml(String(hp24.bad_lead != null ? hp24.bad_lead : 0)) +
+          ' · other ' +
+          escapeHtml(String(hp24.other != null ? hp24.other : 0)) +
+          '</p>'
+      );
+      parts.push(
+        '<p class="small mb-2"><strong>7d</strong> good ' +
+          escapeHtml(String(hp7.good_lead != null ? hp7.good_lead : 0)) +
+          ' · bad ' +
+          escapeHtml(String(hp7.bad_lead != null ? hp7.bad_lead : 0)) +
+          ' · other ' +
+          escapeHtml(String(hp7.other != null ? hp7.other : 0)) +
+          '</p>'
+      );
+      if (d.hot_ranking_review_hint) {
+        parts.push(
+          '<p class="text-muted small mb-0">' + escapeHtml(d.hot_ranking_review_hint) + '</p>'
+        );
+      }
+
+      var loc = d.lead_outcomes;
+      if (loc && loc.hours_24) {
+        parts.push('<h3 class="h6 text-secondary mt-2">Lead outcomes (native vs manual)</h3>');
+        function ocLine(label, o) {
+          if (!o) return '';
+          var nat = o.native || {};
+          var man = o.manual || {};
+          return (
+            '<p class="small mb-1"><strong>' +
+            escapeHtml(label) +
+            '</strong> native ' +
+            escapeHtml(String(nat.total != null ? nat.total : 0)) +
+            ' · manual ' +
+            escapeHtml(String(man.total != null ? man.total : 0)) +
+            '</p>'
+          );
+        }
+        parts.push(ocLine('24h', loc.hours_24));
+        parts.push(ocLine('7d', loc.hours_168));
+        if (loc.note) {
+          parts.push('<p class="text-muted small mb-0">' + escapeHtml(loc.note) + '</p>');
+        }
+      }
+
+      root.innerHTML = parts.join('');
+    }
+
+    function renderValidationMode(d) {
+      var root = document.getElementById('validationModeRoot');
+      var rawEl = document.getElementById('validationModeJson');
+      if (rawEl) rawEl.textContent = JSON.stringify(d, null, 2);
+      if (!root) return;
+      if (!d || d.error) {
+        root.innerHTML = '<p class="text-danger small">' + escapeHtml((d && d.error) || 'Failed') + '</p>';
+        return;
+      }
+      function ocBlock(title, o) {
+        if (!o) return '';
+        var nat = o.native || {};
+        var man = o.manual || {};
+        var prq = o.top_queries_by_positive_rate || [];
+        var wrq = o.worst_queries_by_positive_rate || [];
+        var html = '<h3 class="h6 text-secondary mt-2">' + escapeHtml(title) + '</h3>';
+        html +=
+          '<p class="small mb-1">Outcomes: native <strong>' +
+          escapeHtml(String(nat.total != null ? nat.total : 0)) +
+          '</strong> (positive ' +
+          escapeHtml(String(nat.positive != null ? nat.positive : 0)) +
+          ') · manual <strong>' +
+          escapeHtml(String(man.total != null ? man.total : 0)) +
+          '</strong> (positive ' +
+          escapeHtml(String(man.positive != null ? man.positive : 0)) +
+          ')</p>';
+        if (prq.length) {
+          html += '<p class="small mb-1 text-success">Top queries (positive rate, min 3 outcomes)</p><ul class="small ps-3 mb-2">';
+          prq.slice(0, 8).forEach(function (r) {
+            html +=
+              '<li><code>' +
+              escapeHtml(String(r.query_id)) +
+              '</code> · ' +
+              escapeHtml(String(Math.round((r.positive_rate || 0) * 100))) +
+              '% · n=' +
+              escapeHtml(String(r.outcomes)) +
+              '</li>';
+          });
+          html += '</ul>';
+        }
+        if (wrq.length) {
+          html += '<p class="small mb-1 text-warning">Weakest queries (positive rate, min 3 outcomes)</p><ul class="small ps-3 mb-2">';
+          wrq.slice(0, 8).forEach(function (r) {
+            html +=
+              '<li><code>' +
+              escapeHtml(String(r.query_id)) +
+              '</code> · ' +
+              escapeHtml(String(Math.round((r.positive_rate || 0) * 100))) +
+              '% · n=' +
+              escapeHtml(String(r.outcomes)) +
+              '</li>';
+          });
+          html += '</ul>';
+        }
+        var srcs = o.positive_rate_by_source || [];
+        if (srcs.length) {
+          html += '<p class="small mb-1">By source (top 6 by volume)</p><ul class="small ps-3 mb-2">';
+          srcs.slice(0, 6).forEach(function (r) {
+            html +=
+              '<li>' +
+              escapeHtml(String(r.source_key)) +
+              ' · ' +
+              escapeHtml(String(Math.round((r.positive_rate || 0) * 100))) +
+              '% positive · n=' +
+              escapeHtml(String(r.outcomes)) +
+              '</li>';
+          });
+          html += '</ul>';
+        }
+        return html;
+      }
+      var o7 = (d.outcomes && d.outcomes.hours_168) || {};
+      var o30 = (d.outcomes && d.outcomes.hours_720) || {};
+      var hot7 = (d.hot_lead_usefulness && d.hot_lead_usefulness.hours_168) || {};
+      var hot30 = (d.hot_lead_usefulness && d.hot_lead_usefulness.hours_720) || {};
+      var gt7 = (d.guardrail_transitions && d.guardrail_transitions.hours_168) || {};
+      var gt30 = (d.guardrail_transitions && d.guardrail_transitions.hours_720) || {};
+      var rec = d.recovery_playbook || {};
+      var drift = d.guardrail_drift || {};
+      var snap = d.scorecard_learning_snapshot || {};
+      var parts = [];
+      parts.push('<p class="small text-muted mb-2">' + escapeHtml(d.generated_at || '') + ' · UTC windows</p>');
+      parts.push(ocBlock('Rolling 7d', o7));
+      parts.push(ocBlock('Rolling 30d', o30));
+      parts.push('<h3 class="h6 text-secondary mt-2">Hot lead usefulness (panel feedback)</h3>');
+      parts.push(
+        '<p class="small mb-1"><strong>7d</strong> good/bad ' +
+          escapeHtml(String(hot7.good_lead || 0)) +
+          '/' +
+          escapeHtml(String(hot7.bad_lead || 0)) +
+          ' · ratio ' +
+          escapeHtml(hot7.usefulness_ratio != null ? String(hot7.usefulness_ratio) : '—') +
+          '</p>'
+      );
+      parts.push(
+        '<p class="small mb-2"><strong>30d</strong> good/bad ' +
+          escapeHtml(String(hot30.good_lead || 0)) +
+          '/' +
+          escapeHtml(String(hot30.bad_lead || 0)) +
+          ' · ratio ' +
+          escapeHtml(hot30.usefulness_ratio != null ? String(hot30.usefulness_ratio) : '—') +
+          '</p>'
+      );
+      parts.push('<h3 class="h6 text-secondary mt-2">Guardrail transitions</h3>');
+      parts.push(
+        '<p class="small mb-1"><strong>7d</strong> events ' +
+          escapeHtml(String(gt7.count != null ? gt7.count : 0)) +
+          ' · <strong>30d</strong> ' +
+          escapeHtml(String(gt30.count != null ? gt30.count : 0)) +
+          '</p>'
+      );
+      var recent = gt30.recent || [];
+      if (recent.length) {
+        parts.push('<ul class="small ps-3 mb-2">');
+        recent.slice(0, 12).forEach(function (x) {
+          parts.push(
+            '<li>' +
+              escapeHtml(String(x.created_at || '').slice(0, 19)) +
+              ' · ' +
+              escapeHtml(String(x.scope || '')) +
+              ' <code>' +
+              escapeHtml(String(x.scope_key || '')) +
+              '</code> · ' +
+              escapeHtml(String(x.from || '?')) +
+              ' → ' +
+              escapeHtml(String(x.to || '?')) +
+              '</li>'
+          );
+        });
+        parts.push('</ul>');
+      }
+      parts.push('<h3 class="h6 text-secondary mt-2">Recovery playbook (current scorecard)</h3>');
+      parts.push(
+        '<p class="small mb-1">Non-healthy scopes: <strong>' +
+          escapeHtml(String(rec.non_healthy_scopes != null ? rec.non_healthy_scopes : 0)) +
+          '</strong></p>'
+      );
+      var tally = rec.suggested_action_types_tally || {};
+      var tkeys = Object.keys(tally);
+      if (tkeys.length) {
+        parts.push('<ul class="small ps-3 mb-2">');
+        tkeys.forEach(function (k) {
+          parts.push('<li>' + escapeHtml(k) + ': ' + escapeHtml(String(tally[k])) + '</li>');
+        });
+        parts.push('</ul>');
+      } else {
+        parts.push('<p class="small text-muted mb-2">No recovery actions (all healthy or scorecard empty).</p>');
+      }
+      parts.push('<h3 class="h6 text-secondary mt-2">Guardrail drift (persisted vs computed)</h3>');
+      parts.push(
+        '<p class="small mb-1">Rows: ' +
+          escapeHtml(String(drift.count != null ? drift.count : 0)) +
+          (drift.note ? ' · ' + escapeHtml(drift.note) : '') +
+          '</p>'
+      );
+      var drows = drift.rows || [];
+      if (drows.length) {
+        parts.push('<ul class="small ps-3 mb-2">');
+        drows.slice(0, 15).forEach(function (r) {
+          parts.push(
+            '<li>' +
+              escapeHtml(String(r.scope)) +
+              ' <code>' +
+              escapeHtml(String(r.key)) +
+              '</code> · persisted ' +
+              escapeHtml(String(r.persisted_health_status)) +
+              ' vs computed ' +
+              escapeHtml(String(r.computed_health_status)) +
+              '</li>'
+          );
+        });
+        parts.push('</ul>');
+      }
+      parts.push('<h3 class="h6 text-secondary mt-2">Learning snapshot (7d scorecard)</h3>');
+      parts.push(
+        '<p class="small mb-0">Drafts ' +
+          escapeHtml(String(snap.drafts_generated_7d != null ? snap.drafts_generated_7d : '—')) +
+          ' · positive outcomes ' +
+          escapeHtml(String(snap.positive_outcomes_7d != null ? snap.positive_outcomes_7d : '—')) +
+          ' · native outcomes ' +
+          escapeHtml(String(snap.outcomes_native_7d != null ? snap.outcomes_native_7d : '—')) +
+          ' · manual ' +
+          escapeHtml(String(snap.outcomes_manual_7d != null ? snap.outcomes_manual_7d : '—')) +
+          '</p>'
+      );
+      root.innerHTML = parts.join('');
+    }
+
+    async function loadValidationMode() {
+      var root = document.getElementById('validationModeRoot');
+      var rawEl = document.getElementById('validationModeJson');
+      if (!root && !rawEl) return;
+      if (root) root.innerHTML = '<span class="text-muted">Loading…</span>';
+      if (rawEl) rawEl.textContent = '';
+      var out = await api('lead-engine-validation-mode');
+      if (!out.res.ok) {
+        var msg = (out.data && out.data.error) || 'Failed to load validation mode.';
+        if (root) root.innerHTML = '<p class="text-danger small">' + escapeHtml(msg) + '</p>';
+        return;
+      }
+      renderValidationMode(out.data);
+    }
+
+    async function loadValidationReport() {
+      var root = document.getElementById('validationReportRoot');
+      var rawEl = document.getElementById('validationReportJson');
+      if (!root && !rawEl) return;
+      if (root) root.innerHTML = '<span class="text-muted">Loading…</span>';
+      if (rawEl) rawEl.textContent = '';
+      var out = await api('lead-engine-validation-report');
+      if (!out.res.ok) {
+        var msg = (out.data && out.data.error) || 'Failed to load validation report.';
+        if (root) root.innerHTML = '<p class="text-danger small">' + escapeHtml(msg) + '</p>';
+        return;
+      }
+      renderValidationReport(out.data);
+    }
+
+    async function loadCommandCenter() {
+      var rawEl = document.getElementById('cmdCenterJson');
+      var root = document.getElementById('cmdCenterRoot');
+      if (!root && !rawEl) return;
+      if (root) root.innerHTML = '<p class="text-muted small mb-0">Loading…</p>';
+      if (rawEl) rawEl.textContent = '';
+      var out = await api('lead-engine-automation-dashboard');
+      if (!out.res.ok) {
+        var msg = (out.data && out.data.error) || 'Failed to load automation dashboard.';
+        if (root) root.innerHTML = '<p class="text-danger small">' + escapeHtml(msg) + '</p>';
+        if (rawEl) rawEl.textContent = msg;
+        return;
+      }
+      renderAutomationCommandCenter(out.data);
+      if (rawEl) rawEl.textContent = JSON.stringify(out.data, null, 2);
+    }
+
     function formatHistoryDetail(d) {
       var leadId = d && d.lead && d.lead.id ? String(d.lead.id) : '';
       if (leadId) {
@@ -1112,11 +2213,17 @@
           '<ul class="mb-2 ps-3">' +
           s
             .map(function (x) {
+              var vi = x.vertical_intel || null;
+              var vshort =
+                vi && vi.display_label
+                  ? ' · ' + escapeHtml(String(vi.display_label).slice(0, 36))
+                  : '';
               return (
                 '<li>' +
                 (x.fit_score != null ? x.fit_score + '/100' : ' - ') +
                 ' · ' +
                 escapeHtml(x.recommended_offer || '') +
+                vshort +
                 ' · ' +
                 escapeHtml((x.created_at || '').slice(0, 19)) +
                 '</li>'
@@ -1222,6 +2329,12 @@
       }
       function listEvents(evts) {
         if (!evts || !evts.length) return '<p class="text-muted mb-1">No audit events.</p>';
+        function friendlyEventType(et) {
+          var e = String(et || '');
+          if (e === 'operator_demo_pipeline_edit') return 'Demo pipeline (operator edit)';
+          if (e === 'operator_draft_regenerated') return 'Draft regenerated (operator)';
+          return e;
+        }
         return (
           '<ul class="mb-0 ps-3">' +
           evts
@@ -1230,7 +2343,7 @@
                 '<li>' +
                 escapeHtml((x.created_at || '').slice(0, 19)) +
                 ' · ' +
-                escapeHtml(x.event_type || '') +
+                escapeHtml(friendlyEventType(x.event_type || '')) +
                 (x.actor ? ' · ' + escapeHtml(x.actor) : '') +
                 (x.message ? ' · ' + escapeHtml(String(x.message).slice(0, 80)) : '') +
                 '</li>'
@@ -1238,6 +2351,14 @@
             })
             .join('') +
           '</ul>'
+        );
+      }
+      if (d.scores && d.scores.length) {
+        bits.push(
+          '<div class="mb-3 p-2 rounded border border-secondary le-history-latest-score">' +
+            '<strong class="text-info d-block mb-1">Latest score (inference detail)</strong>' +
+            buildInferenceTrustHtml(d.scores[0]) +
+            '</div>'
         );
       }
       bits.push('<div class="row g-2"><div class="col-md-4"><strong>Audits (recent)</strong>' + listAudits(d.audits) + '</div>');
@@ -1426,157 +2547,7 @@
       if (rows.length === 0) {
         tbody.innerHTML = '<tr><td colspan="12" class="text-muted small">No leads match these filters</td></tr>';
       } else {
-        tbody.innerHTML = rows
-          .map(function (r) {
-            var dt = r.created_at ? new Date(r.created_at).toLocaleString() : ' - ';
-            var url = r.website_url || '';
-            var urlShort = url.length > 36 ? url.slice(0, 34) + '…' : url;
-            var la = r.latest_analysis;
-            var sumCell = '<div class="le-cell-clip">' + formatSummaryCell(la) + '</div>';
-            var scoreCell = '<div class="le-cell-clip">' + formatScoringCell(la) + '</div>';
-            var o = getOutreachSummary(r);
-            var outreachCell = '<div class="le-cell-clip">' + formatOutreachColumn(r, o) + '</div>';
-            var demoOutreachCell =
-              '<div class="le-cell-clip le-demo-outreach-cell">' +
-              formatDemoQueueBadges(r) +
-              formatDemoOutreachSelect(r) +
-              '</div>';
-            var followupDueCell = '<div class="le-cell-clip le-followup-due-cell">' + formatFollowupDueCell(r) + '</div>';
-            var crmCell = '<div class="le-cell-clip">' + formatCrmSyncCell(r) + '</div>';
-            var auditOk = la && la.summary && la.summary.success === true;
-            var canScore = auditOk;
-            var hasAiScore = la && la.scoring && (la.scoring.ai_score_id || la.scoring.source === 'legacy_analysis_row');
-            var canDraft = auditOk && hasAiScore;
-            var ce = (r.contact_email || '').trim();
-            var analyzeBtn = '<button type="button" class="btn btn-outline-info btn-sm analyze-btn" data-lead-id="' + escapeAttr(r.id) + '">Analyze</button>';
-            var scoreBtn = canScore
-              ? '<button type="button" class="btn btn-outline-warning btn-sm score-btn" data-lead-id="' + escapeAttr(r.id) + '">Score</button>'
-              : '';
-            var draftBtn = canDraft
-              ? '<button type="button" class="btn btn-outline-success btn-sm draft-btn" data-lead-id="' + escapeAttr(r.id) + '">Draft</button>'
-              : '';
-            var latestIsDraft = o.latest && o.latest.status === 'draft' && o.latest_draft && o.latest.id === o.latest_draft.id;
-            var approveBtn = latestIsDraft
-              ? '<button type="button" class="btn btn-outline-primary btn-sm approve-btn" data-lead-id="' + escapeAttr(r.id) + '" data-outreach-id="' + escapeAttr(o.latest_draft.id) + '">Approve</button>'
-              : '';
-            var apr = o.latest_approved;
-            var activeSendLock = apr && apr.send_started_at && !isClientStaleSendLock(apr.send_started_at);
-            var canSend = apr && ce && !r.email_opted_out && !r.global_email_suppressed && !activeSendLock;
-            var sendHint = r.email_opted_out
-              ? 'Send blocked: opted out (lead)'
-              : r.global_email_suppressed
-                ? 'Send blocked: suppressed (global email)'
-              : !ce
-                ? 'Send blocked: add contact email on lead'
-                : !apr
-                  ? 'Send blocked: need Apr outreach row'
-                  : activeSendLock
-                    ? 'Send in progress, open History to mark sent / release lock if stuck'
-                    : '';
-            var sendBtn = canSend
-              ? '<button type="button" class="btn btn-outline-danger btn-sm send-btn" data-lead-id="' + escapeAttr(r.id) + '" data-outreach-id="' + escapeAttr(apr.id) + '">Send</button>'
-              : '';
-            var pipelineHints = [];
-            if (!canScore) pipelineHints.push('Run Analyze to enable Score');
-            else if (!hasAiScore) pipelineHints.push('Run Score to enable Draft');
-            else if (!o.latest_draft) pipelineHints.push('Run Draft to enable Approve');
-            else if (!latestIsDraft) pipelineHints.push('Approve: open History (newer outreach row)');
-            if (!canSend && sendHint) pipelineHints.push(sendHint);
-            var hintLine = pipelineHints.join(' · ');
-            var hintHtml = pipelineHints.length
-              ? '<div class="le-pipeline-hint" title="' +
-                escapeAttr(hintLine) +
-                '">' +
-                escapeHtml(hintLine.length > 120 ? hintLine.slice(0, 118) + '…' : hintLine) +
-                '</div>'
-              : '';
-            var sel = selectedLeadIds.has(r.id) ? ' checked' : '';
-            var selBox =
-              '<input class="form-check-input row-select-box" type="checkbox" data-lead-id="' +
-              escapeAttr(r.id) +
-              '"' +
-              sel +
-              '>';
-            var reviewLatestBtn = o.latest_draft
-              ? '<button type="button" class="btn btn-outline-info btn-sm review-latest-btn" data-lead-id="' +
-                escapeAttr(r.id) +
-                '">Review</button>'
-              : '';
-            var histBtn =
-              '<button type="button" class="btn btn-outline-secondary btn-sm history-btn" data-lead-id="' +
-              escapeAttr(r.id) +
-              '">History</button>';
-            var editLeadBtn =
-              '<button type="button" class="btn btn-outline-primary btn-sm le-edit-lead-btn" data-lead-id="' +
-              escapeAttr(r.id) +
-              '" title="Edit company, website URL, contact email">Edit lead</button>';
-            var syncBtn = '<button type="button" class="btn btn-outline-light btn-sm sync-crm-btn" data-lead-id="' + escapeAttr(r.id) + '">CRM</button>';
-            var demoQuick = formatDemoQuickActions(r);
-            var pipelineRow =
-              '<div class="le-action-row le-action-row--pipeline" role="group" aria-label="Analyze, score, draft, review, history">' +
-              analyzeBtn +
-              scoreBtn +
-              draftBtn +
-              reviewLatestBtn +
-              histBtn +
-              '</div>';
-            var approveSendRow =
-              approveBtn || sendBtn
-                ? '<div class="le-action-row le-action-row--approve-send" role="group" aria-label="Approve and send">' +
-                  approveBtn +
-                  sendBtn +
-                  '</div>'
-                : '';
-            var metaRow =
-              '<div class="le-action-row le-action-row--meta" role="group" aria-label="Edit and CRM">' +
-              editLeadBtn +
-              syncBtn +
-              '</div>';
-            var actionsStack =
-              '<div class="lead-actions-stack">' +
-              pipelineRow +
-              approveSendRow +
-              metaRow +
-              demoQuick +
-              hintHtml +
-              '</div>';
-            var mainRow =
-              '<tr data-lead-row="' +
-              escapeAttr(r.id) +
-              '"><td class="small text-nowrap">' +
-              selBox +
-              '</td><td class="small text-nowrap">' +
-              escapeHtml(dt) +
-              '</td><td class="small">' +
-              escapeHtml(r.company_name || '') +
-              '</td><td class="small"><a class="link-info" href="' +
-              escapeAttr(url) +
-              '" target="_blank" rel="noopener">' +
-              escapeHtml(urlShort) +
-              '</a></td><td><span class="badge bg-secondary">' +
-              escapeHtml(r.status || '') +
-              '</span></td><td class="small">' +
-              crmCell +
-              '</td><td class="small le-audit-col">' +
-              sumCell +
-              '</td><td class="small le-score-col">' +
-              scoreCell +
-              '</td><td class="small le-demo-outreach-col">' +
-              demoOutreachCell +
-              '</td><td class="small le-followup-due-col">' +
-              followupDueCell +
-              '</td><td class="small le-outreach-col">' +
-              outreachCell +
-              '</td><td class="le-actions-col">' +
-              actionsStack +
-              '</td></tr>';
-            var histRow =
-              '<tr class="lead-history-row d-none" data-history-for="' +
-              escapeAttr(r.id) +
-              '"><td colspan="12" class="small text-light p-3"><div class="history-inner text-muted">Loading…</div></td></tr>';
-            return mainRow + histRow;
-          })
-          .join('');
+        tbody.innerHTML = rows.map(leadTableRowPairHtml).join('');
       }
       document.getElementById('selectVisible').checked = rows.length > 0 && rows.every(function (r) { return selectedLeadIds.has(r.id); });
       updateBatchActionState();
@@ -1593,6 +2564,218 @@
     }
     function escapeAttr(s) {
       return escapeHtml(s).replace(/'/g, '&#39;');
+    }
+
+    function leadTableRowPairHtml(r) {
+      var dt = r.created_at ? new Date(r.created_at).toLocaleString() : ' - ';
+      var url = r.website_url || '';
+      var urlShort = url.length > 36 ? url.slice(0, 34) + '…' : url;
+      var la = r.latest_analysis;
+      var sumCell = '<div class="le-cell-clip">' + formatSummaryCell(la) + '</div>';
+      var scoreCell = '<div class="le-cell-clip">' + formatScoringCell(la) + '</div>';
+      var o = getOutreachSummary(r);
+      var outreachCell = '<div class="le-cell-clip">' + formatOutreachColumn(r, o) + '</div>';
+      var nextStep = demoNextStepHint(r);
+      var demoOutreachCell =
+        '<div class="le-cell-clip le-demo-outreach-cell">' +
+        formatDemoQueueBadges(r) +
+        formatDemoOutreachSelect(r) +
+        (nextStep ? '<div class="mt-1">' + nextStep + '</div>' : '') +
+        '</div>';
+      var followupDueCell = '<div class="le-cell-clip le-followup-due-cell">' + formatFollowupDueCell(r) + '</div>';
+      var crmCell = '<div class="le-cell-clip">' + formatCrmSyncCell(r) + '</div>';
+      var auditOk = la && la.summary && la.summary.success === true;
+      var canScore = auditOk;
+      var hasAiScore = la && la.scoring && (la.scoring.ai_score_id || la.scoring.source === 'legacy_analysis_row');
+      var canDraft = auditOk && hasAiScore;
+      var ce = (r.contact_email || '').trim();
+      var analyzeBtn = '<button type="button" class="btn btn-outline-info btn-sm analyze-btn" data-lead-id="' + escapeAttr(r.id) + '">Analyze</button>';
+      var scoreBtn = canScore
+        ? '<button type="button" class="btn btn-outline-warning btn-sm score-btn" data-lead-id="' + escapeAttr(r.id) + '">Score</button>'
+        : '';
+      var draftBtn = canDraft
+        ? '<button type="button" class="btn btn-outline-success btn-sm draft-btn" data-lead-id="' + escapeAttr(r.id) + '">Draft</button>'
+        : '';
+      var latestIsDraft = o.latest && o.latest.status === 'draft' && o.latest_draft && o.latest.id === o.latest_draft.id;
+      var approveBtn = latestIsDraft
+        ? '<button type="button" class="btn btn-outline-primary btn-sm approve-btn" data-lead-id="' + escapeAttr(r.id) + '" data-outreach-id="' + escapeAttr(o.latest_draft.id) + '">Approve</button>'
+        : '';
+      var apr = o.latest_approved;
+      var activeSendLock = apr && apr.send_started_at && !isClientStaleSendLock(apr.send_started_at);
+      var canSend = apr && ce && !r.email_opted_out && !r.global_email_suppressed && !activeSendLock;
+      var sendHint = r.email_opted_out
+        ? 'Send blocked: opted out (lead)'
+        : r.global_email_suppressed
+          ? 'Send blocked: suppressed (global email)'
+          : !ce
+            ? 'Send blocked: add contact email on lead'
+            : !apr
+              ? 'Send blocked: need Apr outreach row'
+              : activeSendLock
+                ? 'Send in progress, open History to mark sent / release lock if stuck'
+                : '';
+      var sendBtn = canSend
+        ? '<button type="button" class="btn btn-outline-danger btn-sm send-btn" data-lead-id="' + escapeAttr(r.id) + '" data-outreach-id="' + escapeAttr(apr.id) + '">Send</button>'
+        : '';
+      var pipelineHints = [];
+      if (!canScore) pipelineHints.push('Run Analyze to enable Score');
+      else if (!hasAiScore) pipelineHints.push('Run Score to enable Draft');
+      else if (!o.latest_draft) pipelineHints.push('Run Draft to enable Approve');
+      else if (!latestIsDraft) pipelineHints.push('Approve: open History (newer outreach row)');
+      if (!canSend && sendHint) pipelineHints.push(sendHint);
+      var hintLine = pipelineHints.join(' · ');
+      var hintHtml = pipelineHints.length
+        ? '<div class="le-pipeline-hint" title="' +
+          escapeAttr(hintLine) +
+          '">' +
+          escapeHtml(hintLine.length > 120 ? hintLine.slice(0, 118) + '…' : hintLine) +
+          '</div>'
+        : '';
+      var sel = selectedLeadIds.has(r.id) ? ' checked' : '';
+      var selBox =
+        '<input class="form-check-input row-select-box" type="checkbox" data-lead-id="' +
+        escapeAttr(r.id) +
+        '"' +
+        sel +
+        '>';
+      var reviewLatestBtn = o.latest_draft
+        ? '<button type="button" class="btn btn-outline-info btn-sm review-latest-btn" data-lead-id="' +
+          escapeAttr(r.id) +
+          '">Review</button>'
+        : '';
+      var histBtn =
+        '<button type="button" class="btn btn-outline-secondary btn-sm history-btn" data-lead-id="' +
+        escapeAttr(r.id) +
+        '">History</button>';
+      var editLeadBtn =
+        '<button type="button" class="btn btn-outline-primary btn-sm le-edit-lead-btn" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" title="Edit company, website URL, contact email">Edit lead</button>';
+      var syncBtn = '<button type="button" class="btn btn-outline-light btn-sm sync-crm-btn" data-lead-id="' + escapeAttr(r.id) + '">CRM</button>';
+      var demoQuick = formatDemoQuickActions(r);
+      var lqf = r.latest_quality_feedback;
+      var lqfHint =
+        lqf && lqf.feedback_code
+          ? '<div class="text-muted" style="font-size:0.72rem">Last: ' + escapeHtml(lqf.feedback_code) + '</div>'
+          : '';
+      var qualitySelect =
+        '<select class="form-select form-select-sm le-quality-fb-select mt-1" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" data-feedback-context="lead_list" aria-label="Lead quality">' +
+        '<option value="">' +
+        escapeHtml(lqf && lqf.feedback_code ? 'Update rating…' : 'Rate quality…') +
+        '</option>' +
+        LE_QUALITY_FEEDBACK_OPTIONS.map(function (pair) {
+          return '<option value="' + escapeAttr(pair[0]) + '">' + escapeHtml(pair[1]) + '</option>';
+        }).join('') +
+        '</select>';
+      var outcomeSelect =
+        '<select class="form-select form-select-sm le-outcome-select mt-1" data-lead-id="' +
+        escapeAttr(r.id) +
+        '" data-outcome-context="lead_list" aria-label="Lead outcome">' +
+        '<option value="">Log outcome…</option>' +
+        LE_OUTCOME_OPTIONS.map(function (pair) {
+          return '<option value="' + escapeAttr(pair[0]) + '">' + escapeHtml(pair[1]) + '</option>';
+        }).join('') +
+        '</select>';
+      var pipelineRow =
+        '<div class="le-action-row le-action-row--pipeline" role="group" aria-label="Analyze, score, draft, review, history">' +
+        analyzeBtn +
+        scoreBtn +
+        draftBtn +
+        reviewLatestBtn +
+        histBtn +
+        '</div>';
+      var approveSendRow =
+        approveBtn || sendBtn
+          ? '<div class="le-action-row le-action-row--approve-send" role="group" aria-label="Approve and send">' +
+            approveBtn +
+            sendBtn +
+            '</div>'
+          : '';
+      var metaRow =
+        '<div class="le-action-row le-action-row--meta" role="group" aria-label="Edit and CRM">' +
+        editLeadBtn +
+        syncBtn +
+        '</div>';
+      var actionsStack =
+        '<div class="lead-actions-stack">' +
+        pipelineRow +
+        approveSendRow +
+        metaRow +
+        demoQuick +
+        lqfHint +
+        qualitySelect +
+        outcomeSelect +
+        hintHtml +
+        '<div class="le-row-feedback small mt-1" data-le-feedback="' +
+        escapeAttr(r.id) +
+        '" role="status" aria-live="polite" hidden></div>' +
+        '</div>';
+      var mainRow =
+        '<tr data-lead-row="' +
+        escapeAttr(r.id) +
+        '"><td class="small text-nowrap">' +
+        selBox +
+        '</td><td class="small text-nowrap">' +
+        escapeHtml(dt) +
+        '</td><td class="small">' +
+        escapeHtml(r.company_name || '') +
+        '</td><td class="small"><a class="link-info" href="' +
+        escapeAttr(url) +
+        '" target="_blank" rel="noopener">' +
+        escapeHtml(urlShort) +
+        '</a></td><td><span class="badge bg-secondary">' +
+        escapeHtml(r.status || '') +
+        '</span></td><td class="small">' +
+        crmCell +
+        '</td><td class="small le-audit-col">' +
+        sumCell +
+        '</td><td class="small le-score-col">' +
+        scoreCell +
+        '</td><td class="small le-demo-outreach-col">' +
+        demoOutreachCell +
+        '</td><td class="small le-followup-due-col">' +
+        followupDueCell +
+        '</td><td class="small le-outreach-col">' +
+        outreachCell +
+        '</td><td class="le-actions-col">' +
+        actionsStack +
+        '</td></tr>';
+      var histRow =
+        '<tr class="lead-history-row d-none" data-history-for="' +
+        escapeAttr(r.id) +
+        '"><td colspan="12" class="small text-light p-3"><div class="history-inner text-muted">Loading…</div></td></tr>';
+      return mainRow + histRow;
+    }
+
+    function refreshLeadRowInTable(leadId) {
+      var idx = currentListRows.findIndex(function (x) {
+        return x.id === leadId;
+      });
+      if (idx < 0) return;
+      var mainTr = document.querySelector('tr[data-lead-row="' + leadId + '"]');
+      var histTr = document.querySelector('tr.lead-history-row[data-history-for="' + leadId + '"]');
+      if (!mainTr || !histTr) return;
+      var wasOpen = !histTr.classList.contains('d-none');
+      var innerSnap = wasOpen ? histTr.querySelector('.history-inner') : null;
+      var innerHtml = innerSnap ? innerSnap.innerHTML : '';
+      var pair = leadTableRowPairHtml(currentListRows[idx]);
+      var tpl = document.createElement('tbody');
+      tpl.innerHTML = pair;
+      mainTr.replaceWith(tpl.firstElementChild);
+      histTr.replaceWith(tpl.firstElementChild);
+      if (wasOpen) {
+        var newHist = document.querySelector('tr.lead-history-row[data-history-for="' + leadId + '"]');
+        if (newHist) {
+          newHist.classList.remove('d-none');
+          var ni = newHist.querySelector('.history-inner');
+          if (ni && innerHtml) ni.innerHTML = innerHtml;
+        }
+      }
+      document.getElementById('selectVisible').checked =
+        currentListRows.length > 0 && currentListRows.every(function (r) { return selectedLeadIds.has(r.id); });
+      updateBatchActionState();
     }
 
     /** +N weekdays in UTC (Mon–Fri), same idea as composer follow-up offsets. */
@@ -1690,6 +2873,159 @@
       return bits || '<span class="text-muted">-</span>';
     }
 
+    function humanModelConfidence(c) {
+      var x = String(c || '').toLowerCase();
+      if (x === 'high') return 'High — the scoring model is fairly sure about the fit score';
+      if (x === 'medium') return 'Medium — treat the score as directional';
+      if (x === 'low') return 'Low — double-check the audit and your own read of the site';
+      return c ? String(c) : '';
+    }
+
+    function humanVerticalConfidence(c) {
+      var x = String(c || '').toLowerCase();
+      if (x === 'high') return 'Strong match from page text';
+      if (x === 'medium') return 'Reasonable guess — spot-check the label';
+      if (x === 'low') return 'Weak signal — the industry guess may be wrong';
+      return c ? String(c) : '';
+    }
+
+    function formatWebsiteSignalHints(normalized) {
+      if (!normalized || typeof normalized !== 'object') return '';
+      var parts = [];
+      if (normalized.compliance_sensitive_language) {
+        parts.push('Compliance- or privacy-sensitive wording detected on the site');
+      }
+      if (normalized.b2b_or_enterprise_cues) {
+        parts.push('B2B / enterprise-style messaging (e.g. demos, sales, organizational buyers)');
+      }
+      if (normalized.rfq_or_estimate_language) {
+        parts.push('Quote, estimate, or proposal language');
+      }
+      if (normalized.appointment_or_intake_language) {
+        parts.push('Appointment, intake, or screening language');
+      }
+      if (!parts.length) return '';
+      return (
+        '<div class="small mt-1 le-signal-hints"><span class="text-secondary">Site pattern hints:</span> ' +
+        escapeHtml(parts.join(' · ')) +
+        '</div>'
+      );
+    }
+
+    /**
+     * @param {object} scoring - latest_analysis.scoring or shaped score row from lead detail
+     */
+    function buildInferenceTrustHtml(scoring) {
+      if (!scoring) return '';
+      var vi = scoring.vertical_intel || null;
+      var ns = vi && vi.normalized_signals ? vi.normalized_signals : null;
+      var cues = vi && Array.isArray(vi.matched_cues) ? vi.matched_cues : [];
+      var cueBlock = cues
+        .slice(0, 8)
+        .map(function (c) {
+          return escapeHtml(c);
+        })
+        .join('<br>');
+      var offerWhy =
+        Array.isArray(scoring.top_supporting_signals) && scoring.top_supporting_signals.length
+          ? escapeHtml(scoring.top_supporting_signals.join('; '))
+          : '';
+      var rationale = scoring.offer_rationale
+        ? escapeHtml(String(scoring.offer_rationale).slice(0, 320))
+        : '';
+      var mc = humanModelConfidence(scoring.confidence);
+      var vc = vi && vi.confidence ? humanVerticalConfidence(vi.confidence) : '';
+      var lines = [];
+      lines.push('<div class="le-inference-trust border border-secondary rounded p-2 mt-1 small">');
+      lines.push('<div class="fw-semibold text-light mb-1">Inference &amp; recommended offer</div>');
+      if (vi && vi.display_label) {
+        lines.push(
+          '<div><span class="text-secondary">Inferred industry:</span> ' +
+            escapeHtml(vi.display_label) +
+            (vi.parent_label
+              ? ' · <span class="text-secondary">Group:</span> ' + escapeHtml(vi.parent_label)
+              : '') +
+            '</div>'
+        );
+        if (vc) {
+          lines.push('<div class="text-secondary">How strong is that industry guess? ' + escapeHtml(vc) + '</div>');
+        }
+        if (cueBlock) {
+          lines.push(
+            '<div class="mt-1"><span class="text-secondary">Phrases that matched:</span><br>' + cueBlock + '</div>'
+          );
+        }
+      } else {
+        lines.push(
+          '<div class="text-secondary">No vertical inference on file for this score (legacy run or not stored).</div>'
+        );
+      }
+      if (mc) {
+        lines.push('<div class="text-secondary mt-1">Fit score reliability: ' + escapeHtml(mc) + '</div>');
+      }
+      lines.push(formatWebsiteSignalHints(ns));
+      if (offerWhy) {
+        lines.push(
+          '<div class="mt-1"><span class="text-secondary">Why this offer (from automated site signals):</span> ' +
+            offerWhy +
+            '</div>'
+        );
+      }
+      if (rationale) {
+        lines.push('<div class="mt-1"><span class="text-secondary">Scoring model note:</span> ' + rationale + '</div>');
+      }
+      lines.push('</div>');
+      return lines.join('');
+    }
+
+    function renderProfileReferenceTable(profiles) {
+      if (!profiles || !profiles.length) return '<p class="text-muted mb-0">No profiles.</p>';
+      var rows = profiles
+        .slice()
+        .sort(function (a, b) {
+          return String(a.displayLabel || '').localeCompare(String(b.displayLabel || ''));
+        })
+        .map(function (p) {
+          return (
+            '<tr><td class="align-top"><code class="text-info">' +
+            escapeHtml(p.id) +
+            '</code></td><td class="align-top">' +
+            escapeHtml(p.displayLabel || '') +
+            '</td><td class="align-top small text-secondary">' +
+            escapeHtml(p.parentLabel || p.parentId || '') +
+            '</td><td class="align-top small">' +
+            escapeHtml(p.demoLabel || '') +
+            '</td><td class="align-top small text-muted">' +
+            escapeHtml((p.operatorNotes || '').slice(0, 220)) +
+            (p.operatorNotes && p.operatorNotes.length > 220 ? '…' : '') +
+            '</td></tr>'
+          );
+        })
+        .join('');
+      return (
+        '<div class="table-responsive" style="max-height: 320px; overflow: auto;">' +
+        '<table class="table table-sm table-dark-ish mb-0">' +
+        '<thead><tr><th>Id</th><th>Label</th><th>Group</th><th>Demo title</th><th>Operator note</th></tr></thead>' +
+        '<tbody>' +
+        rows +
+        '</tbody></table></div>'
+      );
+    }
+
+    async function loadProfileReference() {
+      var el = document.getElementById('leProfileReferenceBody');
+      if (!el) return;
+      var out = await api('lead-engine-industry-profiles');
+      if (!out.res.ok || !out.data || !out.data.profiles) {
+        el.innerHTML =
+          '<span class="text-danger">Could not load profiles' +
+          (out.data && out.data.error ? ': ' + escapeHtml(String(out.data.error)) : '') +
+          '.</span>';
+        return;
+      }
+      el.innerHTML = renderProfileReferenceTable(out.data.profiles);
+    }
+
     function formatCrmSyncCell(r) {
       var st = r.sync_status || 'not_synced';
       var badge = st === 'synced'
@@ -1739,7 +3075,13 @@
       if (s.fit_score != null) {
         bits.push('<span class="fw-semibold">' + escapeHtml(String(s.fit_score)) + '</span>/100');
       }
-      if (s.confidence) bits.push(escapeHtml(String(s.confidence)));
+      if (s.confidence) {
+        bits.push(
+          '<span class="badge rounded-pill bg-secondary small" title="Model confidence in the fit score">' +
+            escapeHtml(String(s.confidence)) +
+            '</span>'
+        );
+      }
       if (offer) {
         bits.push(
           '<span class="text-info" title="' + escapeAttr(offer) + '">' + escapeHtml(offerShow) + '</span>'
@@ -1753,6 +3095,7 @@
           '<span class="small fst-italic" title="' + escapeAttr(angle) + '">' + escapeHtml(angleShow) + '</span>'
         );
       }
+      bits.push(buildInferenceTrustHtml(s));
       return bits.join(' · ');
     }
 
@@ -1821,6 +3164,184 @@
       show('ok');
       document.getElementById('who').textContent = st.data.username || '';
       document.getElementById('statusJson').textContent = JSON.stringify(st.data, null, 2);
+      loadProfileReference();
+      var cmdRefresh = document.getElementById('cmdCenterRefresh');
+      if (cmdRefresh) {
+        cmdRefresh.onclick = function () {
+          loadCommandCenter();
+        };
+      }
+      var hotLR = document.getElementById('hotLeadsRefresh');
+      if (hotLR) {
+        hotLR.onclick = function () {
+          loadHotLeadsRanked();
+        };
+      }
+      var cmdRoot = document.getElementById('cmdCenterRoot');
+      if (cmdRoot && !cmdRoot.dataset.leBoundRetry) {
+        cmdRoot.dataset.leBoundRetry = '1';
+        cmdRoot.addEventListener('click', async function (ev) {
+          var btn = ev.target.closest('[data-lead-retry]');
+          if (!btn) return;
+          var lid = btn.getAttribute('data-lead-retry');
+          if (!lid) return;
+          btn.disabled = true;
+          var rout = await api('lead-engine-automation-retry', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ leadId: lid }),
+          });
+          btn.disabled = false;
+          if (!rout.res.ok) {
+            alert((rout.data && rout.data.error) || 'Retry failed');
+            return;
+          }
+          loadCommandCenter();
+          loadList(false);
+        });
+      }
+      if (cmdRoot && !cmdRoot.dataset.leBoundScoutOps) {
+        cmdRoot.dataset.leBoundScoutOps = '1';
+        cmdRoot.addEventListener('change', async function (ev) {
+          var el = ev.target;
+          if (!el || !el.matches || !el.matches('input[data-scout-enabled]')) return;
+          var qid = el.getAttribute('data-scout-enabled');
+          if (!qid) return;
+          el.disabled = true;
+          var out = await api('lead-engine-scout-query-ops', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query_id: qid, enabled_override: el.checked }),
+          });
+          el.disabled = false;
+          if (!out.res.ok) {
+            alert((out.data && out.data.error) || 'Update failed');
+            el.checked = !el.checked;
+            return;
+          }
+          loadCommandCenter();
+        });
+        cmdRoot.addEventListener('click', async function (ev) {
+          var gh = ev.target.closest('[data-guardrail-healthy]');
+          if (gh) {
+            var skH = gh.getAttribute('data-guardrail-healthy');
+            gh.disabled = true;
+            var outGH = await api('lead-engine-guardrail-ops', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                scope_type: 'source',
+                scope_key: skH,
+                forced_status: 'healthy',
+                reason: 'operator override',
+                expires_hours: 12,
+              }),
+            });
+            gh.disabled = false;
+            if (!outGH.res.ok) {
+              alert((outGH.data && outGH.data.error) || 'Override failed');
+              return;
+            }
+            loadCommandCenter();
+            return;
+          }
+          var gp = ev.target.closest('[data-guardrail-pause]');
+          if (gp) {
+            var skP = gp.getAttribute('data-guardrail-pause');
+            gp.disabled = true;
+            var outGP = await api('lead-engine-guardrail-ops', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                scope_type: 'source',
+                scope_key: skP,
+                forced_status: 'paused',
+                reason: 'operator pause',
+                expires_hours: 12,
+              }),
+            });
+            gp.disabled = false;
+            if (!outGP.res.ok) {
+              alert((outGP.data && outGP.data.error) || 'Pause override failed');
+              return;
+            }
+            loadCommandCenter();
+            return;
+          }
+          var applyBtn = ev.target.closest('[data-scout-apply]');
+          if (applyBtn) {
+            var qidA = applyBtn.getAttribute('data-scout-apply');
+            if (!qidA) return;
+            var prEl = null;
+            var cdEl = null;
+            var j;
+            var pri = cmdRoot.querySelectorAll('input[data-scout-priority]');
+            for (j = 0; j < pri.length; j++) {
+              if (pri[j].getAttribute('data-scout-priority') === qidA) prEl = pri[j];
+            }
+            var cdi = cmdRoot.querySelectorAll('input[data-scout-cooldown]');
+            for (j = 0; j < cdi.length; j++) {
+              if (cdi[j].getAttribute('data-scout-cooldown') === qidA) cdEl = cdi[j];
+            }
+            var pr = prEl ? parseInt(String(prEl.value), 10) : NaN;
+            var cd = cdEl ? parseInt(String(cdEl.value), 10) : NaN;
+            if (!Number.isFinite(pr) || !Number.isFinite(cd) || cd < 60) {
+              alert('Priority must be a number; cooldown must be >= 60 seconds.');
+              return;
+            }
+            applyBtn.disabled = true;
+            var outA = await api('lead-engine-scout-query-ops', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                query_id: qidA,
+                priority_override: pr,
+                cooldown_seconds_override: cd,
+              }),
+            });
+            applyBtn.disabled = false;
+            if (!outA.res.ok) {
+              alert((outA.data && outA.data.error) || 'Apply failed');
+              return;
+            }
+            loadCommandCenter();
+            return;
+          }
+          var runBtn = ev.target.closest('[data-scout-run]');
+          if (!runBtn) return;
+          var qidR = runBtn.getAttribute('data-scout-run');
+          if (!qidR) return;
+          runBtn.disabled = true;
+          var outR = await api('lead-engine-scout-query-ops', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query_id: qidR }),
+          });
+          runBtn.disabled = false;
+          if (!outR.res.ok) {
+            var msg = (outR.data && outR.data.error) || 'Run failed';
+            if (outR.data && outR.data.details) msg += ' ' + JSON.stringify(outR.data.details);
+            alert(msg);
+            return;
+          }
+          loadCommandCenter();
+        });
+      }
+      loadCommandCenter();
+      var valRef = document.getElementById('validationReportRefresh');
+      if (valRef) {
+        valRef.onclick = function () {
+          loadValidationReport();
+        };
+      }
+      loadValidationReport();
+      var vmRef = document.getElementById('validationModeRefresh');
+      if (vmRef) {
+        vmRef.onclick = function () {
+          loadValidationMode();
+        };
+      }
+      loadValidationMode();
 
       document.getElementById('logout').style.display = 'inline-block';
       document.getElementById('logout').onclick = async function () {
@@ -1902,22 +3423,65 @@
         if (genDemoBtn) {
           var gdid = genDemoBtn.getAttribute('data-lead-id');
           if (!gdid) return;
+          genDemoBtn.classList.add('le-btn-loading');
           genDemoBtn.disabled = true;
-          var demOut = await api('lead-engine-generate-demo', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ leadId: gdid }),
-          });
-          genDemoBtn.disabled = false;
+          clearLeadRowFeedback(gdid);
+          setLeadRowFeedbackHtml(gdid, '<span class="text-info">Generating demo…</span>', 'info');
+          var demOut;
+          try {
+            demOut = await api('lead-engine-generate-demo', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ leadId: gdid }),
+            });
+          } finally {
+            genDemoBtn.classList.remove('le-btn-loading');
+            genDemoBtn.disabled = false;
+          }
           if (!demOut.res.ok) {
-            var demErr = demOut.data.error || 'Generate demo failed';
-            if (demOut.data.details) demErr += '\n\n' + demOut.data.details;
-            window.alert(demErr);
+            var fx = formatGenerateDemoFailure(demOut);
+            var hintBlock =
+              fx.lines && fx.lines.length
+                ? '<ul class="mb-0 ps-3 mt-2 small">' +
+                  fx.lines
+                    .map(function (L) {
+                      return '<li>' + escapeHtml(L) + '</li>';
+                    })
+                    .join('') +
+                  '</ul>'
+                : '';
+            showLeToast('<strong>' + escapeHtml(fx.title) + '</strong>' + hintBlock, 'danger', 14000);
+            setLeadRowFeedbackHtml(
+              gdid,
+              '<span class="text-danger">Could not generate demo. Check the message at the top of the card.</span>',
+              'danger'
+            );
             return;
           }
           leadDemoUrlByLeadId[gdid] = demOut.data.url || '';
+          var gSlug = demOut.data.slug || '';
+          if (gSlug) {
+            var grow = currentListRows.find(function (x) {
+              return x.id === gdid;
+            });
+            if (grow) grow.demo_slug = gSlug;
+          }
+          var gDemoUrl = demOut.data.url || '';
+          var persistNote = demOut.data.persistencePath
+            ? ' Saved via ' + escapeHtml(String(demOut.data.persistencePath)) + '.'
+            : '';
+          showLeToast(
+            '<strong>Demo ready.</strong>' +
+              persistNote +
+              (gDemoUrl
+                ? ' <a class="alert-link" href="' +
+                  escapeAttr(gDemoUrl) +
+                  '" target="_blank" rel="noopener">Open demo</a>'
+                : ''),
+            'success',
+            12000
+          );
           delete leadHistoryCache[gdid];
-          window.alert('Demo ready:\n' + (demOut.data.url || demOut.data.path || ''));
           var demHistTr = document.querySelector('tr.lead-history-row[data-history-for="' + gdid + '"]');
           if (demHistTr && !demHistTr.classList.contains('d-none')) {
             var demInner = demHistTr.querySelector('.history-inner');
@@ -1931,7 +3495,19 @@
                 '<span class="text-danger">' + escapeHtml(demH.data.error || 'Refresh failed') + '</span>';
             }
           }
-          loadList(false);
+          refreshLeadRowInTable(gdid);
+          setLeadRowFeedbackHtml(
+            gdid,
+            gDemoUrl
+              ? '<span class="text-success">Demo link: <a class="link-light link-underline" href="' +
+                escapeAttr(gDemoUrl) +
+                '" target="_blank" rel="noopener">open</a></span>'
+              : '<span class="text-success">Demo generated — open History to copy the URL.</span>',
+            'success'
+          );
+          setTimeout(function () {
+            clearLeadRowFeedback(gdid);
+          }, 12000);
           return;
         }
 
@@ -1943,11 +3519,17 @@
             (cdid ? leadDemoUrlByLeadId[cdid] : '') ||
             '';
           if (!durl) {
-            window.alert('Generate a demo first.');
+            showLeToast('Generate a demo first (open History → Generate demo).', 'warning', 7000);
             return;
           }
           var dcOk = await copyTextWithFallback(durl);
-          window.alert(dcOk ? 'Demo URL copied.' : 'Copy failed.');
+          showLeToast(
+            dcOk
+              ? 'Demo URL copied to clipboard.'
+              : 'Copy was blocked. Use a secure origin (HTTPS or localhost) or copy from the address bar.',
+            dcOk ? 'success' : 'warning',
+            7000
+          );
           return;
         }
 
@@ -1956,14 +3538,16 @@
           var ckey = copyBtn.getAttribute('data-copy-key') || '';
           var txt = ckey ? draftClipboardByKey[ckey] : '';
           if (!txt) {
-            window.alert('Nothing to copy. Expand History again to refresh this row.');
+            showLeToast('Nothing to copy. Open History for this lead to load the draft again.', 'warning', 8000);
             return;
           }
           var copied = await copyTextWithFallback(txt);
-          window.alert(
+          showLeToast(
             copied
-              ? 'Copied subject + body to the clipboard.'
-              : 'Copy failed. Use https or localhost, or copy from the draft preview text.'
+              ? 'Copied subject and body to the clipboard.'
+              : 'Copy failed. Try HTTPS/localhost or copy from the preview text in History.',
+            copied ? 'success' : 'warning',
+            8000
           );
           return;
         }
@@ -1973,16 +3557,27 @@
           var glid = regenBtn.getAttribute('data-lead-id');
           if (!glid) return;
           regenBtn.disabled = true;
+          regenBtn.classList.add('le-btn-loading');
+          clearLeadRowFeedback(glid);
+          setLeadRowFeedbackHtml(glid, '<span class="text-info">Regenerating draft…</span>', 'info');
           var gout = await api('lead-engine-draft', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ leadId: glid, channel: 'email' }),
+            body: JSON.stringify({ leadId: glid, channel: 'email', operatorIntent: 'regenerate' }),
           });
+          regenBtn.classList.remove('le-btn-loading');
           regenBtn.disabled = false;
           if (!gout.res.ok) {
-            window.alert(gout.data.error || 'Regenerate draft failed');
+            showPipelineError('Draft not regenerated', gout.data.error || 'Request failed');
+            setLeadRowFeedbackHtml(
+              glid,
+              '<span class="text-danger">Regenerate failed — see banner above.</span>',
+              'danger'
+            );
             return;
           }
+          showLeToast('<strong>New draft saved.</strong> Open History to review and approve.', 'success', 7000);
+          clearLeadRowFeedback(glid);
           delete leadHistoryCache[glid];
           loadList(false);
           return;
@@ -1994,16 +3589,23 @@
           var aoid = approveLatestBtn.getAttribute('data-outreach-id');
           if (!alid || !aoid) return;
           approveLatestBtn.disabled = true;
+          approveLatestBtn.classList.add('le-btn-loading');
+          clearLeadRowFeedback(alid);
+          setLeadRowFeedbackHtml(alid, '<span class="text-info">Approving draft…</span>', 'info');
           var aout = await api('lead-engine-approve', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ leadId: alid, outreachId: aoid }),
           });
+          approveLatestBtn.classList.remove('le-btn-loading');
           approveLatestBtn.disabled = false;
           if (!aout.res.ok) {
-            window.alert(aout.data.error || 'Approve latest draft failed');
+            showPipelineError('Approve failed', aout.data.error || 'Request failed');
+            setLeadRowFeedbackHtml(alid, '<span class="text-danger">Approve failed — see banner above.</span>', 'danger');
             return;
           }
+          showLeToast('<strong>Draft approved.</strong> You can send when ready.', 'success', 6000);
+          clearLeadRowFeedback(alid);
           delete leadHistoryCache[alid];
           loadList(false);
           return;
@@ -2054,6 +3656,9 @@
             return;
           }
           rbtn.disabled = true;
+          rbtn.classList.add('le-btn-loading');
+          clearLeadRowFeedback(rhid);
+          setLeadRowFeedbackHtml(rhid, '<span class="text-info">Updating send status…</span>', 'info');
           var rbody = { leadId: rhid, outreachId: roid, action: raction };
           if (raction === 'mark_failed') rbody.acknowledgeMarkFailed = true;
           var rout = await api('lead-engine-reconcile', {
@@ -2061,12 +3666,19 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(rbody),
           });
+          rbtn.classList.remove('le-btn-loading');
           rbtn.disabled = false;
           if (!rout.res.ok) {
-            window.alert(rout.data.error || 'Recovery action failed');
+            showPipelineError('Recovery action failed', rout.data.error || 'Request failed');
+            setLeadRowFeedbackHtml(rhid, '<span class="text-danger">Reconcile failed — see banner above.</span>', 'danger');
             return;
           }
-          if (rout.data.warning) window.alert(rout.data.warning);
+          if (rout.data.warning) {
+            showLeToast('<strong>Note.</strong> ' + escapeHtml(String(rout.data.warning)), 'warning', 12000);
+          } else {
+            showLeToast('<strong>Send status updated.</strong>', 'success', 5000);
+          }
+          clearLeadRowFeedback(rhid);
           delete leadHistoryCache[rhid];
           var rHistTr = document.querySelector('tr.lead-history-row[data-history-for="' + rhid + '"]');
           if (rHistTr && !rHistTr.classList.contains('d-none')) {
@@ -2136,6 +3748,13 @@
                   ? 'Send'
                   : 'Sync CRM';
         btn.disabled = true;
+        btn.classList.add('le-btn-loading');
+        clearLeadRowFeedback(leadId);
+        setLeadRowFeedbackHtml(
+          leadId,
+          '<span class="text-info">' + escapeHtml(label) + '…</span>',
+          'info'
+        );
         try {
           var fn = analyzeBtn
             ? 'lead-engine-analyze'
@@ -2149,7 +3768,10 @@
                     ? 'lead-engine-send'
                     : 'lead-engine-sync-crm';
           var payload = { leadId: leadId };
-          if (draftBtn) payload.channel = 'email';
+          if (draftBtn) {
+            payload.channel = 'email';
+            payload.operatorIntent = 'new';
+          }
           if (approveBtn || sendBtn) {
             var oid = btn.getAttribute('data-outreach-id');
             if (oid) payload.outreachId = oid;
@@ -2171,23 +3793,41 @@
               msg +=
                 '\n\nOpen History for this lead: use Mark sent if Resend delivered, or Release lock only if it did not.';
             }
-            window.alert(msg);
+            showPipelineError(label + ' failed', msg);
+            setLeadRowFeedbackHtml(leadId, '<span class="text-danger">Failed — see banner above.</span>', 'danger');
             return;
-          }
-          if (sendBtn && out.data.idempotentReplay) {
-            window.alert(out.data.message || 'Already sent, no duplicate email.');
           }
           if (syncCrmBtn) {
             var crmMsg = out.data.action === 'created' ? 'CRM record created.' : 'CRM record updated.';
-            if (out.data.externalCrmId) crmMsg += '\nCRM ID: ' + out.data.externalCrmId;
-            window.alert(crmMsg);
+            if (out.data.externalCrmId) crmMsg += ' External ID: ' + out.data.externalCrmId;
+            showLeToast('<strong>CRM synced.</strong> ' + escapeHtml(crmMsg), 'success', 8000);
+          } else if (sendBtn && out.data.idempotentReplay) {
+            showLeToast(
+              escapeHtml(out.data.message || 'Already sent — no duplicate email.'),
+              'info',
+              9000
+            );
+          } else {
+            showLeToast('<strong>' + escapeHtml(label) + ' complete.</strong>', 'success', 6000);
           }
+          clearLeadRowFeedback(leadId);
           loadList(false);
         } catch (err) {
-          window.alert(label + ' failed: ' + String((err && err.message) || err || 'network error'));
+          showPipelineError(
+            label + ' failed',
+            String((err && err.message) || err || 'Network or unexpected error')
+          );
+          setLeadRowFeedbackHtml(leadId, '<span class="text-danger">Request error — see banner above.</span>', 'danger');
         } finally {
+          btn.classList.remove('le-btn-loading');
           btn.disabled = false;
         }
+      });
+
+      document.getElementById('leadsTableWrap').addEventListener('focusin', function (ev) {
+        var s = ev.target.closest('.demo-outreach-status-select');
+        if (!s) return;
+        s.setAttribute('data-le-prev', s.value);
       });
 
       document.getElementById('leadsTableWrap').addEventListener('change', async function (ev) {
@@ -2196,15 +3836,34 @@
         var lid = sel.getAttribute('data-lead-id');
         if (!lid) return;
         var st = sel.value;
+        sel.disabled = true;
+        clearLeadRowFeedback(lid);
+        setLeadRowFeedbackHtml(lid, '<span class="text-secondary">Saving stage…</span>', 'info');
         var out = await api('lead-engine-demo-outreach-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ leadId: lid, status: st === '' ? null : st }),
         });
+        sel.disabled = false;
         if (!out.res.ok) {
-          window.alert(out.data.error || out.data.details || 'Could not update demo outreach status');
+          var rowRef = currentListRows.find(function (x) {
+            return x.id === lid;
+          });
+          var pAttr = sel.getAttribute('data-le-prev');
+          if (pAttr !== null) sel.value = pAttr;
+          else if (rowRef) sel.value = rowRef.demo_outreach_status || '';
+          else sel.value = '';
+          var emsg = out.data.error || out.data.details || 'Could not save stage';
+          showLeToast('<strong>Stage not saved.</strong> ' + escapeHtml(String(emsg)), 'danger', 12000);
+          setLeadRowFeedbackHtml(lid, '<span class="text-danger">' + escapeHtml(String(emsg).slice(0, 140)) + '</span>', 'danger');
+          return;
         }
-        loadList(false);
+        var lr = currentListRows.find(function (x) {
+          return x.id === lid;
+        });
+        if (lr) lr.demo_outreach_status = st === '' ? null : st;
+        showLeToast('<strong>Demo stage saved.</strong>', 'success', 4000);
+        refreshLeadRowInTable(lid);
       });
 
       document.getElementById('leadsTableWrap').addEventListener('click', async function (ev) {
@@ -2213,6 +3872,8 @@
           var lids = markS.getAttribute('data-lead-id');
           if (!lids) return;
           markS.disabled = true;
+          clearLeadRowFeedback(lids);
+          setLeadRowFeedbackHtml(lids, '<span class="text-secondary">Saving…</span>', 'info');
           try {
             var outS = await api('lead-engine-demo-outreach-status', {
               method: 'POST',
@@ -2220,9 +3881,16 @@
               body: JSON.stringify({ leadId: lids, status: 'sent_manual' }),
             });
             if (!outS.res.ok) {
-              window.alert(outS.data.error || outS.data.details || 'Could not mark email sent');
+              var sErr = outS.data.error || outS.data.details || 'Could not save';
+              showLeToast('<strong>Not saved.</strong> ' + escapeHtml(String(sErr)), 'danger', 10000);
+              setLeadRowFeedbackHtml(lids, '<span class="text-danger">' + escapeHtml(String(sErr).slice(0, 120)) + '</span>', 'danger');
             } else {
-              loadList(false);
+              var rS = currentListRows.find(function (x) {
+                return x.id === lids;
+              });
+              if (rS) rS.demo_outreach_status = 'sent_manual';
+              showLeToast('Marked as sent (manual).', 'success', 4000);
+              refreshLeadRowInTable(lids);
             }
           } finally {
             markS.disabled = false;
@@ -2234,6 +3902,8 @@
           var lidf = markF.getAttribute('data-lead-id');
           if (!lidf) return;
           markF.disabled = true;
+          clearLeadRowFeedback(lidf);
+          setLeadRowFeedbackHtml(lidf, '<span class="text-secondary">Setting reminder…</span>', 'info');
           try {
             var dueIso = addUtcBusinessDays(new Date(), 3);
             var outF = await api('lead-engine-demo-outreach-status', {
@@ -2246,9 +3916,23 @@
               }),
             });
             if (!outF.res.ok) {
-              window.alert(outF.data.error || outF.data.details || 'Could not set follow-up');
+              var fErr = outF.data.error || outF.data.details || 'Could not save';
+              showLeToast('<strong>Reminder not set.</strong> ' + escapeHtml(String(fErr)), 'danger', 10000);
+              setLeadRowFeedbackHtml(lidf, '<span class="text-danger">' + escapeHtml(String(fErr).slice(0, 120)) + '</span>', 'danger');
             } else {
-              loadList(false);
+              var rF = currentListRows.find(function (x) {
+                return x.id === lidf;
+              });
+              if (rF) {
+                rF.demo_outreach_status = 'followup_due';
+                rF.demo_followup_due_at = dueIso;
+              }
+              showLeToast(
+                '<strong>Follow-up needed</strong> — reminder date set (UTC business days).',
+                'success',
+                6000
+              );
+              refreshLeadRowInTable(lidf);
             }
           } finally {
             markF.disabled = false;
@@ -2263,7 +3947,7 @@
             return x.id === lidE;
           });
           if (!rowE) {
-            window.alert('Lead not in current page, refresh or change filters.');
+            showLeToast('That lead is not on this page. Refresh or adjust filters, then try again.', 'warning', 8000);
             return;
           }
           openLeadEditModal(rowE);
@@ -2287,9 +3971,16 @@
             body: JSON.stringify({ leadId: lid, demoFollowupDueAt: null }),
           });
           if (!outN.res.ok) {
-            window.alert(outN.data.error || outN.data.details || 'Could not clear follow-up date');
+            var nErr = outN.data.error || outN.data.details || 'Could not clear date';
+            showLeToast('<strong>Date not cleared.</strong> ' + escapeHtml(String(nErr)), 'danger', 10000);
+          } else {
+            var rN = currentListRows.find(function (x) {
+              return x.id === lid;
+            });
+            if (rN) rN.demo_followup_due_at = null;
+            showLeToast('Reminder date cleared (stage unchanged).', 'success', 4000);
+            refreshLeadRowInTable(lid);
           }
-          loadList(false);
           return;
         }
         var clr = ev.target.closest('.le-demo-clearfail');
@@ -2302,9 +3993,16 @@
             body: JSON.stringify({ leadId: lidc, status: null }),
           });
           if (!outC.res.ok) {
-            window.alert(outC.data.error || outC.data.details || 'Could not clear status');
+            var cErr = outC.data.error || outC.data.details || 'Could not clear stage';
+            showLeToast('<strong>Stage not cleared.</strong> ' + escapeHtml(String(cErr)), 'danger', 10000);
+          } else {
+            var rC = currentListRows.find(function (x) {
+              return x.id === lidc;
+            });
+            if (rC) rC.demo_outreach_status = null;
+            showLeToast('Send-failed stage cleared.', 'success', 4000);
+            refreshLeadRowInTable(lidc);
           }
-          loadList(false);
           return;
         }
         var outcomeBtn = ev.target.closest('.le-demo-outcome');
@@ -2313,6 +4011,8 @@
           var ost = outcomeBtn.getAttribute('data-demo-outcome');
           if (!lidO || !ost) return;
           outcomeBtn.disabled = true;
+          clearLeadRowFeedback(lidO);
+          setLeadRowFeedbackHtml(lidO, '<span class="text-secondary">Saving outcome…</span>', 'info');
           try {
             var outO = await api('lead-engine-demo-outreach-status', {
               method: 'POST',
@@ -2320,9 +4020,23 @@
               body: JSON.stringify({ leadId: lidO, status: ost }),
             });
             if (!outO.res.ok) {
-              window.alert(outO.data.error || outO.data.details || 'Could not set outcome');
+              var oErr = outO.data.error || outO.data.details || 'Could not save outcome';
+              showLeToast('<strong>Outcome not saved.</strong> ' + escapeHtml(String(oErr)), 'danger', 10000);
+              setLeadRowFeedbackHtml(lidO, '<span class="text-danger">' + escapeHtml(String(oErr).slice(0, 120)) + '</span>', 'danger');
+            } else {
+              var rO = currentListRows.find(function (x) {
+                return x.id === lidO;
+              });
+              if (rO) rO.demo_outreach_status = ost;
+              var oLabel =
+                ost === 'replied'
+                  ? 'Saved as replied.'
+                  : ost === 'interested'
+                    ? 'Saved as interested.'
+                    : 'Saved as not interested.';
+              showLeToast(oLabel, 'success', 5000);
+              refreshLeadRowInTable(lidO);
             }
-            await loadList(false);
           } finally {
             outcomeBtn.disabled = false;
           }
@@ -2383,7 +4097,11 @@
       async function runBatchChunked(fnName, leadIds) {
         var ids = (leadIds || []).slice();
         if (!ids.length) {
-          window.alert('No eligible selected leads for this batch action.');
+          showLeToast(
+            'No eligible leads selected for this action. Select rows or adjust filters, then try again.',
+            'warning',
+            9000
+          );
           return;
         }
         var chunks = chunkLeadIds(ids, BATCH_CHUNK_SIZE);
@@ -2624,6 +4342,7 @@
       syncDailyQueueButtonStates();
       loadList(true);
       loadActivitySummary();
+      loadCommandCenter();
     }
     init();
   </script>

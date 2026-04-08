@@ -151,7 +151,7 @@ async function fetchLeadIdsByGlobalSuppression(supabase, suppressed) {
 
 /**
  * Custom-demo outreach status (Phase 6), column on lead_engine_leads.
- * @param {string} statusKey drafted|copied|sent_manual|followup_due|unset
+ * @param {string} statusKey drafted|copied|sent_manual|followup_due|send_failed|replied|interested|not_interested|unset
  */
 async function fetchLeadIdsByDemoOutreachStatus(supabase, statusKey) {
   let q = supabase.from('lead_engine_leads').select('id').limit(12000);
@@ -164,7 +164,7 @@ async function fetchLeadIdsByDemoOutreachStatus(supabase, statusKey) {
   if (error) {
     if (isMissingLeadEngineDemoColumnError(error)) {
       console.warn(
-        '[lead-engine-list-filters] demo_outreach_* columns missing; skipping demo outreach status filter. Apply 20260402160000_lead_engine_demo_outreach_status.sql.'
+        '[lead-engine-list-filters] demo_outreach_* columns missing; skipping demo outreach status filter. Apply demo outreach migrations (20260402160000, 20260407180000).'
       );
       return { ok: true, ids: new Set(), skipFilter: true };
     }

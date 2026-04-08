@@ -40,8 +40,10 @@ test('buildScoreUserContent includes deterministic_offer_selection when passed',
     offer_scores: {},
     top_supporting_signals: ['a'],
     draft_angle: 'x',
-    is_hvac: false,
     fix_my_app_eligible: false,
+    scheduling_context_weight: 1,
+    industry_inference: { profile_id: 'unknown', display_label: 'General' },
+    normalized_signals: { version: 1 },
   };
   const j = JSON.parse(buildScoreUserContent(lead, signals, det));
   assert.equal(j.deterministic_offer_selection.selected_offer, 'AI Intake Form Setup');

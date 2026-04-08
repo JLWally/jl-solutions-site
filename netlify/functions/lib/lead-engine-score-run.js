@@ -11,7 +11,7 @@ const { pickNewestSuccessfulAnalysisRow } = require('./lead-engine-analysis-pick
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lead-engine-audit-log');
 
 const LEAD_SELECT = 'id, company_name, website_url, source, status';
-const SCORE_MODEL_VERSION_SUFFIX = 'jl-lead-score-v2-deterministic-offer';
+const SCORE_MODEL_VERSION_SUFFIX = 'jl-lead-score-v3-vertical-agnostic';
 
 async function runScoreForLead(supabase, leadId, actor) {
   const { data: lead, error: leadErr } = await supabase
@@ -82,6 +82,7 @@ async function runScoreForLead(supabase, leadId, actor) {
 
   const offerFinal = deterministic.selected_offer;
 
+  const inf = deterministic.industry_inference || {};
   const scoresPayload = {
     fit_score: parsed.value.fit_score,
     confidence: parsed.value.confidence,
@@ -92,8 +93,18 @@ async function runScoreForLead(supabase, leadId, actor) {
     offer_scores: deterministic.offer_scores,
     top_supporting_signals: deterministic.top_supporting_signals,
     draft_angle: deterministic.draft_angle,
-    is_hvac_niche: deterministic.is_hvac,
     fix_my_app_eligible: deterministic.fix_my_app_eligible,
+    scheduling_context_weight: deterministic.scheduling_context_weight,
+    vertical_intel: {
+      profile_id: inf.profile_id,
+      display_label: inf.display_label,
+      parent_id: inf.parent_id,
+      parent_label: inf.parent_label,
+      confidence: inf.confidence,
+      inference_score: inf.score,
+      matched_cues: inf.matched_cues || [],
+      normalized_signals: deterministic.normalized_signals || null,
+    },
   };
   const modelVersion = `${usedModel}|${SCORE_MODEL_VERSION_SUFFIX}`;
 

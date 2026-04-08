@@ -174,16 +174,16 @@
   to = "/demo-builder.html"
   status = 200
 
-# Quick wizard: name + industry → create demo → redirect (before /demo/* catch-all)
+# Quick demo wizard — not public until tested (avoid /demo/* treating "quick" as a slug)
 [[redirects]]
   from = "/demo/quick"
-  to = "/demo-quick.html"
-  status = 200
+  to = "/404.html"
+  status = 404
 
 [[redirects]]
   from = "/demo/quick/"
-  to = "/demo-quick.html"
-  status = 200
+  to = "/404.html"
+  status = 404
 
 # Per-business smart intake demos: /demo/your-slug → demo page with ?demo=
 [[redirects]]

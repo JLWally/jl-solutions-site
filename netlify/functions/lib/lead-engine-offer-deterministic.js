@@ -2,8 +2,13 @@
 
 /**
  * Deterministic per-offer scoring from audit signals (before AI copy).
- * HVAC: prefer Scheduling & Resource Routing when its score >= AI Intake (see applyHvacOfferPreference).
+ * Offers are chosen from weighted signal buckets — not from industry stereotypes.
+ * Industry profile only supplies a small scheduling-context tie-break when the profile is dispatch-heavy.
  */
+
+const { buildNormalizedVerticalSignals } = require('./lead-engine-vertical-signals');
+const { inferIndustryProfile } = require('./lead-engine-industry-inference');
+const { getProfile } = require('./industry-profiles');
 
 const OFFERS = {
   SCHEDULING: 'Scheduling & Resource Routing',
@@ -21,7 +26,7 @@ const OFFER_PRIORITY = [
 
 const DRAFT_ANGLE_BY_OFFER = {
   [OFFERS.SCHEDULING]:
-    'Emphasize simplifying the service request and scheduling flow so homeowners can book or request service without friction.',
+    'Emphasize simplifying how people request time, service, or appointments—whether end customers, clients, or internal stakeholders—without friction.',
   [OFFERS.AI_INTAKE]:
     'Emphasize a smarter intake and qualification flow (routing, confirmations, structured capture) instead of a generic contact form.',
   [OFFERS.WEBSITE]:
@@ -29,8 +34,6 @@ const DRAFT_ANGLE_BY_OFFER = {
   [OFFERS.FIX_MY_APP]:
     'Emphasize fixing specific broken or confusing flows in their existing app, portal, or embedded tool, not a full site redesign.',
 };
-
-const HVAC_CORPUS_RE = /\b(hvac|h\.?v\.?a\.?c\.?|heating|cooling|air conditioning|air\s*conditioning|furnace|a\/c\b|\bac\b repair|heat pump|ductwork|duct work|boiler|mini[-\s]?split|central air|refrigeration)\b/i;
 
 const EMERGENCY_RE = /\b(emergency|same[-\s]?day|24[-\s/]*7|24\s*hr|after[-\s]?hours|nights?(\s+and\s+|\s*,\s*|\s*&\s*)?weekends?)\b/i;
 
@@ -49,6 +52,10 @@ const PORTAL_TOOL_RE =
   /\b(portal|customer\s*login|client\s*login|my\s*account|web\s*app|dispatcher|field\s*service|service\s*titan|housecall|jobber|fieldedge|workiz|servicetitan)\b/i;
 
 const PORTAL_URL_RE = /\/(portal|login|account|app|customer|dispatch)\b/i;
+
+/** Dispatch / field-service language that applies across verticals (not HVAC-only). */
+const FIELD_DISPATCH_RE =
+  /\b(repair|installation|maintenance|technician|crew|route|dispatch|field\s+service|on[-\s]?site|service\s+truck)\b/i;
 
 function norm(s) {
   return String(s || '')
@@ -86,13 +93,6 @@ function collectHrefCorpus(signals) {
   return urls.join(' ');
 }
 
-function detectHvacNiche(lead, corpus) {
-  const name = norm(lead && lead.company_name);
-  const url = norm(lead && lead.website_url);
-  if (HVAC_CORPUS_RE.test(name) || HVAC_CORPUS_RE.test(url)) return true;
-  return HVAC_CORPUS_RE.test(corpus);
-}
-
 function countServiceTypeHits(corpus) {
   const hits = new Set();
   for (const re of SERVICE_TYPE_RES) {
@@ -115,42 +115,77 @@ function addReason(bucket, points, label) {
   bucket.reasons.push({ points, label });
 }
 
-function scoreScheduling(aggregate, ux, corpus, isHvac) {
+function isNonLocalServiceContext(normalized, corpus) {
+  if (!normalized) return false;
+  if (normalized.compliance_sensitive_language) return true;
+  if (normalized.b2b_or_enterprise_cues) return true;
+  return false;
+}
+
+function fieldDispatchHeuristic(corpus, normalized, aggregate) {
+  if (isNonLocalServiceContext(normalized, corpus)) return false;
+  if (normalized && normalized.service_area_language) return true;
+  if (FIELD_DISPATCH_RE.test(corpus)) return true;
+  if (normalized && normalized.appointment_or_intake_language && !aggregate.booking_detected) return true;
+  return false;
+}
+
+/**
+ * @param {number} schedulingContextWeight from industry profile (1 = neutral)
+ */
+function scoreScheduling(aggregate, ux, corpus, normalized, schedulingContextWeight, profile) {
   const bucket = { total: 0, reasons: [] };
+  const nonLocal = isNonLocalServiceContext(normalized, corpus);
+  const parentId = profile && profile.parentId ? profile.parentId : 'unknown';
+
   if (!aggregate.booking_detected) {
-    addReason(bucket, 3, 'No obvious online booking path');
+    addReason(bucket, nonLocal ? 1 : 3, 'No obvious online booking path');
   }
   if (EMERGENCY_RE.test(corpus)) {
     addReason(bucket, 2, 'Emergency / same-day / 24-7 language');
   }
   if (countServiceTypeHits(corpus) >= 2) {
-    addReason(bucket, 2, 'Multiple service types (e.g. repair / install / maintenance)');
+    addReason(bucket, nonLocal ? 0 : 2, 'Multiple service types (e.g. repair / install / maintenance)');
   }
   const weakRequest =
     !aggregate.booking_detected &&
     (ux.includes('missing_contact_form') || (aggregate.forms_count_total || 0) <= 1);
   if (weakRequest) {
-    addReason(bucket, 2, 'Weak estimate / service request flow');
+    addReason(bucket, nonLocal ? 1 : 2, 'Weak estimate / service request flow');
   }
   if (SERVICE_AREA_RE.test(corpus)) {
-    addReason(bucket, 2, 'Service area / coverage complexity');
+    addReason(bucket, nonLocal ? 0 : 2, 'Service area / coverage complexity');
   }
   const phoneFirst =
     aggregate.has_visible_phone &&
     !aggregate.booking_detected &&
     (aggregate.has_mailto || aggregate.has_tel || aggregate.has_phone_in_text);
   if (phoneFirst) {
-    addReason(bucket, 2, 'Phone-first / manual scheduling workflow');
+    addReason(bucket, nonLocal ? 1 : 2, 'Phone-first / manual scheduling workflow');
   }
-  if (isHvac) {
-    addReason(bucket, 2, 'HVAC / mechanical trade niche');
+  const w = Number(schedulingContextWeight) || 1;
+  if (
+    parentId === 'local_service' &&
+    w > 1.05 &&
+    fieldDispatchHeuristic(corpus, normalized, aggregate)
+  ) {
+    addReason(bucket, Math.min(2, Math.round((w - 1) * 2)), 'Dispatch-style service signals match this vertical profile');
   }
   return bucket;
 }
 
-function scoreAiIntake(aggregate, ux, corpus) {
+function scoreAiIntake(aggregate, ux, corpus, normalized) {
   const bucket = { total: 0, reasons: [] };
   const forms = aggregate.forms_count_total || 0;
+  if (normalized && normalized.compliance_sensitive_language) {
+    addReason(bucket, 2, 'Compliance / sensitive-data context favors structured intake');
+  }
+  if (normalized && normalized.rfq_or_estimate_language) {
+    addReason(bucket, 2, 'Quote, estimate, or proposal-request language');
+  }
+  if (normalized && normalized.b2b_or_enterprise_cues) {
+    addReason(bucket, 2, 'B2B / enterprise journey (demo, sales, or qualification paths)');
+  }
   if (forms < 2) {
     addReason(bucket, 3, 'No multi-step or rich intake pattern');
   }
@@ -223,11 +258,12 @@ function scoreFixMyApp(aggregate, ux, corpus, hrefCorpus, eligible) {
 }
 
 /**
- * When HVAC and scheduling >= aiIntake, demote AI Intake so Scheduling wins ties and near-ties.
+ * When inferred profile is dispatch-heavy and scheduling >= aiIntake, demote AI Intake slightly (tie-break).
  */
-function applyHvacOfferPreference(scores, isHvac) {
-  const out = { ...scores };
-  if (!isHvac) return out;
+function applyProfileSchedulingTieBreak(offerTotals, profile) {
+  const out = { ...offerTotals };
+  const w = Number(profile && profile.schedulingContextWeight) || 1;
+  if (!profile || profile.parentId !== 'local_service' || w < 1.35) return out;
   const s = out[OFFERS.SCHEDULING];
   const a = out[OFFERS.AI_INTAKE];
   if (s >= a) {
@@ -253,15 +289,30 @@ function topSignalsFromWinner(winnerBucket, limit = 3) {
   return sorted.slice(0, limit).map((r) => r.label);
 }
 
+function resolveVerticalIntelligence(lead, signals) {
+  if (signals && signals.vertical_intelligence && signals.vertical_intelligence.normalized_signals) {
+    return {
+      normalized_signals: signals.vertical_intelligence.normalized_signals,
+      industry_inference: signals.vertical_intelligence.industry_inference || inferIndustryProfile({ lead, signals }),
+    };
+  }
+  return {
+    normalized_signals: buildNormalizedVerticalSignals(signals),
+    industry_inference: inferIndustryProfile({ lead, signals }),
+  };
+}
+
 /**
- * @param {{ company_name?: string, website_url?: string }} lead
+ * @param {{ company_name?: string, website_url?: string, niche?: string }} lead
  * @param {object} signals - successful audit signal bundle
  * @returns {{
  *   selected_offer: string,
- *   offer_scores: Record<string, { total: number, reasons: { points: number, label: string }[] }>,
+ *   offer_scores: Record<string, { total: number, reasons: string[] }>,
  *   top_supporting_signals: string[],
  *   draft_angle: string,
- *   is_hvac: boolean,
+ *   industry_inference: object,
+ *   normalized_signals: object,
+ *   scheduling_context_weight: number,
  *   fix_my_app_eligible: boolean,
  * }}
  */
@@ -270,13 +321,16 @@ function computeDeterministicOfferSelection(lead, signals) {
   const ux = Array.isArray(signals && signals.ux_hints) ? signals.ux_hints : [];
   const corpus = buildCorpus(signals);
   const hrefCorpus = collectHrefCorpus(signals);
-  const isHvac = detectHvacNiche(lead, corpus);
   const psiPrimary = signals && signals.psi && signals.psi.primary_scores ? signals.psi.primary_scores : null;
+
+  const { normalized_signals, industry_inference } = resolveVerticalIntelligence(lead, signals);
+  const profile = getProfile(industry_inference.profile_id);
+  const schedulingContextWeight = profile.schedulingContextWeight || 1;
 
   const fixMyAppEligible = hasAppPortalToolSignal(corpus, hrefCorpus, aggregate);
 
-  const schedulingB = scoreScheduling(aggregate, ux, corpus, isHvac);
-  const aiB = scoreAiIntake(aggregate, ux, corpus);
+  const schedulingB = scoreScheduling(aggregate, ux, corpus, normalized_signals, schedulingContextWeight, profile);
+  const aiB = scoreAiIntake(aggregate, ux, corpus, normalized_signals);
   const webB = scoreWebsiteRedesign(aggregate, ux, psiPrimary);
   const fixB = scoreFixMyApp(aggregate, ux, corpus, hrefCorpus, fixMyAppEligible);
 
@@ -294,7 +348,7 @@ function computeDeterministicOfferSelection(lead, signals) {
     [OFFERS.FIX_MY_APP]: fixMyAppEligible ? fixB.total : 0,
   };
 
-  const adjusted = applyHvacOfferPreference(flatTotals, isHvac);
+  const adjusted = applyProfileSchedulingTieBreak(flatTotals, profile);
   const { winner } = pickWinner(adjusted);
   const winnerBucket = offer_scores[winner];
 
@@ -315,7 +369,9 @@ function computeDeterministicOfferSelection(lead, signals) {
     offer_scores: offer_scores_serializable,
     top_supporting_signals,
     draft_angle,
-    is_hvac: isHvac,
+    industry_inference,
+    normalized_signals,
+    scheduling_context_weight: schedulingContextWeight,
     fix_my_app_eligible: fixMyAppEligible,
   };
 }
@@ -326,7 +382,7 @@ module.exports = {
   DRAFT_ANGLE_BY_OFFER,
   computeDeterministicOfferSelection,
   buildCorpus,
-  detectHvacNiche,
   hasAppPortalToolSignal,
-  applyHvacOfferPreference,
+  applyProfileSchedulingTieBreak,
+  resolveVerticalIntelligence,
 };

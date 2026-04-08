@@ -15,8 +15,10 @@ const {
   hasHubspotConfig,
   buildHubspotContactPayload,
   upsertHubspotContact,
+  fetchHubspotContactLifecycleSnapshot,
 } = require('./lib/lead-engine-crm-hubspot');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lib/lead-engine-audit-log');
+const { logNativeLeadOutcome, NATIVE_SOURCES } = require('./lib/lead-engine-native-outcome-log');
 
 exports.handler = async (event) => {
   const headers = withCors('POST, OPTIONS');
@@ -132,6 +134,16 @@ exports.handler = async (event) => {
   });
 
   const nowIso = new Date().toISOString();
+  const existingCrmId = lead.external_crm_id || lead.external_id || '';
+  let beforeSnap = null;
+  if (existingCrmId) {
+    try {
+      beforeSnap = await fetchHubspotContactLifecycleSnapshot(existingCrmId);
+    } catch (e) {
+      console.warn('[lead-engine-sync-crm] lifecycle pre-fetch', (e && e.message) || e);
+    }
+  }
+
   try {
     const { crmId, action } = await upsertHubspotContact({
       externalCrmId: lead.external_crm_id || lead.external_id,
@@ -164,6 +176,34 @@ exports.handler = async (event) => {
       message: 'CRM sync succeeded',
       metadata_json: { crm_source: 'hubspot', action, external_crm_id: crmId },
     });
+
+    let afterSnap = null;
+    try {
+      afterSnap = await fetchHubspotContactLifecycleSnapshot(crmId);
+    } catch (e) {
+      console.warn('[lead-engine-sync-crm] lifecycle post-fetch', (e && e.message) || e);
+    }
+    const canCompare = Boolean(beforeSnap && afterSnap);
+    const lifecycleDiff =
+      canCompare &&
+      (beforeSnap.lifecyclestage !== afterSnap.lifecyclestage ||
+        beforeSnap.hs_lead_status !== afterSnap.hs_lead_status);
+    const shouldLogCrmOutcome = action === 'created' || !beforeSnap || lifecycleDiff;
+    if (shouldLogCrmOutcome) {
+      await logNativeLeadOutcome(supabase, {
+        leadId,
+        outcome_code: 'crm_stage_changed',
+        native_source: NATIVE_SOURCES.HUBSPOT_CRM_SYNC,
+        context: 'hubspot_lifecycle',
+        evidence: {
+          hubspot_action: action,
+          before: beforeSnap,
+          after: afterSnap,
+          stage_changed: Boolean(lifecycleDiff || action === 'created'),
+        },
+        actor: operator ? `operator:${operator}` : 'operator:crm_sync',
+      });
+    }
 
     return {
       statusCode: 200,

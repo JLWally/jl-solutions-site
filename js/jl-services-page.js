@@ -43,6 +43,10 @@
 
     mount('[data-jl-cs="hero"]', CS.renderHero(cfg.hero, routes));
     mount('[data-jl-cs="proof"]', CS.renderProofStrip(cfg.proof));
+    mountOptional(
+      '[data-jl-cs="promo-bridge"]',
+      CS.renderPromoBridge(cfg.promoBridge, routes)
+    );
     mount(
       '[data-jl-cs="featured-head"]',
       CS.renderFeaturedOffersHead(cfg.featuredOffers)

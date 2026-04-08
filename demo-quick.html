@@ -1,16 +1,18 @@
 <!DOCTYPE html>
+<!-- Internal / QA only: not linked from the live site. Quick path is blocked at /demo/quick via netlify.toml. Run npm run dev (Netlify) locally to exercise demo-config + Blobs. -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Get a custom demo | JL Solutions</title>
+  <meta name="robots" content="noindex, nofollow">
+  <title>Quick demo (internal) | JL Solutions</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/theme-jl.css">
   <link rel="stylesheet" href="/css/demo-dynamic-intake.css">
   <link rel="icon" href="assets/images/jlsolutions-logo.png" type="image/png">
-  <meta name="description" content="See your system before you buy, generate a personalized smart intake demo in seconds.">
+  <meta name="description" content="Internal quick demo flow for QA (not linked from the public site).">
   <style>
     body.demo-quick-body { font-family: Inter, system-ui, sans-serif; background: #f8fafc; color: #0f172a; min-height: 100vh; }
     .demo-quick-wrap { max-width: 26rem; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
@@ -26,18 +28,6 @@
     .demo-quick-card h1 { font-size: 1.35rem; font-weight: 800; color: var(--jl-ink, #0a1628); margin: 0 0 0.35rem; }
     @media (min-width: 576px) { .demo-quick-card h1 { font-size: 1.5rem; } }
     .demo-quick-lead { font-size: 0.9375rem; color: #64748b; margin: 0 0 1.25rem; line-height: 1.5; }
-    .demo-quick-dev-hint {
-      font-size: 0.8125rem;
-      line-height: 1.5;
-      color: #475569;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.5rem;
-      padding: 0.6rem 0.75rem;
-      margin: -0.5rem 0 1rem;
-    }
-    .demo-quick-dev-hint code { font-size: 0.9em; color: #334155; background: #fff; padding: 0.1rem 0.3rem; border-radius: 0.25rem; border: 1px solid #e2e8f0; }
-    .demo-quick-dev-hint strong { color: #0f172a; }
     .demo-quick-progress { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0d9488; margin-bottom: 1rem; }
     .demo-quick-actions { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.25rem; }
     @media (min-width: 480px) {
@@ -93,7 +83,6 @@
     <div class="demo-quick-card">
       <h1>See your system before you buy</h1>
       <p class="demo-quick-lead">We’ll spin up a branded smart intake preview for your business. Two quick questions, then you’re in.</p>
-      <p class="demo-quick-dev-hint" role="note"><strong>Developers:</strong> creating a demo needs Netlify Functions + Blobs, use <code>npm run dev</code> (not static <code>serve</code> alone).</p>
       <p class="demo-quick-progress" id="dq-progress">Step 1 of 2</p>
 
       <div id="dq-step-1">

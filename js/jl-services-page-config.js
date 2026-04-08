@@ -11,10 +11,12 @@
     bookConsultation: '/book-consultation',
     contact: '/contact.html',
     demo: '/demo',
+    checkout: '/checkout/',
   };
 
   var GS = R.getStarted;
   var BC = R.bookConsultation;
+  var CH = R.checkout;
 
   global.JL_SERVICES_PAGE = {
     routes: R,
@@ -29,16 +31,16 @@
     },
 
     hero: {
-      title: 'Stop losing leads. Start converting them automatically.',
+      title: 'Need something more advanced?',
       lead:
-        'We build smart intake, booking, and lead systems that qualify customers before you ever respond - so you make more money from the traffic and reputation you already have.',
-      primaryHref: GS,
+        'Quick Setup is the fastest way to get started, but JL Solutions also builds full intake, routing, automation, and workflow systems for teams that need deeper support.',
+      primaryHref: CH,
       secondaryHref: BC,
       tertiaryHref: '#product-cards-section',
-      primaryLabel: 'Get Started',
+      primaryLabel: 'Start Setup Now',
       secondaryLabel: 'Talk it through first',
-      tertiaryLinkLabel: 'View packages',
-      trustItems: ['Built to convert', 'Fast turnaround', 'Fixed-price systems'],
+      tertiaryLinkLabel: 'Explore full services below',
+      trustItems: ['Full-system builds', 'Custom automation', 'Fixed-price packages'],
     },
 
     proof: {
@@ -52,14 +54,27 @@
         'Built by a Senior Full Stack Developer with 10+ years across government, healthcare, and enterprise systems.',
     },
 
+    promoBridge: {
+      title: 'Start simple or build bigger',
+      subHtml:
+        'If you need something live fast, start with <a href="' +
+        CH +
+        '">Quick Setup</a>. If you need broader automation, routing, follow-up, or custom workflow support, explore the <a href="#product-cards-section">full services below</a>. Not sure yet? Use the <a href="' +
+        GS +
+        '">guided path</a>.',
+      checkoutLinkText: 'Just want the fastest path? Start with Quick Setup.',
+    },
+
     featuredOffers: {
       headingId: 'featured-offers-heading',
-      kicker: 'Featured offers',
-      title: 'Four fixed-price systems that pay for themselves',
+      kicker: 'Full services & fixed-price systems',
+      title: 'Deeper builds: intake, routing, automation, and workflow systems',
       subHtml:
-        'Same path for every package: pick a system below → optional <strong>service overview</strong> → <a href="' +
+        'Quick Setup is the fastest way to go live. The packages below are for teams that need <strong>broader automation</strong>, larger scopes, or custom workflows. Pick a system → optional <strong>service overview</strong> → <a href="' +
         GS +
-        '">Get Started</a> (short intake) → secure checkout. Want to <a href="' +
+        '">help me choose</a> or <a href="' +
+        CH +
+        '">checkout</a>. Want to <a href="' +
         BC +
         '">talk it through first</a>? <strong>One new customer can often pay for the entire setup.</strong>',
     },
@@ -141,9 +156,13 @@
         'No long builds. No complicated setup. We handle everything.',
       steps: [
         {
-          title: 'Choose your system',
+          title: 'Choose your path',
           bodyHtml:
-            'Pick the setup that matches your biggest bottleneck - then open a <strong>service overview</strong> if you want the full picture.',
+            'Need speed? <a href="' +
+            CH +
+            '">Start at checkout</a> with Quick Setup, Priority Quick Setup, or a Full System Deposit. Need a deeper fixed-price package or custom scope? Explore the <a href="#product-cards-section">systems below</a> or use <a href="' +
+            GS +
+            '">help me choose</a>.',
         },
         {
           title: 'We map your workflow',
@@ -154,8 +173,10 @@
           title: 'We build + launch fast',
           bodyHtml:
             'Live in days, not weeks - ready to convert. <a href="' +
+            CH +
+            '">Checkout</a>, <a href="' +
             GS +
-            '">Start now</a> or <a href="' +
+            '">guided intake</a>, or <a href="' +
             BC +
             '">talk it through first</a>.',
         },
@@ -164,9 +185,9 @@
 
     advanced: {
       headingId: 'custom-heading',
-      title: 'Need something more advanced? We build full revenue systems.',
+      title: 'Custom automation, applications, and full platforms',
       subHtml:
-        'When your workflow gets complex, we design systems that handle everything automatically - end to end.',
+        'When your workflow gets complex, we design systems that handle everything automatically—end to end. Quick Setup covers the front door; this is the layer for larger scopes.',
       links: [
         { href: '/services/eligibility-wizard.html', label: 'Multi-step applications' },
         { href: '/services/document-extraction.html', label: 'AI-powered document processing' },
@@ -180,27 +201,32 @@
 
     decisionCta: {
       headingId: 'guided-heading',
-      title: 'Not sure which system fits best?',
-      lead: 'We’ll point you in the right direction.',
+      title: 'Not sure which setup fits best?',
+      lead:
+        'Use the guided path to compare Quick Setup, Priority Quick Setup, and Full System Deposit—or go straight to checkout if you already know.',
       primaryHref: GS,
       secondaryHref: BC,
-      primaryLabel: 'Get Started (guided)',
+      tertiaryHref: CH,
+      primaryLabel: 'Help me choose',
       secondaryLabel: 'Talk it through first',
+      tertiaryLabel: 'Go to checkout',
     },
 
     footerCta: {
       headingId: 'services-cta-heading',
-      title: 'Stop losing leads. Start converting them this week.',
+      title: 'Start simple this week—or go deeper on automation.',
       lead:
-        'Fixed-price systems built to turn demand into revenue - start now or talk it through first.',
+        'Quick Setup is the fastest path. Full services below cover larger builds, routing, and workflow automation end to end.',
       subHtml:
         'Need a larger build or more complexity? <a href="' +
         BC +
-        '" class="text-white fw-semibold text-decoration-underline">Talk it through first</a> and we’ll scope it with you.',
-      primaryHref: GS,
+        '" class="text-white fw-semibold text-decoration-underline">Talk it through first</a> and we’ll scope it with you. <a href="' +
+        CH +
+        '" class="text-white fw-semibold text-decoration-underline">Just want Quick Setup?</a>',
+      primaryHref: CH,
       secondaryHref: BC,
       tertiaryHref: R.contact,
-      primaryLabel: 'Get Started',
+      primaryLabel: 'Start Setup Now',
       secondaryLabel: 'Talk it through first',
       tertiaryLabel: 'Request a Quote',
       risk:

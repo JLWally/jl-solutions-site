@@ -17,7 +17,9 @@ const { getLeadEnginePublicSiteUrl } = require('./lead-engine-public-site-url');
 
 const LEAD_SELECT = 'id, company_name, website_url, source, status, demo_slug';
 
-async function runDraftForLead(supabase, leadId, channel, actor) {
+async function runDraftForLead(supabase, leadId, channel, actor, options) {
+  const opts = options && typeof options === 'object' ? options : {};
+  const operatorIntent = opts.operatorIntent === 'regenerate' ? 'regenerate' : 'new';
   const { data: lead, error: leadErr } = await supabase
     .from('lead_engine_leads')
     .select(LEAD_SELECT)
@@ -140,8 +142,21 @@ async function runDraftForLead(supabase, leadId, channel, actor) {
     event_type: EVENT_TYPES.DRAFT_GENERATED,
     actor: actor || null,
     message: 'Draft generated',
-    metadata_json: { channel: channel || 'email' },
+    metadata_json: { channel: channel || 'email', operatorIntent },
   });
+
+  if (operatorIntent === 'regenerate') {
+    await logLeadEngineEvent(supabase, {
+      lead_id: leadId,
+      outreach_id: inserted.id,
+      analysis_id: analysisRow.id,
+      ai_score_id: aiScoreRow.id,
+      event_type: EVENT_TYPES.OPERATOR_DRAFT_REGENERATED,
+      actor: actor || null,
+      message: 'Operator regenerated outreach draft',
+      metadata_json: { channel: channel || 'email', source: 'lead_engine_ui' },
+    });
+  }
 
   await supabase
     .from('lead_engine_leads')

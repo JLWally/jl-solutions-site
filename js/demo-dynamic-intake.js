@@ -1,6 +1,6 @@
 /**
  * Smart demo: multi-step intake wizard + CTAs (JSON / demo-config).
- * Fallback issue lists, keep in sync with netlify/functions/lib/demo-industry-presets.js
+ * Fallback issue lists align with netlify/functions/lib/industry-profiles.js (via demo-industry-presets).
  */
 (function () {
   'use strict';

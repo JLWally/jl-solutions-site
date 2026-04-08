@@ -1,0 +1,21 @@
+{
+  "version": "icp-v1",
+  "rules": {
+    "require_https": true,
+    "min_company_name_len": 2,
+    "max_company_name_len": 200,
+    "blocked_host_substrings": [
+      "wikipedia.org",
+      "facebook.com",
+      "linkedin.com/company",
+      "google.com/maps",
+      "yelp.com/biz"
+    ],
+    "blocked_url_substrings": [],
+    "allowed_url_protocols": ["https:", "http:"]
+  },
+  "tiers": {
+    "default_pass_tier": "standard",
+    "strong_signals": []
+  }
+}

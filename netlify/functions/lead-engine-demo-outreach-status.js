@@ -1,23 +1,16 @@
 /**
  * Patch custom-demo outreach fields on a lead.
- * POST JSON: { leadId, status? }, status drafted|copied|sent_manual|followup_due|null (omit status to leave unchanged)
+ * POST JSON: { leadId, status? } — status must be an allowed demo_outreach_status or null (omit to leave unchanged).
  * Optional: demoFollowupDueAt (ISO string | null | ""), demoLastContactedAt (ISO | null | "")
  */
 const { guardLeadEngineRequest, withCors } = require('./lib/lead-engine-guard');
 const { getLeadEngineSupabase } = require('./lib/lead-engine-supabase');
 const { validateAnalyzeBody } = require('./lib/lead-engine-analyze-validate');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lib/lead-engine-audit-log');
-
-const VALID = new Set([
-  'drafted',
-  'copied',
-  'sent_manual',
-  'followup_due',
-  'send_failed',
-  'replied',
-  'interested',
-  'not_interested',
-]);
+const {
+  validateDemoOutreachStatusForWrite,
+  allowedDemoOutreachStatusesHumanList,
+} = require('./lib/lead-engine-demo-outreach-contract');
 
 function parseBody(raw) {
   if (!raw) return { ok: false, errors: ['Missing body'] };
@@ -93,24 +86,20 @@ exports.handler = async (event) => {
   const patch = { updated_at: nowIso };
 
   if (Object.prototype.hasOwnProperty.call(o, 'status')) {
-    let status = o.status;
-    if (status === '' || status === undefined) {
-      status = null;
-    } else {
-      status = String(status).trim().toLowerCase();
-      if (!VALID.has(status)) {
-        return {
-          statusCode: 400,
-          headers,
-          body: JSON.stringify({
-            error: 'Invalid status',
-            errors: [
-              'status must be drafted, copied, sent_manual, followup_due, send_failed, replied, interested, not_interested, or null',
-            ],
-          }),
-        };
-      }
+    const stCheck = validateDemoOutreachStatusForWrite(o.status);
+    if (!stCheck.ok) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+          ok: false,
+          error: stCheck.error,
+          code: stCheck.code,
+          details: stCheck.details,
+        }),
+      };
     }
+    const status = stCheck.value;
     patch.demo_outreach_status = status;
     patch.demo_outreach_status_at = nowIso;
   }
@@ -151,6 +140,12 @@ exports.handler = async (event) => {
     };
   }
 
+  const { data: prevLead } = await supabase
+    .from('lead_engine_leads')
+    .select('demo_outreach_status, demo_followup_due_at, demo_last_contacted_at')
+    .eq('id', leadId)
+    .maybeSingle();
+
   const { data, error } = await supabase
     .from('lead_engine_leads')
     .update(patch)
@@ -162,10 +157,33 @@ exports.handler = async (event) => {
 
   if (error) {
     console.error('[lead-engine-demo-outreach-status]', error);
+    const msg = String(error.message || '');
+    const pgCode = error.code != null ? String(error.code) : '';
+    if (
+      pgCode === '23514' ||
+      /chk_lead_demo_outreach_status/i.test(msg) ||
+      /violates check constraint/i.test(msg)
+    ) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+          ok: false,
+          error: 'Demo outreach status is not allowed by the database',
+          code: 'INVALID_DEMO_OUTREACH_STATUS',
+          details: `Allowed values: ${allowedDemoOutreachStatusesHumanList()}. If you recently deployed code, apply migration 20260407180000_lead_engine_demo_outreach_status_expand.sql in Supabase.`,
+        }),
+      };
+    }
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Update failed', details: error.message }),
+      body: JSON.stringify({
+        ok: false,
+        error: 'Update failed',
+        code: 'UPDATE_FAILED',
+        details: msg.slice(0, 500),
+      }),
     };
   }
 
@@ -197,6 +215,27 @@ exports.handler = async (event) => {
       });
     }
   }
+
+  const pipelineMeta = { source: 'operator_ui' };
+  if (Object.prototype.hasOwnProperty.call(o, 'status')) {
+    pipelineMeta.demo_outreach_status_before = prevLead ? prevLead.demo_outreach_status : null;
+    pipelineMeta.demo_outreach_status_after = data.demo_outreach_status;
+  }
+  if (Object.prototype.hasOwnProperty.call(o, 'demoFollowupDueAt')) {
+    pipelineMeta.demo_followup_due_at_before = prevLead ? prevLead.demo_followup_due_at : null;
+    pipelineMeta.demo_followup_due_at_after = data.demo_followup_due_at;
+  }
+  if (Object.prototype.hasOwnProperty.call(o, 'demoLastContactedAt')) {
+    pipelineMeta.demo_last_contacted_at_before = prevLead ? prevLead.demo_last_contacted_at : null;
+    pipelineMeta.demo_last_contacted_at_after = data.demo_last_contacted_at;
+  }
+  await logLeadEngineEvent(supabase, {
+    lead_id: leadId,
+    event_type: EVENT_TYPES.OPERATOR_DEMO_PIPELINE_EDIT,
+    actor: g.session.username || null,
+    message: 'Operator updated demo pipeline fields',
+    metadata_json: pipelineMeta,
+  });
 
   return {
     statusCode: 200,
