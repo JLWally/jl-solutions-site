@@ -7,21 +7,21 @@
   },
   "queries": [
     {
-      "id": "example_hvac_austin",
+      "id": "medspa_austin_tx",
       "source": "scout_google_places",
-      "label": "HVAC contractors — Austin TX (example)",
-      "enabled": false,
-      "text_query": "HVAC contractors in Austin TX",
+      "label": "Medical spas in Austin, TX",
+      "enabled": true,
+      "text_query": "medical spa Austin TX",
       "region": "us",
       "language": "en",
-      "max_details_per_run": 10,
+      "max_details_per_run": 8,
       "cooldown_seconds": 14400,
       "priority": 10
     },
     {
       "id": "example_plumbing_austin",
       "source": "scout_google_places",
-      "label": "Plumbing — Austin TX (example)",
+      "label": "Plumbing — Austin TX (disabled; enable after first query validates)",
       "enabled": false,
       "text_query": "Plumbing companies in Austin TX",
       "region": "us",
