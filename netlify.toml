@@ -96,6 +96,13 @@
   status = 301
   force = true
 
+# Short link for LinkedIn (avoids exposing personal URL slug in visible page links)
+[[redirects]]
+  from = "/go/linkedin"
+  to = "https://www.linkedin.com/in/jess-walcott-3423aa87"
+  status = 302
+  force = true
+
 # Industry lander: HVAC
 [[redirects]]
   from = "/hvac-lead-system"
