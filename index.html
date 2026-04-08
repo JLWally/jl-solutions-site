@@ -16,7 +16,7 @@
   <link rel="apple-touch-icon" href="assets/images/jlsolutions-logo.png">
   <meta name="description" content="JL Solutions helps B2B service businesses automate intake, pre-qualify clients, streamline scheduling and follow-up, and turn data into insights. Automate, streamline, grow.">
 </head>
-<body>
+<body class="jl-homepage">
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark jl-theme" role="navigation" aria-label="Main navigation">
     <div class="container">
@@ -30,6 +30,7 @@
         <ul class="navbar-nav mx-auto">
           <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="/demo">Live demo</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
           <li class="nav-item"><a class="nav-link" href="services/index.html">Services</a></li>
           <li class="nav-item"><a class="nav-link" href="case-studies/index.html">Case Studies</a></li>
           <li class="nav-item dropdown">
@@ -41,33 +42,31 @@
           </li>
           <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
-        <a href="book-consultation.html" class="btn btn-book-call">Book a Free Call</a>
+        <a href="/checkout/" class="btn btn-book-call">Start Setup Now</a>
       </div>
     </div>
   </nav>
 
   <main id="main-content">
-  <!--
-    Hero: text/CTA left, image right. Content stays primary; image supports the headline.
-    HERO IMAGE RULE: Clean photo or clean visual ONLY. Do NOT use:
-    - Logo, headline text, CTA button text, or any baked-in marketing copy.
-    - Banner graphics, promo panels, or images that duplicate the left-column messaging.
-    Use a real supporting photo (e.g. business setting, team, operations). Landscape ~3:2 works well.
-    To add: <img class="hero-with-image__img" src="..." alt="..." loading="eager" width="1200" height="800"> and remove the placeholder div.
-  -->
   <section class="hero-with-image jl-theme" aria-labelledby="hero-heading">
     <div class="hero-with-image__inner">
       <div class="hero-with-image__content">
-        <p class="hero-with-image__eyebrow">Business process automation</p>
-        <h1 id="hero-heading" class="hero-with-image__title">Automate. Streamline. Grow Your Business.</h1>
+        <p class="hero-with-image__eyebrow">Built for service businesses</p>
+        <h1 id="hero-heading" class="hero-with-image__title">Stop losing booked jobs from missed calls and bad forms</h1>
+        <p class="mb-2">We fix missed calls and broken forms so more leads turn into booked jobs automatically.</p>
+        <p class="small mb-3 opacity-95">Most businesses are losing booked jobs every day without realizing it.</p>
         <div class="hero-with-image__actions">
-          <a href="book-consultation.html" class="hero-with-image__cta">Book a Free Call</a>
-          <a href="services/index.html" class="hero-with-image__cta-secondary">Explore services</a>
+          <div class="d-flex flex-column align-items-start">
+            <a href="/checkout/" class="hero-with-image__cta">Start Setup Now</a>
+            <span class="small mt-2 opacity-90">Takes less than 1 minute</span>
+          </div>
+          <a href="/book-consultation.html" class="hero-with-image__cta-secondary">Talk It Through First</a>
         </div>
-        <!-- Hidden until /demo/quick has working Netlify Blobs in prod: remove `hidden` to show -->
-        <div class="hero-custom-demo" hidden>
-          <p class="hero-custom-demo__tagline">See your system before you buy</p>
-          <a href="/demo/quick" class="hero-custom-demo__btn">👉 Get a Custom Demo</a>
+        <p class="mt-2 mb-2 small opacity-90">No new software to learn. We set it up and it just works.</p>
+        <div class="d-flex flex-wrap gap-2" aria-label="Offer highlights">
+          <span class="badge rounded-pill text-bg-light">Built to convert</span>
+          <span class="badge rounded-pill text-bg-light">Fast turnaround</span>
+          <span class="badge rounded-pill text-bg-light">Fixed-price systems</span>
         </div>
       </div>
       <div class="hero-with-image__visual">
@@ -76,321 +75,123 @@
     </div>
   </section>
 
-  <!-- Why JL Solutions + founder story (combined) -->
-  <section class="jl-home-about-section jl-home-about-section--combined" aria-labelledby="why-jl-heading">
+  <section class="feature-cards-section services-section-home" aria-labelledby="offer-heading">
     <div class="container">
-      <header class="jl-home-about-section__combined-head">
-        <p class="jl-home-about-section__eyebrow jl-home-about-section__eyebrow--center">Why JL Solutions</p>
-        <h2 id="why-jl-heading" class="jl-home-about-section__combined-title">Built to simplify the work behind growth</h2>
-        <p class="jl-home-about-section__intro">JL Solutions helps businesses stop losing time, leads, and momentum to broken systems. We build smarter workflows, better user experiences, and practical automation that helps teams run more efficiently and grow with confidence.</p>
-      </header>
-
-      <div class="row justify-content-center g-4 g-lg-5 jl-home-about-section__layout-row">
-        <div class="col-lg-5 col-xl-4">
-          <div class="jl-home-about-section__founders-stack jl-home-about-section__founders-stack--embedded">
-            <div class="jl-home-about-section__founders" role="list" aria-label="JL Solutions co-founders">
-              <article class="jl-home-about-section__founder" role="listitem">
-                <img
-                  class="jl-home-about-section__founder-image"
-                  src="assets/images/jess-walcott.webp"
-                  alt="Jess, co-founder of JL Solutions"
-                  loading="lazy"
-                  width="320"
-                  height="400"
-                >
-                <div class="jl-home-about-section__founder-meta">
-                  <h3>Jess</h3>
-                  <p class="jl-home-about-section__founder-role">Founder, Full Stack &amp; UX</p>
-                  <a href="https://www.linkedin.com/in/jess-walcott-3423aa87" class="jl-home-about-section__founder-link" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin" aria-hidden="true"></i> LinkedIn</a>
-                </div>
-              </article>
-              <article class="jl-home-about-section__founder" role="listitem">
-                <img
-                  class="jl-home-about-section__founder-image"
-                  src="assets/images/brittany-watts.png"
-                  alt="Brittany, co-founder of JL Solutions"
-                  loading="lazy"
-                  width="320"
-                  height="400"
-                >
-                <div class="jl-home-about-section__founder-meta">
-                  <h3>Brittany</h3>
-                  <p class="jl-home-about-section__founder-role">Co-Founder, Strategy &amp; Operations</p>
-                </div>
-              </article>
-            </div>
+      <p class="services-section-home__eyebrow">Primary offer</p>
+      <h2 id="offer-heading" class="services-section-home__title">Fix your intake. Start capturing more booked jobs this week, without changing how you work.</h2>
+      <p class="services-section-home__intro">Most businesses lose leads because their intake is slow, messy, or manual. We fix that fast without adding complexity.</p>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="feature-card-jl service-card h-100">
+            <h3>Quick Setup</h3>
+            <p class="mb-2"><strong>$750</strong></p>
+            <p>Best for businesses that want more booked jobs fast.</p>
+            <ul>
+              <li>Smart intake form</li>
+              <li>Better lead capture</li>
+              <li>Simple qualification flow</li>
+              <li>Mobile-friendly setup</li>
+            </ul>
+            <p><strong>Timeline:</strong> Live in 1-3 days</p>
+            <a href="/checkout/" class="btn-cta-primary">Start Setup Now</a>
+            <p class="small text-muted mb-0 mt-2">Takes less than 1 minute</p>
           </div>
         </div>
-        <div class="col-lg-7 col-xl-8">
-          <div class="jl-home-about-section__card">
-            <div class="jl-home-about-section__prose">
-              <p class="jl-home-about-section__prose-lead">We&rsquo;re Jess and Brittany, co-founders of JL Solutions.</p>
-              <p>We built JL Solutions because too many businesses are stuck using disconnected tools, outdated workflows, and systems that create more work instead of less. The result is slower operations, missed opportunities, and frustrating customer experiences.</p>
-              <p>Jess brings deep experience in full stack development, UX, and business process design, with a background building secure, user-focused solutions across government, healthcare, nonprofit, and private-sector environments.</p>
-              <p>Brittany brings a thoughtful, people-centered perspective and a strong focus on strategy, operations, and long-term business value. Having known each other since grade school, we built JL Solutions on a real foundation of trust, collaboration, and shared vision.</p>
-              <p class="mb-0">Together, we focus on practical automation, better user experiences, and systems that help businesses run smoother, serve better, and grow with less friction.</p>
-            </div>
+        <div class="col-md-6">
+          <div class="feature-card-jl service-card h-100">
+            <h3>Need something more advanced?</h3>
+            <p>If you need routing, automation, or a full system build, we've got you covered.</p>
+            <p class="mb-2"><a href="/services/" class="services-section-home__link">View full services <i class="bi bi-arrow-right" aria-hidden="true"></i></a></p>
+            <p class="mb-0"><a href="/book-consultation.html" class="services-section-home__link">Talk It Through First <i class="bi bi-arrow-right" aria-hidden="true"></i></a></p>
           </div>
         </div>
       </div>
+      <div class="mt-3 mx-auto text-center rounded-3 px-3 py-2 jl-home-callout" role="note">
+        Most clients start with Quick Setup, then expand after results.
+      </div>
+    </div>
+  </section>
 
-      <div class="row justify-content-center jl-home-about-section__cta-row">
-        <div class="col-lg-10 col-xl-9 text-center jl-home-about-section__cta-wrap">
-          <a href="book-consultation.html" class="btn-cta-primary jl-home-about-section__cta-primary">
-            Book a Free Call <i class="bi bi-arrow-right" aria-hidden="true"></i>
-          </a>
-          <a href="services/index.html" class="jl-home-about-section__cta-secondary">
-            Explore services <i class="bi bi-arrow-right" aria-hidden="true"></i>
-          </a>
+  <section class="section-how-we-help" aria-labelledby="why-matters-heading">
+    <div class="container">
+      <p class="section-how-we-help__eyebrow">Why this matters</p>
+      <h2 id="why-matters-heading" class="section-how-we-help__title">Basic forms are costing you real money</h2>
+      <p class="section-how-we-help__subtitle jl-home-why-lead">See what is leaking revenue and what we replace it with.</p>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="feature-card-jl feature-card-jl--dark h-100">
+            <h3 class="feature-card-jl__heading-light">Why basic forms fail</h3>
+            <ul class="feature-card-jl__text-muted mb-0">
+              <li>Missed calls equal lost jobs</li>
+              <li>People do not want to call anymore</li>
+              <li>Forms do not convert</li>
+              <li>You are chasing leads manually</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="feature-card-jl feature-card-jl--dark h-100">
+            <h3 class="feature-card-jl__heading-light">What we do instead</h3>
+            <ul class="feature-card-jl__text-muted mb-0">
+              <li>Capture more jobs automatically</li>
+              <li>Qualify leads upfront</li>
+              <li>Reduce back-and-forth</li>
+              <li>Book faster without extra effort</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Services (What We Do) -->
-  <section class="feature-cards-section services-section-home" aria-labelledby="services-heading">
-    <div class="container">
-      <p class="services-section-home__eyebrow">Systems &amp; capabilities</p>
-      <h2 id="services-heading" class="services-section-home__title">What We Do</h2>
-      <p class="services-section-home__intro">We build practical, revenue-focused systems that capture demand, qualify it fast, and keep your team aligned from first touch to booked work.</p>
-      <div class="row g-4">
-        <div class="col-md-6">
-          <div class="feature-card-jl service-card">
-            <div class="service-card__icon" aria-hidden="true"><i class="bi bi-gear-fill"></i></div>
-            <h3>Automated Intake</h3>
-            <p>Smart forms, routing rules, and integrations so every submission lands in the right queue—24/7, without manual forwarding.</p>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="feature-card-jl service-card">
-            <div class="service-card__icon" aria-hidden="true"><i class="bi bi-funnel-fill"></i></div>
-            <h3>Pre-Qualify Clients</h3>
-            <p>Scoring, required fields, and structured data so reps see fit, urgency, and context before they respond.</p>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="feature-card-jl service-card">
-            <div class="service-card__icon" aria-hidden="true"><i class="bi bi-calendar-check-fill"></i></div>
-            <h3>Scheduling &amp; Follow-Up</h3>
-            <p>Calendar booking, reminders, and pipeline-tied nudges so slots fill, confirmations go out, and nothing stalls in limbo.</p>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="feature-card-jl service-card">
-            <div class="service-card__icon" aria-hidden="true"><i class="bi bi-bar-chart-fill"></i></div>
-            <h3>Data &amp; Insights</h3>
-            <p>Dashboards and reports built on real activity—volume, bottlenecks, and next actions your team can act on weekly.</p>
-          </div>
-        </div>
-      </div>
-      <p class="services-section-home__link-wrap">
-        <a href="services/index.html" class="services-section-home__link">View all services <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-      </p>
-    </div>
-  </section>
-
-  <!-- How It Works (3-step, dark band) -->
   <section class="value-bar-jl how-it-works" aria-labelledby="how-it-works-heading">
     <div class="container">
       <h2 id="how-it-works-heading" class="how-it-works__title">How It Works</h2>
-      <p class="how-it-works__subtitle">Clear process, fast execution, and decisions rooted in your real operations, not generic templates.</p>
-      <div class="row g-4 how-it-works__steps">
+      <p class="how-it-works__subtitle">No long builds. No complicated setup. We handle everything.</p>
+      <div class="row g-3 how-it-works__steps">
         <div class="col-md-4">
           <div class="how-it-works__step">
             <div class="how-it-works__step-label">Step 1</div>
-            <h3 class="how-it-works__step-title">Identify the bottlenecks</h3>
-            <p class="how-it-works__step-text">We pinpoint where leads, intake, and follow-up are breaking down.</p>
+            <h3 class="how-it-works__step-title">We map your current process</h3>
           </div>
         </div>
         <div class="col-md-4">
           <div class="how-it-works__step">
             <div class="how-it-works__step-label">Step 2</div>
-            <h3 class="how-it-works__step-title">Build the automation</h3>
-            <p class="how-it-works__step-text">We create the systems that capture, organize, and move work forward.</p>
+            <h3 class="how-it-works__step-title">We build your intake system</h3>
           </div>
         </div>
         <div class="col-md-4">
           <div class="how-it-works__step">
             <div class="how-it-works__step-label">Step 3</div>
-            <h3 class="how-it-works__step-title">Launch with confidence</h3>
-            <p class="how-it-works__step-text">We help you implement, refine, and scale without adding more manual work.</p>
+            <h3 class="how-it-works__step-title">You start capturing more booked jobs</h3>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How We Help -->
-  <section class="section-how-we-help" aria-labelledby="how-we-help-heading">
-    <div class="container">
-      <p class="section-how-we-help__eyebrow">Outcomes &amp; benefits</p>
-      <h2 id="how-we-help-heading" class="section-how-we-help__title">How We Help You Win</h2>
-      <p class="section-how-we-help__subtitle">The biggest gains come from removing friction at the exact points where leads, teams, and customers usually break down.</p>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="feature-card-jl feature-card-jl--dark">
-            <div class="card-icon card-icon--accent"><i class="bi bi-clipboard-check-fill" aria-hidden="true"></i></div>
-            <h3 class="feature-card-jl__heading-light">Never Miss a Lead Again</h3>
-            <p class="feature-card-jl__text-muted">Every inquiry lands in one system with clear ownership—fewer ghosts in the inbox and faster first response.</p>
-            <a href="book-consultation.html" class="help-card-link">Learn More <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="feature-card-jl feature-card-jl--dark">
-            <div class="card-icon card-icon--accent"><i class="bi bi-lightning-charge-fill" aria-hidden="true"></i></div>
-            <h3 class="feature-card-jl__heading-light">Faster Quotes &amp; Turnaround</h3>
-            <p class="feature-card-jl__text-muted">A shorter path from request to estimate so you win work where speed and clarity decide who gets the job.</p>
-            <a href="book-consultation.html" class="help-card-link">Learn More <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="feature-card-jl feature-card-jl--dark">
-            <div class="card-icon card-icon--accent"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></div>
-            <h3 class="feature-card-jl__heading-light">Scale Without Chaos</h3>
-            <p class="feature-card-jl__text-muted">Campaigns and busy seasons don&rsquo;t mean manual overload—workflows absorb the surge without constant fire drills.</p>
-            <a href="book-consultation.html" class="help-card-link">Learn More <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-          </div>
-        </div>
-      </div>
+  <section class="feature-cards-section services-section-home" aria-labelledby="ai-support-heading">
+    <div class="container text-center">
+      <p class="services-section-home__eyebrow">Supporting technology</p>
+      <h2 id="ai-support-heading" class="services-section-home__title">Powered by AI, without adding complexity</h2>
+      <p class="services-section-home__intro jl-home-ai-intro mb-0">Yes, it uses AI behind the scenes. No, you do not have to learn anything new. It just works and helps bring in more booked jobs.</p>
+      <hr class="jl-home-section-divider mx-auto" aria-hidden="true">
+      <h2 id="services-link-heading" class="services-section-home__title mt-0">Need broader system support?</h2>
+      <p class="services-section-home__intro jl-home-services-blurb mb-0">Our full services are still available for teams that need intake, scheduling, follow-up, and reporting across more than one workflow.</p>
+      <p class="services-section-home__link-wrap mb-0"><a href="services/index.html" class="services-section-home__link">View all services <i class="bi bi-arrow-right" aria-hidden="true"></i></a></p>
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class="section-testimonials jl-reviews-section" aria-labelledby="testimonials-heading">
-    <div class="container">
-      <header class="jl-reviews-section__header">
-        <span class="jl-reviews-section__eyebrow">Testimonials</span>
-        <h2 id="testimonials-heading" class="jl-reviews-section__title">What Our Customers Say</h2>
-        <p class="jl-reviews-section__subtitle">Results from teams that needed stronger intake, faster follow-up, and less manual overhead.</p>
-      </header>
-      <div class="jl-reviews-grid" role="list">
-        <article class="jl-review-card jl-review-card--summary" role="listitem">
-          <div class="jl-review-card__top">
-            <div class="jl-review-card__avatar-wrap">
-              <div class="jl-review-card__avatar jl-review-card__avatar--summary" aria-hidden="true"><i class="bi bi-stars"></i></div>
-              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions">JL</span>
-            </div>
-            <div class="jl-review-card__meta">
-              <div class="jl-review-card__name-row">
-                <span class="jl-review-card__name">What clients emphasize</span>
-              </div>
-              <span class="jl-review-card__time">Themes from recent projects</span>
-            </div>
-          </div>
-          <div class="jl-review-card__stars" aria-label="Highlighted themes from client feedback"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
-          <blockquote class="jl-review-card__quote jl-review-card__quote--summary">
-            <p>Clients highlight faster intake, fewer dropped leads, and clearer follow-up after JL Solutions workflows.</p>
-            <p>Teams report projects staying on track with automation instead of manual email chasing.</p>
-            <p>Strong focus on practical outcomes: more bookings, less admin, and better visibility into the pipeline.</p>
-          </blockquote>
-        </article>
-        <article class="jl-review-card" role="listitem">
-          <div class="jl-review-card__top">
-            <div class="jl-review-card__avatar-wrap">
-              <div class="jl-review-card__avatar" aria-hidden="true">MH</div>
-              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions client">JL</span>
-            </div>
-            <div class="jl-review-card__meta">
-              <div class="jl-review-card__name-row">
-                <span class="jl-review-card__name">Mental health clinic</span>
-                <i class="bi bi-patch-check-fill jl-review-card__verified" aria-label="Verified"></i>
-              </div>
-              <span class="jl-review-card__time">2 months ago</span>
-            </div>
-          </div>
-          <div class="jl-review-card__stars" aria-label="5 out of 5 stars"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
-          <blockquote class="jl-review-card__quote">
-            <p>JL Solutions automated our client intake and eligibility tracking. We onboard more patients in a day than we used to in a week.</p>
-          </blockquote>
-        </article>
-        <article class="jl-review-card" role="listitem">
-          <div class="jl-review-card__top">
-            <div class="jl-review-card__avatar-wrap">
-              <div class="jl-review-card__avatar" aria-hidden="true">EC</div>
-              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions client">JL</span>
-            </div>
-            <div class="jl-review-card__meta">
-              <div class="jl-review-card__name-row">
-                <span class="jl-review-card__name">Electrical contractor</span>
-                <i class="bi bi-patch-check-fill jl-review-card__verified" aria-label="Verified"></i>
-              </div>
-              <span class="jl-review-card__time">3 weeks ago</span>
-            </div>
-          </div>
-          <div class="jl-review-card__stars" aria-label="5 out of 5 stars"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
-          <blockquote class="jl-review-card__quote">
-            <p>JL Solutions cut our quote turnaround in half. We're booking jobs we used to miss.</p>
-          </blockquote>
-        </article>
-        <article class="jl-review-card" role="listitem">
-          <div class="jl-review-card__top">
-            <div class="jl-review-card__avatar-wrap">
-              <div class="jl-review-card__avatar" aria-hidden="true">LC</div>
-              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions client">JL</span>
-            </div>
-            <div class="jl-review-card__meta">
-              <div class="jl-review-card__name-row">
-                <span class="jl-review-card__name">Local catering company</span>
-                <i class="bi bi-patch-check-fill jl-review-card__verified" aria-label="Verified"></i>
-              </div>
-              <span class="jl-review-card__time">1 month ago</span>
-            </div>
-          </div>
-          <div class="jl-review-card__stars" aria-label="5 out of 5 stars"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
-          <blockquote class="jl-review-card__quote">
-            <p>Event inquiries used to live in three inboxes. Now everything lands in one place with clear next steps—our team actually knows who to call back first.</p>
-          </blockquote>
-        </article>
-        <article class="jl-review-card" role="listitem">
-          <div class="jl-review-card__top">
-            <div class="jl-review-card__avatar-wrap">
-              <div class="jl-review-card__avatar" aria-hidden="true">HV</div>
-              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions client">JL</span>
-            </div>
-            <div class="jl-review-card__meta">
-              <div class="jl-review-card__name-row">
-                <span class="jl-review-card__name">HVAC services company</span>
-                <i class="bi bi-patch-check-fill jl-review-card__verified" aria-label="Verified"></i>
-              </div>
-              <span class="jl-review-card__time">5 weeks ago</span>
-            </div>
-          </div>
-          <div class="jl-review-card__stars" aria-label="5 out of 5 stars"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
-          <blockquote class="jl-review-card__quote">
-            <p>Emergency calls and routine tune-ups are routed automatically. Dispatch sees the full picture and customers get faster callbacks.</p>
-          </blockquote>
-        </article>
-        <article class="jl-review-card" role="listitem">
-          <div class="jl-review-card__top">
-            <div class="jl-review-card__avatar-wrap">
-              <div class="jl-review-card__avatar" aria-hidden="true">PS</div>
-              <span class="jl-review-card__brand-badge" aria-hidden="true" title="JL Solutions client">JL</span>
-            </div>
-            <div class="jl-review-card__meta">
-              <div class="jl-review-card__name-row">
-                <span class="jl-review-card__name">Professional services firm</span>
-                <i class="bi bi-patch-check-fill jl-review-card__verified" aria-label="Verified"></i>
-              </div>
-              <span class="jl-review-card__time">6 days ago</span>
-            </div>
-          </div>
-          <div class="jl-review-card__stars" aria-label="5 out of 5 stars"><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i><i class="bi bi-star-fill" aria-hidden="true"></i></div>
-          <blockquote class="jl-review-card__quote">
-            <p>Our intake form and follow-up sequence finally match how we actually work. Fewer back-and-forth emails and more qualified conversations on the calendar.</p>
-          </blockquote>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
   <section class="cta-section-home">
     <div class="container text-center">
-      <h2 class="cta-section-home__title">Ready to See How It Works?</h2>
-      <p class="cta-section-home__text">Book a Free Call and we'll show you how to capture every lead and scale without the chaos.</p>
-      <a href="book-consultation.html" class="btn-cta-primary">Book a Free Call <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+      <h2 class="cta-section-home__title">Stop losing booked jobs this week</h2>
+      <p class="cta-section-home__text">Fix your intake fast and start capturing more leads immediately.</p>
+      <a href="/checkout/" class="btn-cta-primary">Start Setup Now <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+      <p class="small mt-2 mb-0 opacity-90">Takes less than 1 minute</p>
     </div>
   </section>
+
   </main>
 
   <!-- Footer -->
@@ -405,6 +206,7 @@
           <h5 class="footer__heading">Quick Links</h5>
           <ul class="list-unstyled footer__links mb-0">
             <li><a href="/demo">Live demo</a></li>
+            <li><a href="/about/">About</a></li>
             <li><a href="services/index.html">Services</a></li>
             <li><a href="case-studies/index.html">Case Studies</a></li>
             <li><a href="resources/index.html">Resources</a></li>
@@ -415,7 +217,8 @@
         <div class="col-md-4 footer__contact">
           <h5 class="footer__heading">Get in Touch</h5>
           <p class="footer__email-wrap"><a href="mailto:info@jlsolutions.io" class="footer__email">info@jlsolutions.io</a></p>
-          <a href="book-consultation.html" class="footer__cta">Book a Free Call</a>
+          <a href="/checkout/" class="footer__cta">Start Setup Now</a>
+          <p class="small mt-2 mb-0"><a href="book-consultation.html" class="text-white text-decoration-underline">Book a Free Call</a></p>
           <p class="mb-2 mt-3 footer__social">
             <a href="https://www.facebook.com/people/JL-Solutions/61584401443601/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-white me-2" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
             <a href="https://instagram.com/jlsolutions" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-white" style="opacity: 0.9;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>

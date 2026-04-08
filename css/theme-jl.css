@@ -2177,3 +2177,126 @@ footer.jl-theme a.footer__cta:hover {
 body .text-white-50 {
   color: rgba(255, 255, 255, 0.9) !important;
 }
+
+/* Homepage: tighter vertical rhythm, less empty space between bands */
+body.jl-homepage .feature-cards-section.services-section-home {
+  padding: 2.75rem 0;
+}
+
+body.jl-homepage .section-how-we-help {
+  padding: 2.75rem 0;
+}
+
+body.jl-homepage .value-bar-jl {
+  padding: 2.5rem 0;
+}
+
+body.jl-homepage .cta-section-home {
+  padding: 3.25rem 0;
+}
+
+body.jl-homepage .cta-section-home__text {
+  margin-bottom: 1.5rem;
+}
+
+body.jl-homepage .services-section-home__intro:not(.jl-home-ai-intro):not(.jl-home-services-blurb) {
+  margin-bottom: 1.5rem;
+}
+
+body.jl-homepage .services-section-home .row {
+  --bs-gutter-y: 1.25rem;
+}
+
+body.jl-homepage .section-how-we-help .row {
+  --bs-gutter-y: 1.25rem;
+}
+
+body.jl-homepage .services-section-home .service-card,
+body.jl-homepage .services-section-home .feature-card-jl {
+  padding: 2rem 1.75rem;
+}
+
+body.jl-homepage .hero-with-image.jl-theme {
+  min-height: 460px;
+}
+
+body.jl-homepage .hero-with-image__inner {
+  min-height: 460px;
+}
+
+body.jl-homepage .hero-with-image__content {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+body.jl-homepage .jl-home-callout {
+  max-width: 42rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.45;
+  border: 1px solid rgba(250, 204, 21, 0.45);
+  background: rgba(250, 204, 21, 0.1);
+  color: var(--jl-text-dark, #0f172a);
+}
+
+body.jl-homepage .jl-home-section-divider {
+  max-width: 28rem;
+  margin-top: 1.75rem;
+  margin-bottom: 1.35rem;
+  border: 0;
+  border-top: 1px solid rgba(15, 23, 42, 0.12);
+  opacity: 1;
+}
+
+body.jl-homepage .jl-home-ai-intro {
+  max-width: 38rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.jl-homepage .jl-home-services-blurb {
+  max-width: 38rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0.5rem !important;
+}
+
+body.jl-homepage .services-section-home__link-wrap {
+  margin-top: 0.65rem;
+}
+
+body.jl-homepage .section-how-we-help__subtitle.jl-home-why-lead {
+  margin: 0 auto 1.2rem;
+  max-width: 36rem;
+  font-size: 1.05rem;
+}
+
+body.jl-homepage .how-it-works__steps {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 992px) {
+  body.jl-homepage .hero-with-image__inner {
+    min-height: 520px;
+  }
+
+  body.jl-homepage .hero-with-image.jl-theme {
+    min-height: 520px;
+  }
+
+  body.jl-homepage .hero-with-image__content {
+    padding-top: 2.75rem;
+    padding-bottom: 2.75rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  body.jl-homepage .feature-cards-section.services-section-home,
+  body.jl-homepage .section-how-we-help {
+    padding: 2.25rem 0;
+  }
+
+  body.jl-homepage .cta-section-home {
+    padding: 2.75rem 0;
+  }
+}
