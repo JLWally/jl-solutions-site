@@ -10,9 +10,15 @@
 [functions]
   node_bundler = "esbuild"
 
-# Lead engine: Scout → Qualifier → analyze/score/(demo)/draft for pending automation leads
-[functions."lead-engine-automation-tick"]
-  schedule = "@hourly"
+# Lead engine split schedules (recommended for 24/7): scout-only + downstream (enrichment → ICP → pipeline).
+# Do NOT also schedule the full tick — that would overlap idempotency and double-spend Places quota.
+[functions."lead-engine-automation-tick-scout"]
+  schedule = "*/20 * * * *"
+[functions."lead-engine-automation-tick-downstream"]
+  schedule = "7 * * * *"
+# Full tick: HTTP/manual only (Bearer LEAD_ENGINE_AUTOMATION_SECRET). Uncomment schedule only if you disable split jobs above.
+# [functions."lead-engine-automation-tick"]
+#   schedule = "@hourly"
 
 # Onboarding wizard
 [[redirects]]
@@ -90,6 +96,18 @@
   status = 200
 
 # About: legacy file; canonical co-founder page is /about/
+[[redirects]]
+  from = "/about"
+  to = "/about/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/about/"
+  to = "/about/index.html"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/about.html"
   to = "/about/"
