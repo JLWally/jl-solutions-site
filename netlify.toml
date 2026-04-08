@@ -10,6 +10,10 @@
 [functions]
   node_bundler = "esbuild"
 
+# Lead engine: Scout → Qualifier → analyze/score/(demo)/draft for pending automation leads
+[functions."lead-engine-automation-tick"]
+  schedule = "@hourly"
+
 # Onboarding wizard
 [[redirects]]
   from = "/onboard"
@@ -83,6 +87,17 @@
 [[redirects]]
   from = "/book-consultation/"
   to = "/book-consultation.html"
+  status = 200
+
+# About: original about.html (pretty URL)
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/about/"
+  to = "/about.html"
   status = 200
 
 # Industry lander: HVAC
