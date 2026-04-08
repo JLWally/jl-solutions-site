@@ -18,8 +18,8 @@
     },
     'priority-quick-setup': {
       panel: 'ai',
-      packageValue: 'Priority Quick Setup',
-      headlineName: 'Priority Quick Setup',
+      packageValue: 'Skip the Line (Priority Setup)',
+      headlineName: 'Priority setup',
       timeline: 'Priority this week',
     },
     'full-system-deposit': {
@@ -79,7 +79,7 @@
       'Fix My App': 'fix',
       'AI Intake Form': 'ai',
       'Quick Setup': 'ai',
-      'Priority Quick Setup': 'ai',
+      'Skip the Line (Priority Setup)': 'ai',
       'Scheduling Setup': 'scheduling',
       'Lead Generation Engine': 'lead',
       'Full System Deposit': 'deposit',
@@ -93,7 +93,7 @@
     var slugEl = document.getElementById('kp_purchase_service_slug');
     var val = sel ? sel.value : '';
     var slug = slugEl ? String(slugEl.value || '').trim() : '';
-    var show = val === 'Priority Quick Setup' || slug === 'priority-quick-setup';
+    var show = val === 'Skip the Line (Priority Setup)' || slug === 'priority-quick-setup';
     if (wrap) wrap.classList.toggle('d-none', !show);
   }
 

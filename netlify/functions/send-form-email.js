@@ -141,7 +141,7 @@ function getPurchaseKickoffMeta(data) {
   const slug = data.purchase_service_slug ? String(data.purchase_service_slug).trim().toLowerCase() : '';
   const bySlug = {
     'quick-setup': { label: 'Quick Setup', timeline: '1–3 business days' },
-    'priority-quick-setup': { label: 'Priority Quick Setup', timeline: 'Priority this week' },
+    'priority-quick-setup': { label: 'Skip the Line (Priority Setup)', timeline: 'Priority this week' },
     'full-system-deposit': {
       label: 'Full System Deposit',
       timeline: 'Kickoff within 1 business day; full timeline after scoping',
@@ -155,7 +155,13 @@ function getPurchaseKickoffMeta(data) {
   const pkg = (data.package_name && String(data.package_name).trim()) || '';
   const lower = pkg.toLowerCase();
   if (lower.includes('full system') && lower.includes('deposit')) return bySlug['full-system-deposit'];
-  if (lower.includes('priority') && lower.includes('quick')) return bySlug['priority-quick-setup'];
+  if (
+    lower.includes('skip the line') ||
+    (lower.includes('priority') && lower.includes('quick')) ||
+    (lower.includes('priority') && lower.includes('setup') && !lower.includes('full system'))
+  ) {
+    return bySlug['priority-quick-setup'];
+  }
   if (lower.includes('quick setup')) return bySlug['quick-setup'];
   if (lower.includes('ai intake')) return bySlug['ai-intake'];
   if (lower.includes('fix')) return bySlug['fix-app'];
@@ -248,7 +254,12 @@ function collectPackageKickoffMainNotes(data) {
     push('Phase 1 scope (intake + routing + conversion)', data.fullsys_scope_summary);
     push('Current tools / stack', data.fullsys_current_stack);
     push('Success vision after deposit phase', data.fullsys_success_vision);
-  } else if (pkg.includes('quick setup') || pkg.includes('ai intake') || pkg.includes('intake form')) {
+  } else if (
+    pkg.includes('quick setup') ||
+    pkg.includes('skip the line') ||
+    pkg.includes('ai intake') ||
+    pkg.includes('intake form')
+  ) {
     push('Lead questions (current)', data.ai_current_questions);
     const fq = (data.ai_filter_qualify || '').trim();
     if (fq) parts.push(`Filter / qualify leads\n${fq}`);
@@ -348,7 +359,12 @@ function buildPackageKickoffEmail(data, opts = {}) {
       ['Current tools / stack', data.fullsys_current_stack],
       ['Success vision after deposit phase', data.fullsys_success_vision],
     ]);
-  } else if (pkgNorm.includes('quick setup') || pkgNorm.includes('ai intake') || pkgNorm.includes('intake form')) {
+  } else if (
+    pkgNorm.includes('quick setup') ||
+    pkgNorm.includes('skip the line') ||
+    pkgNorm.includes('ai intake') ||
+    pkgNorm.includes('intake form')
+  ) {
     const intakeRows = [
       ['Questions you currently ask customers (or how leads reach you)', data.ai_current_questions],
       ['Filter / qualify leads', data.ai_filter_qualify],
