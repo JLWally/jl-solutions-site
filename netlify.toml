@@ -89,16 +89,12 @@
   to = "/book-consultation.html"
   status = 200
 
-# About: original about.html (pretty URL)
+# About: legacy file; canonical co-founder page is /about/
 [[redirects]]
-  from = "/about"
-  to = "/about.html"
-  status = 200
-
-[[redirects]]
-  from = "/about/"
-  to = "/about.html"
-  status = 200
+  from = "/about.html"
+  to = "/about/"
+  status = 301
+  force = true
 
 # Industry lander: HVAC
 [[redirects]]
