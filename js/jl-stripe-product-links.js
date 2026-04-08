@@ -13,8 +13,8 @@
  *   https://YOUR_PRODUCTION_DOMAIN/onboarding?service=lead-engine
  * (Netlify maps /onboarding → onboarding/index.html; query locks the right package in the form.)
  *
- * Same buy.stripe.com URL can only map to one key here; if a legacy link shares a URL, set the
- * Payment Link’s success URL `service=` to match the product (Quick Setup vs Full System Deposit, etc.).
+ * Legacy /get-started slugs `fix-my-app` and `ai-intake` reuse the Quick Setup and Full System Deposit
+ * checkout links above; each Payment Link still needs its own success URL in Stripe (quick-setup vs full-system-deposit).
  *
  * Verify each Payment Link success URL uses the onboarding *service* slug (not the keys below):
  * | Link key in stripeLinks   | Stripe Dashboard success URL must end with        |
@@ -32,10 +32,11 @@
 
   /** Slug → Stripe Payment Link (single source for checkout redirects) */
   var stripeLinks = {
-    'quick-setup': 'https://buy.stripe.com/3cI9AM1LOfjmdfM1VJ3Ru00',
-    'full-system-deposit': 'https://buy.stripe.com/dRmaEQ9eg9Z2a3A6bZ3Ru01',
-    'ai-intake': 'https://buy.stripe.com/dRmaEQ9eg9Z2a3A6bZ3Ru01',
-    'fix-my-app': 'https://buy.stripe.com/3cI9AM1LOfjmdfM1VJ3Ru00',
+    'quick-setup': 'https://buy.stripe.com/9B614g1LO2wA7Vs2ZN3Ru04',
+    'priority-quick-setup': 'https://buy.stripe.com/bJedR26245IMa3Abwj3Ru05',
+    'full-system-deposit': 'https://buy.stripe.com/8x23co4Y03AEgrYdEr3Ru06',
+    'ai-intake': 'https://buy.stripe.com/8x23co4Y03AEgrYdEr3Ru06',
+    'fix-my-app': 'https://buy.stripe.com/9B614g1LO2wA7Vs2ZN3Ru04',
     'lead-gen': 'https://buy.stripe.com/3cIfZacqsgnq6Ro6bZ3Ru03',
     scheduling: 'https://buy.stripe.com/7sYcMY8acc7aejQ0RF3Ru02',
   };
