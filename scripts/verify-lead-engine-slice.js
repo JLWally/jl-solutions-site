@@ -16,6 +16,7 @@ const MIGRATIONS = [
   '20260402140000_lead_engine_demo_slug.sql',
   '20260402160000_lead_engine_demo_outreach_status.sql',
   '20260403100000_lead_engine_demo_followup_due.sql',
+  '20260407180000_lead_engine_demo_outreach_status_expand.sql',
 ];
 
 const ENV_ONE_CLICK_SEND = [
@@ -50,10 +51,13 @@ function main() {
   );
 
   console.log('--- Stripe Payment Links (Dashboard → success URL must match) ---');
-  console.log('  ai-intake   → …/onboarding?service=ai-intake');
-  console.log('  fix-my-app  → …/onboarding?service=fix-app');
-  console.log('  scheduling  → …/onboarding?service=scheduling');
-  console.log('  lead-gen    → …/onboarding?service=lead-engine');
+  console.log('  quick-setup            → …/onboarding?service=quick-setup');
+  console.log('  priority-quick-setup   → …/onboarding?service=priority-quick-setup');
+  console.log('  full-system-deposit    → …/onboarding?service=full-system-deposit');
+  console.log('  ai-intake              → …/onboarding?service=ai-intake');
+  console.log('  fix-my-app             → …/onboarding?service=fix-app');
+  console.log('  scheduling             → …/onboarding?service=scheduling');
+  console.log('  lead-gen               → …/onboarding?service=lead-engine');
   console.log('  Source: js/jl-stripe-product-links.js\n');
 
   console.log('--- Env: one-click send (/internal/outreach) ---');

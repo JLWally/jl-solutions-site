@@ -15,7 +15,7 @@
  * - Buyer confirmation: subject "We've got your JL Solutions setup started" (service, timeline, next steps).
  * - Internal (info@): full HTML with "At a glance" (name, email, business, service, website) +
  *   main notes rollup + full sections. Optional ONBOARDING_OPS_EMAIL sends a second concise summary.
- * - Stripe Payment Links: success URL must be /onboarding?service=ai-intake | fix-app | scheduling | lead-engine.
+ * - Stripe Payment Links: success URL must be /onboarding?service=quick-setup | priority-quick-setup | full-system-deposit | ai-intake | fix-app | scheduling | lead-engine.
  *
  * JSON mode: if the client sends Accept: application/json (or form field response_format=json),
  * the function returns JSON instead of redirecting to thank-you. For most forms, Resend failure
@@ -140,6 +140,12 @@ function buildFixMyAppEmail(data) {
 function getPurchaseKickoffMeta(data) {
   const slug = data.purchase_service_slug ? String(data.purchase_service_slug).trim().toLowerCase() : '';
   const bySlug = {
+    'quick-setup': { label: 'Quick Setup', timeline: '1–3 business days' },
+    'priority-quick-setup': { label: 'Priority Quick Setup', timeline: 'Priority this week' },
+    'full-system-deposit': {
+      label: 'Full System Deposit',
+      timeline: 'Kickoff within 1 business day; full timeline after scoping',
+    },
     'ai-intake': { label: 'AI Intake', timeline: '3–7 business days' },
     'fix-app': { label: 'Fix My App', timeline: '2–5 business days' },
     scheduling: { label: 'Scheduling & routing setup', timeline: '3–7 business days' },
@@ -148,6 +154,9 @@ function getPurchaseKickoffMeta(data) {
   if (slug && bySlug[slug]) return bySlug[slug];
   const pkg = (data.package_name && String(data.package_name).trim()) || '';
   const lower = pkg.toLowerCase();
+  if (lower.includes('full system') && lower.includes('deposit')) return bySlug['full-system-deposit'];
+  if (lower.includes('priority') && lower.includes('quick')) return bySlug['priority-quick-setup'];
+  if (lower.includes('quick setup')) return bySlug['quick-setup'];
   if (lower.includes('ai intake')) return bySlug['ai-intake'];
   if (lower.includes('fix')) return bySlug['fix-app'];
   if (lower.includes('scheduling')) return bySlug.scheduling;
@@ -235,11 +244,16 @@ function collectPackageKickoffMainNotes(data) {
   push('Login details', data.login_details);
 
   const pkg = String(data.package_name || '').toLowerCase();
-  if (pkg.includes('ai intake') || pkg.includes('intake form')) {
+  if (pkg.includes('full system') && pkg.includes('deposit')) {
+    push('Phase 1 scope (intake + routing + conversion)', data.fullsys_scope_summary);
+    push('Current tools / stack', data.fullsys_current_stack);
+    push('Success vision after deposit phase', data.fullsys_success_vision);
+  } else if (pkg.includes('quick setup') || pkg.includes('ai intake') || pkg.includes('intake form')) {
     push('Lead questions (current)', data.ai_current_questions);
     const fq = (data.ai_filter_qualify || '').trim();
     if (fq) parts.push(`Filter / qualify leads\n${fq}`);
     push('Where leads should go', data.ai_leads_destination);
+    push('Priority focus first', data.priority_focus_first);
   } else if (pkg.includes('scheduling')) {
     push('What to book', data.sched_services_offered);
     push('Availability', data.sched_availability);
@@ -328,12 +342,22 @@ function buildPackageKickoffEmail(data, opts = {}) {
   ]);
 
   const pkgNorm = pkg.toLowerCase();
-  if (pkgNorm.includes('ai intake') || pkgNorm.includes('intake form')) {
-    html += section('Section 5: Features (AI Intake)', [
-      ['Questions you currently ask customers', data.ai_current_questions],
+  if (pkgNorm.includes('full system') && pkgNorm.includes('deposit')) {
+    html += section('Section 5: Features (Full System Deposit)', [
+      ['Phase 1 scope (intake + routing + conversion)', data.fullsys_scope_summary],
+      ['Current tools / stack', data.fullsys_current_stack],
+      ['Success vision after deposit phase', data.fullsys_success_vision],
+    ]);
+  } else if (pkgNorm.includes('quick setup') || pkgNorm.includes('ai intake') || pkgNorm.includes('intake form')) {
+    const intakeRows = [
+      ['Questions you currently ask customers (or how leads reach you)', data.ai_current_questions],
       ['Filter / qualify leads', data.ai_filter_qualify],
       ['Where should leads go?', data.ai_leads_destination],
-    ]);
+    ];
+    if ((data.priority_focus_first || '').trim()) {
+      intakeRows.push(['What to prioritize first', data.priority_focus_first]);
+    }
+    html += section('Section 5: Features (Intake & leads)', intakeRows);
   } else if (pkgNorm.includes('scheduling')) {
     html += section('Section 5: Features (Scheduling)', [
       ['Services you offer', data.sched_services_offered],

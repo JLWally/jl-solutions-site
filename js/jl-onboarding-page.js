@@ -1,8 +1,8 @@
 /**
  * /onboarding, post-purchase kickoff after Stripe (productized packages).
  *
- * Query param `service` must match Stripe Payment Link success URLs (set in Stripe Dashboard):
- *   /onboarding?service=ai-intake | fix-app | scheduling | lead-engine
+ * Query param `service` must match Stripe Payment Link success URLs (set in Stripe Dashboard), e.g.
+ *   /onboarding?service=quick-setup | priority-quick-setup | full-system-deposit | ai-intake | fix-app | scheduling | lead-engine
  * See also: js/jl-stripe-product-links.js (checkout URLs) and netlify.toml redirects for /onboarding.
  */
 (function () {
@@ -10,6 +10,24 @@
 
   /** Display timelines (keep aligned with getPurchaseKickoffMeta in send-form-email.js) */
   var POST_SERVICE_CONFIG = {
+    'quick-setup': {
+      panel: 'ai',
+      packageValue: 'Quick Setup',
+      headlineName: 'Quick Setup',
+      timeline: '1–3 business days',
+    },
+    'priority-quick-setup': {
+      panel: 'ai',
+      packageValue: 'Priority Quick Setup',
+      headlineName: 'Priority Quick Setup',
+      timeline: 'Priority this week',
+    },
+    'full-system-deposit': {
+      panel: 'deposit',
+      packageValue: 'Full System Deposit',
+      headlineName: 'Full System deposit',
+      timeline: 'Kickoff within 1 business day; full timeline after scoping',
+    },
     'ai-intake': {
       panel: 'ai',
       packageValue: 'AI Intake Form',
@@ -60,10 +78,23 @@
     var map = {
       'Fix My App': 'fix',
       'AI Intake Form': 'ai',
+      'Quick Setup': 'ai',
+      'Priority Quick Setup': 'ai',
       'Scheduling Setup': 'scheduling',
       'Lead Generation Engine': 'lead',
+      'Full System Deposit': 'deposit',
     };
     return map[packageValue] || '';
+  }
+
+  function syncPriorityExtra() {
+    var wrap = document.getElementById('jl-priority-extra-wrap');
+    var sel = document.getElementById('kp_package');
+    var slugEl = document.getElementById('kp_purchase_service_slug');
+    var val = sel ? sel.value : '';
+    var slug = slugEl ? String(slugEl.value || '').trim() : '';
+    var show = val === 'Priority Quick Setup' || slug === 'priority-quick-setup';
+    if (wrap) wrap.classList.toggle('d-none', !show);
   }
 
   function syncIntakePanels() {
@@ -75,6 +106,7 @@
     });
     var hint = document.getElementById('intake-panel-hint');
     if (hint) hint.classList.toggle('d-none', key !== '');
+    syncPriorityExtra();
   }
 
   function setPackageLock(locked, packageValue) {
@@ -152,11 +184,25 @@
         return false;
       }
     }
-    if (key === 'ai' && document.getElementById('kp_purchase_service_slug') && document.getElementById('kp_purchase_service_slug').value === 'ai-intake') {
+    if (key === 'ai') {
       var q = document.getElementById('kp_ai_questions');
       if (q && !String(q.value || '').trim()) {
-        window.alert('Please add lead questions.');
+        window.alert('Please describe lead questions or how leads reach you today.');
         q.focus();
+        return false;
+      }
+    }
+    if (key === 'deposit') {
+      var sc = document.getElementById('kp_fullsys_scope');
+      var st = document.getElementById('kp_fullsys_stack');
+      if (!sc || !String(sc.value || '').trim()) {
+        window.alert('Please describe what Phase 1 should cover (intake, routing, conversion).');
+        if (sc) sc.focus();
+        return false;
+      }
+      if (!st || !String(st.value || '').trim()) {
+        window.alert('Please list your current tools (forms, CRM, phone, scheduling).');
+        if (st) st.focus();
         return false;
       }
     }
