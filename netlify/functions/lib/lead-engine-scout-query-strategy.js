@@ -5,6 +5,8 @@ const fs = require('fs');
 const { loadAutomationPolicy } = require('./lead-engine-automation-policy');
 
 const DEFAULT_STRATEGY_PATH = path.join(__dirname, 'scout-query-strategy-v1.json');
+/** Bundle-safe default when SCOUT_QUERY_STRATEGY_PATH is unset or missing on disk. */
+const EMBEDDED_SCOUT_QUERY_STRATEGY = require('./scout-query-strategy-v1.json');
 
 function readJsonPath(p) {
   const raw = fs.readFileSync(p, 'utf8');
@@ -13,23 +15,15 @@ function readJsonPath(p) {
 
 function loadScoutQueryStrategy() {
   const envP = process.env.SCOUT_QUERY_STRATEGY_PATH && String(process.env.SCOUT_QUERY_STRATEGY_PATH).trim();
-  const candidates = [];
   if (envP) {
-    candidates.push(path.isAbsolute(envP) ? envP : path.join(process.cwd(), envP));
-  }
-  candidates.push(DEFAULT_STRATEGY_PATH);
-  for (const c of candidates) {
+    const c = path.isAbsolute(envP) ? envP : path.join(process.cwd(), envP);
     try {
       if (fs.existsSync(c)) return readJsonPath(c);
     } catch {
-      /* continue */
+      /* fall through to embedded */
     }
   }
-  return {
-    version: 'scout-query-strategy-v1',
-    global_budgets: {},
-    queries: [],
-  };
+  return EMBEDDED_SCOUT_QUERY_STRATEGY;
 }
 
 function intOr(v, def) {

@@ -6,14 +6,17 @@ const fs = require('fs');
 const DEFAULT_ICP_V2_PATH = path.join(__dirname, 'icp-v2.json');
 const DEFAULT_ICP_V1_PATH = path.join(__dirname, 'icp-v1.json');
 
+/** Bundle-safe defaults (no runtime fs on Netlify for stock config). */
+const EMBEDDED_ICP_V2 = require('./icp-v2.json');
+const EMBEDDED_ICP_V1 = require('./icp-v1.json');
+
 function readJsonIfExists(p) {
   if (!p || !fs.existsSync(p)) return null;
   return JSON.parse(fs.readFileSync(p, 'utf8'));
 }
 
 /**
- * Default: icp-v2.json next to this module.
- * Override with LEAD_ENGINE_ICP_CONFIG (path relative to cwd or absolute).
+ * Default: embedded icp-v2. Override with explicitPath or LEAD_ENGINE_ICP_CONFIG (file on disk).
  */
 function loadIcpConfig(explicitPath) {
   const candidates = [];
@@ -26,18 +29,20 @@ function loadIcpConfig(explicitPath) {
   if (envPath) {
     candidates.push(path.isAbsolute(envPath) ? envPath : path.join(process.cwd(), envPath));
   }
-  candidates.push(DEFAULT_ICP_V2_PATH, DEFAULT_ICP_V1_PATH);
   for (const c of candidates) {
     const j = readJsonIfExists(c);
     if (j) return j;
   }
-  throw new Error('No ICP config found (icp-v2.json / icp-v1.json)');
+  return EMBEDDED_ICP_V2;
 }
 
 function loadIcpV1Config(explicitPath) {
-  const p = explicitPath || DEFAULT_ICP_V1_PATH;
-  const raw = fs.readFileSync(p, 'utf8');
-  return JSON.parse(raw);
+  if (explicitPath) {
+    const p = path.isAbsolute(explicitPath) ? explicitPath : path.join(__dirname, explicitPath);
+    const raw = fs.readFileSync(p, 'utf8');
+    return JSON.parse(raw);
+  }
+  return EMBEDDED_ICP_V1;
 }
 
 /**

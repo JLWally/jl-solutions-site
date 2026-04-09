@@ -12,6 +12,21 @@ function isJlDemoSupabaseConfigured() {
 }
 
 /**
+ * PostgREST / Postgres when public.jl_demo_configs was never created.
+ * Fail-soft: demos can still use Blobs-only when this is true.
+ */
+function isJlDemoConfigsSchemaMissing(error) {
+  if (!error) return false;
+  const msg = String(error.message || error.details || error.hint || '').toLowerCase();
+  if (!msg.includes('jl_demo_configs')) return false;
+  return (
+    msg.includes('could not find the table') ||
+    msg.includes('schema cache') ||
+    (msg.includes('relation') && msg.includes('does not exist'))
+  );
+}
+
+/**
  * @param {string} slug
  * @returns {Promise<{ exists: boolean, error: string|null }>}
  */
@@ -20,6 +35,9 @@ async function checkSlugInJlDemoConfigs(slug) {
   if (!supabase || !slug) return { exists: false, error: null };
   const { data, error } = await supabase.from('jl_demo_configs').select('slug').eq('slug', slug).maybeSingle();
   if (error) {
+    if (isJlDemoConfigsSchemaMissing(error)) {
+      return { exists: false, error: null };
+    }
     console.warn('[demo-config-supabase] slug existence check failed:', error.message);
     return { exists: false, error: String(error.message || 'unknown error') };
   }
@@ -48,7 +66,9 @@ async function fetchJlDemoConfigBySlug(slug) {
     .eq('slug', slug)
     .maybeSingle();
   if (error) {
-    console.warn('[demo-config-supabase] fetch by slug failed:', error.message);
+    if (!isJlDemoConfigsSchemaMissing(error)) {
+      console.warn('[demo-config-supabase] fetch by slug failed:', error.message);
+    }
     return null;
   }
   if (!data) return null;
@@ -95,6 +115,9 @@ async function insertJlDemoConfig(payload) {
 
   const { error } = await supabase.from('jl_demo_configs').upsert(row, { onConflict: 'slug' });
   if (error) {
+    if (isJlDemoConfigsSchemaMissing(error)) {
+      return { ok: true, skipped: true, reason: 'jl_demo_configs_table_absent' };
+    }
     console.warn('[demo-config-supabase] upsert failed:', error.message);
     return { ok: false, error, message: error.message };
   }
@@ -134,6 +157,7 @@ async function isJlDemoSlugFreeOrOwnedByLead(slug, leadEngineLeadId) {
 module.exports = {
   insertJlDemoConfig,
   isJlDemoSupabaseConfigured,
+  isJlDemoConfigsSchemaMissing,
   isSlugTakenInJlDemoConfigs,
   checkSlugInJlDemoConfigs,
   fetchJlDemoConfigBySlug,

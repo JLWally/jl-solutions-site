@@ -4,6 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const { normalizeWebsiteUrl } = require('./lead-engine-ingest-validate');
 
+/** Bundle-safe default seeds when SCOUT_MVP_SOURCE_URL is unset. */
+const EMBEDDED_SCOUT_MVP_SEEDS = require('./scout-mvp-seeds.json');
 const DEFAULT_SEEDS_PATH = path.join(__dirname, 'scout-mvp-seeds.json');
 const SOURCE_KEY = 'scout_mvp_json';
 
@@ -28,10 +30,10 @@ async function loadScoutMvpSeedRows() {
     return data;
   }
 
-  const raw = fs.readFileSync(DEFAULT_SEEDS_PATH, 'utf8');
-  const arr = JSON.parse(raw);
-  if (!Array.isArray(arr)) throw new Error('Bundled scout seeds must be a JSON array');
-  return arr;
+  if (!Array.isArray(EMBEDDED_SCOUT_MVP_SEEDS)) {
+    throw new Error('Bundled scout seeds must be a JSON array');
+  }
+  return EMBEDDED_SCOUT_MVP_SEEDS;
 }
 
 function externalKeyForNormalizedUrl(normUrl) {

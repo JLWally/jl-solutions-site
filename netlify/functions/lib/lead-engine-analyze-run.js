@@ -91,7 +91,7 @@ async function runAnalyzeForLead(supabase, leadId, actor) {
     },
   ];
 
-  const secondaryUrls = discoverSecondaryPageUrls(homeFetch.html, homeFetch.finalUrl, 2);
+  const secondaryUrls = discoverSecondaryPageUrls(homeFetch.html, homeFetch.finalUrl, 1);
   for (const extraUrl of secondaryUrls) {
     if (extraUrl.replace(/\/$/, '') === homeFetch.finalUrl.replace(/\/$/, '')) continue;
     const extra = await fetchHtmlPage(extraUrl);
@@ -125,7 +125,7 @@ async function runAnalyzeForLead(supabase, leadId, actor) {
     const psiResults = await runPageSpeedForUrls(psiTargets, {
       apiKey: psiKey,
       strategy: 'mobile',
-      timeoutMs: 25000,
+      timeoutMs: 15000,
     });
     signalBundle.psi = {
       ...buildPsiSignalBundle(psiResults),

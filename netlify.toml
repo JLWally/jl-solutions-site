@@ -9,6 +9,14 @@
 
 [functions]
   node_bundler = "esbuild"
+  # Fallback: any remaining fs reads of JSON beside handlers still resolve on disk.
+  included_files = ["netlify/functions/lib/*.json"]
+
+# Analyze does sequential HTML fetches + PageSpeed; default 10s is too tight on cold starts.
+[functions."lead-engine-analyze"]
+  maxDuration = 60
+[functions."lead-engine-batch-analyze"]
+  maxDuration = 60
 
 # Lead engine split schedules (recommended for 24/7): scout-only + downstream (enrichment → ICP → pipeline).
 # Do NOT also schedule the full tick — that would overlap idempotency and double-spend Places quota.

@@ -2,7 +2,8 @@
  * Bounded homepage / key-page fetch for lead engine audit (no crawler).
  */
 
-const DEFAULT_TIMEOUT_MS = 8000;
+/** Keep analyze under typical serverless ceilings (multiple fetches + PSI). */
+const DEFAULT_TIMEOUT_MS = 6000;
 const MAX_BYTES = 600_000;
 
 const BLOCKED_HOST_SUBSTRINGS = [
