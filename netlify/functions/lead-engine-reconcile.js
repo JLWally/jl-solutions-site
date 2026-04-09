@@ -61,7 +61,7 @@ exports.handler = async (event) => {
     };
   }
 
-  const { leadId, outreachId, action, sentAt } = validated.value;
+  const { leadId, outreachId, action, sentAt, resendMessageId } = validated.value;
   const operator = g.session.username || 'unknown';
 
   const { data: row, error: loadErr } = await supabase
@@ -160,13 +160,15 @@ exports.handler = async (event) => {
       actor: operator || null,
       message: 'Reconcile action: mark_sent',
     });
+    const deliveryKey = resendMessageId || `reconcile_outreach_${outreachId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
     await logNativeLeadOutcome(supabase, {
       leadId,
       outreachId,
       outcome_code: 'email_delivered',
       native_source: NATIVE_SOURCES.OPERATOR_RECONCILE_MARK_SENT,
       context: 'reconcile_mark_sent',
-      evidence: { sent_at: upd.sent_at || null },
+      delivery_idempotency_key: deliveryKey,
+      evidence: { sent_at: upd.sent_at || null, resendMessageId: resendMessageId || null },
       actor: operator ? `operator:${operator}` : 'operator:reconcile',
     });
 

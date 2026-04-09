@@ -126,13 +126,24 @@ async function handleAuthenticatedJson(supabase, body) {
     context: body.context != null ? String(body.context).slice(0, 64) : 'pipeline_webhook',
     note: body.note != null ? String(body.note) : null,
     evidence: body.evidence,
+    delivery_idempotency_key:
+      body.delivery_idempotency_key != null ? String(body.delivery_idempotency_key) : null,
     actor: 'pipeline_webhook',
   });
 
   if (!logged.ok) {
     return { statusCode: 500, body: { error: (logged.error && logged.error.message) || 'log failed' } };
   }
-  return { statusCode: 200, body: { ok: true, leadId, outcome_code } };
+  return {
+    statusCode: 200,
+    body: {
+      ok: true,
+      leadId,
+      outcome_code,
+      idempotentReplay: Boolean(logged.idempotentReplay),
+      delivery_idempotency_key: logged.delivery_idempotency_key || null,
+    },
+  };
 }
 
 exports.handler = async (event) => {

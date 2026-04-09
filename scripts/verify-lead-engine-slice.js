@@ -17,6 +17,10 @@ const MIGRATIONS = [
   '20260402160000_lead_engine_demo_outreach_status.sql',
   '20260403100000_lead_engine_demo_followup_due.sql',
   '20260407180000_lead_engine_demo_outreach_status_expand.sql',
+  '20260407193000_lead_engine_automation_orchestration.sql',
+  '20260408120000_lead_engine_scout_strategy_and_prospect_branches.sql',
+  '20260408140000_lead_engine_operations_split_enrichment.sql',
+  '20260408170000_lead_engine_feedback_guardrails_and_outcomes.sql',
 ];
 
 const ENV_ONE_CLICK_SEND = [

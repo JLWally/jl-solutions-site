@@ -44,6 +44,18 @@ test('validateReconcileBody requires outreachId and action', () => {
   });
   assert.equal(r.ok, true);
   assert.equal(r.value.sentAt, null);
+  assert.equal(r.value.resendMessageId, null);
+});
+
+test('validateReconcileBody optional resendMessageId', () => {
+  const r = validateReconcileBody({
+    leadId: goodLead,
+    outreachId: goodOut,
+    action: 'mark_sent',
+    resendMessageId: 'resend-msg-id-1',
+  });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.resendMessageId, 'resend-msg-id-1');
 });
 
 test('validateReconcileBody parses sentAt', () => {

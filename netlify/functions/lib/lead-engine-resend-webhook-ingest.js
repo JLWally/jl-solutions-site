@@ -108,6 +108,9 @@ async function ingestVerifiedResendEvent(supabase, event) {
       return { ok: true, skip: true, reason: 'event_type_ignored', type };
   }
 
+  const deliveryKey =
+    outcome_code === 'email_delivered' && data.email_id != null ? String(data.email_id).trim() : null;
+
   const logged = await logNativeLeadOutcome(supabase, {
     leadId,
     outreachId,
@@ -115,13 +118,21 @@ async function ingestVerifiedResendEvent(supabase, event) {
     native_source: NATIVE_SOURCES.RESEND_WEBHOOK,
     context,
     evidence,
+    delivery_idempotency_key: deliveryKey,
     actor: 'resend_webhook',
   });
 
   if (!logged.ok) {
     return { ok: false, error: logged.error, type, leadId };
   }
-  return { ok: true, leadId, outcome_code, type };
+  return {
+    ok: true,
+    leadId,
+    outcome_code,
+    type,
+    idempotentReplay: Boolean(logged.idempotentReplay),
+    delivery_idempotency_key: logged.delivery_idempotency_key || null,
+  };
 }
 
 module.exports = {

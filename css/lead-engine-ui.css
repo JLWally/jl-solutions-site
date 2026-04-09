@@ -817,6 +817,60 @@ body.lead-engine-surface {
   }
 }
 
+/* Main layout: above-fold strip + tabbed ops / validation / reference */
+.lead-engine-surface .le-above-fold-scroll {
+  max-height: 220px;
+  overflow: auto;
+}
+
+.lead-engine-surface .le-above-fold-card .table-responsive {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.lead-engine-surface .le-nav-tabs-dark {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+}
+
+.lead-engine-surface .le-nav-tabs-dark .nav-link {
+  color: #94a3b8;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 0.5rem 0.85rem;
+  font-weight: 600;
+}
+
+.lead-engine-surface .le-nav-tabs-dark .nav-link:hover {
+  color: #e2e8f0;
+  border-bottom-color: rgba(248, 250, 252, 0.25);
+}
+
+.lead-engine-surface .le-nav-tabs-dark .nav-link.active {
+  color: #f8fafc;
+  background: transparent;
+  border-bottom-color: #38bdf8;
+}
+
+.lead-engine-surface .le-tab-card-body {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  background: #1e1e1e;
+}
+
+.lead-engine-surface .le-setup-offcanvas {
+  --bs-offcanvas-width: min(420px, 100vw - 1rem);
+}
+
+.lead-engine-surface .le-setup-offcanvas .offcanvas-body {
+  background: #161616;
+}
+
 @media (max-width: 767.98px) {
   .lead-engine-surface #leadsTableWrap {
     max-height: calc(100vh - 14rem);

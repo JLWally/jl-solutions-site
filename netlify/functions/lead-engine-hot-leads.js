@@ -5,6 +5,7 @@ const { guardLeadEngineRequest, withCors } = require('./lib/lead-engine-guard');
 const { getLeadEngineSupabase } = require('./lib/lead-engine-supabase');
 const { rankHotLeads } = require('./lib/lead-engine-hot-leads-rank');
 const { fetchLatestFeedbackByLeadIds } = require('./lib/lead-engine-lead-quality-feedback');
+const { readinessErrorPayload } = require('./lib/lead-engine-readiness');
 
 const EVENT_DRAFT = 'draft_generated';
 
@@ -39,10 +40,19 @@ exports.handler = async (event) => {
     .limit(120);
 
   if (leErr) {
+    const readiness = readinessErrorPayload(leErr.message);
     return {
-      statusCode: 500,
+      statusCode: 200,
       headers,
-      body: JSON.stringify({ error: leErr.message }),
+      body: JSON.stringify({
+        ...readiness,
+        generated_at: new Date().toISOString(),
+        window: 'updated_at within 7d UTC',
+        ranking_note: readiness.readiness.message,
+        feedback_endpoint: 'lead-engine-lead-feedback',
+        hot_leads_feedback_context: 'hot_leads_panel',
+        leads: [],
+      }),
     };
   }
 
@@ -91,6 +101,8 @@ exports.handler = async (event) => {
     statusCode: 200,
     headers,
     body: JSON.stringify({
+      ok: true,
+      readiness: { ok: true },
       generated_at: new Date().toISOString(),
       window: 'updated_at within 7d UTC',
       ranking_note:

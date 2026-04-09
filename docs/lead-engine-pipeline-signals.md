@@ -33,6 +33,10 @@ If no lead matches, the handler returns **200** with `{ ok: true, skipped: true,
 
 **Raw body:** Netlify must pass the **unmodified** POST body to Svix verification. Do not transform the body before verify.
 
+### Delivery idempotency (`email_delivered`)
+
+Resend’s **`email_id`** in webhooks matches the **`id`** returned when sending via the API. For **`email_delivered`** outcomes only, the system sets **`metadata_json.delivery_idempotency_key`** to that id (normalized) and **skips inserting a second row** for the same lead + key. So app-logged delivery (after send) and webhook-logged delivery **do not double count**. Operator **reconcile `mark_sent`** uses optional body **`resendMessageId`** when known; otherwise a per-outreach fallback key dedupes repeated reconcile clicks only (may not dedupe against the webhook if the Resend id was never recorded).
+
 ## 2) Authenticated JSON (`Authorization: Bearer <LEAD_ENGINE_PIPELINE_SIGNAL_SECRET>`)
 
 ### Generic outcome (n8n, scripts)
@@ -94,5 +98,6 @@ Logs **`crm_stage_changed`** with `native_source: hubspot_pipeline`.
 
 ## 5) Related docs
 
+- [Live validation deployment + 7-day checklist + send no-gos](lead-engine-live-validation-deployment.md)
 - [Send pilot readiness checklist](lead-engine-send-pilot-readiness.md) (no auto-send enabled).
 - [Trust ladder](lead-engine-trust-ladder.md).

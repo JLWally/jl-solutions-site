@@ -357,6 +357,7 @@ exports.handler = async (event) => {
     outcome_code: 'email_delivered',
     native_source: NATIVE_SOURCES.DEMO_OUTREACH_COMPOSER,
     context: 'demo_composer_send_ok',
+    delivery_idempotency_key: resendMessageId || null,
     evidence: { resendMessageId: resendMessageId || null, templateVariant: templateVariant || null },
     actor: g.session.username ? `operator:${g.session.username}` : 'operator:demo_send',
   });

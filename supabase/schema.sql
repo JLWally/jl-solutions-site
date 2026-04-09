@@ -210,7 +210,10 @@ CREATE TABLE IF NOT EXISTS lead_engine_leads (
   demo_last_contacted_at TIMESTAMPTZ,
   -- Operator workflow timestamps
   last_reviewed_at TIMESTAMPTZ,
-  audited_at TIMESTAMPTZ
+  audited_at TIMESTAMPTZ,
+  -- 24/7 automation pipeline (see migrations/20260407193000_lead_engine_automation_orchestration.sql)
+  automation_pipeline_status TEXT,
+  automation_correlation_id UUID
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_lead_engine_leads_idempotency_key
@@ -259,6 +262,21 @@ ALTER TABLE lead_engine_leads
 CREATE INDEX IF NOT EXISTS idx_lead_engine_leads_demo_outreach_status
   ON lead_engine_leads (demo_outreach_status)
   WHERE demo_outreach_status IS NOT NULL;
+
+-- Idempotent for DBs created before automation columns were in CREATE TABLE
+ALTER TABLE lead_engine_leads
+  ADD COLUMN IF NOT EXISTS automation_pipeline_status TEXT,
+  ADD COLUMN IF NOT EXISTS automation_correlation_id UUID;
+
+ALTER TABLE lead_engine_leads DROP CONSTRAINT IF EXISTS chk_lead_automation_pipeline_status;
+ALTER TABLE lead_engine_leads ADD CONSTRAINT chk_lead_automation_pipeline_status CHECK (
+  automation_pipeline_status IS NULL
+  OR automation_pipeline_status IN ('pending', 'running', 'completed', 'failed', 'skipped_openai')
+);
+
+CREATE INDEX IF NOT EXISTS idx_lead_engine_leads_automation_pipeline
+  ON lead_engine_leads (automation_pipeline_status)
+  WHERE automation_pipeline_status IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS lead_engine_analysis (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

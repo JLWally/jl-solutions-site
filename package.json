@@ -8,6 +8,7 @@
     "images:webp": "node scripts/convert-to-webp.js",
     "test": "node --test netlify/functions/lib/*.test.js",
     "verify:lead-engine-slice": "node scripts/verify-lead-engine-slice.js",
+    "verify:lead-engine-automation-schema": "node scripts/verify-lead-engine-automation-schema.js",
     "verify:live-revenue": "node scripts/verify-live-revenue.js"
   },
   "dependencies": {

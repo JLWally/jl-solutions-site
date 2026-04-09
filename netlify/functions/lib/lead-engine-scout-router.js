@@ -1,10 +1,10 @@
 'use strict';
 
-const { runScoutMvpIngest, SOURCE_KEY as MVP_SOURCE } = require('./lead-engine-scout-mvp');
+const { runScoutMvpIngest, SOURCE_KEY: MVP_SOURCE } = require('./lead-engine-scout-mvp');
 const {
   isScoutGooglePlacesConfigured,
   runGooglePlacesScoutIngest,
-  SOURCE_KEY as GOOGLE_SOURCE,
+  SOURCE_KEY: GOOGLE_SOURCE,
 } = require('./lead-engine-scout-google-places');
 const {
   getMergedActiveGooglePlaceQueries,

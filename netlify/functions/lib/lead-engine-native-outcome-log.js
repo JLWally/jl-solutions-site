@@ -1,7 +1,10 @@
 'use strict';
 
 const { logLeadEngineEvent } = require('./lead-engine-audit-log');
-const { LEAD_OUTCOME_EVENT, isValidOutcomeCode } = require('./lead-engine-outcome-events');
+const {
+  LEAD_OUTCOME_EVENT,
+  isValidOutcomeCode,
+} = require('./lead-engine-outcome-events');
 const { resolveSourceContextForLead } = require('./lead-engine-lead-quality-feedback');
 
 const NATIVE_SOURCES = {
@@ -16,6 +19,37 @@ const NATIVE_SOURCES = {
   HUBSPOT_PIPELINE: 'hubspot_pipeline',
   CALENDLY_PIPELINE: 'calendly_pipeline',
 };
+
+const DELIVERY_IDEM_MAX = 128;
+
+function normalizeDeliveryIdempotencyKey(raw) {
+  const s = raw != null ? String(raw).trim() : '';
+  if (!s) return null;
+  const safe = s.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, DELIVERY_IDEM_MAX);
+  return safe || null;
+}
+
+/**
+ * Same Resend message id is returned from the send API as `id` and in webhooks as `email_id`.
+ * @param {import('@supabase/supabase-js').SupabaseClient} supabase
+ */
+async function hasExistingEmailDeliveredIdempotency(supabase, leadId, idemKey) {
+  const k = normalizeDeliveryIdempotencyKey(idemKey);
+  if (!k) return false;
+  const { data, error } = await supabase
+    .from('lead_engine_events')
+    .select('id')
+    .eq('lead_id', leadId)
+    .eq('event_type', LEAD_OUTCOME_EVENT)
+    .contains('metadata_json', { delivery_idempotency_key: k })
+    .limit(1)
+    .maybeSingle();
+  if (error) {
+    console.warn('[native-outcome-log] idempotency lookup failed', error.message || error);
+    return false;
+  }
+  return Boolean(data && data.id);
+}
 
 /**
  * Structured lead_outcome row for non-manual pipeline capture (bounce, reply, CRM, etc.).
@@ -59,6 +93,27 @@ async function logNativeLeadOutcome(supabase, opts) {
   };
   if (evidence) metadata.evidence = evidence;
 
+  if (outcome_code === 'email_delivered') {
+    const idem =
+      normalizeDeliveryIdempotencyKey(opts.delivery_idempotency_key) ||
+      (evidence && evidence.email_id != null
+        ? normalizeDeliveryIdempotencyKey(evidence.email_id)
+        : null) ||
+      (evidence && evidence.resend_email_id != null
+        ? normalizeDeliveryIdempotencyKey(evidence.resend_email_id)
+        : null) ||
+      (evidence && evidence.resendMessageId != null
+        ? normalizeDeliveryIdempotencyKey(evidence.resendMessageId)
+        : null);
+    if (idem) {
+      const exists = await hasExistingEmailDeliveredIdempotency(supabase, leadId, idem);
+      if (exists) {
+        return { ok: true, idempotentReplay: true, delivery_idempotency_key: idem };
+      }
+      metadata.delivery_idempotency_key = idem;
+    }
+  }
+
   return logLeadEngineEvent(supabase, {
     lead_id: leadId,
     outreach_id: opts.outreachId != null ? String(opts.outreachId).trim() : null,
@@ -98,4 +153,6 @@ module.exports = {
   NATIVE_SOURCES,
   logNativeLeadOutcome,
   looksLikeEmailHardFailure,
+  normalizeDeliveryIdempotencyKey,
+  hasExistingEmailDeliveredIdempotency,
 };

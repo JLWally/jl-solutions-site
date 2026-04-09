@@ -24,133 +24,48 @@
       <a class="btn btn-primary" href="/lead-engine/login.html?return=%2Flead-engine%2F">Sign in</a>
     </div>
     <div id="ok" class="le-main-compact" style="display:none;">
-      <div class="d-flex justify-content-between align-items-center mb-1">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-1">
         <h1 class="h5 mb-0">Lead engine</h1>
-        <a href="/lead-engine/submissions.html" class="btn btn-outline-light btn-sm">View form submissions</a>
+        <div class="d-flex flex-wrap gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="offcanvas" data-bs-target="#leSetupOffcanvas" aria-controls="leSetupOffcanvas">Add / Import</button>
+          <a href="/lead-engine/submissions.html" class="btn btn-outline-light btn-sm">View form submissions</a>
+        </div>
       </div>
       <p class="text-muted small mb-2">Signed in as <span id="who" class="text-light"></span> · internal only</p>
 
-      <details class="card card-dark p-3 mb-2 le-panel">
-        <summary class="mb-0">Connection &amp; feature status</summary>
-        <pre id="statusJson" class="text-light small mb-0 mt-2" style="white-space: pre-wrap;"></pre>
-      </details>
-      <details class="card card-dark p-3 mb-2 le-panel">
-        <summary class="mb-0">Recent activity</summary>
-        <div id="activitySummary" class="small text-muted mb-2 mt-2">Loading…</div>
-        <div id="activityRecent" class="small text-light"></div>
-      </details>
-      <details class="card card-dark p-3 mb-2 le-panel" id="leCommandCenterPanel">
-        <summary class="mb-0">Automation command center (24/7)</summary>
-        <p class="small text-muted mt-2 mb-2">
-          Worker health, latest runs, failures, retry queue, prospect funnel, and hot leads (UTC day). Scheduled tick runs hourly when deployed on Netlify.
-        </p>
-        <button type="button" class="btn btn-outline-light btn-sm mb-2" id="cmdCenterRefresh">Refresh</button>
-        <div id="cmdCenterRoot" class="small text-light"></div>
-        <details class="mt-2">
-          <summary class="small text-muted">Raw JSON</summary>
-          <pre id="cmdCenterJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 280px; overflow: auto;"></pre>
-        </details>
-      </details>
-      <details class="card card-dark p-3 mb-2 le-panel" id="leHotLeadsPanel">
-        <summary class="mb-0">Best leads (hot ranking)</summary>
-        <p class="small text-muted mt-2 mb-2">
-          Composite score from fit, website, demo, draft, ICP tier hint, recency (7-day updated window). Not auto-send.
-          Use <strong class="text-light">Quality</strong> to log good/bad signals (feeds validation report).
-          <button type="button" class="btn btn-outline-light btn-sm py-0 ms-1" id="hotLeadsRefresh">Refresh</button>
-        </p>
-        <div id="hotLeadsBody" class="small text-light">Open this panel and click Refresh to load.</div>
-      </details>
-      <details class="card card-dark p-3 mb-2 le-panel" id="leValidationPanel">
-        <summary class="mb-0">MVP validation &amp; quality (24h / 7d UTC)</summary>
-        <p class="small text-muted mt-2 mb-2">
-          Funnel, scout health, duplicate ratio by query, operator feedback rollups. Pair with lead quality ratings on the list and hot panel.
-        </p>
-        <button type="button" class="btn btn-outline-light btn-sm mb-2" id="validationReportRefresh">Refresh</button>
-        <div id="validationReportRoot" class="small text-light">Open and refresh to load.</div>
-        <details class="mt-2">
-          <summary class="small text-muted">Raw JSON</summary>
-          <pre id="validationReportJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 220px; overflow: auto;"></pre>
-        </details>
-      </details>
-      <details class="card card-dark p-3 mb-2 le-panel" id="leValidationModePanel">
-        <summary class="mb-0">Validation mode (7d / 30d)</summary>
-        <p class="small text-muted mt-2 mb-2">
-          Native vs manual <code class="text-secondary">lead_outcome</code> events, positive rates by query/source, guardrail transitions, recovery playbook tallies, hot-panel usefulness. For wiring downstream signals see
-          <code class="text-secondary">docs/lead-engine-pipeline-signals.md</code>.
-        </p>
-        <button type="button" class="btn btn-outline-light btn-sm mb-2" id="validationModeRefresh">Refresh</button>
-        <div id="validationModeRoot" class="small text-light">Open and refresh to load.</div>
-        <details class="mt-2">
-          <summary class="small text-muted">Raw JSON</summary>
-          <pre id="validationModeJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 260px; overflow: auto;"></pre>
-        </details>
-      </details>
-      <details class="card card-dark p-3 mb-2 le-panel" id="leProfileReferencePanel">
-        <summary class="mb-0">Industry profile reference</summary>
-        <p class="small text-muted mb-2 mt-2 mb-lg-1">
-          Taxonomy used for demo defaults and vertical context. Offers still follow <strong class="text-light">audit signals</strong>, not the label alone.
-        </p>
-        <div id="leProfileReferenceBody" class="small text-muted">Loading…</div>
-      </details>
-
-      <div class="row g-2">
-        <div class="col-lg-5">
-          <div class="card card-dark p-3">
-            <h2 class="h6 text-secondary mb-2">Add lead (manual)</h2>
-            <form id="ingestForm">
-              <div class="mb-2">
-                <label class="form-label small" for="company_name">Company name</label>
-                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="company_name" required autocomplete="organization" />
-              </div>
-              <div class="mb-2">
-                <label class="form-label small" for="website_url">Website URL</label>
-                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="website_url" required placeholder="https:// or example.com" />
-              </div>
-              <div class="mb-2">
-                <label class="form-label small" for="contact_email">Contact email (optional)</label>
-                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="contact_email" type="email" autocomplete="off" />
-              </div>
-              <div class="mb-2">
-                <label class="form-label small" for="idempotency_key">Idempotency key (optional)</label>
-                <input class="form-control form-control-sm bg-dark text-light border-secondary" id="idempotency_key" autocomplete="off" />
-              </div>
-              <p id="ingestErr" class="text-danger small" style="display:none;"></p>
-              <p id="ingestOk" class="text-success small" style="display:none;"></p>
-              <button type="submit" class="btn btn-primary btn-sm" id="ingestBtn">Save lead</button>
-            </form>
-          </div>
-          <div class="card card-dark p-3 mt-2">
-            <h2 class="h6 text-secondary mb-2">Import leads (CSV)</h2>
-            <p class="small text-muted mb-2">Headers: <code>company_name,website_url,contact_email,source,idempotency_key</code>. Required: <code>company_name</code>, <code>website_url</code>.</p>
-            <div class="mb-2">
-              <input class="form-control form-control-sm bg-dark text-light border-secondary" id="importCsvFile" type="file" accept=".csv,text/csv" />
+      <div class="row g-2 mb-3 le-above-fold">
+        <div class="col-12 col-lg-4">
+          <div class="card card-dark p-2 h-100 le-above-fold-card">
+            <div class="d-flex justify-content-between align-items-center mb-1 gap-2">
+              <h2 class="h6 text-secondary mb-0">Hot leads</h2>
+              <button type="button" class="btn btn-outline-light btn-sm py-0" id="hotLeadsRefresh">Refresh</button>
             </div>
-            <div class="d-flex gap-2 flex-wrap mb-2">
-              <button type="button" class="btn btn-outline-light btn-sm" id="importPreviewBtn">Preview CSV</button>
-              <button type="button" class="btn btn-success btn-sm" id="importCommitBtn" disabled>Import ready rows</button>
-            </div>
-            <p id="importErr" class="text-danger small" style="display:none;"></p>
-            <p id="importOk" class="text-success small" style="display:none;"></p>
-            <div id="importSummary" class="small text-muted mb-2" style="display:none;"></div>
-            <div class="table-responsive" id="importPreviewWrap" style="display:none; max-height: 240px;">
-              <table class="table table-sm table-dark-ish mb-0">
-                <thead>
-                  <tr>
-                    <th>Row</th>
-                    <th>Status</th>
-                    <th>Company</th>
-                    <th>Website</th>
-                    <th>Notes</th>
-                  </tr>
-                </thead>
-                <tbody id="importPreviewBody"></tbody>
-              </table>
-            </div>
+            <p class="small text-muted mb-1 mb-lg-0">7-day window · rate quality for validation</p>
+            <div id="hotLeadsBody" class="small text-light le-above-fold-scroll">Loading…</div>
           </div>
         </div>
-        <div class="col-12">
-          <div class="card card-dark p-3">
-            <h2 class="h6 text-secondary mb-2">Leads</h2>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card card-dark p-2 h-100 le-above-fold-card">
+            <div class="d-flex justify-content-between align-items-center mb-1 gap-2 flex-wrap">
+              <h2 class="h6 text-secondary mb-0">Guardrails &amp; queries</h2>
+              <button type="button" class="btn btn-link btn-sm text-secondary text-decoration-none p-0" id="leOpenOpsFromGuardrails">Operations →</button>
+            </div>
+            <div id="leAboveFoldGuardrails" class="small text-light le-above-fold-scroll">Loading…</div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card card-dark p-2 h-100 le-above-fold-card">
+            <div class="d-flex justify-content-between align-items-center mb-1 gap-2 flex-wrap">
+              <h2 class="h6 text-secondary mb-0">Failures &amp; retries</h2>
+              <button type="button" class="btn btn-link btn-sm text-secondary text-decoration-none p-0" id="leOpenOpsFromFailures">Operations →</button>
+            </div>
+            <div id="leAboveFoldFailures" class="small text-light le-above-fold-scroll">Loading…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-dark p-3 mb-3">
+            <h2 class="h5 text-light mb-2">Leads</h2>
             <p class="small text-muted mb-2 mb-lg-1 le-readable-hint"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest <em>email</em> outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
             <p class="small le-operator-guide mb-2"><strong>Demo email vs reminder date:</strong> <strong class="text-white">Demo stage</strong> (dropdown) is where this lead is in <em>your</em> custom-demo email workflow. <strong class="text-white">Remind on</strong> (column) is only the calendar date for the next nudge—it does not replace stage. Use <strong class="text-white">Email sent</strong> or the stage dropdown → “Marked sent (manual)” when they got the demo link. <strong class="text-white">Set reminder</strong> sets stage to “Follow-up needed” <em>and</em> a due date (+3 business days UTC). <strong class="text-white">Open outreach</strong> opens the email composer. <strong class="text-white">Edit lead</strong> updates company, URL, and contact email.</p>
             <div id="leDailyActionSummaryBar" class="le-daily-action-summary mb-2" style="display: none" aria-live="polite"></div>
@@ -346,7 +261,139 @@
                 </tbody>
               </table>
             </div>
+      </div>
+
+      <ul class="nav nav-tabs le-nav-tabs-dark px-2 pt-2 mb-0 flex-nowrap overflow-x-auto" id="leMainTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="le-tab-ops-trigger" type="button" role="tab" aria-controls="le-tab-ops" aria-selected="true" onclick="showLeadEngineOperationsTab(); return false;">Operations</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="le-tab-val-trigger" data-bs-toggle="tab" data-bs-target="#le-tab-val" type="button" role="tab" aria-controls="le-tab-val" aria-selected="false">Validation</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="le-tab-ref-trigger" data-bs-toggle="tab" data-bs-target="#le-tab-ref" type="button" role="tab" aria-controls="le-tab-ref" aria-selected="false">Reference</button>
+        </li>
+      </ul>
+      <div class="tab-content card card-dark le-tab-card-body p-3 mb-2">
+        <div class="tab-pane fade show active" id="le-tab-ops" role="tabpanel" aria-labelledby="le-tab-ops-trigger" tabindex="0">
+          <details class="card card-dark p-3 mb-2 le-panel border-secondary">
+            <summary class="mb-0">Connection &amp; feature status</summary>
+            <pre id="statusJson" class="text-light small mb-0 mt-2" style="white-space: pre-wrap;"></pre>
+          </details>
+          <details class="card card-dark p-3 mb-2 le-panel border-secondary">
+            <summary class="mb-0">Recent activity</summary>
+            <div id="activitySummary" class="small text-muted mb-2 mt-2">Loading…</div>
+            <div id="activityRecent" class="small text-light"></div>
+          </details>
+          <div class="card card-dark p-3 mb-0 le-panel border-secondary" id="leCommandCenterPanel">
+            <h2 class="h6 text-secondary mb-2">Automation command center</h2>
+            <p class="small text-muted mb-2">
+              Worker health, scout queries, guardrails, failures, retry queue, prospect funnel (UTC). Scheduled tick runs hourly when deployed on Netlify.
+            </p>
+            <button type="button" class="btn btn-outline-light btn-sm mb-2" id="cmdCenterRefresh">Refresh</button>
+            <div id="cmdCenterRoot" class="small text-light"></div>
+            <details class="mt-2">
+              <summary class="small text-muted">Raw JSON</summary>
+              <pre id="cmdCenterJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 280px; overflow: auto;"></pre>
+            </details>
           </div>
+        </div>
+        <div class="tab-pane fade" id="le-tab-val" role="tabpanel" aria-labelledby="le-tab-val-trigger" tabindex="0">
+          <details class="card card-dark p-3 mb-2 le-panel border-secondary" id="leValidationPanel">
+            <summary class="mb-0">MVP validation &amp; quality (24h / 7d UTC)</summary>
+            <p class="small text-muted mt-2 mb-2">
+              Funnel, scout health, duplicate ratio by query, operator feedback rollups. Pair with lead quality ratings on the list and hot panel.
+            </p>
+            <button type="button" class="btn btn-outline-light btn-sm mb-2" id="validationReportRefresh">Refresh</button>
+            <div id="validationReportRoot" class="small text-light">Loads when you open this tab (or Refresh).</div>
+            <details class="mt-2">
+              <summary class="small text-muted">Raw JSON</summary>
+              <pre id="validationReportJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 220px; overflow: auto;"></pre>
+            </details>
+          </details>
+          <details class="card card-dark p-3 mb-0 le-panel border-secondary" id="leValidationModePanel">
+            <summary class="mb-0">Validation mode (7d / 30d)</summary>
+            <p class="small text-muted mt-2 mb-2">
+              Native vs manual <code class="text-secondary">lead_outcome</code> events, positive rates by query/source, guardrail transitions, recovery playbook tallies, hot-panel usefulness. For wiring downstream signals see
+              <code class="text-secondary">docs/lead-engine-pipeline-signals.md</code>.
+            </p>
+            <button type="button" class="btn btn-outline-light btn-sm mb-2" id="validationModeRefresh">Refresh</button>
+            <div id="validationModeRoot" class="small text-light">Loads when you open this tab (or Refresh).</div>
+            <details class="mt-2">
+              <summary class="small text-muted">Raw JSON</summary>
+              <pre id="validationModeJson" class="text-light small mb-0 mt-1" style="white-space: pre-wrap; max-height: 260px; overflow: auto;"></pre>
+            </details>
+          </details>
+        </div>
+        <div class="tab-pane fade" id="le-tab-ref" role="tabpanel" aria-labelledby="le-tab-ref-trigger" tabindex="0">
+          <div class="card card-dark p-3 mb-0 le-panel border-secondary" id="leProfileReferencePanel">
+            <h2 class="h6 text-secondary mb-2">Industry profile reference</h2>
+            <p class="small text-muted mb-2">
+              Taxonomy used for demo defaults and vertical context. Offers still follow <strong class="text-light">audit signals</strong>, not the label alone.
+            </p>
+            <div id="leProfileReferenceBody" class="small text-muted">Loads when you open this tab.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="offcanvas offcanvas-end text-bg-dark le-setup-offcanvas" tabindex="-1" id="leSetupOffcanvas" aria-labelledby="leSetupOffcanvasLabel">
+    <div class="offcanvas-header border-bottom border-secondary">
+      <h2 class="h5 offcanvas-title mb-0" id="leSetupOffcanvasLabel">Add &amp; import leads</h2>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="mb-4">
+        <h3 class="h6 text-secondary mb-2">Add lead (manual)</h3>
+        <form id="ingestForm">
+          <div class="mb-2">
+            <label class="form-label small" for="company_name">Company name</label>
+            <input class="form-control form-control-sm bg-dark text-light border-secondary" id="company_name" required autocomplete="organization" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label small" for="website_url">Website URL</label>
+            <input class="form-control form-control-sm bg-dark text-light border-secondary" id="website_url" required placeholder="https:// or example.com" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label small" for="contact_email">Contact email (optional)</label>
+            <input class="form-control form-control-sm bg-dark text-light border-secondary" id="contact_email" type="email" autocomplete="off" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label small" for="idempotency_key">Idempotency key (optional)</label>
+            <input class="form-control form-control-sm bg-dark text-light border-secondary" id="idempotency_key" autocomplete="off" />
+          </div>
+          <p id="ingestErr" class="text-danger small" style="display:none;"></p>
+          <p id="ingestOk" class="text-success small" style="display:none;"></p>
+          <button type="submit" class="btn btn-primary btn-sm" id="ingestBtn">Save lead</button>
+        </form>
+      </div>
+      <div>
+        <h3 class="h6 text-secondary mb-2">Import leads (CSV)</h3>
+        <p class="small text-muted mb-2">Headers: <code>company_name,website_url,contact_email,source,idempotency_key</code>. Required: <code>company_name</code>, <code>website_url</code>.</p>
+        <div class="mb-2">
+          <input class="form-control form-control-sm bg-dark text-light border-secondary" id="importCsvFile" type="file" accept=".csv,text/csv" />
+        </div>
+        <div class="d-flex gap-2 flex-wrap mb-2">
+          <button type="button" class="btn btn-outline-light btn-sm" id="importPreviewBtn">Preview CSV</button>
+          <button type="button" class="btn btn-success btn-sm" id="importCommitBtn" disabled>Import ready rows</button>
+        </div>
+        <p id="importErr" class="text-danger small" style="display:none;"></p>
+        <p id="importOk" class="text-success small" style="display:none;"></p>
+        <div id="importSummary" class="small text-muted mb-2" style="display:none;"></div>
+        <div class="table-responsive" id="importPreviewWrap" style="display:none; max-height: 240px;">
+          <table class="table table-sm table-dark-ish mb-0">
+            <thead>
+              <tr>
+                <th>Row</th>
+                <th>Status</th>
+                <th>Company</th>
+                <th>Website</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="importPreviewBody"></tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -382,11 +429,36 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     function show(id) {
       ['loading', 'gate', 'ok'].forEach(function (x) {
         document.getElementById(x).style.display = x === id ? 'block' : 'none';
       });
+    }
+
+    /** Operations tab + “Operations →” links: works without Bootstrap or before dashboard loads. */
+    function showLeadEngineOperationsTab() {
+      var trig = document.getElementById('le-tab-ops-trigger');
+      var pane = document.getElementById('le-tab-ops');
+      if (!trig || !pane) return;
+      var B = window.bootstrap;
+      if (B && B.Tab) {
+        try {
+          B.Tab.getOrCreateInstance(trig).show();
+          return;
+        } catch (e) {}
+      }
+      document.querySelectorAll('#leMainTabs .nav-link').forEach(function (el) {
+        el.classList.remove('active');
+        el.setAttribute('aria-selected', 'false');
+      });
+      trig.classList.add('active');
+      trig.setAttribute('aria-selected', 'true');
+      document.querySelectorAll('.le-tab-card-body .tab-pane').forEach(function (p) {
+        p.classList.remove('show', 'active');
+      });
+      pane.classList.add('show', 'active');
     }
 
     async function api(path, opts) {
@@ -1226,6 +1298,7 @@
     function renderActivitySummary(d) {
       var summaryEl = document.getElementById('activitySummary');
       var recentEl = document.getElementById('activityRecent');
+      if (!summaryEl || !recentEl) return;
       if (!d || !d.summary) {
         summaryEl.textContent = 'No activity available.';
         recentEl.innerHTML = '';
@@ -1275,12 +1348,14 @@
     }
 
     async function loadActivitySummary() {
+      var summaryEl = document.getElementById('activitySummary');
+      var recentEl = document.getElementById('activityRecent');
       var out = await api('lead-engine-activity-summary?limit=200');
       if (!out.res.ok) {
         var amsg = out.data.error || 'Failed to load activity.';
         if (out.data.details) amsg += ' ' + out.data.details;
-        document.getElementById('activitySummary').textContent = amsg;
-        document.getElementById('activityRecent').innerHTML = '';
+        if (summaryEl) summaryEl.textContent = amsg;
+        if (recentEl) recentEl.innerHTML = '';
         return;
       }
       renderActivitySummary(out.data);
@@ -1291,6 +1366,16 @@
       if (!root) return;
       var st = d.stats_today_utc || {};
       var parts = [];
+      if (d && d.ok === false && d.readiness && d.readiness.message) {
+        parts.push(
+          '<div class="alert alert-warning py-2 px-3 small mb-3 border border-warning text-warning" role="alert">' +
+            escapeHtml(d.readiness.message) +
+            (d.readiness.failed_sections && d.readiness.failed_sections.length
+              ? ' <span class="text-secondary">Some sections used empty data.</span>'
+              : '') +
+            '</div>'
+        );
+      }
       parts.push('<div class="row g-2 mb-3">');
       [
         ['New prospects (created today, UTC)', st.prospects_created_any_status],
@@ -1647,7 +1732,13 @@
         el.innerHTML = '<span class="text-danger">' + escapeHtml((out.data && out.data.error) || 'Failed') + '</span>';
         return;
       }
-      var leads = (out.data && out.data.leads) || [];
+      var payload = out.data || {};
+      if (payload.ok === false && payload.readiness && payload.readiness.message) {
+        el.innerHTML =
+          '<span class="text-warning small">' + escapeHtml(payload.readiness.message) + '</span>';
+        return;
+      }
+      var leads = payload.leads || [];
       if (!leads.length) {
         el.innerHTML = '<span class="text-muted">No leads in window.</span>';
         return;
@@ -2099,21 +2190,178 @@
       renderValidationReport(out.data);
     }
 
+    function renderAboveFoldFromDashboard(d, errMsg) {
+      var gEl = document.getElementById('leAboveFoldGuardrails');
+      var fEl = document.getElementById('leAboveFoldFailures');
+      if (!gEl || !fEl) return;
+      if (d && d.ok === false && (d.readiness || {}).message && !errMsg) {
+        gEl.innerHTML =
+          '<span class="text-warning small">' + escapeHtml(d.readiness.message) + '</span>';
+        fEl.innerHTML =
+          '<span class="text-muted small">Open Operations for partial command center data.</span>';
+        return;
+      }
+      if (errMsg || !d) {
+        gEl.innerHTML = '<span class="text-danger">' + escapeHtml(errMsg || 'Could not load dashboard.') + '</span>';
+        fEl.innerHTML = '<span class="text-muted">—</span>';
+        return;
+      }
+      function healthOk(h) {
+        return String(h || 'healthy').toLowerCase() === 'healthy';
+      }
+      var ssc = d.guardrail_source_scorecard || [];
+      var qsc = d.guardrail_query_scorecard || [];
+      var srcBad = ssc.filter(function (s) {
+        return !healthOk(s.latest_health_status);
+      });
+      var qBad = qsc.filter(function (q) {
+        return !healthOk(q.latest_health_status);
+      });
+      var gl = d.guardrail_learning_summary || {};
+      var lines = [];
+      lines.push(
+        '<div><span class="text-secondary">Sources</span> · ' +
+          escapeHtml(String(ssc.length)) +
+          ' tracked · <span class="' +
+          (srcBad.length ? 'text-warning' : 'text-success') +
+          '">' +
+          escapeHtml(String(srcBad.length)) +
+          ' non-healthy</span></div>'
+      );
+      lines.push(
+        '<div><span class="text-secondary">Queries</span> · ' +
+          escapeHtml(String(qsc.length)) +
+          ' tracked · <span class="' +
+          (qBad.length ? 'text-warning' : 'text-success') +
+          '">' +
+          escapeHtml(String(qBad.length)) +
+          ' non-healthy</span></div>'
+      );
+      if (gl.drafts_warning) {
+        lines.push('<div class="text-warning mt-1 small">Learning: drafts warning threshold</div>');
+      }
+      var issues = [];
+      qBad.slice(0, 3).forEach(function (q) {
+        issues.push(
+          '<li class="small"><code>' +
+            escapeHtml(q.query_id || '') +
+            '</code> · ' +
+            escapeHtml(q.latest_health_status || '') +
+            (q.latest_health_reason
+              ? ' · ' + escapeHtml(String(q.latest_health_reason).slice(0, 80))
+              : '') +
+            '</li>'
+        );
+      });
+      var room = 3 - issues.length;
+      if (room > 0) {
+        srcBad.slice(0, room).forEach(function (s) {
+          issues.push(
+            '<li class="small"><code>' +
+              escapeHtml(s.source_key || '') +
+              '</code> · ' +
+              escapeHtml(s.latest_health_status || '') +
+              '</li>'
+          );
+        });
+      }
+      if (issues.length) {
+        lines.push('<ul class="mb-0 ps-3 mt-1">' + issues.join('') + '</ul>');
+      } else if (!ssc.length && !qsc.length) {
+        lines.push('<div class="text-muted mt-1 small">No guardrail scorecards yet.</div>');
+      } else {
+        lines.push('<div class="text-muted mt-1 small">All reported sources/queries healthy.</div>');
+      }
+      gEl.innerHTML = lines.join('');
+
+      var fr = d.failed_runs || [];
+      var rq = d.retry_queue || [];
+      var fpl = d.failed_pipeline_leads || [];
+      if (!fr.length && !rq.length && !fpl.length) {
+        fEl.innerHTML = '<span class="text-muted">No failed runs, retry queue items, or pipeline failures in window.</span>';
+        return;
+      }
+      var fParts = [];
+      if (fr.length) {
+        fParts.push(
+          '<div class="text-secondary small mb-1">Failed runs (' + escapeHtml(String(fr.length)) + ')</div><ul class="mb-2 ps-3">'
+        );
+        fr.slice(0, 4).forEach(function (r) {
+          fParts.push(
+            '<li class="small">' +
+              escapeHtml((r.finished_at || '').slice(0, 16)) +
+              ' · <strong>' +
+              escapeHtml(r.worker_name || '') +
+              '</strong> · ' +
+              escapeHtml(String(r.error_message || r.status || '').slice(0, 100)) +
+              '</li>'
+          );
+        });
+        fParts.push('</ul>');
+      }
+      if (rq.length) {
+        fParts.push(
+          '<div class="text-secondary small mb-1">Retry queue (' + escapeHtml(String(rq.length)) + ')</div><ul class="mb-2 ps-3">'
+        );
+        rq.slice(0, 3).forEach(function (r) {
+          fParts.push(
+            '<li class="small">' +
+              escapeHtml(r.worker_name || '') +
+              ' · tries ' +
+              escapeHtml(String(r.retry_count != null ? r.retry_count : '—')) +
+              ' · ' +
+              escapeHtml(String(r.error_message || '').slice(0, 80)) +
+              '</li>'
+          );
+        });
+        fParts.push('</ul>');
+      }
+      if (fpl.length) {
+        fParts.push(
+          '<div class="text-secondary small mb-1">Pipeline failures (' + escapeHtml(String(fpl.length)) + ')</div><ul class="mb-0 ps-3">'
+        );
+        fpl.slice(0, 4).forEach(function (L) {
+          var id = L.id ? String(L.id) : '';
+          fParts.push(
+            '<li class="small d-flex flex-wrap align-items-center gap-1">' +
+              '<span>' +
+              escapeHtml(L.company_name || id || 'lead') +
+              '</span>' +
+              (id
+                ? '<button type="button" class="btn btn-outline-warning btn-sm py-0" data-lead-retry="' +
+                  escapeAttr(id) +
+                  '">Retry</button>'
+                : '') +
+              '</li>'
+          );
+        });
+        fParts.push('</ul>');
+      }
+      fEl.innerHTML = fParts.join('');
+    }
+
     async function loadCommandCenter() {
       var rawEl = document.getElementById('cmdCenterJson');
       var root = document.getElementById('cmdCenterRoot');
       if (!root && !rawEl) return;
       if (root) root.innerHTML = '<p class="text-muted small mb-0">Loading…</p>';
       if (rawEl) rawEl.textContent = '';
+      var gLoad = document.getElementById('leAboveFoldGuardrails');
+      var fLoad = document.getElementById('leAboveFoldFailures');
+      if (gLoad) gLoad.innerHTML = '<span class="text-muted">Loading…</span>';
+      if (fLoad) fLoad.innerHTML = '<span class="text-muted">Loading…</span>';
       var out = await api('lead-engine-automation-dashboard');
       if (!out.res.ok) {
         var msg = (out.data && out.data.error) || 'Failed to load automation dashboard.';
         if (root) root.innerHTML = '<p class="text-danger small">' + escapeHtml(msg) + '</p>';
         if (rawEl) rawEl.textContent = msg;
+        renderAboveFoldFromDashboard(null, msg);
         return;
       }
-      renderAutomationCommandCenter(out.data);
-      if (rawEl) rawEl.textContent = JSON.stringify(out.data, null, 2);
+      var dash = out.data || {};
+      renderAboveFoldFromDashboard(dash, null);
+      renderAutomationCommandCenter(dash);
+      if (rawEl) rawEl.textContent = JSON.stringify(dash, null, 2);
     }
 
     function formatHistoryDetail(d) {
@@ -3164,7 +3412,29 @@
       show('ok');
       document.getElementById('who').textContent = st.data.username || '';
       document.getElementById('statusJson').textContent = JSON.stringify(st.data, null, 2);
-      loadProfileReference();
+      var goOpsG = document.getElementById('leOpenOpsFromGuardrails');
+      if (goOpsG) goOpsG.onclick = function () { showLeadEngineOperationsTab(); };
+      var goOpsF = document.getElementById('leOpenOpsFromFailures');
+      if (goOpsF) goOpsF.onclick = function () { showLeadEngineOperationsTab(); };
+      var leValidationTabLoaded = false;
+      var leReferenceTabLoaded = false;
+      var valTabTrig = document.getElementById('le-tab-val-trigger');
+      if (valTabTrig) {
+        valTabTrig.addEventListener('shown.bs.tab', function () {
+          if (leValidationTabLoaded) return;
+          leValidationTabLoaded = true;
+          loadValidationReport();
+          loadValidationMode();
+        });
+      }
+      var refTabTrig = document.getElementById('le-tab-ref-trigger');
+      if (refTabTrig) {
+        refTabTrig.addEventListener('shown.bs.tab', function () {
+          if (leReferenceTabLoaded) return;
+          leReferenceTabLoaded = true;
+          loadProfileReference();
+        });
+      }
       var cmdRefresh = document.getElementById('cmdCenterRefresh');
       if (cmdRefresh) {
         cmdRefresh.onclick = function () {
@@ -3177,10 +3447,10 @@
           loadHotLeadsRanked();
         };
       }
-      var cmdRoot = document.getElementById('cmdCenterRoot');
-      if (cmdRoot && !cmdRoot.dataset.leBoundRetry) {
-        cmdRoot.dataset.leBoundRetry = '1';
-        cmdRoot.addEventListener('click', async function (ev) {
+      var okRoot = document.getElementById('ok');
+      if (okRoot && !okRoot.dataset.leBoundLeadRetry) {
+        okRoot.dataset.leBoundLeadRetry = '1';
+        okRoot.addEventListener('click', async function (ev) {
           var btn = ev.target.closest('[data-lead-retry]');
           if (!btn) return;
           var lid = btn.getAttribute('data-lead-retry');
@@ -3200,6 +3470,7 @@
           loadList(false);
         });
       }
+      var cmdRoot = document.getElementById('cmdCenterRoot');
       if (cmdRoot && !cmdRoot.dataset.leBoundScoutOps) {
         cmdRoot.dataset.leBoundScoutOps = '1';
         cmdRoot.addEventListener('change', async function (ev) {
@@ -3327,21 +3598,18 @@
           loadCommandCenter();
         });
       }
-      loadCommandCenter();
       var valRef = document.getElementById('validationReportRefresh');
       if (valRef) {
         valRef.onclick = function () {
           loadValidationReport();
         };
       }
-      loadValidationReport();
       var vmRef = document.getElementById('validationModeRefresh');
       if (vmRef) {
         vmRef.onclick = function () {
           loadValidationMode();
         };
       }
-      loadValidationMode();
 
       document.getElementById('logout').style.display = 'inline-block';
       document.getElementById('logout').onclick = async function () {
@@ -4342,6 +4610,7 @@
       syncDailyQueueButtonStates();
       loadList(true);
       loadActivitySummary();
+      loadHotLeadsRanked();
       loadCommandCenter();
     }
     init();

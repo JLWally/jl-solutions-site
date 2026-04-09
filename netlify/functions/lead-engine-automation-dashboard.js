@@ -5,6 +5,7 @@ const { guardLeadEngineRequest, withCors } = require('./lib/lead-engine-guard');
 const { getLeadEngineSupabase } = require('./lib/lead-engine-supabase');
 const { listScoutQueriesForOperations } = require('./lib/lead-engine-scout-query-strategy');
 const { computeGuardrailScorecards } = require('./lib/lead-engine-feedback-guardrails');
+const { isLikelySchemaDriftError, readinessErrorPayload } = require('./lib/lead-engine-readiness');
 
 const EVENT_DRAFT = 'draft_generated';
 
@@ -145,19 +146,53 @@ exports.handler = async (event) => {
     ]),
   ]);
 
-  const err = (r) => r.error && r.error.message;
-  if (err(latestRuns) || err(prospectRows) || err(scoutRunsRecent) || err(scoutQueryState)) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        error: 'Query failed',
-        details: err(latestRuns) || err(prospectRows),
-      }),
-    };
+  function dataOrEmpty(r) {
+    return r && !r.error && r.data ? r.data : [];
+  }
+  function countOrZero(r) {
+    if (!r || r.error) return 0;
+    return r.count || 0;
   }
 
-  const prospects = prospectRows.data || [];
+  const labeledResults = [
+    ['latestRuns', latestRuns],
+    ['failedRuns', failedRuns],
+    ['retryQueue', retryQueue],
+    ['workerEvents', workerEvents],
+    ['hotLeads', hotLeads],
+    ['prospectRows', prospectRows],
+    ['promotedToday', promotedToday],
+    ['blockedToday', blockedToday],
+    ['prospectsNewToday', prospectsNewToday],
+    ['draftEventsToday', draftEventsToday],
+    ['failedPipelineLeads', failedPipelineLeads],
+    ['scoutRunsRecent', scoutRunsRecent],
+    ['scoutQueryState', scoutQueryState],
+    ['enrichEvents', enrichEvents],
+  ];
+  const queryErrors = [];
+  for (const [name, r] of labeledResults) {
+    if (r && r.error && r.error.message) {
+      queryErrors.push({ section: name, message: r.error.message });
+    }
+  }
+  const ecArr = enrichBranchCounts || [];
+  const branchLabels = ['no_website', 'weak_web_presence', 'alternate_enrichment_needed'];
+  for (let i = 0; i < branchLabels.length; i++) {
+    const r = ecArr[i];
+    if (r && r.error && r.error.message) {
+      queryErrors.push({ section: 'enrichBranch.' + branchLabels[i], message: r.error.message });
+    }
+  }
+
+  let readinessBlock = { ok: true, readiness: { ok: true } };
+  if (queryErrors.length) {
+    const schemaHit = queryErrors.find((e) => isLikelySchemaDriftError(e.message));
+    readinessBlock = readinessErrorPayload((schemaHit || queryErrors[0]).message);
+    readinessBlock.readiness.failed_sections = queryErrors.map((e) => e.section);
+  }
+
+  const prospects = dataOrEmpty(prospectRows);
   const bySource = {};
   for (const pr of prospects) {
     const sk = pr.source_key || 'unknown';
@@ -177,7 +212,7 @@ exports.handler = async (event) => {
     if (typeof bySource[sk][st] === 'number') bySource[sk][st] += 1;
   }
 
-  const runs24 = (latestRuns.data || []).filter((r) => r.created_at >= since24h);
+  const runs24 = dataOrEmpty(latestRuns).filter((r) => r.created_at >= since24h);
   const workerHealth = {};
   for (const r of runs24) {
     const w = r.worker_name || 'unknown';
@@ -188,21 +223,21 @@ exports.handler = async (event) => {
     else workerHealth[w].other += 1;
   }
 
-  const hotRaw = hotLeads.data || [];
+  const hotRaw = dataOrEmpty(hotLeads);
   const hotLeadsToday = hotRaw.filter((l) => {
     const u = l.updated_at && String(l.updated_at) >= dayStart;
     const c = l.created_at && String(l.created_at) >= dayStart;
     return u || c;
   });
 
-  const draftRows = draftEventsToday.data || [];
+  const draftRows = dataOrEmpty(draftEventsToday);
   const draftedLeadIds = new Set();
   for (const row of draftRows) {
     if (row.lead_id) draftedLeadIds.add(row.lead_id);
   }
 
   const sourceHealth = {};
-  for (const r of scoutRunsRecent.data || []) {
+  for (const r of dataOrEmpty(scoutRunsRecent)) {
     const w = r.worker_name;
     if (!sourceHealth[w]) {
       sourceHealth[w] = {
@@ -233,7 +268,7 @@ exports.handler = async (event) => {
     }
   }
 
-  const promotedCount = promotedToday.count || 0;
+  const promotedCount = countOrZero(promotedToday);
 
   let scoutQueriesList = { strategy_version: null, queries: [] };
   try {
@@ -261,36 +296,37 @@ exports.handler = async (event) => {
   };
 
   const body = {
+    ...readinessBlock,
     generated_at: new Date().toISOString(),
     day_start_utc: dayStart,
     worker_health_last_24h: workerHealth,
-    latest_runs: latestRuns.data || [],
-    failed_runs: failedRuns.data || [],
-    retry_queue: retryQueue.data || [],
-    worker_events: workerEvents.data || [],
+    latest_runs: dataOrEmpty(latestRuns),
+    failed_runs: dataOrEmpty(failedRuns),
+    retry_queue: dataOrEmpty(retryQueue),
+    worker_events: dataOrEmpty(workerEvents),
     hot_leads_today: hotLeadsToday.slice(0, 20),
     prospect_counts_by_source: bySource,
     source_health: sourceHealth,
-    failed_pipeline_leads: failedPipelineLeads.data || [],
+    failed_pipeline_leads: dataOrEmpty(failedPipelineLeads),
     stats_today_utc: {
-      prospects_created_any_status: prospectsNewToday.count || 0,
+      prospects_created_any_status: countOrZero(prospectsNewToday),
       icp_promoted_to_leads: promotedCount,
       qualified_today_note:
         'In this pipeline, ICP pass immediately promotes to a lead; promoted count equals qualified-through.',
-      icp_blocked_prospects: blockedToday.count || 0,
+      icp_blocked_prospects: countOrZero(blockedToday),
       drafted_leads_distinct: draftedLeadIds.size,
     },
     passed_vs_blocked_today_utc: {
       promoted_prospects_touched_today: promotedCount,
-      blocked_prospects_touched_today: blockedToday.count || 0,
+      blocked_prospects_touched_today: countOrZero(blockedToday),
     },
-    scout_query_state: scoutQueryState.data || [],
+    scout_query_state: dataOrEmpty(scoutQueryState),
     scout_queries: scoutQueriesList.queries || [],
     scout_query_strategy_version: scoutQueriesList.strategy_version || null,
     guardrail_query_scorecard: guardrailScorecards.query_scorecard || [],
     guardrail_source_scorecard: guardrailScorecards.source_scorecard || [],
     guardrail_learning_summary: guardrailScorecards.global_learning_summary || {},
-    enrichment_recent_events: enrichEvents.error ? [] : enrichEvents.data || [],
+    enrichment_recent_events: dataOrEmpty(enrichEvents),
     enrichment_branch_counts,
     scout_query_ops_endpoint: 'lead-engine-scout-query-ops',
     guardrail_ops_endpoint: 'lead-engine-guardrail-ops',

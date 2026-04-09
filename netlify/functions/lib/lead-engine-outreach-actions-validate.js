@@ -76,7 +76,11 @@ function validateReconcileBody(body) {
     }
     sentAt = new Date(ms).toISOString();
   }
-  return { ok: true, value: { leadId, outreachId, action, sentAt } };
+  let resendMessageId = null;
+  if (body.resendMessageId != null && String(body.resendMessageId).trim() !== '') {
+    resendMessageId = String(body.resendMessageId).trim().slice(0, 120);
+  }
+  return { ok: true, value: { leadId, outreachId, action, sentAt, resendMessageId } };
 }
 
 module.exports = {
