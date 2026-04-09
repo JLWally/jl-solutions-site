@@ -64,11 +64,14 @@ exports.handler = async (event) => {
     else counts.invalid += 1;
   }
 
+  const ignoredHeaders = (parsed.value && parsed.value.ignoredHeaders) || [];
+
   return {
     statusCode: 200,
     headers,
     body: JSON.stringify({
       success: true,
+      ignoredHeaders,
       counts,
       rows: classified.map((r) => ({
         rowNumber: r.rowNumber,

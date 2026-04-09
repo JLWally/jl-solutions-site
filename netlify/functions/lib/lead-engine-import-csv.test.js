@@ -29,3 +29,14 @@ test('parseCsvText handles quoted commas', () => {
   assert.equal(out.value.rows[0].values.company_name, 'Acme, Inc.');
 });
 
+test('parseCsvText allows city and ignores unknown headers', () => {
+  const csv = [
+    'company_name,website_url,city,phone',
+    'Spa,https://example.com,Austin,512-555-0100',
+  ].join('\n');
+  const out = parseCsvText(csv);
+  assert.equal(out.ok, true);
+  assert.equal(out.value.rows[0].values.city, 'Austin');
+  assert.deepEqual(out.value.ignoredHeaders, ['phone']);
+});
+

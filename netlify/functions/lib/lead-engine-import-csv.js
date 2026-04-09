@@ -1,8 +1,9 @@
 'use strict';
 
 const REQUIRED_HEADERS = ['company_name', 'website_url'];
-const OPTIONAL_HEADERS = ['contact_email', 'source', 'idempotency_key'];
-const SUPPORTED_HEADERS = [...REQUIRED_HEADERS, ...OPTIONAL_HEADERS];
+/** Parsed into row.values and passed through to import (extra CSV columns are ignored). */
+const OPTIONAL_HEADERS = ['contact_email', 'source', 'idempotency_key', 'city', 'state'];
+const KNOWN_HEADERS = new Set([...REQUIRED_HEADERS, ...OPTIONAL_HEADERS]);
 
 function parseCsvLine(line) {
   const out = [];
@@ -64,17 +65,6 @@ function parseCsvText(csvText) {
       return { ok: false, error: `Missing required header: ${req}` };
     }
   }
-  for (const h of lower) {
-    if (!SUPPORTED_HEADERS.includes(h)) {
-      return {
-        ok: false,
-        error:
-          `Unsupported header: ${h}. Supported headers: ` +
-          SUPPORTED_HEADERS.join(', '),
-      };
-    }
-  }
-
   const rows = [];
   for (let i = 1; i < lines.length; i += 1) {
     const parsed = parseCsvLine(lines[i]);
@@ -84,7 +74,9 @@ function parseCsvText(csvText) {
     const rawValues = parsed.values;
     const rec = {};
     for (let c = 0; c < headers.length; c += 1) {
-      rec[lower[c]] = rawValues[c] == null ? '' : String(rawValues[c]);
+      const key = lower[c];
+      if (!key) continue;
+      rec[key] = rawValues[c] == null ? '' : String(rawValues[c]);
     }
     rows.push({
       rowNumber: i + 1,
@@ -94,17 +86,24 @@ function parseCsvText(csvText) {
         contact_email: rec.contact_email || '',
         source: rec.source || '',
         idempotency_key: rec.idempotency_key || '',
+        city: rec.city || '',
+        state: rec.state || '',
       },
     });
   }
 
-  return { ok: true, value: { headers: lower, rows } };
+  const ignoredHeaders = [...new Set(lower.filter((h) => h && !KNOWN_HEADERS.has(h)))];
+  return { ok: true, value: { headers: lower, rows, ignoredHeaders } };
 }
 
 module.exports = {
   REQUIRED_HEADERS,
   OPTIONAL_HEADERS,
-  SUPPORTED_HEADERS,
+  KNOWN_HEADERS,
+  /** @deprecated use [...REQUIRED_HEADERS, ...OPTIONAL_HEADERS] */
+  get SUPPORTED_HEADERS() {
+    return [...REQUIRED_HEADERS, ...OPTIONAL_HEADERS];
+  },
   parseCsvText,
 };
 

@@ -19,6 +19,13 @@ function normalizeImportSource(raw) {
   return { ok: true, value: s };
 }
 
+function trimLocationField(raw, maxLen) {
+  const m = maxLen == null ? 200 : maxLen;
+  const s = raw == null ? '' : String(raw).trim();
+  if (!s) return null;
+  return s.length > m ? s.slice(0, m) : s;
+}
+
 function normalizeImportRow(rawValues) {
   const errors = [];
   const company = sanitizeCompanyName(rawValues.company_name);
@@ -33,6 +40,8 @@ function normalizeImportRow(rawValues) {
   if (!idem.ok) errors.push(idem.error);
 
   if (errors.length) return { ok: false, errors };
+  const city = trimLocationField(rawValues.city);
+  const state = trimLocationField(rawValues.state);
   return {
     ok: true,
     value: {
@@ -41,6 +50,8 @@ function normalizeImportRow(rawValues) {
       contact_email: email.value,
       source: source.value,
       idempotency_key: idem.value,
+      city,
+      state,
     },
   };
 }
@@ -162,6 +173,8 @@ async function insertImportRowWithSafeguards(supabase, normalizedRow, createdBy)
     created_by: createdBy,
     idempotency_key: normalizedRow.idempotency_key,
   };
+  if (normalizedRow.city) insertRow.city = normalizedRow.city;
+  if (normalizedRow.state) insertRow.state = normalizedRow.state;
   const { data: created, error: insErr } = await supabase
     .from('lead_engine_leads')
     .insert(insertRow)

@@ -370,7 +370,7 @@
       </div>
       <div>
         <h3 class="h6 text-secondary mb-2">Import leads (CSV)</h3>
-        <p class="small text-muted mb-2">Headers: <code>company_name,website_url,contact_email,source,idempotency_key</code>. Required: <code>company_name</code>, <code>website_url</code>.</p>
+        <p class="small text-muted mb-2">Required headers: <code>company_name</code>, <code>website_url</code>. Optional: <code>contact_email</code>, <code>source</code>, <code>idempotency_key</code>, <code>city</code>, <code>state</code>. Extra columns (e.g. exports from Sheets) are ignored.</p>
         <div class="mb-2">
           <input class="form-control form-control-sm bg-dark text-light border-secondary" id="importCsvFile" type="file" accept=".csv,text/csv" />
         </div>
@@ -2624,6 +2624,11 @@
       var c = (data && data.counts) || { total: 0, ready: 0, duplicate: 0, invalid: 0 };
       importPreviewReadyCount = c.ready || 0;
       summaryEl.style.display = 'block';
+      var ign = (data && data.ignoredHeaders) || [];
+      var ignLine =
+        ign.length > 0
+          ? ' <span class="text-secondary">· Ignored columns: ' + escapeHtml(ign.join(', ')) + '</span>'
+          : '';
       summaryEl.innerHTML =
         'Rows: ' +
         c.total +
@@ -2633,7 +2638,8 @@
         c.duplicate +
         '</span> · <span class="text-danger">invalid ' +
         c.invalid +
-        '</span>';
+        '</span>' +
+        ignLine;
       var rows = (data && data.rows) || [];
       if (!rows.length) {
         wrapEl.style.display = 'none';
