@@ -110,7 +110,7 @@
   to = "/book-consultation.html"
   status = 200
 
-# About: legacy file; canonical co-founder page is /about/
+# About: legacy file; canonical founder page is /about/
 [[redirects]]
   from = "/about"
   to = "/about/index.html"

@@ -1,0 +1,447 @@
+/**
+ * About page hero only — founder-led builder profile composition.
+ * Scoped under .jl-about-hero / .jl-about-hero__*
+ */
+
+body.jl-homepage .jl-about-hero.hero-with-image.jl-theme {
+  overflow-x: clip;
+  min-height: 0;
+}
+
+body.jl-homepage .jl-about-hero .hero-with-image__inner {
+  min-height: 0;
+}
+
+body.jl-homepage .jl-about-hero .hero-with-image__title {
+  font-size: clamp(2.15rem, 4.6vw, 3.15rem);
+  max-width: 14ch;
+  margin-bottom: 1.35rem;
+}
+
+body.jl-homepage .jl-about-hero__lead.hero-with-image__subline {
+  max-width: 42ch;
+  margin-bottom: 1rem;
+  color: rgba(226, 232, 240, 0.9);
+}
+
+body.jl-homepage .jl-about-hero__secondary {
+  margin: 0 0 1.85rem;
+  max-width: 42ch;
+  font-size: clamp(1.0625rem, 1.25vw, 1.125rem);
+  line-height: 1.65;
+  font-weight: 500;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+body.jl-homepage .jl-about-hero__support {
+  margin: 1.35rem 0 0;
+  max-width: 40rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+body.jl-homepage .jl-about-hero .hero-with-image__cta-secondary:hover {
+  color: var(--jl-brand-cyan, #5fdbf0);
+  border-bottom-color: var(--jl-brand-cyan, #5fdbf0);
+}
+
+body.jl-homepage .jl-about-hero .hero-with-image__cta-secondary:focus-visible {
+  outline: 2px solid var(--jl-brand-cyan, #5fdbf0);
+  outline-offset: 3px;
+}
+
+/* Visual column */
+body.jl-homepage .jl-about-hero__visual.hero-with-image__visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.35rem 0.85rem 1.85rem;
+  background:
+    radial-gradient(ellipse 58% 48% at 50% 44%, rgba(95, 219, 240, 0.13) 0%, transparent 62%),
+    radial-gradient(ellipse 42% 36% at 78% 78%, rgba(37, 99, 235, 0.16) 0%, transparent 70%),
+    linear-gradient(165deg, #122038 0%, #0a1628 55%, #081222 100%);
+  overflow: hidden;
+  min-width: 0;
+}
+
+body.jl-homepage .jl-about-hero__visual.hero-with-image__visual::after {
+  display: none;
+}
+
+body.jl-homepage .jl-about-hero__scene {
+  --about-hero-navy: #0f1c30;
+  --about-hero-teal: #5fdbf0;
+  --about-hero-blue: #3b82f6;
+  --about-hero-yellow: #ffc107;
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  min-width: 0;
+  aspect-ratio: 420 / 440;
+  margin: 0 auto;
+}
+
+body.jl-homepage .jl-about-hero__connectors {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.jl-homepage .jl-about-hero__connectors path {
+  fill: none;
+  stroke: rgba(95, 219, 240, 0.28);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+body.jl-homepage .jl-about-hero__connectors circle {
+  fill: rgba(95, 219, 240, 0.55);
+}
+
+body.jl-homepage .jl-about-hero__connectors .is-accent {
+  fill: var(--about-hero-yellow);
+  opacity: 0.9;
+}
+
+/* Central profile — dominant */
+body.jl-homepage .jl-about-hero__profile {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: min(52%, 13.75rem);
+  transform: translate(-50%, -50%);
+  padding: 1.05rem 1rem 1.15rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.1) 0%, rgba(15, 28, 48, 0.94) 48%, rgba(8, 18, 34, 0.98) 100%);
+  box-shadow:
+    0 22px 44px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(95, 219, 240, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+body.jl-homepage .jl-about-hero__portrait-wrap {
+  position: relative;
+  width: 6.75rem;
+  height: 6.75rem;
+  margin: 0 auto 0.85rem;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(95, 219, 240, 0.4);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
+}
+
+body.jl-homepage .jl-about-hero__portrait-wrap::after {
+  content: "";
+  position: absolute;
+  right: 0.4rem;
+  bottom: 0.4rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--about-hero-yellow);
+  box-shadow: 0 0 0 2px rgba(15, 28, 48, 0.92);
+}
+
+body.jl-homepage .jl-about-hero__portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 16%;
+  display: block;
+}
+
+body.jl-homepage .jl-about-hero__profile-name {
+  margin: 0 0 0.3rem;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  line-height: 1.2;
+}
+
+body.jl-homepage .jl-about-hero__profile-role {
+  margin: 0 0 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgba(203, 213, 225, 0.88);
+}
+
+body.jl-homepage .jl-about-hero__profile-line {
+  margin: 0;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--about-hero-teal);
+}
+
+/* Capability nodes */
+body.jl-homepage .jl-about-hero__nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+body.jl-homepage .jl-about-hero__node {
+  position: absolute;
+  z-index: 1;
+  width: 9.6rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 28, 48, 0.92);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(6px);
+}
+
+body.jl-homepage .jl-about-hero__node-title {
+  display: block;
+  margin: 0 0 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #f1f5f9;
+  line-height: 1.25;
+}
+
+body.jl-homepage .jl-about-hero__node-text {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+body.jl-homepage .jl-about-hero__node--strategy {
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: rgba(95, 219, 240, 0.28);
+}
+
+body.jl-homepage .jl-about-hero__node--ux {
+  top: 16%;
+  right: 0;
+}
+
+body.jl-homepage .jl-about-hero__node--dev {
+  bottom: 8%;
+  right: 0;
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+body.jl-homepage .jl-about-hero__node--systems {
+  bottom: 8%;
+  left: 0;
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+body.jl-homepage .jl-about-hero__node--launch {
+  top: 16%;
+  left: 0;
+  border-color: rgba(255, 193, 7, 0.32);
+}
+
+body.jl-homepage .jl-about-hero__node--strategy .jl-about-hero__node-title {
+  color: var(--about-hero-teal);
+}
+
+body.jl-homepage .jl-about-hero__node--launch .jl-about-hero__node-title {
+  color: #ffd54f;
+}
+
+body.jl-homepage .jl-about-hero__node--dev .jl-about-hero__node-title,
+body.jl-homepage .jl-about-hero__node--systems .jl-about-hero__node-title {
+  color: #93c5fd;
+}
+
+/* Entrance motion */
+@media (prefers-reduced-motion: no-preference) {
+  body.jl-homepage .jl-about-hero__profile {
+    animation: jl-about-hero-in-center 0.7s ease both;
+    animation-delay: 0.05s;
+  }
+
+  body.jl-homepage .jl-about-hero__node {
+    animation: jl-about-hero-fade 0.65s ease both;
+  }
+
+  body.jl-homepage .jl-about-hero__node--strategy {
+    animation-name: jl-about-hero-in-center-x;
+    animation-delay: 0.12s;
+  }
+
+  body.jl-homepage .jl-about-hero__node--ux { animation-delay: 0.18s; }
+  body.jl-homepage .jl-about-hero__node--dev { animation-delay: 0.26s; }
+  body.jl-homepage .jl-about-hero__node--systems { animation-delay: 0.32s; }
+  body.jl-homepage .jl-about-hero__node--launch { animation-delay: 0.2s; }
+}
+
+@keyframes jl-about-hero-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes jl-about-hero-in-center {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 10px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes jl-about-hero-in-center-x {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.jl-homepage .jl-about-hero__profile,
+  body.jl-homepage .jl-about-hero__node {
+    animation: none;
+  }
+}
+
+/* Tablet / mobile: stack under copy */
+@media (max-width: 991.98px) {
+  body.jl-homepage .jl-about-hero .hero-with-image__title {
+    max-width: 18ch;
+  }
+
+  body.jl-homepage .jl-about-hero__scene {
+    aspect-ratio: auto;
+    max-width: 24rem;
+    padding-bottom: 0.15rem;
+  }
+
+  body.jl-homepage .jl-about-hero__connectors {
+    display: none;
+  }
+
+  body.jl-homepage .jl-about-hero__profile {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 18rem;
+    margin: 0 auto 1.15rem;
+    transform: none;
+  }
+
+  body.jl-homepage .jl-about-hero__portrait-wrap {
+    width: 7.25rem;
+    height: 7.25rem;
+  }
+
+  body.jl-homepage .jl-about-hero__nodes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem;
+  }
+
+  body.jl-homepage .jl-about-hero__node {
+    position: static;
+    transform: none;
+    width: auto;
+  }
+
+  body.jl-homepage .jl-about-hero__node--strategy {
+    grid-column: 1 / -1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    body.jl-homepage .jl-about-hero__profile,
+    body.jl-homepage .jl-about-hero__node--strategy {
+      animation-name: jl-about-hero-fade;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  body.jl-homepage .jl-about-hero__visual.hero-with-image__visual {
+    padding: 1.5rem 1.15rem 1.85rem;
+  }
+
+  body.jl-homepage .jl-about-hero__scene {
+    max-width: 29rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  body.jl-homepage .jl-about-hero__scene {
+    max-width: 30rem;
+  }
+
+  body.jl-homepage .jl-about-hero__node {
+    width: 10.25rem;
+    padding: 0.7rem 0.8rem;
+  }
+
+  body.jl-homepage .jl-about-hero__node-title {
+    font-size: 0.875rem;
+  }
+
+  body.jl-homepage .jl-about-hero__node-text {
+    font-size: 0.75rem;
+  }
+
+  body.jl-homepage .jl-about-hero__profile {
+    width: min(50%, 14.5rem);
+  }
+
+  body.jl-homepage .jl-about-hero__portrait-wrap {
+    width: 7.25rem;
+    height: 7.25rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  body.jl-homepage .jl-about-hero .hero-with-image__content {
+    padding-bottom: 2.25rem;
+  }
+
+  body.jl-homepage .jl-about-hero__visual.hero-with-image__visual {
+    padding-top: 0.65rem;
+  }
+
+  body.jl-homepage .jl-about-hero .hero-with-image__cta {
+    min-width: 0;
+    width: 100%;
+  }
+
+  body.jl-homepage .jl-about-hero__nodes {
+    grid-template-columns: 1fr;
+  }
+
+  body.jl-homepage .jl-about-hero__node--strategy {
+    grid-column: auto;
+  }
+
+  body.jl-homepage .jl-about-hero__node-title {
+    font-size: 0.875rem;
+  }
+
+  body.jl-homepage .jl-about-hero__node-text {
+    font-size: 0.75rem;
+  }
+}

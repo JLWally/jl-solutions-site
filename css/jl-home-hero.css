@@ -1,0 +1,590 @@
+/**
+ * Homepage hero only — branded digital-experience composition.
+ * Scoped under .jl-home-hero / .jl-home-hero__*
+ * Visual hierarchy: public website primary; form / booking / record secondary.
+ */
+
+body.jl-homepage .jl-home-hero.hero-with-image.jl-theme {
+  overflow-x: clip;
+}
+
+body.jl-homepage .jl-home-hero .hero-with-image__cta-secondary:hover {
+  color: var(--jl-brand-cyan, #5fdbf0);
+  border-bottom-color: var(--jl-brand-cyan, #5fdbf0);
+}
+
+body.jl-homepage .jl-home-hero .hero-with-image__cta-secondary:focus-visible {
+  outline: 2px solid var(--jl-brand-cyan, #5fdbf0);
+  outline-offset: 3px;
+}
+
+body.jl-homepage .jl-home-hero__lead.hero-with-image__subline {
+  max-width: 46ch;
+  margin-bottom: 1.75rem;
+  color: rgba(226, 232, 240, 0.9);
+}
+
+body.jl-homepage .jl-home-hero__support {
+  margin: 1.25rem 0 0;
+  max-width: 40rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+/* Visual column */
+body.jl-homepage .jl-home-hero__visual.hero-with-image__visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 1.25rem 1rem 1.75rem;
+  background:
+    radial-gradient(ellipse 65% 50% at 42% 38%, rgba(95, 219, 240, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 78% 72%, rgba(30, 58, 95, 0.5) 0%, transparent 70%),
+    var(--jl-dark-lighter, #152238);
+  overflow: hidden;
+  min-width: 0;
+}
+
+body.jl-homepage .jl-home-hero__visual.hero-with-image__visual::after {
+  display: none;
+}
+
+body.jl-homepage .jl-home-hero__scene {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  min-width: 0;
+}
+
+body.jl-homepage .jl-home-hero__connectors {
+  display: none;
+}
+
+body.jl-homepage .jl-home-hero__panel {
+  position: relative;
+  min-width: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.08) 0%, rgba(10, 22, 40, 0.72) 55%, rgba(8, 16, 32, 0.92) 100%);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  padding: 0.45rem 0.5rem 0.55rem;
+  overflow: hidden;
+}
+
+body.jl-homepage .jl-home-hero__panel--website {
+  padding: 0.6rem 0.65rem 0.7rem;
+}
+
+body.jl-homepage .jl-home-hero__panel.is-active {
+  border-color: rgba(95, 219, 240, 0.55);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.36),
+    0 0 0 1px rgba(95, 219, 240, 0.18),
+    0 0 32px rgba(95, 219, 240, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+body.jl-homepage .jl-home-hero__panel-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.jl-homepage .jl-home-hero__panel--website .jl-home-hero__panel-label {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+body.jl-homepage .jl-home-hero__panel.is-active .jl-home-hero__panel-label {
+  color: var(--jl-brand-cyan, #5fdbf0);
+}
+
+body.jl-homepage .jl-home-hero__browser {
+  display: grid;
+  gap: 0.3rem;
+}
+
+body.jl-homepage .jl-home-hero__browser--site {
+  gap: 0.4rem;
+}
+
+body.jl-homepage .jl-home-hero__chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.22rem;
+  margin-bottom: 0.05rem;
+}
+
+body.jl-homepage .jl-home-hero__chrome span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  flex-shrink: 0;
+}
+
+body.jl-homepage .jl-home-hero__chrome span:first-child {
+  background: #ff6b6b;
+}
+
+body.jl-homepage .jl-home-hero__chrome span:nth-child(2) {
+  background: var(--jl-accent, #ffc107);
+}
+
+body.jl-homepage .jl-home-hero__chrome span:nth-child(3) {
+  background: #51cf66;
+}
+
+body.jl-homepage .jl-home-hero__url {
+  flex: 1;
+  min-width: 0;
+  margin-left: 0.35rem;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(10, 22, 40, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(203, 213, 225, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.jl-homepage .jl-home-hero__site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+  padding: 0.32rem 0.45rem;
+  border-radius: 6px;
+  background: rgba(10, 22, 40, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+body.jl-homepage .jl-home-hero__logo-mark {
+  margin-right: 0.2rem;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.625rem;
+}
+
+body.jl-homepage .jl-home-hero__site-nav .is-accent {
+  color: var(--jl-brand-cyan, #5fdbf0);
+}
+
+body.jl-homepage .jl-home-hero__site-hero {
+  padding: 0.7rem 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(95, 219, 240, 0.24);
+  background:
+    linear-gradient(145deg, rgba(95, 219, 240, 0.28) 0%, rgba(30, 58, 79, 0.9) 48%, rgba(15, 28, 48, 0.96) 100%);
+}
+
+body.jl-homepage .jl-home-hero__site-kicker {
+  margin: 0 0 0.28rem;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(95, 219, 240, 0.95);
+  line-height: 1.2;
+}
+
+body.jl-homepage .jl-home-hero__site-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+
+body.jl-homepage .jl-home-hero__site-copy {
+  margin: 0 0 0.55rem;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(226, 232, 240, 0.82);
+  max-width: 28ch;
+}
+
+body.jl-homepage .jl-home-hero__site-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 5px;
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #1a1a1a;
+  background: var(--jl-accent, #ffc107);
+  width: fit-content;
+}
+
+body.jl-homepage .jl-home-hero__site-cta--sm {
+  min-height: 1rem;
+  padding: 0.14rem 0.45rem;
+}
+
+body.jl-homepage .jl-home-hero__site-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.3rem;
+}
+
+body.jl-homepage .jl-home-hero__site-cards > div {
+  min-width: 0;
+  padding: 0.4rem 0.35rem;
+  border-radius: 6px;
+  background: rgba(10, 22, 40, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.jl-homepage .jl-home-hero__site-cards strong {
+  display: block;
+  font-size: 0.5625rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 0.15rem;
+}
+
+body.jl-homepage .jl-home-hero__site-cards em {
+  display: block;
+  font-style: normal;
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: rgba(203, 213, 225, 0.75);
+  line-height: 1.3;
+}
+
+body.jl-homepage .jl-home-hero__site-footer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  padding: 0.28rem 0.15rem 0.05rem;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(203, 213, 225, 0.7);
+}
+
+body.jl-homepage .jl-home-hero__form-heading {
+  margin: 0;
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+body.jl-homepage .jl-home-hero__field {
+  display: grid;
+  gap: 0.1rem;
+  margin: 0;
+}
+
+body.jl-homepage .jl-home-hero__field span {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+body.jl-homepage .jl-home-hero__field i {
+  display: block;
+  font-style: normal;
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: rgba(226, 232, 240, 0.9);
+  padding: 0.24rem 0.35rem;
+  border-radius: 5px;
+  background: rgba(10, 22, 40, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.jl-homepage .jl-home-hero__slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.22rem;
+}
+
+body.jl-homepage .jl-home-hero__slots span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  border-radius: 5px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: rgba(226, 232, 240, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+body.jl-homepage .jl-home-hero__slots span.is-active {
+  color: #1a1a1a;
+  background: var(--jl-accent, #ffc107);
+  border-color: rgba(255, 193, 7, 0.85);
+}
+
+body.jl-homepage .jl-home-hero__record-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.jl-homepage .jl-home-hero__record-head strong {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+body.jl-homepage .jl-home-hero__record-head .is-status {
+  font-style: normal;
+  font-size: 0.4375rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0a1628;
+  background: rgba(95, 219, 240, 0.9);
+  border-radius: 999px;
+  padding: 0.14rem 0.35rem;
+  white-space: nowrap;
+}
+
+body.jl-homepage .jl-home-hero__record-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  padding: 0.16rem 0;
+}
+
+body.jl-homepage .jl-home-hero__record-row b {
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: rgba(226, 232, 240, 0.92);
+  text-align: left;
+}
+
+body.jl-homepage .jl-home-hero__caption {
+  margin: 0;
+  max-width: 26rem;
+  padding: 0 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.62);
+  text-align: center;
+}
+
+/* Mobile / tablet: website first, then supporting panels */
+body.jl-homepage .jl-home-hero__scene {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+body.jl-homepage .jl-home-hero__panel--website {
+  grid-column: 1 / -1;
+}
+
+body.jl-homepage .jl-home-hero__panel--records {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 575.98px) {
+  body.jl-homepage .jl-home-hero__scene {
+    grid-template-columns: 1fr;
+    max-width: 22rem;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--website,
+  body.jl-homepage .jl-home-hero__panel--records {
+    grid-column: auto;
+  }
+
+  body.jl-homepage .jl-home-hero__site-nav span:not(.jl-home-hero__logo-mark):not(.is-accent) {
+    display: none;
+  }
+
+  body.jl-homepage .jl-home-hero__site-copy {
+    display: none;
+  }
+}
+
+/* Desktop overlapping composition — avoid cramped absolute panels below ~1100px */
+@media (min-width: 1100px) {
+  body.jl-homepage .jl-home-hero__visual.hero-with-image__visual {
+    padding: 1.75rem 1.1rem 1.75rem 0.5rem;
+    align-items: stretch;
+  }
+
+  body.jl-homepage .jl-home-hero__scene {
+    display: block;
+    height: min(420px, 68vh);
+    max-width: none;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  body.jl-homepage .jl-home-hero__connectors {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  body.jl-homepage .jl-home-hero__connectors path {
+    stroke: rgba(95, 219, 240, 0.26);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-dasharray: 3.5 5;
+  }
+
+  body.jl-homepage .jl-home-hero__panel {
+    position: absolute;
+    animation: jl-home-hero-panel-in 0.7s ease both;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--website {
+    top: 4%;
+    left: 0;
+    width: min(78%, 22.25rem);
+    z-index: 4;
+    animation-delay: 0.04s;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--form {
+    top: 5%;
+    right: 0;
+    width: min(32%, 9rem);
+    z-index: 5;
+    animation-delay: 0.12s;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--booking {
+    top: 44%;
+    right: 2%;
+    width: min(30%, 8.5rem);
+    z-index: 5;
+    animation-delay: 0.18s;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--records {
+    bottom: 3%;
+    right: 12%;
+    width: min(28%, 8rem);
+    z-index: 3;
+    animation-delay: 0.24s;
+  }
+
+  body.jl-homepage .jl-home-hero__panel.is-active {
+    z-index: 6;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--website .jl-home-hero__site-title {
+    font-size: 0.9375rem;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--form,
+  body.jl-homepage .jl-home-hero__panel--booking,
+  body.jl-homepage .jl-home-hero__panel--records {
+    opacity: 0.94;
+  }
+
+  body.jl-homepage .jl-home-hero__caption {
+    max-width: none;
+    margin-top: 0.1rem;
+  }
+}
+
+/* Tablet / small desktop: keep stacked grid (no absolute overflow) */
+@media (min-width: 576px) and (max-width: 1099.98px) {
+  body.jl-homepage .jl-home-hero__scene {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    max-width: 28rem;
+    height: auto;
+  }
+
+  body.jl-homepage .jl-home-hero__panel {
+    position: relative;
+  }
+
+  body.jl-homepage .jl-home-hero__connectors {
+    display: none;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--website {
+    grid-column: 1 / -1;
+  }
+
+  body.jl-homepage .jl-home-hero__panel--records {
+    grid-column: 1 / -1;
+  }
+}
+
+@keyframes jl-home-hero-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.jl-homepage .jl-home-hero__panel {
+    animation: none !important;
+  }
+
+  body.jl-homepage .jl-home-hero__panel.is-active {
+    transform: none;
+  }
+
+  body.jl-homepage .hero-with-image__cta {
+    transition: none;
+  }
+
+  body.jl-homepage .hero-with-image__cta:hover {
+    transform: none;
+  }
+}

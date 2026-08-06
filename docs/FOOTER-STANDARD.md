@@ -1,42 +1,39 @@
-# Footer standardization – JL Solutions
+# Footer & header standardization – JL Solutions
 
-## Reference: homepage footer
+## Canonical source of truth
 
-The **preferred footer** sitewide is the full **footer-home** pattern used on the homepage (`index.html`):
+Use the shared partials:
 
-- **Classes:** `jl-theme footer-home` (+ optional `mt-5`, `no-print`)
-- **Structure:**
-  - **Column 1 (footer__brand):** JL Solutions, tagline “Automate, Streamline, Grow Your Business.”
-  - **Column 2 (Quick Links):** Services, Case Studies, Resources, **Book a Free Call**, Contact
-  - **Column 3 (footer__contact):** **Get in Touch**, email link, **Book a Free Call** CTA button, social icons
-  - **Divider:** `footer__divider` (hr)
-  - **Copy:** “© 2026 JL Solutions. All rights reserved.” in `footer__copy`
+- `partials/header.html`
+- `partials/footer.html`
 
-All styling lives in `css/theme-jl.css` (`.footer-home`, `.footer__*`). Pages using this footer must load `theme-jl.css`.
+Injected via `js/main.js` into `#header` / `#footer` when those slots exist. Marketing pages may also inline the same markup (root-relative paths).
 
-## Where the full footer is used
+## Header
 
-- **Partial (injected):** `partials/footer.html` – full footer-home markup; injected into any page that has `#footer` and loads `main.js` (e.g. Contact, resources.html, services/automation.html).
-- **Inline full footer:** Homepage, About, FAQ, Book Consultation, Services index, Case Studies index, Resources index, Insights index, all four case study detail pages, Tools ROI calculator, Dashboard, Onboard, Fix My App, Automation & AI service, Eligibility Wizard, Process Documentation Template (resources), Insights good-enough-blog, and any other page updated in the footer standardization pass.
+- Nav: Home · Live demo · About · Services · Case Studies · Resources (Templates & Guides / Blogs) · Contact
+- Primary CTA: **Start a Project** → `/book-consultation.html` (get-started wizard temporarily offline)
 
-## CTA and copy consistency
+## Footer (`footer-home`)
 
-- **Quick Links:** “Book a Free Call” (not “Free Consultation”, “Book Consultation”, or “Schedule a 15-Minute Demo”).
-- **Third column heading:** “Get in Touch” (not “Connect With Us”).
-- **Copyright:** “© 2026 JL Solutions. All rights reserved.” (not “Built with purpose” or page-specific taglines).
+- Tagline: “Automation and smart systems for growing businesses.”
+- Quick Links: Live demo · About · Services · Case Studies · Resources
+- Get in Touch: email · **Start a Project** → `/book-consultation.html` · secondary **Talk It Through First** → `/book-consultation.html`
+- Social: SMS · Facebook · Instagram
+- Copyright: © 2026 JL Solutions. All rights reserved.
 
-## Where a simplified footer is still used
+## Keeping pages in sync
 
-The following pages still use a **minimal footer** (`bg-dark` + single-line copyright or short link row). They are acceptable for now but can be switched to the full footer-home for full consistency:
+```bash
+node scripts/sync-header-footer.js
+```
 
-- **Sales / funnel:** `sales.html`, `sales/index.html`, `sales/funnel/index.html`, `sales/landing/*.html` (ai, automation, documents, operations, govcon)
-- **Insights (articles):** `insights/getting-started-ai-automation.html`, `insights/weekend-reset-busy-businesses.html`, `insights/measuring-roi-automation.html`, `insights/fix-my-app-smartest-investment.html`
-- **Services:** `services/operations-optimization.html`, `services/document-extraction.html`, `services/document-extraction-demo.html`, `services/ai-intake-form.html`
-- **Resources:** `resources/process-documentation-template.html` (standalone), `resources/automation-checklist.html`
+Re-run after editing the partials to refresh inline marketing headers/footers.
 
-To align them: replace the minimal footer block with the same HTML as in `partials/footer.html` (using root-relative paths), add `theme-jl.css` if missing, and use the same CTA/copy as above.
+## Intentionally different chrome
 
-## Special cases
+Leave alone unless explicitly redesigning:
 
-- **services/automation.html:** Uses `#footer` (partial). The `<footer>` inside a testimonial quote is content, not the site footer.
-- **Print:** Resource/template pages that hide the footer when printing use `no-print` on the footer element (e.g. process-documentation-template).
+- Funnel: `get-started.html`, `onboarding/*`
+- Apps: `lead-engine/*`, `referral/*`, `referral-dashboard/*`, `internal-pay/*`, `demo-builder.html`
+- Sales tooling: `sales/*`

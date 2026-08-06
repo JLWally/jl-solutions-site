@@ -1,0 +1,758 @@
+/**
+ * About page — founder story section only (.jl-about-founder).
+ * Type scale: eyebrow · heading · body (intro/bio) · name · role/chips · closing
+ */
+
+.jl-about-founder {
+  --af-ink: #0f172a;
+  --af-muted: #475569;
+  --af-line: rgba(15, 23, 42, 0.1);
+  --af-teal: #0b6579;
+  --af-teal-soft: rgba(11, 101, 121, 0.08);
+  --af-navy: #122038;
+  --af-surface: #f7f9fc;
+  --af-body: 1.125rem;
+  --af-body-lh: 1.75;
+  padding: clamp(3.25rem, 6vw, 4.75rem) 0;
+  background:
+    linear-gradient(180deg, #eef3f8 0%, var(--af-surface) 42%, #ffffff 100%);
+  overflow-x: clip;
+}
+
+.jl-about-founder__container {
+  max-width: 70rem;
+}
+
+.jl-about-founder__header {
+  max-width: 48rem;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.jl-about-founder__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--af-teal);
+}
+
+.jl-about-founder__title {
+  margin: 0 0 1rem;
+  font-size: clamp(1.75rem, 3.4vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
+  color: var(--af-ink);
+}
+
+.jl-about-founder__intro {
+  margin: 0;
+  font-size: var(--af-body);
+  line-height: var(--af-body-lh);
+  font-weight: 500;
+  color: var(--af-muted);
+}
+
+.jl-about-founder__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+@media (min-width: 992px) {
+  .jl-about-founder__layout {
+    grid-template-columns: minmax(16rem, 0.78fr) minmax(0, 1.55fr);
+    gap: clamp(2.75rem, 4.5vw, 4rem);
+    align-items: start;
+  }
+
+  .jl-about-founder__header {
+    margin-bottom: 3rem;
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 54rem;
+  }
+}
+
+.jl-about-founder__visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+@media (min-width: 992px) {
+  .jl-about-founder__visual {
+    align-items: stretch;
+    position: sticky;
+    top: 1.25rem;
+  }
+}
+
+.jl-about-founder__portrait-panel {
+  margin: 0;
+  width: 100%;
+  max-width: 24.5rem;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--af-navy);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow:
+    0 18px 40px rgba(10, 22, 40, 0.12),
+    0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.jl-about-founder__portrait {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 8%;
+}
+
+.jl-about-founder__portrait-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.95rem 1.05rem 1.1rem;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
+    var(--af-navy);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.jl-about-founder__portrait-name {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.jl-about-founder__portrait-role {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgba(203, 213, 225, 0.88);
+}
+
+.jl-about-founder__linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--af-teal);
+  text-decoration: none;
+  padding: 0.35rem 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.jl-about-founder__linkedin:hover {
+  color: #084d5c;
+  border-bottom-color: rgba(11, 101, 121, 0.35);
+}
+
+.jl-about-founder__linkedin:focus-visible {
+  outline: 2px solid var(--af-teal);
+  outline-offset: 3px;
+}
+
+.jl-about-founder__story {
+  min-width: 0;
+  padding: 0;
+}
+
+.jl-about-founder__name {
+  margin: 0 0 0.3rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--af-ink);
+  line-height: 1.2;
+}
+
+.jl-about-founder__role {
+  margin: 0 0 1.15rem;
+  font-size: var(--af-body);
+  font-weight: 600;
+  color: var(--af-teal);
+  line-height: 1.45;
+}
+
+.jl-about-founder__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0;
+}
+
+.jl-about-founder__chips li {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(11, 101, 121, 0.16);
+  background: rgba(11, 101, 121, 0.06);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #0f3d4a;
+  line-height: 1.3;
+}
+
+.jl-about-founder__bio {
+  max-width: none;
+}
+
+.jl-about-founder__bio p {
+  margin: 0 0 1.2rem;
+  font-size: clamp(1.125rem, 1.45vw, 1.1875rem);
+  line-height: 1.78;
+  font-weight: 500;
+  color: #334155;
+}
+
+.jl-about-founder__bio p:last-child {
+  margin-bottom: 0;
+}
+
+.jl-about-founder__closing {
+  margin: 1.85rem 0 0;
+  max-width: none;
+  padding: 1.2rem 1.25rem;
+  border: none;
+  border-left: 3px solid var(--af-teal);
+  border-radius: 0 10px 10px 0;
+  background: rgba(11, 101, 121, 0.06);
+  font-size: clamp(1.125rem, 1.45vw, 1.1875rem);
+  line-height: 1.7;
+  font-weight: 600;
+  color: var(--af-ink);
+}
+
+@media (max-width: 991.98px) {
+  .jl-about-founder__portrait-panel {
+    max-width: 20rem;
+  }
+
+  .jl-about-founder__name {
+    /* Avoid repeating the large name block immediately under the portrait caption on small screens */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .jl-about-founder__role {
+    text-align: center;
+    margin-top: 0.15rem;
+  }
+
+  .jl-about-founder__chips {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .jl-about-founder {
+    padding: 3rem 0;
+  }
+
+  .jl-about-founder__header {
+    margin-bottom: 2rem;
+    text-align: left;
+  }
+
+  .jl-about-founder__portrait-panel {
+    max-width: 100%;
+  }
+
+  .jl-about-founder__role {
+    text-align: left;
+  }
+
+  .jl-about-founder__chips {
+    justify-content: flex-start;
+  }
+
+  .jl-about-founder__closing {
+    padding: 1.05rem 1rem;
+  }
+}
+
+/* About page — guiding principles (replaces former automation-focused block) */
+.jl-about-principles {
+  --ap-ink: #0f172a;
+  --ap-muted: #475569;
+  --ap-teal: #0b6579;
+  --ap-line: rgba(15, 23, 42, 0.1);
+  padding: clamp(3rem, 5.5vw, 4.25rem) 0;
+  background: #f8fafc;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  border-bottom: none;
+  overflow-x: clip;
+}
+
+.jl-about-principles__container {
+  max-width: 68rem;
+}
+
+.jl-about-principles__header {
+  max-width: 42rem;
+  margin: 0 auto 2.35rem;
+  text-align: center;
+}
+
+.jl-about-principles__eyebrow {
+  margin: 0 0 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ap-teal);
+}
+
+.jl-about-principles__title {
+  margin: 0 0 0.9rem;
+  font-size: clamp(1.65rem, 3.1vw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--ap-ink);
+}
+
+.jl-about-principles__intro {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1.4vw, 1.125rem);
+  line-height: 1.65;
+  font-weight: 500;
+  color: var(--ap-muted);
+}
+
+.jl-about-principles__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.35rem 1.5rem;
+  counter-reset: none;
+}
+
+@media (min-width: 640px) {
+  .jl-about-principles__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1.75rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  .jl-about-principles__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem 1.35rem;
+  }
+}
+
+.jl-about-principles__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.jl-about-principles__marker {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 50%;
+  border: 1px solid rgba(11, 101, 121, 0.28);
+  background: rgba(11, 101, 121, 0.08);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: var(--ap-teal);
+  line-height: 1;
+}
+
+.jl-about-principles__body {
+  min-width: 0;
+  padding-top: 0.15rem;
+}
+
+.jl-about-principles__name {
+  margin: 0 0 0.4rem;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--ap-ink);
+}
+
+.jl-about-principles__text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 500;
+  color: #334155;
+}
+
+@media (max-width: 639.98px) {
+  .jl-about-principles__header {
+    margin-bottom: 1.85rem;
+    text-align: left;
+  }
+}
+
+/* About page — why clients choose */
+.jl-about-choose {
+  --ac-ink: #0f172a;
+  --ac-muted: #475569;
+  --ac-teal: #0b6579;
+  padding: clamp(3.25rem, 6vw, 4.75rem) 0;
+  background: var(--jl-surface, #eef2f6);
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  overflow-x: clip;
+}
+
+.jl-about-choose__container {
+  max-width: 70rem;
+}
+
+.jl-about-choose__header {
+  max-width: 40rem;
+  margin: 0 auto 2.35rem;
+  text-align: center;
+}
+
+.jl-about-choose__eyebrow {
+  margin: 0 0 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ac-teal);
+}
+
+.jl-about-choose__title {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--ac-ink);
+}
+
+.jl-about-choose__intro {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
+  line-height: 1.65;
+  font-weight: 500;
+  color: var(--ac-muted);
+}
+
+.jl-about-choose__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.65rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .jl-about-choose__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.85rem 1.75rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  .jl-about-choose__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.75rem 1.5rem;
+  }
+}
+
+.jl-about-choose__item {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.jl-about-choose__marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  margin-bottom: 0.75rem;
+  border-radius: 50%;
+  border: 1px solid rgba(11, 101, 121, 0.28);
+  background: rgba(11, 101, 121, 0.08);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: var(--ac-teal);
+  line-height: 1;
+}
+
+.jl-about-choose__name {
+  margin: 0 0 0.45rem;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--ac-ink);
+}
+
+.jl-about-choose__text {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-weight: 500;
+  color: #334155;
+}
+
+@media (max-width: 639.98px) {
+  .jl-about-choose__header {
+    margin-bottom: 1.85rem;
+    text-align: left;
+  }
+}
+
+/* About page — process timeline */
+.jl-about-process {
+  --aproc-navy: #0a1628;
+  --aproc-teal: #5fdbf0;
+  --aproc-teal-deep: #0b6579;
+  --aproc-yellow: #ffc107;
+  --aproc-muted: rgba(203, 213, 225, 0.88);
+  padding: clamp(3.5rem, 6.5vw, 5rem) 0;
+  background: var(--jl-dark, var(--aproc-navy));
+  border-top: 2px solid rgba(95, 219, 240, 0.28);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-x: clip;
+  color: #f8fafc;
+}
+
+.jl-about-process__container {
+  max-width: 70rem;
+}
+
+.jl-about-process__header {
+  max-width: 40rem;
+  margin: 0 auto 2.75rem;
+  text-align: center;
+}
+
+.jl-about-process__eyebrow {
+  margin: 0 0 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--aproc-teal);
+}
+
+.jl-about-process__title {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.85rem, 3.3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
+  color: #fff;
+}
+
+.jl-about-process__intro {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
+  line-height: 1.65;
+  font-weight: 500;
+  color: var(--aproc-muted);
+}
+
+.jl-about-process__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  position: relative;
+}
+
+.jl-about-process__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.1rem 1.25rem;
+  align-items: start;
+  position: relative;
+  padding: 0 0 2rem;
+}
+
+.jl-about-process__step:last-child {
+  padding-bottom: 0;
+}
+
+.jl-about-process__marker {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 2.75rem;
+}
+
+.jl-about-process__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 2px solid rgba(95, 219, 240, 0.55);
+  background: rgba(10, 22, 40, 0.95);
+  box-shadow: 0 0 0 4px rgba(95, 219, 240, 0.08);
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--aproc-teal);
+  line-height: 1;
+}
+
+.jl-about-process__step:last-child .jl-about-process__num {
+  border-color: rgba(255, 193, 7, 0.45);
+  box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.08);
+  color: #ffd54f;
+}
+
+/* Vertical connector on mobile */
+.jl-about-process__step:not(:last-child) .jl-about-process__marker::after {
+  content: "";
+  position: absolute;
+  top: 2.75rem;
+  left: 50%;
+  width: 2px;
+  height: calc(100% + 2rem - 2.75rem);
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    rgba(95, 219, 240, 0.55) 0%,
+    rgba(95, 219, 240, 0.18) 100%
+  );
+}
+
+.jl-about-process__body {
+  min-width: 0;
+  padding-top: 0.2rem;
+}
+
+.jl-about-process__step-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(95, 219, 240, 0.85);
+}
+
+.jl-about-process__step:last-child .jl-about-process__step-label {
+  color: rgba(255, 213, 79, 0.9);
+}
+
+.jl-about-process__step-title {
+  margin: 0 0 0.55rem;
+  font-size: clamp(1.2rem, 2vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.jl-about-process__step-text {
+  margin: 0;
+  font-size: clamp(1.0625rem, 1.35vw, 1.125rem);
+  line-height: 1.75;
+  font-weight: 500;
+  color: var(--aproc-muted);
+  max-width: 38rem;
+}
+
+@media (min-width: 900px) {
+  .jl-about-process__header {
+    margin-bottom: 3.25rem;
+  }
+
+  .jl-about-process__steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .jl-about-process__step {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    gap: 1.15rem;
+  }
+
+  .jl-about-process__marker {
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .jl-about-process__step:not(:last-child) .jl-about-process__marker::after {
+    top: 1.3rem;
+    left: 2.75rem;
+    width: calc(100% + 1.75rem - 2.75rem);
+    height: 2px;
+    transform: none;
+    background: linear-gradient(
+      90deg,
+      rgba(95, 219, 240, 0.55) 0%,
+      rgba(95, 219, 240, 0.18) 100%
+    );
+  }
+
+  .jl-about-process__num {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.2rem;
+  }
+
+  .jl-about-process__body {
+    padding-top: 0;
+  }
+
+  .jl-about-process__step-text {
+    max-width: none;
+  }
+}
+
+@media (max-width: 899.98px) {
+  .jl-about-process__header {
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+
+
