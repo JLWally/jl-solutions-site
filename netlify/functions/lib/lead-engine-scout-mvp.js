@@ -1,12 +1,9 @@
 'use strict';
 
-const path = require('path');
-const fs = require('fs');
 const { normalizeWebsiteUrl } = require('./lead-engine-ingest-validate');
 
 /** Bundle-safe default seeds when SCOUT_MVP_SOURCE_URL is unset. */
 const EMBEDDED_SCOUT_MVP_SEEDS = require('./scout-mvp-seeds.json');
-const DEFAULT_SEEDS_PATH = path.join(__dirname, 'scout-mvp-seeds.json');
 const SOURCE_KEY = 'scout_mvp_json';
 
 /**
@@ -141,5 +138,4 @@ module.exports = {
   runScoutMvpIngest,
   loadScoutMvpSeedRows,
   SOURCE_KEY,
-  DEFAULT_SEEDS_PATH,
 };

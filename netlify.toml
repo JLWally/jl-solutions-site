@@ -28,6 +28,13 @@
 # [functions."lead-engine-automation-tick"]
 #   schedule = "@hourly"
 
+# Document extraction demo: stable POST path → function (avoids some static hosts returning 405 on /.netlify/functions/*)
+[[redirects]]
+  from = "/api/document-extraction-demo"
+  to = "/.netlify/functions/document-extraction-demo"
+  status = 200
+  force = true
+
 # Onboarding wizard
 [[redirects]]
   from = "/onboard"

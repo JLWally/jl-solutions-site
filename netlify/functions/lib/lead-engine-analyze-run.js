@@ -39,6 +39,14 @@ async function runAnalyzeForLead(supabase, leadId, actor) {
   const homeFetch = await fetchHtmlPage(homeUrl);
 
   if (!homeFetch.ok || !homeFetch.html) {
+    console.warn('[lead-engine-analyze] home fetch failed', {
+      leadId,
+      website_url: homeUrl,
+      error: homeFetch.error,
+      message: homeFetch.message,
+      statusCode: homeFetch.statusCode,
+      finalUrl: homeFetch.finalUrl,
+    });
     const failureSignals = buildFailureSignalBundle({
       error: homeFetch.error,
       message: homeFetch.message,

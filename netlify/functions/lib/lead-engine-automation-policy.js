@@ -1,31 +1,35 @@
 'use strict';
 
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const { isNetlifyBundleArtifactPath } = require('./lead-engine-config-override-guard');
+const defaultPolicy = require('./automation-policy-v1.json');
 
-/** Bundle-safe default (no runtime fs read on Netlify). */
-const EMBEDDED_AUTOMATION_POLICY = require('./automation-policy-v1.json');
-
-function loadAutomationPolicy(explicitPath) {
-  if (explicitPath) {
-    const raw = fs.readFileSync(explicitPath, 'utf8');
-    return JSON.parse(raw);
+function readOverrideJson(resolvedPath, envVarName) {
+  try {
+    return JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+  } catch (e) {
+    const code = e && e.code;
+    const detail = code === 'ENOENT' ? 'file not found' : e.message || String(e);
+    throw new Error(`${envVarName}: ${detail} (${resolvedPath})`);
   }
-  const envP =
-    process.env.LEAD_ENGINE_AUTOMATION_POLICY_PATH &&
-    String(process.env.LEAD_ENGINE_AUTOMATION_POLICY_PATH).trim();
-  if (envP) {
-    const p = path.isAbsolute(envP) ? envP : path.join(process.cwd(), envP);
-    if (fs.existsSync(p)) {
-      return JSON.parse(fs.readFileSync(p, 'utf8'));
-    }
-  }
-  return EMBEDDED_AUTOMATION_POLICY;
 }
 
-const DEFAULT_POLICY_PATH = path.join(__dirname, 'automation-policy-v1.json');
+function loadAutomationPolicy() {
+  const raw = process.env.LEAD_ENGINE_AUTOMATION_POLICY_PATH;
+  const overridePath = raw != null ? String(raw).trim() : '';
+  if (overridePath) {
+    const resolved = path.resolve(overridePath);
+    if (isNetlifyBundleArtifactPath(resolved)) {
+      console.warn(
+        '[lead-engine-automation-policy] LEAD_ENGINE_AUTOMATION_POLICY_PATH points at a Netlify bundle path; using embedded default. Unset this variable in Netlify UI and your shell.',
+        resolved
+      );
+      return defaultPolicy;
+    }
+    return readOverrideJson(resolved, 'LEAD_ENGINE_AUTOMATION_POLICY_PATH');
+  }
+  return defaultPolicy;
+}
 
-module.exports = {
-  loadAutomationPolicy,
-  DEFAULT_POLICY_PATH,
-};
+module.exports = { loadAutomationPolicy };

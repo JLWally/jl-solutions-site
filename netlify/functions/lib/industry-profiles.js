@@ -563,7 +563,7 @@ const PROFILES = {
     displayLabel: 'Local service (general)',
     parentId: 'local_service',
     parentLabel: PARENT_GROUPS.local_service.label,
-    /** Neutral: this bucket is only a weak inference fallback — do not tilt offers toward dispatch. */
+    /** Neutral: this bucket is only a weak inference fallback; do not tilt offers toward dispatch. */
     schedulingContextWeight: 1.0,
     inference: {
       keywords: [
@@ -600,7 +600,7 @@ const PROFILES = {
     parentLabel: PARENT_GROUPS.unknown.label,
     schedulingContextWeight: 1.0,
     operatorNotes:
-      'Low inference confidence — verify vertical from the site and niche field. Demos and offers stay generic and signal-driven.',
+      'Low inference confidence. Verify vertical from the site and niche field. Demos and offers stay generic and signal-driven.',
     inference: { keywords: [], patterns: [] },
     demo: {
       label: 'Your organization',

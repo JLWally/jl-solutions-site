@@ -3,25 +3,34 @@
 const path = require('path');
 const fs = require('fs');
 const { loadAutomationPolicy } = require('./lead-engine-automation-policy');
+const { isNetlifyBundleArtifactPath } = require('./lead-engine-config-override-guard');
 
-const DEFAULT_STRATEGY_PATH = path.join(__dirname, 'scout-query-strategy-v1.json');
-/** Bundle-safe default when SCOUT_QUERY_STRATEGY_PATH is unset or missing on disk. */
+/** Bundle-safe default when SCOUT_QUERY_STRATEGY_PATH is unset. */
 const EMBEDDED_SCOUT_QUERY_STRATEGY = require('./scout-query-strategy-v1.json');
 
-function readJsonPath(p) {
-  const raw = fs.readFileSync(p, 'utf8');
-  return JSON.parse(raw);
+function readOverrideJson(resolvedPath, envVarName) {
+  try {
+    return JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+  } catch (e) {
+    const code = e && e.code;
+    const detail = code === 'ENOENT' ? 'file not found' : e.message || String(e);
+    throw new Error(`${envVarName}: ${detail} (${resolvedPath})`);
+  }
 }
 
 function loadScoutQueryStrategy() {
-  const envP = process.env.SCOUT_QUERY_STRATEGY_PATH && String(process.env.SCOUT_QUERY_STRATEGY_PATH).trim();
-  if (envP) {
-    const c = path.isAbsolute(envP) ? envP : path.join(process.cwd(), envP);
-    try {
-      if (fs.existsSync(c)) return readJsonPath(c);
-    } catch {
-      /* fall through to embedded */
+  const raw = process.env.SCOUT_QUERY_STRATEGY_PATH;
+  const overridePath = raw != null ? String(raw).trim() : '';
+  if (overridePath) {
+    const resolved = path.resolve(overridePath);
+    if (isNetlifyBundleArtifactPath(resolved)) {
+      console.warn(
+        '[lead-engine-scout-query-strategy] SCOUT_QUERY_STRATEGY_PATH points at a Netlify bundle path; using embedded default. Unset this variable in Netlify UI and your shell.',
+        resolved
+      );
+      return EMBEDDED_SCOUT_QUERY_STRATEGY;
     }
+    return readOverrideJson(resolved, 'SCOUT_QUERY_STRATEGY_PATH');
   }
   return EMBEDDED_SCOUT_QUERY_STRATEGY;
 }
@@ -317,5 +326,4 @@ module.exports = {
   effectivePriority,
   effectiveCooldownSeconds,
   maxPausedIso,
-  DEFAULT_STRATEGY_PATH,
 };

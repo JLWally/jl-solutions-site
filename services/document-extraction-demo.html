@@ -335,6 +335,24 @@
       font-size: 0.875rem;
     }
     body.jl-doc-demo-page { padding-bottom: 4.5rem; }
+
+    .jl-upload-feedback {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .jl-upload-feedback--error {
+      background: rgba(220, 53, 69, 0.15);
+      border: 1px solid rgba(220, 53, 69, 0.45);
+      color: #ffb4b4;
+    }
+    .jl-upload-feedback--success {
+      background: rgba(0, 200, 83, 0.12);
+      border: 1px solid rgba(0, 200, 83, 0.35);
+      color: #b8f5c8;
+    }
   </style>
 </head>
 <body class="jl-doc-demo-page">
@@ -431,22 +449,23 @@
       <h3 class="mb-4">Try It Now</h3>
       
       <!-- Upload Section -->
-      <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.doc" style="display: none;">
+      <div class="upload-area" id="uploadArea" role="button" tabindex="0" aria-controls="fileInput" aria-label="Upload documents, click or drop files">
+        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.doc,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword" style="display: none;">
         <div style="font-size: 3rem; margin-bottom: 1rem;">📁</div>
         <h4>Drag & Drop Files Here</h4>
         <p class="text-muted">or click to browse</p>
-        <p class="small text-muted">Supports PDF, DOCX files<span class="limit-badge">Max 5 files in demo</span></p>
+        <p class="small text-muted">Supports PDF, DOCX, and DOC<span class="limit-badge">Max 5 files · 4MB each for live AI</span></p>
       </div>
       
       <div class="file-list" id="fileList"></div>
+      <p id="uploadFeedback" class="jl-upload-feedback" role="status" aria-live="polite" hidden></p>
       
       <!-- Action Buttons -->
       <div class="d-flex gap-3 mt-4">
-        <button class="btn-demo" id="extractBtn" onclick="startExtraction()" disabled>
+        <button type="button" class="btn-demo" id="extractBtn" onclick="startExtraction()" disabled>
           Scan & Extract Business Data
         </button>
-        <button class="btn btn-secondary" onclick="clearFiles()">
+        <button type="button" class="btn btn-secondary" onclick="clearFiles()">
           Clear Files
         </button>
       </div>
@@ -456,8 +475,8 @@
     <div id="processingStatus" style="display: none;">
       <div class="processing-status">
         <div class="spinner mb-3"></div>
-        <h5>Processing Documents...</h5>
-        <p class="mb-0">Our AI is scanning your business documents and extracting invoice data, contract terms, form fields, and other key information. This may take a moment.</p>
+        <h5>Processing documents…</h5>
+        <p class="mb-0">Sending your first file to the secure extraction service. When OpenAI is configured on the site, results reflect your file. Otherwise you will see a labeled sample layout.</p>
       </div>
     </div>
 
@@ -490,8 +509,8 @@
         </div>
         
         <div class="mt-4">
-          <button class="btn-demo" onclick="downloadResults()">Download Results (JSON)</button>
-          <button class="btn btn-outline-light ms-3" onclick="tryAnother()">Try Another Document</button>
+          <button type="button" class="btn-demo" onclick="downloadResults()">Download Results (JSON)</button>
+          <button type="button" class="btn btn-outline-light ms-3" onclick="tryAnother()">Try Another Document</button>
         </div>
       </div>
     </div>
@@ -502,7 +521,7 @@
       <p class="mb-2">This is a <strong>free demo version</strong> with limited functionality:</p>
       <ul class="mb-0">
         <li>Maximum 5 files per session</li>
-        <li>File size limit: 10MB per file</li>
+        <li>File size limit: 4MB per file (live AI demo)</li>
         <li>Results are not saved</li>
         <li>Simplified extraction (full version includes advanced AI analysis)</li>
       </ul>
@@ -569,195 +588,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    let uploadedFiles = [];
-    const MAX_FILES = 5;
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-    // File upload handling
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-    const fileList = document.getElementById('fileList');
-
-    uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.classList.add('dragover');
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-      uploadArea.classList.remove('dragover');
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove('dragover');
-      handleFiles(e.dataTransfer.files);
-    });
-
-    fileInput.addEventListener('change', (e) => {
-      handleFiles(e.target.files);
-    });
-
-    function handleFiles(files) {
-      const validFiles = Array.from(files).filter(file => {
-        const validType = file.type === 'application/pdf' || 
-                         file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-                         file.type === 'application/msword';
-        const validSize = file.size <= MAX_FILE_SIZE;
-        return validType && validSize;
-      });
-
-      if (uploadedFiles.length + validFiles.length > MAX_FILES) {
-        alert(`Demo limit: Maximum ${MAX_FILES} files allowed. You can upload ${MAX_FILES - uploadedFiles.length} more.`);
-        validFiles.splice(MAX_FILES - uploadedFiles.length);
-      }
-
-      uploadedFiles = [...uploadedFiles, ...validFiles];
-      updateFileList();
-      updateExtractButton();
-    }
-
-    function updateFileList() {
-      fileList.innerHTML = uploadedFiles.map((file, index) => `
-        <div class="file-item">
-          <div>
-            <strong>${file.name}</strong>
-            <small class="text-muted d-block">${(file.size / 1024).toFixed(2)} KB</small>
-          </div>
-          <button class="btn btn-sm btn-danger" onclick="removeFile(${index})">Remove</button>
-        </div>
-      `).join('');
-    }
-
-    function removeFile(index) {
-      uploadedFiles.splice(index, 1);
-      updateFileList();
-      updateExtractButton();
-    }
-
-    function clearFiles() {
-      uploadedFiles = [];
-      updateFileList();
-      updateExtractButton();
-      document.getElementById('resultsSection').style.display = 'none';
-      document.getElementById('processingStatus').style.display = 'none';
-    }
-
-    function updateExtractButton() {
-      document.getElementById('extractBtn').disabled = uploadedFiles.length === 0;
-    }
-
-    function startExtraction() {
-      if (uploadedFiles.length === 0) return;
-
-      document.getElementById('processingStatus').style.display = 'block';
-      document.getElementById('resultsSection').style.display = 'none';
-
-      // Simulate processing (in real demo, this would call an API)
-      setTimeout(() => {
-        document.getElementById('processingStatus').style.display = 'none';
-        document.getElementById('resultsSection').style.display = 'block';
-        displayResults();
-      }, 3000);
-    }
-
-    function displayResults() {
-      // Demo results - in real version, this would come from API
-      const docInfo = {
-        totalFiles: uploadedFiles.length,
-        filesProcessed: uploadedFiles.length,
-        processingTime: '3.2 seconds',
-        extractionMethod: 'AI-Powered Analysis'
-      };
-
-      document.getElementById('docInfo').textContent = JSON.stringify(docInfo, null, 2);
-
-      // Demo Key Information content - Business Document Focus
-      const sampleExtractedData = {
-        documentType: 'Invoice',
-        vendor: 'ABC Supplies Inc.',
-        invoiceNumber: 'INV-2024-001234',
-        date: '2024-12-15',
-        dueDate: '2025-01-15',
-        totalAmount: '$4,567.89',
-        lineItems: [
-          { description: 'Office Supplies', quantity: 50, unitPrice: '$45.00', total: '$2,250.00' },
-          { description: 'Software Licenses', quantity: 3, unitPrice: '$599.99', total: '$1,799.97' }
-        ],
-        paymentTerms: 'Net 30',
-        billingAddress: '123 Business St, City, ST 12345'
-      };
-
-      document.getElementById('keyInformation').textContent = `Extracted Data Fields:
-
-Document Type: ${sampleExtractedData.documentType}
-Vendor: ${sampleExtractedData.vendor}
-Invoice Number: ${sampleExtractedData.invoiceNumber}
-Invoice Date: ${sampleExtractedData.date}
-Due Date: ${sampleExtractedData.dueDate}
-Total Amount: ${sampleExtractedData.totalAmount}
-Payment Terms: ${sampleExtractedData.paymentTerms}
-
-Line Items:
-${sampleExtractedData.lineItems.map(item => 
-  `  • ${item.description}: ${item.quantity} × ${item.unitPrice} = ${item.total}`
-).join('\n')}
-
-Billing Address: ${sampleExtractedData.billingAddress}
-
----
-[Demo Mode: This is sample extracted data. Full version automatically extracts all fields from your business documents including invoices, contracts, forms, reports, and more.]`;
-
-      // Demo Document Summary content
-      document.getElementById('documentSummary').textContent = `Document Analysis Summary:
-
-This document is an invoice from ABC Supplies Inc. dated December 15, 2024, 
-totaling $4,567.89. The invoice includes office supplies and software licenses 
-with payment terms of Net 30 days, due by January 15, 2025.
-
-Key Details:
-• Invoice Number: INV-2024-001234
-• Total Amount Due: $4,567.89
-• Payment Due: January 15, 2025 (30 days)
-• Number of Line Items: 2
-• Document Status: Pending Payment
-
-Suggested Actions:
-- Add to accounts payable system
-- Schedule payment for due date
-- Verify line items match purchase order
-
----
-[Demo Mode: This is a sample summary. Full version provides detailed analysis 
-and insights for all your business documents.]`;
-
-      // Scroll to results
-      document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function downloadResults() {
-      const results = {
-        documentInfo: JSON.parse(document.getElementById('docInfo').textContent),
-        keyInformation: document.getElementById('keyInformation').textContent,
-        documentSummary: document.getElementById('documentSummary').textContent,
-        extractedAt: new Date().toISOString(),
-        demo: true
-      };
-
-      const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `extraction-results-${Date.now()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function tryAnother() {
-      clearFiles();
-      document.getElementById('resultsSection').style.display = 'none';
-    }
-  </script>
+  <script src="/js/document-extraction-demo-page.js" defer></script>
   <script src="/js/chatbot.js" defer></script>
 </body>
 </html>

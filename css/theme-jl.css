@@ -76,7 +76,10 @@ main#main-content.jl-main-text .display-4 {
 main#main-content.jl-main-text .jl-services-demo-strip :is(h1, h2, h3, h4),
 main#main-content.jl-main-text .jl-services-cta :is(h1, h2, h3, h4),
 main#main-content.jl-main-text .jl-footer-cta-section :is(h1, h2, h3, h4),
-main#main-content.jl-main-text .jl-doc-seller__cta-band :is(h1, h2, h3, h4) {
+main#main-content.jl-main-text .jl-doc-seller__cta-band :is(h1, h2, h3, h4),
+main#main-content.jl-main-text .jl-svc-hero :is(h1, h2, h3, h4),
+main#main-content.jl-main-text .jl-svc-workflow :is(h1, h2, h3, h4),
+main#main-content.jl-main-text .jl-svc-final-cta :is(h1, h2, h3, h4) {
   color: inherit;
 }
 
@@ -2011,6 +2014,36 @@ footer.jl-theme small {
 
 .footer__email:hover {
   color: var(--jl-accent-hover);
+}
+
+.footer__sms {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.footer__sms svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.footer__sms:hover {
+  opacity: 1 !important;
+  color: var(--jl-accent) !important;
+}
+
+.footer__sms:focus-visible {
+  outline: 2px solid var(--jl-accent);
+  outline-offset: 3px;
+  opacity: 1 !important;
+  color: var(--jl-accent) !important;
 }
 
 /* Footer CTA button - must override any generic footer link styles */

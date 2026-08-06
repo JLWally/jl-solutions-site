@@ -2,7 +2,7 @@
 
 /**
  * Deterministic per-offer scoring from audit signals (before AI copy).
- * Offers are chosen from weighted signal buckets — not from industry stereotypes.
+ * Offers are chosen from weighted signal buckets, not from industry stereotypes.
  * Industry profile only supplies a small scheduling-context tie-break when the profile is dispatch-heavy.
  */
 
@@ -26,7 +26,7 @@ const OFFER_PRIORITY = [
 
 const DRAFT_ANGLE_BY_OFFER = {
   [OFFERS.SCHEDULING]:
-    'Emphasize simplifying how people request time, service, or appointments—whether end customers, clients, or internal stakeholders—without friction.',
+    'Emphasize simplifying how people request time, service, or appointments (whether end customers, clients, or internal stakeholders) without friction.',
   [OFFERS.AI_INTAKE]:
     'Emphasize a smarter intake and qualification flow (routing, confirmations, structured capture) instead of a generic contact form.',
   [OFFERS.WEBSITE]:

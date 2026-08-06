@@ -15,9 +15,9 @@
     var link = (demoLink || '').trim() || '[INSERT DEMO LINK]';
     return (
       greet +
-      ' I took a quick look at your site and noticed something:\n\n' +
+      ' We took a quick look at your site and noticed something:\n\n' +
       'Your current setup makes it easy for people to reach out, but not easy to qualify or book quickly.\n\n' +
-      'So I put together a quick example of what this could look like for you:\n\n' +
+      'So we put together a quick example of what this could look like for you:\n\n' +
       link +
       '\n\n' +
       'This shows how you could:\n' +
@@ -25,7 +25,7 @@
       '• filter out low-quality leads\n' +
       '• and book faster without back-and-forth\n\n' +
       "No pitch - just a working example.\n\n" +
-      "If this is close to what you'd want, I can tailor it to your exact setup.\n\n" +
+      "If this is close to what you'd want, we can tailor it to your exact setup.\n\n" +
       'What do you think?'
     );
   }

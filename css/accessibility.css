@@ -45,6 +45,30 @@ a.btn,
   min-width: 44px;
 }
 
+/* Skip to main content */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  z-index: 10000;
+  padding: 0.65rem 1rem;
+  border-radius: 0 0 8px 8px;
+  background: var(--jl-accent, #ffc107);
+  color: #1a1a1a;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transform: translateY(-120%);
+  transition: transform 0.15s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
 /* Screen Reader Only Content */
 .sr-only {
   position: absolute;

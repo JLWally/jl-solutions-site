@@ -8,7 +8,7 @@
   const chatConfig = {
     position: 'bottom-right',
     primaryColor: '#0078d4',
-    welcomeMessage: 'Hi! I\'m here to help. How can I assist you today?',
+    welcomeMessage: 'Hi! We\'re here to help. How can we assist you today?',
     businessHours: {
       enabled: true,
       timezone: 'America/New_York',
@@ -418,7 +418,7 @@
     const message = userMessage.toLowerCase();
     
     if (message.includes('consultation') || message.includes('schedule')) {
-      return 'I\'d be happy to help you schedule a consultation! You can book directly at https://www.jlsolutions.io/book-consultation.html or I can help answer questions first.';
+      return 'We\'d be happy to help you schedule a consultation! You can book directly at https://www.jlsolutions.io/book-consultation.html or we can help answer questions first.';
     }
     
     if (message.includes('pricing') || message.includes('price') || message.includes('cost')) {
@@ -426,11 +426,11 @@
     }
     
     if (message.includes('support') || message.includes('help')) {
-      return 'I\'m here to help! You can ask me about our services, schedule a consultation, or get technical support. What would you like to know?';
+      return 'We\'re here to help! You can ask us about our services, schedule a consultation, or get technical support. What would you like to know?';
     }
     
     // Default response
-    return 'Thank you for your message! For detailed questions, I recommend scheduling a consultation or checking our FAQ section. How else can I help you?';
+    return 'Thank you for your message! For detailed questions, we recommend scheduling a consultation or checking our FAQ section. How else can we help you?';
   }
 
   /**

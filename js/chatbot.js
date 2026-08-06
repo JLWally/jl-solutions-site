@@ -4,18 +4,20 @@
       document.currentScript?.dataset?.endpoint ||
       "/.netlify/functions/chatbot",
     brand: "Wattson",
-    subtitle: "Demos and self-serve tools work without a call. Ask anything or use the shortcuts below.",
+    subtitle: "Demos, package pricing, and secure checkout work without a call. Ask anything or use the shortcuts below.",
     /** Shown when there is no chat history yet (not saved to storage). */
     welcomeMarkdown:
-      "Hi, I am Wattson. You can [open the live demo](/demo) or [try document extraction](/services/document-extraction-demo.html). For a personalized walkthrough or open-ended questions, use [Book a Free Call](/book-consultation.html) or [send a message](/contact.html). What would you like to do?",
-    placeholder: "Ask about demos, services, or next steps...",
+      "Hi from JL Solutions. Quick options: [live demo](/demo), [starter packages from $750 on checkout](/checkout/), or [get started with a short guided fit](/get-started). You can also [try document extraction](/services/document-extraction-demo.html). For a personalized walkthrough or custom scope, [book a free call](/book-consultation.html) or [send a message](/contact.html). What would you like to do?",
+    placeholder: "Ask about packages, demos, checkout, or next steps...",
     quickPrompts: [
       "Show me the product demo",
-      "I want to pay an invoice or deposit",
-      "What does JL Solutions help with?"
+      "What packages and prices do you offer?",
+      "I want to pay an invoice or deposit"
     ],
     ctaLinks: [
+      { label: "Checkout", href: "/checkout/" },
       { label: "Live demo", href: "/demo" },
+      { label: "Get started", href: "/get-started" },
       { label: "Book a Free Call", href: "/book-consultation.html" },
       { label: "Contact", href: "/contact.html" }
     ],
@@ -30,17 +32,20 @@
       .replace(/"/g, "&quot;");
 
   const SAFE_PATH = /^\/[a-zA-Z0-9/_\-.]+$/;
+  /** Site contact only (avoid open mailto: injection in assistant markdown). */
+  const SAFE_MAILTO = /^mailto:info@jlsolutions\.io$/i;
 
   const renderAssistantHtml = text => {
     if (!text) return "";
     const parts = [];
     let last = 0;
-    const re = /\[([^\]]+)\]\((\/[^)\s]+)\)/g;
+    const re = /\[([^\]]+)\]\(([^)\s]+)\)/g;
     let m;
     while ((m = re.exec(text)) !== null) {
       parts.push(escapeHtml(text.slice(last, m.index)));
       const href = m[2];
-      if (SAFE_PATH.test(href)) {
+      const safe = SAFE_PATH.test(href) || SAFE_MAILTO.test(href);
+      if (safe) {
         parts.push(
           `<a href="${escapeHtml(href)}" class="chatbot-inline-link">${escapeHtml(
             m[1]
@@ -148,7 +153,7 @@
           required
         ></textarea>
         <div class="chatbot-actions">
-          <small>AI-generated answers. Demos and get started checkout work without a call. For binding quotes or contracts, use Contact or Book a Free Call.</small>
+          <small>AI-generated answers. Demos, checkout, and get started work without a call. For binding custom quotes or contracts, use <strong>Contact</strong> or <strong>Book a Free Call</strong> under Next steps.</small>
           <button type="submit" class="btn-chatbot-send">Send</button>
         </div>
       </form>
@@ -210,14 +215,16 @@
         welcomeEl.setAttribute("aria-label", "Welcome message");
         messagesEl.appendChild(welcomeEl);
       }
-      state.history.forEach(({ role, content, error }) => {
+      state.history.forEach(({ role, content, error, richAssistant }) => {
         const bubble = createElement(
           "div",
           `chatbot-message ${role === "user" ? "user" : "assistant"}${
-            role === "assistant" && !error ? " chatbot-message--rich" : ""
+            role === "assistant" && (!error || richAssistant)
+              ? " chatbot-message--rich"
+              : ""
           }`
         );
-        if (role === "assistant" && !error) {
+        if (role === "assistant" && (!error || richAssistant)) {
           bubble.innerHTML = renderAssistantHtml(content);
         } else {
           bubble.textContent = content;
@@ -283,14 +290,14 @@
         const reply =
           payload.reply ||
           payload.message ||
-          "I am not sure I understood that. Try one of the buttons below, or ask in your own words.";
+          "We're not sure we understood that. Try Next steps or Common questions below, or ask in your own words.";
         addMessage("assistant", reply);
       } catch (error) {
         console.error("[JL Chatbot]", error);
         addMessage(
           "assistant",
-          "Something went wrong on our side. Please try again, email info@jlsolutions.io, or use Book a Free Call / Send a message below.",
-          { error: true }
+          "Something went wrong on our side. Please try sending again, [email info@jlsolutions.io](mailto:info@jlsolutions.io), or use [Book a Free Call](/book-consultation.html) or [Contact](/contact.html) under Next steps below.",
+          { error: true, richAssistant: true }
         );
       } finally {
         setLoading(false);

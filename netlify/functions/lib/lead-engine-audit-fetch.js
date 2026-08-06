@@ -2,9 +2,22 @@
  * Bounded homepage / key-page fetch for lead engine audit (no crawler).
  */
 
-/** Keep analyze under typical serverless ceilings (multiple fetches + PSI). */
-const DEFAULT_TIMEOUT_MS = 6000;
 const MAX_BYTES = 600_000;
+
+function resolveFetchTimeoutMs() {
+  const raw = process.env.LEAD_ENGINE_AUDIT_FETCH_TIMEOUT_MS;
+  if (raw == null || !String(raw).trim()) return 12_000;
+  const n = parseInt(String(raw).trim(), 10);
+  if (!Number.isFinite(n)) return 12_000;
+  return Math.min(25_000, Math.max(4_000, n));
+}
+
+function defaultAuditUserAgent() {
+  const custom = process.env.LEAD_ENGINE_AUDIT_USER_AGENT && String(process.env.LEAD_ENGINE_AUDIT_USER_AGENT).trim();
+  if (custom) return custom;
+  // Many sites/CDNs block non-browser UAs; this is a standard Chromium UA for operator-triggered fetches only.
+  return 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+}
 
 const BLOCKED_HOST_SUBSTRINGS = [
   'linkedin.com',
@@ -26,7 +39,7 @@ function isBlockedHost(hostname) {
  * @param {{ timeoutMs?: number, maxBytes?: number }} [opts]
  */
 async function fetchHtmlPage(url, opts = {}) {
-  const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const timeoutMs = opts.timeoutMs ?? resolveFetchTimeoutMs();
   const maxBytes = opts.maxBytes ?? MAX_BYTES;
 
   let parsed;
@@ -67,8 +80,11 @@ async function fetchHtmlPage(url, opts = {}) {
       signal: ctrl.signal,
       redirect: 'follow',
       headers: {
-        'User-Agent': 'JL-Solutions-LeadEngine/1.0 (+https://www.jlsolutions.io)',
-        Accept: 'text/html,application/xhtml+xml;q=0.9,*/*;q=0.8',
+        'User-Agent': defaultAuditUserAgent(),
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
       },
     });
 
@@ -146,6 +162,14 @@ async function fetchHtmlPage(url, opts = {}) {
 module.exports = {
   fetchHtmlPage,
   isBlockedHost,
-  DEFAULT_TIMEOUT_MS,
+  resolveFetchTimeoutMs,
   MAX_BYTES,
 };
+
+Object.defineProperty(module.exports, 'DEFAULT_TIMEOUT_MS', {
+  enumerable: true,
+  configurable: true,
+  get() {
+    return resolveFetchTimeoutMs();
+  },
+});

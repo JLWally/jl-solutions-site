@@ -67,7 +67,7 @@
       <div class="card card-dark p-3 mb-3">
             <h2 class="h5 text-light mb-2">Leads</h2>
             <p class="small text-muted mb-2 mb-lg-1 le-readable-hint"><strong>Pipeline:</strong> Analyze → Score → Draft → Approve → Send. <strong>Gen/Apr/Sent</strong> = latest <em>email</em> outreach by status. <strong>History</strong> = full timeline + send recovery.</p>
-            <p class="small le-operator-guide mb-2"><strong>Demo email vs reminder date:</strong> <strong class="text-white">Demo stage</strong> (dropdown) is where this lead is in <em>your</em> custom-demo email workflow. <strong class="text-white">Remind on</strong> (column) is only the calendar date for the next nudge—it does not replace stage. Use <strong class="text-white">Email sent</strong> or the stage dropdown → “Marked sent (manual)” when they got the demo link. <strong class="text-white">Set reminder</strong> sets stage to “Follow-up needed” <em>and</em> a due date (+3 business days UTC). <strong class="text-white">Open outreach</strong> opens the email composer. <strong class="text-white">Edit lead</strong> updates company, URL, and contact email.</p>
+            <p class="small le-operator-guide mb-2"><strong>Demo email vs reminder date:</strong> <strong class="text-white">Demo stage</strong> (dropdown) is where this lead is in <em>your</em> custom-demo email workflow. <strong class="text-white">Remind on</strong> (column) is only the calendar date for the next nudge. It does not replace stage. Use <strong class="text-white">Email sent</strong> or the stage dropdown → “Marked sent (manual)” when they got the demo link. <strong class="text-white">Set reminder</strong> sets stage to “Follow-up needed” <em>and</em> a due date (+3 business days UTC). <strong class="text-white">Open outreach</strong> opens the email composer. <strong class="text-white">Edit lead</strong> updates company, URL, and contact email.</p>
             <div id="leDailyActionSummaryBar" class="le-daily-action-summary mb-2" style="display: none" aria-live="polite"></div>
             <div class="le-daily-queue mb-2 p-2 rounded" role="region" aria-label="Demo outreach daily queue">
               <div class="d-flex flex-wrap align-items-center gap-2">
@@ -706,7 +706,7 @@
         return '<span class="le-next-step text-success">Next: mark <strong>Interested</strong> or <strong>Not interested</strong></span>';
       }
       if (st === 'interested' || st === 'not_interested') {
-        return '<span class="le-next-step text-muted">Closed loop — update if needed</span>';
+        return '<span class="le-next-step text-muted">Closed loop. Update if needed</span>';
       }
       return '';
     }
@@ -3129,17 +3129,17 @@
 
     function humanModelConfidence(c) {
       var x = String(c || '').toLowerCase();
-      if (x === 'high') return 'High — the scoring model is fairly sure about the fit score';
-      if (x === 'medium') return 'Medium — treat the score as directional';
-      if (x === 'low') return 'Low — double-check the audit and your own read of the site';
+      if (x === 'high') return 'High: the scoring model is fairly sure about the fit score';
+      if (x === 'medium') return 'Medium: treat the score as directional';
+      if (x === 'low') return 'Low: double-check the audit and your own read of the site';
       return c ? String(c) : '';
     }
 
     function humanVerticalConfidence(c) {
       var x = String(c || '').toLowerCase();
       if (x === 'high') return 'Strong match from page text';
-      if (x === 'medium') return 'Reasonable guess — spot-check the label';
-      if (x === 'low') return 'Weak signal — the industry guess may be wrong';
+      if (x === 'medium') return 'Reasonable guess: spot-check the label';
+      if (x === 'low') return 'Weak signal: the industry guess may be wrong';
       return c ? String(c) : '';
     }
 
@@ -3776,7 +3776,7 @@
               ? '<span class="text-success">Demo link: <a class="link-light link-underline" href="' +
                 escapeAttr(gDemoUrl) +
                 '" target="_blank" rel="noopener">open</a></span>'
-              : '<span class="text-success">Demo generated — open History to copy the URL.</span>',
+              : '<span class="text-success">Demo generated. Open History to copy the URL.</span>',
             'success'
           );
           setTimeout(function () {
@@ -3845,7 +3845,7 @@
             showPipelineError('Draft not regenerated', gout.data.error || 'Request failed');
             setLeadRowFeedbackHtml(
               glid,
-              '<span class="text-danger">Regenerate failed — see banner above.</span>',
+              '<span class="text-danger">Regenerate failed. See banner above.</span>',
               'danger'
             );
             return;
@@ -3875,7 +3875,7 @@
           approveLatestBtn.disabled = false;
           if (!aout.res.ok) {
             showPipelineError('Approve failed', aout.data.error || 'Request failed');
-            setLeadRowFeedbackHtml(alid, '<span class="text-danger">Approve failed — see banner above.</span>', 'danger');
+            setLeadRowFeedbackHtml(alid, '<span class="text-danger">Approve failed. See banner above.</span>', 'danger');
             return;
           }
           showLeToast('<strong>Draft approved.</strong> You can send when ready.', 'success', 6000);
@@ -3944,7 +3944,7 @@
           rbtn.disabled = false;
           if (!rout.res.ok) {
             showPipelineError('Recovery action failed', rout.data.error || 'Request failed');
-            setLeadRowFeedbackHtml(rhid, '<span class="text-danger">Reconcile failed — see banner above.</span>', 'danger');
+            setLeadRowFeedbackHtml(rhid, '<span class="text-danger">Reconcile failed. See banner above.</span>', 'danger');
             return;
           }
           if (rout.data.warning) {
@@ -4068,7 +4068,7 @@
                 '\n\nOpen History for this lead: use Mark sent if Resend delivered, or Release lock only if it did not.';
             }
             showPipelineError(label + ' failed', msg);
-            setLeadRowFeedbackHtml(leadId, '<span class="text-danger">Failed — see banner above.</span>', 'danger');
+            setLeadRowFeedbackHtml(leadId, '<span class="text-danger">Failed. See banner above.</span>', 'danger');
             return;
           }
           if (syncCrmBtn) {
@@ -4077,7 +4077,7 @@
             showLeToast('<strong>CRM synced.</strong> ' + escapeHtml(crmMsg), 'success', 8000);
           } else if (sendBtn && out.data.idempotentReplay) {
             showLeToast(
-              escapeHtml(out.data.message || 'Already sent — no duplicate email.'),
+              escapeHtml(out.data.message || 'Already sent. No duplicate email.'),
               'info',
               9000
             );
@@ -4091,7 +4091,7 @@
             label + ' failed',
             String((err && err.message) || err || 'Network or unexpected error')
           );
-          setLeadRowFeedbackHtml(leadId, '<span class="text-danger">Request error — see banner above.</span>', 'danger');
+          setLeadRowFeedbackHtml(leadId, '<span class="text-danger">Request error. See banner above.</span>', 'danger');
         } finally {
           btn.classList.remove('le-btn-loading');
           btn.disabled = false;
@@ -4202,7 +4202,7 @@
                 rF.demo_followup_due_at = dueIso;
               }
               showLeToast(
-                '<strong>Follow-up needed</strong> — reminder date set (UTC business days).',
+                '<strong>Follow-up needed</strong>. Reminder date set (UTC business days).',
                 'success',
                 6000
               );

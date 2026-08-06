@@ -21,7 +21,7 @@
     {
       "id": "example_plumbing_austin",
       "source": "scout_google_places",
-      "label": "Plumbing — Austin TX (disabled; enable after first query validates)",
+      "label": "Plumbing, Austin TX (disabled; enable after first query validates)",
       "enabled": false,
       "text_query": "Plumbing companies in Austin TX",
       "region": "us",

@@ -1,5 +1,5 @@
 /**
- * /checkout — contrast and light-band text (body uses global dark-theme defaults).
+ * /checkout - contrast and light-band text (body uses global dark-theme defaults).
  */
 body.jl-checkout-page main#main-content .feature-cards-section.services-section-home {
   color: var(--jl-text-dark);

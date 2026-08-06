@@ -2,45 +2,63 @@
 
 const path = require('path');
 const fs = require('fs');
+const { isNetlifyBundleArtifactPath } = require('./lead-engine-config-override-guard');
 
-const DEFAULT_ICP_V2_PATH = path.join(__dirname, 'icp-v2.json');
-const DEFAULT_ICP_V1_PATH = path.join(__dirname, 'icp-v1.json');
-
-/** Bundle-safe defaults (no runtime fs on Netlify for stock config). */
+/** Bundle-safe defaults (no runtime fs for stock config). */
 const EMBEDDED_ICP_V2 = require('./icp-v2.json');
 const EMBEDDED_ICP_V1 = require('./icp-v1.json');
 
-function readJsonIfExists(p) {
-  if (!p || !fs.existsSync(p)) return null;
-  return JSON.parse(fs.readFileSync(p, 'utf8'));
+function readOverrideJson(resolvedPath, label) {
+  try {
+    return JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+  } catch (e) {
+    const code = e && e.code;
+    const detail = code === 'ENOENT' ? 'file not found' : e.message || String(e);
+    throw new Error(`${label}: ${detail} (${resolvedPath})`);
+  }
 }
 
 /**
- * Default: embedded icp-v2. Override with explicitPath or LEAD_ENGINE_ICP_CONFIG (file on disk).
+ * Default: embedded icp-v2. Override only via LEAD_ENGINE_ICP_CONFIG (absolute or cwd-relative path).
  */
-function loadIcpConfig(explicitPath) {
-  const candidates = [];
-  if (explicitPath) {
-    candidates.push(
-      path.isAbsolute(explicitPath) ? explicitPath : path.join(__dirname, explicitPath)
-    );
-  }
-  const envPath = process.env.LEAD_ENGINE_ICP_CONFIG && String(process.env.LEAD_ENGINE_ICP_CONFIG).trim();
-  if (envPath) {
-    candidates.push(path.isAbsolute(envPath) ? envPath : path.join(process.cwd(), envPath));
-  }
-  for (const c of candidates) {
-    const j = readJsonIfExists(c);
-    if (j) return j;
+function loadIcpConfig() {
+  const raw = process.env.LEAD_ENGINE_ICP_CONFIG;
+  const overridePath = raw != null ? String(raw).trim() : '';
+  if (overridePath) {
+    const resolved = path.resolve(overridePath);
+    if (isNetlifyBundleArtifactPath(resolved)) {
+      console.warn(
+        '[lead-engine-qualifier-icp] LEAD_ENGINE_ICP_CONFIG points at a Netlify bundle path; using embedded icp-v2. Unset this variable in Netlify UI and your shell.',
+        resolved
+      );
+      return EMBEDDED_ICP_V2;
+    }
+    return readOverrideJson(resolved, 'LEAD_ENGINE_ICP_CONFIG');
   }
   return EMBEDDED_ICP_V2;
 }
 
+/**
+ * Default: embedded icp-v1. Optional override: LEAD_ENGINE_ICP_V1_CONFIG, or explicitPath for tests/tools.
+ */
 function loadIcpV1Config(explicitPath) {
-  if (explicitPath) {
-    const p = path.isAbsolute(explicitPath) ? explicitPath : path.join(__dirname, explicitPath);
-    const raw = fs.readFileSync(p, 'utf8');
-    return JSON.parse(raw);
+  const fromArg = explicitPath != null ? String(explicitPath).trim() : '';
+  const fromEnv =
+    process.env.LEAD_ENGINE_ICP_V1_CONFIG != null
+      ? String(process.env.LEAD_ENGINE_ICP_V1_CONFIG).trim()
+      : '';
+  const p = fromArg || fromEnv;
+  if (p) {
+    const resolved = path.isAbsolute(p) ? p : path.resolve(p);
+    if (isNetlifyBundleArtifactPath(resolved)) {
+      console.warn(
+        '[lead-engine-qualifier-icp] ICP v1 override path points at a Netlify bundle path; using embedded icp-v1. Unset LEAD_ENGINE_ICP_V1_CONFIG / explicit path in Netlify UI and your shell.',
+        resolved
+      );
+      return EMBEDDED_ICP_V1;
+    }
+    const label = fromArg ? 'loadIcpV1Config explicitPath' : 'LEAD_ENGINE_ICP_V1_CONFIG';
+    return readOverrideJson(resolved, label);
   }
   return EMBEDDED_ICP_V1;
 }
@@ -362,7 +380,7 @@ function evaluateIcpV2Extensions(prospect, icp, baseOut) {
 
 /**
  * @param {object} prospectRow — company_name, website_url, source_key?, raw_payload?
- * @param {object} icp — from loadIcpConfig()
+ * @param {object} icp — from loadIcpConfig() (embedded v2 or LEAD_ENGINE_ICP_CONFIG file)
  */
 function evaluateProspectAgainstIcp(prospectRow, icp) {
   const base = evaluateIcpBaseUrlAndName(prospectRow, icp);
@@ -375,6 +393,4 @@ module.exports = {
   loadIcpV1Config,
   evaluateProspectAgainstIcp,
   evaluateIcpBaseUrlAndName,
-  DEFAULT_ICP_V2_PATH,
-  DEFAULT_ICP_V1_PATH,
 };

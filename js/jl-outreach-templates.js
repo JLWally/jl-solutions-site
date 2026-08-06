@@ -41,23 +41,23 @@
       hooks: {
         default:
           'Hey,\n\n' +
-          "I took a quick look at {{businessName}}'s site and noticed your current setup makes it easy for people to reach out, but not easy to qualify or book quickly.",
+          "We took a quick look at {{businessName}}'s site and noticed your current setup makes it easy for people to reach out, but not easy to qualify or book quickly.",
         warmer:
           'Hey,\n\n' +
-          "I spent a few minutes on {{businessName}}'s site. You have made it easy for people to reach out, which is great. The piece I would tighten next is how quickly you can qualify a lead and get a real job on the calendar.",
+          "We spent a few minutes on {{businessName}}'s site. You have made it easy for people to reach out, which is great. The piece we would tighten next is how quickly you can qualify a lead and get a real job on the calendar.",
         crisper:
           'Hey,\n\n' +
           "{{businessName}}'s site makes outreach easy; qualification and fast booking still look like the bottleneck.",
       },
       standardBody:
-        'So I put together a quick example of what this could look like for you:\n\n' +
+        'So we put together a quick example of what this could look like for you:\n\n' +
         '{{demoUrl}}\n\n' +
         'This shows how you could:\n' +
         '• capture better job details upfront\n' +
         '• filter out low-quality leads\n' +
         '• and make booking faster without all the back-and-forth\n\n' +
         "No pitch - just a working example.\n\n" +
-        "If this is close to what you'd want, I can tailor it to your actual workflow.\n\n" +
+        "If this is close to what you'd want, we can tailor it to your actual workflow.\n\n" +
         'What do you think?',
     },
     followup_1: {
@@ -81,13 +81,13 @@
       subject: 'Wanted to bubble this up',
       hooks: {
         default: 'Hey,',
-        warmer: 'Hey, quick nudge from me.',
+        warmer: 'Hey, quick nudge from us.',
         crisper: '',
       },
       standardBody:
         'Bubbling this once more, here is the demo link again:\n\n' +
         '{{demoUrl}}\n\n' +
-        "If it is not a fit, no worries. If you want it aligned to how you actually operate, I can adjust it.\n\n" +
+        "If it is not a fit, no worries. If you want it aligned to how you actually operate, we can adjust it.\n\n" +
         'Either way, thanks for reading.',
     },
     shorter: {
@@ -97,7 +97,7 @@
       hooks: {
         default:
           'Hey,\n\n' +
-          "I sketched a lightweight intake + booking flow for {{businessName}} so you can see it, not just read about it.",
+          "We sketched a lightweight intake + booking flow for {{businessName}} so you can see it, not just read about it.",
         warmer:
           'Hey,\n\n' +
           'Sharing something concrete, a tight intake + booking example tailored to {{businessName}}.',
@@ -118,14 +118,14 @@
           'Your site gets inquiries; it does not yet force clarity before the conversation. That costs time.',
         warmer:
           'Hey,\n\n' +
-          "I will be direct: {{businessName}} is easy to contact, but the path from contact to qualified to booked still looks heavy.",
+          "We will be direct: {{businessName}} is easy to contact, but the path from contact to qualified to booked still looks heavy.",
         crisper:
           'Hey,\n\n' + '{{businessName}}: more inbound, not enough structure before the call. Here is a fix in practice:',
       },
       standardBody:
         '{{demoUrl}}\n\n' +
         "That is a working preview, not a deck.\n\n" +
-        'If the direction is right, I will tailor the steps and fields to how you actually run jobs.\n\n' +
+        'If the direction is right, we will tailor the steps and fields to how you actually run jobs.\n\n' +
         'Reply yes/no and we go from there.',
     },
   };
