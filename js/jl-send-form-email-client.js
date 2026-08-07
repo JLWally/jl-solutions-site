@@ -35,11 +35,14 @@
             code: body.code,
           };
         }
+        var errMsg = body.error;
+        if (typeof errMsg !== 'string') {
+          if (errMsg && typeof errMsg.message === 'string') errMsg = errMsg.message;
+          else errMsg = 'We could not complete your request. Email info@jlsolutions.io or try again.';
+        }
         return {
           ok: false,
-          message:
-            body.error ||
-            'We could not complete your request. Email info@jlsolutions.io or try again.',
+          message: errMsg,
           code: body.code,
         };
       }

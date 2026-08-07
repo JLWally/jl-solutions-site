@@ -3,10 +3,25 @@
 /**
  * Google PageSpeed Insights API v5 (Lighthouse).
  * Uses GOOGLE_PAGESPEED_API_KEY (same Google Cloud API key with PageSpeed Insights API enabled).
+ * Optional alias: PAGESPEED_API_KEY.
  */
+
+const { envVarFromB64 } = require('./runtime-process-env');
 
 const PSI_BASE = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
 const DEFAULT_TIMEOUT_MS = 25000;
+
+/**
+ * Runtime-safe PageSpeed API key (avoids esbuild inlining empty process.env.*).
+ * Prefer the lead-engine key GOOGLE_PAGESPEED_API_KEY; accept PAGESPEED_API_KEY alias.
+ */
+function getPageSpeedApiKey() {
+  const key =
+    envVarFromB64('R09PR0xFX1BBR0VTUEVFRF9BUElfS0VZ') ||
+    envVarFromB64('UEFHRVNQRUVEX0FQSV9LRVk=') ||
+    '';
+  return String(key || '').trim();
+}
 
 function scoreToInt(score) {
   if (score == null || Number.isNaN(Number(score))) return null;
@@ -168,4 +183,5 @@ module.exports = {
   buildPsiSignalBundle,
   scoreToInt,
   extractAccessibilityFlags,
+  getPageSpeedApiKey,
 };

@@ -2,7 +2,7 @@
  * Sends website form submissions to info@jlsolutions.io (Resend).
  * Supported form-name values: contact, consultation, fix-my-app, newsletter,
  * roi-calculator, ai-intake-demo, onboard-payment, pay-checkout, package-kickoff,
- * getstarted-product-intake, getstarted-custom-quote.
+ * getstarted-product-intake, getstarted-custom-quote, lead-flow-check.
  *
  * Set RESEND_API_KEY in Netlify. Use FORM_FROM_EMAIL with a domain verified in Resend
  * (e.g. JL Solutions <notifications@jlsolutions.io>) for production.
@@ -603,6 +603,93 @@ function buildRoiCalculatorEmail(data) {
   };
 }
 
+function buildLeadFlowCheckEmail(data) {
+  const firstName = data.firstName || data.name || '(not provided)';
+  const email = data.email || '(not provided)';
+  const business = data.businessName || data.company || '(not provided)';
+  const leadScore =
+    data.leadFlowScore != null && String(data.leadFlowScore).trim() !== ''
+      ? String(data.leadFlowScore).trim()
+      : data.score != null && String(data.score).trim() !== ''
+        ? String(data.score).trim()
+        : '?';
+  const health =
+    data.websiteHealthScore != null && String(data.websiteHealthScore).trim() !== ''
+      ? String(data.websiteHealthScore).trim()
+      : 'n/a';
+  const fields = [
+    ['First name', firstName],
+    ['Email', email],
+    ['Phone', data.phone],
+    ['Business name', business],
+    ['Website URL', data.websiteUrl],
+    ['Inquiry volume / month', data.inquiryVolumeLabel || data.inquiryVolume],
+    ['Website Health Score', health !== 'n/a' ? `${health}/100` : health],
+    ['Website grade', data.websiteGrade],
+    ['Performance', data.performanceScore],
+    ['Accessibility', data.accessibilityScore],
+    ['SEO', data.seoScore],
+    ['Best practices', data.bestPracticesScore],
+    ['Website scan status', data.websiteScanStatus],
+    ['Website scan error', data.websiteScanError],
+    ['Lead Flow Score', `${leadScore}/100`],
+    ['Lead Flow tier', data.leadFlowTier || data.scoreTierTitle || data.scoreTier],
+    ['Recommended path', data.recommendedPathHeading || data.recommendedPath],
+    ['Technical opportunities', data.technicalOpportunityTitles],
+    ['Weakest Lead Flow areas', data.weakestLeadFlowAreas || data.weakestAreas],
+    ['Page URL', data.pageUrl],
+    ['Referrer', data.referrer],
+    ['UTM source', data.utmSource],
+    ['UTM medium', data.utmMedium],
+    ['UTM campaign', data.utmCampaign],
+    ['Submitted at', data.submittedAt],
+  ];
+  const rows = fields
+    .filter(([, v]) => v != null && String(v).trim() !== '')
+    .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
+    .join('');
+  const answersBlock =
+    data.answersJson && String(data.answersJson).trim()
+      ? `<h3>Lead Flow answers (JSON)</h3><pre style="white-space:pre-wrap;font-size:12px;">${escapeHtml(String(data.answersJson))}</pre>`
+      : '';
+  return {
+    subject: `New Website & Lead Flow Check: ${business} — Health ${health} / Lead ${leadScore}`,
+    html: `
+      <h2>New Website &amp; Lead Flow Check submission</h2>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
+      ${answersBlock}
+      <p><em>Sent from jlsolutions.io/lead-flow-check</em></p>
+    `,
+  };
+}
+
+function leadFlowCheckPersistMessage(data) {
+  const lead =
+    data.leadFlowScore != null
+      ? String(data.leadFlowScore)
+      : data.score != null
+        ? String(data.score)
+        : '?';
+  const health = data.websiteHealthScore != null ? String(data.websiteHealthScore) : 'n/a';
+  const tier = data.leadFlowTier || data.scoreTier || '';
+  const path = data.recommendedPath || '';
+  const weak = data.weakestLeadFlowAreas || data.weakestAreas || '';
+  const url = data.websiteUrl || '';
+  const scan = data.websiteScanStatus || '';
+  return [
+    `Website & Lead Flow Check`,
+    `health:${health}`,
+    `lead:${lead}/100`,
+    scan && `scan:${scan}`,
+    tier && `tier:${tier}`,
+    path && `path:${path}`,
+    weak && `weak:${weak}`,
+    url && `site:${url}`,
+  ]
+    .filter(Boolean)
+    .join(' | ');
+}
+
 function buildAiIntakeDemoEmail(data) {
   const name = data.name || '(not provided)';
   const email = data.email || '(not provided)';
@@ -752,7 +839,7 @@ async function persistToConsultationsTable(formName, data) {
   if (!supabase) return null;
 
   const email = (data.email || '').trim();
-  let name = (data.name || '').trim();
+  let name = (data.name || data.firstName || '').trim();
   if (!email) {
     console.warn('[send-form-email] Skipping Supabase persist: missing email');
     return null;
@@ -809,6 +896,17 @@ async function persistToConsultationsTable(formName, data) {
       message: roiPersistMessage(data),
       status: 'new',
       source: 'roi_calculator',
+    };
+  } else if (formName === 'lead-flow-check') {
+    row = {
+      name,
+      email,
+      phone: data.phone ? String(data.phone).trim() : null,
+      company: (data.businessName || data.company) ? String(data.businessName || data.company).trim() : null,
+      service: data.recommendedPath ? String(data.recommendedPath).trim() : 'lead-flow-check',
+      message: leadFlowCheckPersistMessage(data),
+      status: 'new',
+      source: 'lead_flow_check',
     };
   } else if (formName === 'ai-intake-demo') {
     const need = [data.demoNeedLabel, data.demoOther, data.demoDesc].filter((x) => x && String(x).trim()).join(', ');
@@ -1079,6 +1177,10 @@ exports.handler = async (event) => {
     const built = buildRoiCalculatorEmail(data);
     subject = built.subject;
     html = built.html;
+  } else if (formName === 'lead-flow-check') {
+    const built = buildLeadFlowCheckEmail(data);
+    subject = built.subject;
+    html = built.html;
   } else if (formName === 'ai-intake-demo') {
     const built = buildAiIntakeDemoEmail(data);
     subject = built.subject;
@@ -1274,7 +1376,7 @@ exports.handler = async (event) => {
     const customerEmail = (data.email || '').trim();
     if (customerEmail) {
       try {
-      const first = escapeHtml((data.name || 'there').trim().split(' ')[0]);
+      const first = escapeHtml((data.name || data.firstName || 'there').trim().split(' ')[0]);
       const cust =
         formName === 'consultation'
           ? buildCustomerConfirmation(data)
@@ -1308,7 +1410,17 @@ exports.handler = async (event) => {
           <p><em>info@jlsolutions.io</em></p>
         `,
                   }
-                : formName === 'ai-intake-demo'
+                : formName === 'lead-flow-check'
+                  ? {
+                      subject: 'Your Website & Lead Flow Check results - JL Solutions',
+                      html: `
+          <h2>Hi ${first},</h2>
+          <p>Thanks for completing the Website &amp; Lead Flow Check. Your scores and recommendations were shown on the results page. We may follow up about the issues identified in your assessment.</p>
+          <p> - The JL Solutions team</p>
+          <p><em>info@jlsolutions.io</em></p>
+        `,
+                    }
+                  : formName === 'ai-intake-demo'
                   ? {
                       subject: 'Thanks for trying our AI intake demo - JL Solutions',
                       html: `

@@ -3102,3 +3102,88 @@ body.jl-homepage .section-how-we-help .feature-card-jl__text-muted {
     padding: 2.75rem 0;
   }
 }
+
+/* Homepage — Lead Flow Check promo (after Common problems) */
+body.jl-homepage .jl-home-lfc-promo {
+  background: #fff;
+  padding: 3.25rem 0 3.5rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+body.jl-homepage .jl-home-lfc-promo__inner {
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+body.jl-homepage .jl-home-lfc-promo__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--jl-brand-cyan-deep, #0b6579);
+  margin: 0 0 0.5rem;
+}
+
+body.jl-homepage .jl-home-lfc-promo__title {
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-weight: 800;
+  color: var(--jl-ink, #0a1628);
+  margin: 0 0 0.65rem;
+  line-height: 1.25;
+}
+
+body.jl-homepage .jl-home-lfc-promo__lead {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: #475569;
+  margin: 0 0 1.25rem;
+}
+
+body.jl-homepage .jl-home-lfc-promo__actions {
+  margin: 0 0 0.75rem;
+}
+
+body.jl-homepage .jl-home-lfc-promo__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: 10px;
+  background: var(--jl-accent, #ffc107);
+  color: #0a1628;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.jl-homepage .jl-home-lfc-promo__cta:hover {
+  background: var(--jl-accent-hover, #ffd54f);
+  color: #0a1628;
+  box-shadow: 0 8px 20px -10px rgba(255, 193, 7, 0.65);
+}
+
+body.jl-homepage .jl-home-lfc-promo__cta:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(11, 101, 121, 0.35);
+}
+
+body.jl-homepage .jl-home-lfc-promo__support {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+@media (max-width: 767.98px) {
+  body.jl-homepage .jl-home-lfc-promo {
+    padding: 2.5rem 0 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.jl-homepage .jl-home-lfc-promo__cta {
+    transition: none;
+  }
+}

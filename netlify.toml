@@ -17,6 +17,8 @@
   maxDuration = 60
 [functions."lead-engine-batch-analyze"]
   maxDuration = 60
+[functions."grade-website"]
+  maxDuration = 60
 
 # Lead engine split schedules (recommended for 24/7): scout-only + downstream (enrichment → ICP → pipeline).
 # Do NOT also schedule the full tick — that would overlap idempotency and double-spend Places quota.
@@ -32,6 +34,12 @@
 [[redirects]]
   from = "/api/document-extraction-demo"
   to = "/.netlify/functions/document-extraction-demo"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/grade-website"
+  to = "/.netlify/functions/grade-website"
   status = 200
   force = true
 

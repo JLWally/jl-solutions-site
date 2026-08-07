@@ -11,7 +11,7 @@ const {
   buildCompactSummary,
 } = require('./lead-engine-audit-signals');
 const { attachVerticalIntelligenceToSignalBundle } = require('./lead-engine-vertical-intelligence');
-const { runPageSpeedForUrls, buildPsiSignalBundle } = require('./lead-engine-psi');
+const { runPageSpeedForUrls, buildPsiSignalBundle, getPageSpeedApiKey } = require('./lead-engine-psi');
 const { EVENT_TYPES, logLeadEngineEvent } = require('./lead-engine-audit-log');
 const { isLeadEnginePsiExtended } = require('./lead-engine-config');
 
@@ -119,7 +119,7 @@ async function runAnalyzeForLead(supabase, leadId, actor) {
 
   const signalBundle = buildSuccessSignalBundle(homeFetch.finalUrl, pageResults);
 
-  const psiKey = process.env.GOOGLE_PAGESPEED_API_KEY || '';
+  const psiKey = getPageSpeedApiKey();
   const psiExtended = isLeadEnginePsiExtended();
   let psiTargets = [homeFetch.finalUrl];
   if (psiExtended) {
@@ -142,8 +142,11 @@ async function runAnalyzeForLead(supabase, leadId, actor) {
   } else {
     signalBundle.psi = {
       psi_version: 1,
-      skipped: true,
+      strategy: 'mobile',
+      pages: [],
+      primary_scores: null,
       reason: 'missing_GOOGLE_PAGESPEED_API_KEY',
+      psi_mode: psiExtended ? 'extended' : 'home_only',
     };
   }
 
