@@ -1289,76 +1289,121 @@ exports.handler = async (event) => {
   try {
     const { Resend } = require('resend');
     const resend = new Resend(env.resendApiKey);
+    const RESEND_FALLBACK_FROM = 'JL Solutions <onboarding@resend.dev>';
 
-    console.log('[send-form-email] Sending to', TO_EMAIL, 'subject:', subject);
-    // 1. Send lead to info@jlsolutions.io (Resend may throw on network/validation errors)
-    let err1;
-    try {
-      const out1 = await resend.emails.send({
-        from: env.formFromEmail,
-        to: [TO_EMAIL],
-        subject,
-        html,
-        replyTo: data.email || undefined,
-      });
-      err1 = out1.error;
-    } catch (sendErr) {
-      console.error('[send-form-email] Resend threw (to info@):', sendErr && sendErr.message, sendErr);
-      await appendSubmissionAudit(formName, data, {
-        _fallbackReason: 'resend_to_info_threw',
-        _error: sendErr && sendErr.message,
-      });
-      if (jsonMode) {
-        if (softOkWhenLeadSaved(formName)) {
-          console.error(
-            '[send-form-email]',
-            formName + ': Resend threw to info@; lead JSON still ok:',
-            sendErr && sendErr.message
-          );
-          return jsonLeadSavedEmailOptional(false, { code: 'RESEND_ERROR' });
-        }
-        const hint =
-          sendErr && sendErr.message
-            ? String(sendErr.message)
-                .replace(/\s+/g, ' ')
-                .trim()
-                .slice(0, 180)
-            : '';
-        return jsonFail(
-          502,
-          'RESEND_ERROR',
-          hint
-            ? `Email could not be sent (${hint}). Please email info@jlsolutions.io or try again.`
-            : 'We could not send email right now. Your details may be saved, please email info@jlsolutions.io.'
-        );
+    /**
+     * Send via Resend; if the configured from-domain is unverified, retry once
+     * with Resend's onboarding address so production leads still notify.
+     * Returns { ok, id, error, fromUsed }.
+     */
+    async function sendResendEmail({ to, subject, html, replyTo, label }) {
+      const attempts = [env.formFromEmail];
+      if (
+        env.formFromEmail &&
+        !/onboarding@resend\.dev/i.test(env.formFromEmail) &&
+        attempts.indexOf(RESEND_FALLBACK_FROM) === -1
+      ) {
+        attempts.push(RESEND_FALLBACK_FROM);
       }
-      return redirectSuccess({ emailed: false });
+
+      let lastError = null;
+      for (let i = 0; i < attempts.length; i++) {
+        const fromUsed = attempts[i];
+        try {
+          const out = await resend.emails.send({
+            from: fromUsed,
+            to: Array.isArray(to) ? to : [to],
+            subject,
+            html,
+            replyTo: replyTo || undefined,
+          });
+          if (out.error) {
+            lastError = out.error;
+            const msg = String((out.error && out.error.message) || '');
+            const unverified = /domain is not verified/i.test(msg);
+            console.error('[send-form-email] Resend error (' + label + '):', {
+              message: out.error.message,
+              name: out.error.name,
+              fromUsed,
+            });
+            if (unverified && i < attempts.length - 1) {
+              console.warn(
+                '[send-form-email] From domain unverified; retrying with Resend onboarding sender for',
+                label
+              );
+              continue;
+            }
+            return { ok: false, id: null, error: out.error, fromUsed };
+          }
+          if (fromUsed !== env.formFromEmail) {
+            console.warn(
+              '[send-form-email] Sent',
+              label,
+              'using fallback from',
+              fromUsed,
+              '(configure a verified FORM_FROM_EMAIL domain in Resend)'
+            );
+          }
+          return {
+            ok: true,
+            id: out.data && out.data.id ? out.data.id : null,
+            error: null,
+            fromUsed,
+          };
+        } catch (sendErr) {
+          lastError = { message: sendErr && sendErr.message, name: 'throw' };
+          console.error('[send-form-email] Resend threw (' + label + '):', {
+            message: sendErr && sendErr.message,
+            name: sendErr && sendErr.name,
+            fromUsed,
+          });
+          const unverified = /domain is not verified/i.test(
+            String((sendErr && sendErr.message) || '')
+          );
+          if (unverified && i < attempts.length - 1) continue;
+          return { ok: false, id: null, error: lastError, fromUsed };
+        }
+      }
+      return { ok: false, id: null, error: lastError, fromUsed: env.formFromEmail };
     }
 
-    if (err1) {
-      console.error('[send-form-email] Resend error (to info@):', JSON.stringify(err1));
-      await appendSubmissionAudit(formName, data, { _fallbackReason: 'resend_to_info_failed', _resendError: err1.message });
-      if (jsonMode) {
-        if (softOkWhenLeadSaved(formName)) {
-          console.error(
-            '[send-form-email]',
-            formName + ': Resend error to info@; lead JSON still ok:',
-            err1.message
-          );
-          return jsonLeadSavedEmailOptional(false, { code: 'RESEND_ERROR' });
-        }
+    let ownerEmailed = false;
+    let ownerEmailId = null;
+    let ownerEmailError = null;
+
+    console.log('[send-form-email] Sending to', TO_EMAIL, 'subject:', subject);
+    // 1. Owner notification (info@) — independent of customer report email
+    const ownerSend = await sendResendEmail({
+      to: TO_EMAIL,
+      subject,
+      html,
+      replyTo: data.email || undefined,
+      label: 'owner',
+    });
+    if (!ownerSend.ok) {
+      ownerEmailError = ownerSend.error;
+      await appendSubmissionAudit(formName, data, {
+        _fallbackReason: 'resend_to_info_failed',
+        _resendError: ownerSend.error && ownerSend.error.message,
+      });
+      if (jsonMode && !softOkWhenLeadSaved(formName)) {
         return jsonFail(
           502,
           'RESEND_ERROR',
           'We could not send email right now. Your details were saved, please email info@jlsolutions.io or try again shortly.'
         );
       }
-      return redirectSuccess({ emailed: false });
+      if (!jsonMode && !softOkWhenLeadSaved(formName)) {
+        return redirectSuccess({ emailed: false });
+      }
+      console.error('[send-form-email]', formName + ': owner email failed; continuing soft-ok path');
+    } else {
+      ownerEmailed = true;
+      ownerEmailId = ownerSend.id;
+      console.log('[send-form-email] Delivered to', TO_EMAIL, 'form=', formName, 'id=', ownerEmailId);
     }
 
-    console.log('[send-form-email] Delivered to', TO_EMAIL, 'form=', formName);
-
-    if (formName === 'package-kickoff') {
+    if (formName === 'package-kickoff' && ownerEmailed) {
       const opsRaw = process.env.ONBOARDING_OPS_EMAIL || '';
       const seen = new Set();
       const opsList = [];
@@ -1375,14 +1420,14 @@ exports.handler = async (event) => {
         try {
           const siteUrl = (process.env.URL || '').trim();
           const brief = buildPackageKickoffOpsBrief(data, { consultationId, siteUrl });
-          const outOps = await resend.emails.send({
-            from: env.formFromEmail,
+          const outOps = await sendResendEmail({
             to: opsList,
             subject: brief.subject,
             html: brief.html,
             replyTo: (data.email || '').trim() || undefined,
+            label: 'onboarding-ops',
           });
-          if (outOps.error) {
+          if (!outOps.ok) {
             console.warn('[send-form-email] ONBOARDING_OPS_EMAIL send failed:', outOps.error);
           }
         } catch (opsErr) {
@@ -1391,7 +1436,7 @@ exports.handler = async (event) => {
       }
     }
 
-    // 2. Send confirmation to customer, must not fail the request if info@ already succeeded
+    // 2. Customer confirmation / report email — independent of owner notify
     const customerEmail = (data.email || '').trim();
     if (customerEmail) {
       try {
@@ -1480,28 +1525,46 @@ exports.handler = async (event) => {
           <p><em>info@jlsolutions.io</em></p>
         `,
                     };
-      const { error: err2 } = await resend.emails.send({
-        from: env.formFromEmail,
-        to: [customerEmail],
+      const custSend = await sendResendEmail({
+        to: customerEmail,
         subject: cust.subject,
         html: cust.html,
         replyTo: TO_EMAIL,
+        label: 'customer',
       });
-      if (err2) {
-        console.warn('[send-form-email] Customer confirmation failed (lead was sent):', err2);
+      if (!custSend.ok) {
+        console.warn('[send-form-email] Customer confirmation failed (lead was saved):', {
+          message: custSend.error && custSend.error.message,
+          name: custSend.error && custSend.error.name,
+        });
       } else {
         reportEmailed = true;
+        console.log('[send-form-email] Customer confirmation sent id=', custSend.id);
       }
       } catch (confirmErr) {
         console.warn(
-          '[send-form-email] Customer confirmation threw (lead was already sent):',
+          '[send-form-email] Customer confirmation threw (lead was already saved):',
           confirmErr && confirmErr.message,
           confirmErr
         );
       }
     } else {
-      /* No customer address: owner notify already succeeded */
-      reportEmailed = formName !== 'lead-flow-check';
+      /* No customer address: treat report email N/A; owner success counts for non-LFC */
+      reportEmailed = formName !== 'lead-flow-check' ? ownerEmailed : false;
+    }
+
+    if (jsonMode && softOkWhenLeadSaved(formName)) {
+      return {
+        statusCode: 200,
+        headers: jsonHeaders,
+        body: JSON.stringify({
+          success: true,
+          emailed: !!reportEmailed,
+          ownerEmailed: !!ownerEmailed,
+          customerEmailed: !!reportEmailed,
+          code: ownerEmailed && reportEmailed ? undefined : ownerEmailError ? 'RESEND_ERROR' : reportEmailed ? undefined : 'RESEND_ERROR',
+        }),
+      };
     }
   } catch (err) {
     console.error('[send-form-email] Unexpected error:', err && err.message, err);
