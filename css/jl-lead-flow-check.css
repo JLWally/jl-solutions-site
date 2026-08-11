@@ -591,6 +591,75 @@
   margin: 0 0 1rem;
 }
 
+.lfc-email-notice {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: 8px;
+}
+
+.lfc-email-notice__text {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--lfc-ink) !important;
+}
+
+.lfc-score-grid--single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 28rem;
+}
+
+.lfc-website-health__status {
+  margin: 0 0 0.75rem;
+}
+
+.lfc-audit-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 600;
+  color: var(--lfc-ink) !important;
+}
+
+.lfc-audit-progress__spinner {
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 2px solid var(--lfc-border);
+  border-top-color: var(--lfc-accent-bright, #0aa2c0);
+  border-radius: 50%;
+  animation: lfc-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfc-audit-progress__spinner {
+    animation: none;
+    border-top-color: var(--lfc-border);
+  }
+}
+
+.lfc-website-health__findings-title {
+  margin: 1.25rem 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lfc-ink) !important;
+}
+
+.lfc-website-health__notice {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: 8px;
+}
+
+.lfc-website-health__notice p {
+  margin: 0 0 0.75rem;
+  color: var(--lfc-ink) !important;
+  line-height: 1.5;
+}
+
 .lfc-choices {
   display: flex;
   flex-direction: column;

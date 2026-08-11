@@ -19,9 +19,11 @@
  *
  * JSON mode: if the client sends Accept: application/json (or form field response_format=json),
  * the function returns JSON instead of redirecting to thank-you. For most forms, Resend failure
- * or missing RESEND_API_KEY returns success:false. For form-name getstarted-product-intake,
- * once intake is persisted (Supabase when configured), the response is success:true with
- * emailed:false so /get-started can continue to Stripe; failures are logged and audit-appended.
+ * or missing RESEND_API_KEY returns success:false. For form-name getstarted-product-intake and
+ * lead-flow-check, once the lead/intake is persisted (Supabase when configured; audit always),
+ * the response is success:true with emailed:false so the client can continue (checkout or
+ * results) even when notification/report email fails; failures are logged and audit-appended.
+ * For lead-flow-check, emailed reflects customer report-email delivery (owner notify is separate).
  */
 const { createClient } = require('@supabase/supabase-js');
 const { envVarFromB64 } = require('./lib/runtime-process-env');
@@ -653,9 +655,9 @@ function buildLeadFlowCheckEmail(data) {
       ? `<h3>Lead Flow answers (JSON)</h3><pre style="white-space:pre-wrap;font-size:12px;">${escapeHtml(String(data.answersJson))}</pre>`
       : '';
   return {
-    subject: `New Website & Lead Flow Check: ${business} — Health ${health} / Lead ${leadScore}`,
+    subject: `New Lead Flow Check: ${business} — Health ${health} / Lead ${leadScore}`,
     html: `
-      <h2>New Website &amp; Lead Flow Check submission</h2>
+      <h2>New Lead Flow Check submission</h2>
       <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
       ${answersBlock}
       <p><em>Sent from jlsolutions.io/lead-flow-check</em></p>
@@ -677,7 +679,7 @@ function leadFlowCheckPersistMessage(data) {
   const url = data.websiteUrl || '';
   const scan = data.websiteScanStatus || '';
   return [
-    `Website & Lead Flow Check`,
+    `Lead Flow Check`,
     `health:${health}`,
     `lead:${lead}/100`,
     scan && `scan:${scan}`,
@@ -1222,20 +1224,34 @@ exports.handler = async (event) => {
       body: JSON.stringify({ success: false, code, error }),
     };
   }
-  /** Product checkout path: intake saved; email optional for JSON clients */
-  function jsonIntakeSavedCheckoutOk(emailed, extra = {}) {
+  /** Lead/intake already saved; email optional for JSON clients that continue without it */
+  function jsonLeadSavedEmailOptional(emailed, extra = {}) {
     return {
       statusCode: 200,
       headers: jsonHeaders,
       body: JSON.stringify({ success: true, emailed: !!emailed, ...extra }),
     };
   }
-  const redirectSuccess = () => {
+  /** @deprecated use jsonLeadSavedEmailOptional */
+  function jsonIntakeSavedCheckoutOk(emailed, extra = {}) {
+    return jsonLeadSavedEmailOptional(emailed, extra);
+  }
+  function softOkWhenLeadSaved(name) {
+    return name === 'getstarted-product-intake' || name === 'lead-flow-check';
+  }
+  let reportEmailed = false;
+  const redirectSuccess = (opts = {}) => {
+    const emailed =
+      opts.emailed != null
+        ? !!opts.emailed
+        : formName === 'lead-flow-check'
+          ? reportEmailed
+          : true;
     if (jsonMode) {
       return {
         statusCode: 200,
         headers: jsonHeaders,
-        body: JSON.stringify({ success: true, emailed: true }),
+        body: JSON.stringify({ success: true, emailed }),
       };
     }
     return {
@@ -1254,11 +1270,12 @@ exports.handler = async (event) => {
       console.error('[send-form-email] Blob fallback failed:', e);
     }
     if (jsonMode) {
-      if (formName === 'getstarted-product-intake') {
+      if (softOkWhenLeadSaved(formName)) {
         console.warn(
-          '[send-form-email] getstarted-product-intake: RESEND_API_KEY missing; intake persisted, proceeding JSON ok without email'
+          '[send-form-email]',
+          formName + ': RESEND_API_KEY missing; lead persisted, proceeding JSON ok without email'
         );
-        return jsonIntakeSavedCheckoutOk(false, { code: 'MISSING_RESEND' });
+        return jsonLeadSavedEmailOptional(false, { code: 'MISSING_RESEND' });
       }
       return jsonFail(
         503,
@@ -1266,7 +1283,7 @@ exports.handler = async (event) => {
         'Email delivery is not configured. Your details were saved, please email info@jlsolutions.io so we can follow up.'
       );
     }
-    return redirectSuccess();
+    return redirectSuccess({ emailed: false });
   }
 
   try {
@@ -1292,12 +1309,13 @@ exports.handler = async (event) => {
         _error: sendErr && sendErr.message,
       });
       if (jsonMode) {
-        if (formName === 'getstarted-product-intake') {
+        if (softOkWhenLeadSaved(formName)) {
           console.error(
-            '[send-form-email] getstarted-product-intake: Resend threw to info@; checkout JSON still ok:',
+            '[send-form-email]',
+            formName + ': Resend threw to info@; lead JSON still ok:',
             sendErr && sendErr.message
           );
-          return jsonIntakeSavedCheckoutOk(false, { code: 'RESEND_ERROR' });
+          return jsonLeadSavedEmailOptional(false, { code: 'RESEND_ERROR' });
         }
         const hint =
           sendErr && sendErr.message
@@ -1314,19 +1332,20 @@ exports.handler = async (event) => {
             : 'We could not send email right now. Your details may be saved, please email info@jlsolutions.io.'
         );
       }
-      return redirectSuccess();
+      return redirectSuccess({ emailed: false });
     }
 
     if (err1) {
       console.error('[send-form-email] Resend error (to info@):', JSON.stringify(err1));
       await appendSubmissionAudit(formName, data, { _fallbackReason: 'resend_to_info_failed', _resendError: err1.message });
       if (jsonMode) {
-        if (formName === 'getstarted-product-intake') {
+        if (softOkWhenLeadSaved(formName)) {
           console.error(
-            '[send-form-email] getstarted-product-intake: Resend error to info@; checkout JSON still ok:',
+            '[send-form-email]',
+            formName + ': Resend error to info@; lead JSON still ok:',
             err1.message
           );
-          return jsonIntakeSavedCheckoutOk(false, { code: 'RESEND_ERROR' });
+          return jsonLeadSavedEmailOptional(false, { code: 'RESEND_ERROR' });
         }
         return jsonFail(
           502,
@@ -1334,7 +1353,7 @@ exports.handler = async (event) => {
           'We could not send email right now. Your details were saved, please email info@jlsolutions.io or try again shortly.'
         );
       }
-      return redirectSuccess();
+      return redirectSuccess({ emailed: false });
     }
 
     console.log('[send-form-email] Delivered to', TO_EMAIL, 'form=', formName);
@@ -1412,10 +1431,10 @@ exports.handler = async (event) => {
                   }
                 : formName === 'lead-flow-check'
                   ? {
-                      subject: 'Your Website & Lead Flow Check results - JL Solutions',
+                      subject: 'Your Lead Flow Check results - JL Solutions',
                       html: `
           <h2>Hi ${first},</h2>
-          <p>Thanks for completing the Website &amp; Lead Flow Check. Your scores and recommendations were shown on the results page. We may follow up about the issues identified in your assessment.</p>
+          <p>Thanks for completing The Lead Flow Check. Your Lead Flow Score, Website Health Score, and recommendations were shown on the results page. We may follow up about the issues identified in your assessment.</p>
           <p> - The JL Solutions team</p>
           <p><em>info@jlsolutions.io</em></p>
         `,
@@ -1470,6 +1489,8 @@ exports.handler = async (event) => {
       });
       if (err2) {
         console.warn('[send-form-email] Customer confirmation failed (lead was sent):', err2);
+      } else {
+        reportEmailed = true;
       }
       } catch (confirmErr) {
         console.warn(
@@ -1478,17 +1499,21 @@ exports.handler = async (event) => {
           confirmErr
         );
       }
+    } else {
+      /* No customer address: owner notify already succeeded */
+      reportEmailed = formName !== 'lead-flow-check';
     }
   } catch (err) {
     console.error('[send-form-email] Unexpected error:', err && err.message, err);
     await appendSubmissionAudit(formName, data, { _fallbackReason: 'send_form_email_exception', _error: err.message });
     if (jsonMode) {
-      if (formName === 'getstarted-product-intake') {
+      if (softOkWhenLeadSaved(formName)) {
         console.error(
-          '[send-form-email] getstarted-product-intake: exception during send path; intake already persisted, checkout JSON ok:',
+          '[send-form-email]',
+          formName + ': exception during send path; lead already persisted, JSON ok:',
           err && err.message
         );
-        return jsonIntakeSavedCheckoutOk(false, { code: 'SEND_EXCEPTION' });
+        return jsonLeadSavedEmailOptional(false, { code: 'SEND_EXCEPTION' });
       }
       const detail =
         err && err.message
@@ -1505,7 +1530,7 @@ exports.handler = async (event) => {
           : 'Something went wrong. Please email info@jlsolutions.io.'
       );
     }
-    return redirectSuccess();
+    return redirectSuccess({ emailed: false });
   }
 
   return redirectSuccess();

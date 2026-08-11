@@ -1,5 +1,5 @@
 /**
- * Website & Lead Flow Check — guided combined assessment for JL Solutions.
+ * The Lead Flow Check — guided assessment with a supporting automated website audit.
  *
  * Scoring configuration, recommendation rules, website grade API integration,
  * session restoration, and Netlify/send-form-email submission live here so
@@ -284,16 +284,14 @@
     missing_api_key: true,
   };
 
-  var SESSION_KEY = 'jl-lead-flow-check-v3';
+  var SESSION_KEY = 'jl-lead-flow-check-v4';
   var WEAK_RATIO_THRESHOLD = 0.65;
-  var SCAN_WAIT_MS = 8000;
   var SCAN_POLL_MS = 250;
 
   var PHASE = {
     IDLE: 'idle',
     QUESTIONS: 'questions',
     GATE: 'gate',
-    WAITING: 'waiting',
     RESULTS: 'results',
   };
 
@@ -306,9 +304,30 @@
   };
 
   /**
-   * Single source of truth for the combined assessment.
-   * Never store Error/Response/raw PageSpeed objects in form fields.
+   * Independent process statuses — never collapse into one combined success flag.
+   * Website audit must never block Lead Flow results.
    */
+  var LEAD_STATUS = {
+    IDLE: 'idle',
+    SUBMITTING: 'submitting',
+    SUCCESS: 'success',
+    ERROR: 'error',
+  };
+
+  var AUDIT_STATUS = {
+    IDLE: 'idle',
+    RUNNING: 'running',
+    SUCCESS: 'success',
+    ERROR: 'error',
+  };
+
+  var EMAIL_STATUS = {
+    IDLE: 'idle',
+    SENDING: 'sending',
+    SUCCESS: 'success',
+    ERROR: 'error',
+  };
+
   var state = {
     phase: PHASE.IDLE,
     questionIndex: 0,
@@ -335,6 +354,11 @@
     results: null,
     submitting: false,
     pendingSubmitError: '',
+    leadSubmissionStatus: LEAD_STATUS.IDLE,
+    websiteAuditStatus: AUDIT_STATUS.IDLE,
+    reportEmailStatus: EMAIL_STATUS.IDLE,
+    resultsVisible: false,
+    reportEmailNotice: '',
   };
 
   var root;
@@ -413,6 +437,67 @@
     window.setTimeout(function () {
       liveRegion.textContent = text;
     }, reduceMotion ? 0 : 30);
+  }
+
+  function syncWebsiteAuditStatus() {
+    if (state.scan.status === SCAN.SUCCESS) {
+      state.websiteAuditStatus = AUDIT_STATUS.SUCCESS;
+    } else if (state.scan.status === SCAN.RUNNING) {
+      state.websiteAuditStatus = AUDIT_STATUS.RUNNING;
+    } else if (state.scan.status === SCAN.FAILED) {
+      state.websiteAuditStatus = AUDIT_STATUS.ERROR;
+    } else if (state.scan.status === SCAN.TIMED_OUT) {
+      /* Legacy: timed_out meant UI gave up waiting; audit may still finish via promise */
+      state.websiteAuditStatus = state.scan.promise
+        ? AUDIT_STATUS.RUNNING
+        : AUDIT_STATUS.ERROR;
+    } else {
+      state.websiteAuditStatus = AUDIT_STATUS.IDLE;
+    }
+  }
+
+  /**
+   * Strip server messages that tell visitors to email info@ — never surface those here.
+   */
+  function sanitizeVisitorError(message) {
+    var text = getErrorMessage(message);
+    if (!text) return '';
+    if (/info@jlsolutions\.io/i.test(text)) {
+      return 'We could not save your assessment. Check your connection and try again.';
+    }
+    return text;
+  }
+
+  function refreshResultsFromAudit(opts) {
+    if (!state.resultsVisible || !state.results) {
+      updateScanStatusUI();
+      updateGateChrome();
+      return;
+    }
+
+    var scanData = state.scan.status === SCAN.SUCCESS ? state.scan.data : null;
+    state.results.scan = scanData;
+    state.results.scanStatus = resolveScanStatusForResults();
+    state.results.technicalOpportunities = buildTechnicalOpportunities(scanData);
+    /* Lead Flow score, findings, and recommended path stay frozen after lead save. */
+    syncWebsiteAuditStatus();
+    saveSession();
+
+    if (state.phase === PHASE.RESULTS) {
+      render({ skipFocus: true });
+      if (opts && opts.announceSuccess && scanData) {
+        announce(
+          'Website Health Score is ' + scanData.websiteHealthScore + ' out of 100.'
+        );
+      } else if (opts && opts.announceFailure) {
+        announce(
+          "We couldn't complete the automated website check right now. Your Lead Flow results and recommendations are still available."
+        );
+      }
+    } else {
+      updateScanStatusUI();
+      updateGateChrome();
+    }
   }
 
   /**
@@ -568,8 +653,9 @@
 
   function saveSession() {
     try {
+      syncWebsiteAuditStatus();
       var payload = {
-        v: 3,
+        v: 4,
         phase: state.phase === PHASE.RESULTS ? PHASE.RESULTS : state.phase,
         questionIndex: state.questionIndex,
         websiteUrl: state.websiteUrl,
@@ -592,6 +678,11 @@
         },
         submitted: state.submitted,
         results: state.results,
+        leadSubmissionStatus: state.leadSubmissionStatus,
+        websiteAuditStatus: state.websiteAuditStatus,
+        reportEmailStatus: state.reportEmailStatus,
+        resultsVisible: state.resultsVisible,
+        reportEmailNotice: state.reportEmailNotice || '',
       };
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(payload));
     } catch (_) {
@@ -658,12 +749,32 @@
         state.submitted = true;
         state.results = data.results;
         state.phase = PHASE.RESULTS;
+        state.resultsVisible = true;
+        state.leadSubmissionStatus = LEAD_STATUS.SUCCESS;
+        if (
+          data.reportEmailStatus === EMAIL_STATUS.ERROR ||
+          data.reportEmailStatus === 'failed' ||
+          data.reportEmailStatus === 'error'
+        ) {
+          state.reportEmailStatus = EMAIL_STATUS.ERROR;
+        } else if (
+          data.reportEmailStatus === EMAIL_STATUS.SUCCESS ||
+          data.reportEmailStatus === 'success'
+        ) {
+          state.reportEmailStatus = EMAIL_STATUS.SUCCESS;
+        } else {
+          state.reportEmailStatus = EMAIL_STATUS.IDLE;
+        }
+        state.reportEmailNotice =
+          typeof data.reportEmailNotice === 'string' ? data.reportEmailNotice : '';
+        syncWebsiteAuditStatus();
       } else if (
         data.phase === PHASE.QUESTIONS ||
         data.phase === PHASE.GATE ||
-        data.phase === PHASE.WAITING
+        data.phase === 'waiting'
       ) {
-        state.phase = data.phase === PHASE.WAITING ? PHASE.GATE : data.phase;
+        state.phase = data.phase === 'waiting' ? PHASE.GATE : data.phase;
+        syncWebsiteAuditStatus();
       }
     } catch (_) {
       /* ignore corrupt session */
@@ -673,6 +784,7 @@
   function clearSession() {
     try {
       sessionStorage.removeItem(SESSION_KEY);
+      sessionStorage.removeItem('jl-lead-flow-check-v3');
       sessionStorage.removeItem('jl-lead-flow-check-v2');
       sessionStorage.removeItem('jl-lead-flow-check-v1');
     } catch (_) {}
@@ -749,15 +861,21 @@
     state.scan.data = data;
     state.scan.errorCode = null;
     state.scan.errorMessage = '';
-    updateScanStatusUI();
-    updateGateChrome();
+    syncWebsiteAuditStatus();
     saveSession();
 
     track('website_grade_completed', {
       website_score_range: scoreRangeBucket(data.websiteHealthScore),
       website_grade: data.grade || '',
     });
-    announce('Website check complete.');
+
+    if (state.resultsVisible) {
+      refreshResultsFromAudit({ announceSuccess: true });
+    } else {
+      updateScanStatusUI();
+      updateGateChrome();
+      announce('Website check complete.');
+    }
   }
 
   function handleGradeFailure(error) {
@@ -767,16 +885,22 @@
       error && error.code && SAFE_GRADE_ERROR_CODES[error.code] ? error.code : null;
     state.scan.errorMessage = getErrorMessage(
       error ||
-        'We couldn\'t complete the automated website check. You can retry it or continue with the Lead Flow Check.'
+        "We couldn't complete the automated website check. You can continue with the Lead Flow Check."
     );
-    updateScanStatusUI();
-    updateGateChrome();
+    syncWebsiteAuditStatus();
     saveSession();
 
     var failProps = {};
     if (state.scan.errorCode) failProps.error_code = state.scan.errorCode;
     track('website_grade_failed', failProps);
-    announce(state.scan.errorMessage);
+
+    if (state.resultsVisible) {
+      refreshResultsFromAudit({ announceFailure: true });
+    } else {
+      updateScanStatusUI();
+      updateGateChrome();
+      announce(state.scan.errorMessage);
+    }
   }
 
   function startWebsiteGrade() {
@@ -787,6 +911,7 @@
     state.scan.errorCode = null;
     state.scan.errorMessage = '';
     state.scan.startedAt = new Date().toISOString();
+    syncWebsiteAuditStatus();
     updateScanStatusUI();
     updateGateChrome();
     saveSession();
@@ -807,27 +932,16 @@
       })
       .finally(function () {
         state.scan.promise = null;
+        syncWebsiteAuditStatus();
       });
 
     state.scan.promise = gradePromise;
     return gradePromise;
   }
 
-  async function waitForScanCompletion(maxMs) {
-    var deadline = Date.now() + (maxMs || SCAN_WAIT_MS);
-    while (state.scan.status === SCAN.RUNNING && Date.now() < deadline) {
-      await sleep(SCAN_POLL_MS);
-    }
-    if (state.scan.status === SCAN.RUNNING) {
-      state.scan.status = SCAN.TIMED_OUT;
-      updateScanStatusUI();
-      updateGateChrome();
-      saveSession();
-    }
-  }
-
   /**
-   * Reusable website scan status banner (above questions, gate, and waiting).
+   * Reusable website scan status banner (above questions and gate only).
+   * On the results page, Website Health has its own independent section.
    */
   function updateScanStatusUI() {
     if (!scanStatusEl) return;
@@ -835,7 +949,8 @@
     if (
       state.scan.status === SCAN.IDLE ||
       state.phase === PHASE.IDLE ||
-      state.phase === PHASE.RESULTS
+      state.phase === PHASE.RESULTS ||
+      state.resultsVisible
     ) {
       scanStatusEl.hidden = true;
       scanStatusEl.className = 'lfc-scan';
@@ -845,7 +960,7 @@
 
     scanStatusEl.hidden = false;
 
-    if (state.scan.status === SCAN.RUNNING) {
+    if (state.scan.status === SCAN.RUNNING || state.websiteAuditStatus === AUDIT_STATUS.RUNNING) {
       scanStatusEl.className = 'lfc-scan lfc-scan--running';
       scanStatusEl.innerHTML =
         '<span class="lfc-scan__icon" aria-hidden="true"><i class="bi bi-arrow-repeat"></i></span>' +
@@ -856,38 +971,19 @@
 
     if (state.scan.status === SCAN.SUCCESS) {
       scanStatusEl.className = 'lfc-scan lfc-scan--done';
-      var successMsg =
-        state.phase === PHASE.GATE || state.phase === PHASE.WAITING
-          ? 'Website check complete. Finish the assessment to see your results.'
-          : 'Website check complete. Finish the assessment to see your results.';
       scanStatusEl.innerHTML =
         '<span class="lfc-scan__icon" aria-hidden="true"><i class="bi bi-check-circle"></i></span>' +
-        '<div class="lfc-scan__body">' +
-        successMsg +
-        '</div>';
+        '<div class="lfc-scan__body">Website check complete. Finish the assessment to see your results.</div>';
       bindScanStatusActions();
       return;
     }
 
-    if (state.scan.status === SCAN.TIMED_OUT) {
-      scanStatusEl.className = 'lfc-scan lfc-scan--error';
-      scanStatusEl.innerHTML =
-        '<span class="lfc-scan__icon" aria-hidden="true"><i class="bi bi-clock-history"></i></span>' +
-        '<div class="lfc-scan__body">' +
-        'The website check is taking longer than expected. You can continue and view your Lead Flow results while we finish.' +
-        '<div class="lfc-scan__actions">' +
-        '<button type="button" class="lfc-btn lfc-btn--ghost lfc-scan__retry" data-lfc-action="retry-scan">Retry Website Check</button>' +
-        '</div></div>';
-      bindScanStatusActions();
-      return;
-    }
-
-    if (state.scan.status === SCAN.FAILED) {
+    if (state.scan.status === SCAN.FAILED || state.scan.status === SCAN.TIMED_OUT) {
       scanStatusEl.className = 'lfc-scan lfc-scan--error';
       scanStatusEl.innerHTML =
         '<span class="lfc-scan__icon" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></span>' +
         '<div class="lfc-scan__body">' +
-        'We couldn\'t complete the automated website check. You can retry it or continue with the Lead Flow Check.' +
+        "We couldn't complete the automated website check. You can continue with the Lead Flow Check." +
         '<div class="lfc-scan__actions">' +
         '<button type="button" class="lfc-btn lfc-btn--ghost lfc-scan__retry" data-lfc-action="retry-scan">Retry Website Check</button>' +
         '</div></div>';
@@ -905,9 +1001,6 @@
   }
 
   function gateSubmitLabel() {
-    if (state.scan.status === SCAN.RUNNING) return 'Finishing Website Check…';
-    if (state.scan.status === SCAN.TIMED_OUT) return 'Show Available Results';
-    if (state.scan.status === SCAN.FAILED) return 'Show My Results';
     return 'Show My Results';
   }
 
@@ -915,6 +1008,8 @@
     var btn = document.getElementById('lfc-submit-btn');
     if (btn && !state.submitting) {
       btn.textContent = gateSubmitLabel();
+      btn.disabled = false;
+      btn.removeAttribute('aria-busy');
     }
     var heading = document.getElementById('lfc-step-heading');
     var copy = document.getElementById('lfc-gate-copy');
@@ -926,25 +1021,10 @@
   }
 
   function gateHeadingCopy() {
-    if (state.scan.status === SCAN.SUCCESS) {
-      return {
-        title: 'Your Website & Lead Flow Results are ready.',
-        copy:
-          'Enter your information to see your Website Health Score, Lead Flow Score, priority issues, and recommended starting point.',
-      };
-    }
-    if (state.scan.status === SCAN.RUNNING || state.scan.status === SCAN.TIMED_OUT) {
-      return {
-        title: "Your Lead Flow Check is complete. We're finishing your website check.",
-        copy:
-          'Enter your information to see your scores, priority issues, and recommended starting point. You can continue even if the website check is still running.',
-      };
-    }
-    /* failed / unavailable */
     return {
-      title: 'Your Lead Flow Results are ready.',
+      title: 'Your Lead Flow results are ready.',
       copy:
-        'We couldn\'t complete the automated website check, but you can still view your Lead Flow Score and recommendations. Enter your information to continue.',
+        "We're also checking your website's performance, accessibility, SEO, and technical setup in the background. You can view your Lead Flow Score and recommendations without waiting for that check to finish.",
     };
   }
 
@@ -1149,8 +1229,10 @@
   function resolveScanStatusForResults() {
     if (state.scan.status === SCAN.SUCCESS) return 'completed';
     if (state.scan.status === SCAN.FAILED) return 'failed';
-    if (state.scan.status === SCAN.TIMED_OUT) return 'timed_out';
-    if (state.scan.status === SCAN.RUNNING) return 'timed_out';
+    if (state.scan.status === SCAN.RUNNING) return 'running';
+    if (state.scan.status === SCAN.TIMED_OUT) {
+      return state.scan.promise ? 'running' : 'failed';
+    }
     return 'unavailable';
   }
 
@@ -1331,7 +1413,261 @@
 
   function renderIdle() {
     return (
-      '<p class="lfc-idle-note">Enter your website above to start the Website &amp; Lead Flow Check.</p>'
+      '<p class="lfc-idle-note">Enter your website above to start The Lead Flow Check.</p>'
+    );
+  }
+
+  /**
+   * Persist contact-gate field values into state before leaving the gate
+   * so visitors never retype information already entered.
+   */
+  function syncContactFromGateForm(form) {
+    var gateForm = form || document.getElementById('lfc-gate-form');
+    if (!gateForm) return;
+    if (gateForm.firstName) {
+      state.contact.firstName = String(gateForm.firstName.value || '').trim();
+    }
+    if (gateForm.email) {
+      state.contact.email = String(gateForm.email.value || '').trim();
+    }
+    if (gateForm.phone) {
+      state.contact.phone = String(gateForm.phone.value || '').trim();
+    }
+    if (gateForm.businessName) {
+      state.contact.businessName = String(gateForm.businessName.value || '').trim();
+    }
+    var inquirySelect = gateForm.querySelector('#lfc-inquiry-volume');
+    if (inquirySelect) {
+      state.contact.inquiryVolume = String(inquirySelect.value || '');
+    }
+  }
+
+  function reportEmailNoticeHtml() {
+    if (state.reportEmailStatus !== EMAIL_STATUS.ERROR || !state.reportEmailNotice) {
+      return '';
+    }
+    return (
+      '<div class="lfc-email-notice" role="status" aria-live="polite">' +
+      '<p class="lfc-email-notice__text">' +
+      escapeHtml(state.reportEmailNotice) +
+      '</p>' +
+      '</div>'
+    );
+  }
+
+  function websiteHealthSectionHtml(r) {
+    var auditStatus = state.websiteAuditStatus;
+    var scanStatus = r.scanStatus || resolveScanStatusForResults();
+    var scan = r.scan;
+
+    if (auditStatus === AUDIT_STATUS.RUNNING || scanStatus === 'running') {
+      return (
+        '<section class="lfc-results__section lfc-website-health" id="lfc-website-health" aria-labelledby="lfc-health-heading" aria-busy="true">' +
+        '<h3 id="lfc-health-heading">Website Health</h3>' +
+        '<p class="lfc-website-health__status">' +
+        '<span class="lfc-audit-progress" role="status">' +
+        '<span class="lfc-audit-progress__spinner" aria-hidden="true"></span>' +
+        '<span>Technical check in progress…</span>' +
+        '</span>' +
+        '</p>' +
+        '<p class="lfc-panel__copy">We’re checking performance, accessibility, SEO, and technical best practices. You can review the rest of your recommendations while this finishes.</p>' +
+        '</section>'
+      );
+    }
+
+    if (auditStatus === AUDIT_STATUS.SUCCESS && scanStatus === 'completed' && scan) {
+      var techItems = r.technicalOpportunities || [];
+      var techHtml = '';
+      if (techItems.length) {
+        techHtml =
+          '<div class="lfc-tech-list">' +
+          techItems
+            .map(function (item) {
+              return (
+                '<article class="lfc-tech-item">' +
+                '<p class="lfc-tech-item__cat">' +
+                escapeHtml(item.category) +
+                '</p>' +
+                '<p class="lfc-tech-item__title">' +
+                escapeHtml(item.title) +
+                '</p>' +
+                '<p class="lfc-tech-item__desc">' +
+                escapeHtml(item.description) +
+                '</p>' +
+                '</article>'
+              );
+            })
+            .join('') +
+          '</div>';
+      } else {
+        techHtml =
+          '<p class="lfc-panel__copy">No major technical opportunities stood out in the automated check.</p>';
+      }
+
+      return (
+        '<section class="lfc-results__section lfc-website-health" id="lfc-website-health" aria-labelledby="lfc-health-heading">' +
+        '<h3 id="lfc-health-heading">Website Health</h3>' +
+        '<div class="lfc-score-grid lfc-score-grid--single">' +
+        '<article class="lfc-score-card">' +
+        '<p class="lfc-score-card__label">Website Health Score</p>' +
+        '<p class="lfc-score-card__source">From automated browser-based website audit</p>' +
+        scoreRingHtml(scan.websiteHealthScore, 'Website Health Score') +
+        '<p class="lfc-score-card__grade">Grade: ' +
+        escapeHtml(scan.grade || '—') +
+        '</p>' +
+        miniMetricsHtml(scan.categories || {}) +
+        '</article>' +
+        '</div>' +
+        '<h4 class="lfc-website-health__findings-title">Technical opportunities</h4>' +
+        techHtml +
+        '<p class="lfc-panel__copy" style="font-size:0.8125rem;margin-top:0.75rem;">' +
+        'Automated website audits measure technical signals in a browser—they do not evaluate business fit, writing quality, design taste, conversion strategy, or complete accessibility on their own.' +
+        '</p>' +
+        '</section>'
+      );
+    }
+
+    /* error / unavailable — non-blocking */
+    return (
+      '<section class="lfc-results__section lfc-website-health" id="lfc-website-health" aria-labelledby="lfc-health-heading">' +
+      '<h3 id="lfc-health-heading">Website Health</h3>' +
+      '<div class="lfc-website-health__notice" role="status">' +
+      '<p>' +
+      "We couldn’t complete the automated website check right now. Your Lead Flow results and recommendations are still available." +
+      '</p>' +
+      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="retry-scan">Retry Website Check</button>' +
+      '</div>' +
+      '</section>'
+    );
+  }
+
+  function leadFlowCardHtml(r) {
+    var breakdown = r.areas
+      .map(function (a) {
+        var pct = Math.round(a.ratio * 100);
+        return (
+          '<li class="lfc-breakdown__item">' +
+          '<div class="lfc-breakdown__meta">' +
+          '<span class="lfc-breakdown__name">' +
+          escapeHtml(a.name) +
+          '</span>' +
+          '<span class="lfc-breakdown__pts">' +
+          a.points +
+          '/' +
+          a.maxPoints +
+          '</span>' +
+          '</div>' +
+          '<div class="lfc-breakdown__bar" aria-hidden="true"><span style="width:' +
+          pct +
+          '%"></span></div>' +
+          '<p class="lfc-breakdown__answer">' +
+          escapeHtml(a.optionLabel) +
+          '</p>' +
+          '</li>'
+        );
+      })
+      .join('');
+
+    return (
+      '<article class="lfc-score-card">' +
+      '<p class="lfc-score-card__label">Lead Flow Score</p>' +
+      '<p class="lfc-score-card__source">From your answers</p>' +
+      scoreRingHtml(r.leadFlowScore, 'Lead Flow Score') +
+      '<p class="lfc-score-card__tier">' +
+      escapeHtml(r.tier.title) +
+      ' · ' +
+      escapeHtml(String(r.leadFlowScore)) +
+      '/100</p>' +
+      '<ol class="lfc-breakdown">' +
+      breakdown +
+      '</ol>' +
+      '</article>'
+    );
+  }
+
+  function renderResults() {
+    var r = state.results;
+    if (!r) return '<p>Unable to load results. Please retake the assessment.</p>';
+
+    var metaLine =
+      '<p class="lfc-meta-line">Website: ' +
+      escapeHtml(state.websiteUrl) +
+      '</p>';
+
+    var findings = r.findings
+      .map(function (f) {
+        return (
+          '<article class="lfc-finding">' +
+          '<h4 class="lfc-finding__area">' +
+          escapeHtml(f.name) +
+          '</h4>' +
+          '<p class="lfc-finding__status">' +
+          escapeHtml(f.status) +
+          '</p>' +
+          '<p class="lfc-finding__why"><strong>Why it matters:</strong> ' +
+          escapeHtml(f.why) +
+          '</p>' +
+          '<p class="lfc-finding__rec"><strong>Recommended improvement:</strong> ' +
+          escapeHtml(f.recommendation) +
+          '</p>' +
+          '</article>'
+        );
+      })
+      .join('');
+
+    var primaryHref = consultationUrl(r.path.id, r.tier.id, 'results-primary');
+    var secondaryHref = consultationUrl(r.path.id, r.tier.id, 'results-secondary');
+    var startProjectHref = consultationUrl(r.path.id, r.tier.id, 'results-start-project');
+
+    return (
+      '<div class="lfc-results" id="lfc-results">' +
+      '<header class="lfc-results__heading">' +
+      '<h2 class="lfc-panel__title" id="lfc-step-heading" tabindex="-1">Your Lead Flow Check Results</h2>' +
+      metaLine +
+      '</header>' +
+      reportEmailNoticeHtml() +
+      '<section class="lfc-results__section lfc-lead-flow-results" aria-labelledby="lfc-lead-heading">' +
+      '<h3 id="lfc-lead-heading" class="visually-hidden">Lead Flow</h3>' +
+      '<div class="lfc-score-grid lfc-score-grid--single">' +
+      leadFlowCardHtml(r) +
+      '</div>' +
+      '<section class="lfc-results__section" aria-labelledby="lfc-findings-heading">' +
+      '<h3 id="lfc-findings-heading">Priority Lead Flow findings</h3>' +
+      '<div class="lfc-findings">' +
+      findings +
+      '</div>' +
+      '</section>' +
+      '<section class="lfc-results__section lfc-recommend" aria-labelledby="lfc-path-heading">' +
+      '<p class="lfc-recommend__label">' +
+      escapeHtml(r.path.label) +
+      '</p>' +
+      '<h3 id="lfc-path-heading">' +
+      escapeHtml(r.path.heading) +
+      '</h3>' +
+      '<p>' +
+      escapeHtml(r.path.copy) +
+      '</p>' +
+      '<div class="lfc-results__actions">' +
+      '<a class="lfc-btn lfc-btn--primary" href="' +
+      escapeHtml(primaryHref) +
+      '" data-lfc-track="recommendation" data-lfc-cta="primary">' +
+      escapeHtml(r.path.cta) +
+      '</a>' +
+      '<a class="lfc-btn lfc-btn--ghost" href="' +
+      escapeHtml(secondaryHref) +
+      '" data-lfc-track="recommendation" data-lfc-cta="secondary">Talk It Through First</a>' +
+      '<a class="lfc-btn lfc-btn--ghost" href="' +
+      escapeHtml(startProjectHref) +
+      '" data-lfc-track="recommendation" data-lfc-cta="start-project">Start a Project</a>' +
+      '</div>' +
+      '</section>' +
+      '</section>' +
+      websiteHealthSectionHtml(r) +
+      '<div class="lfc-results__footer">' +
+      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="print">Print or Save Results</button>' +
+      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="restart">Retake the Assessment</button>' +
+      '</div>' +
+      '</div>'
     );
   }
 
@@ -1454,21 +1790,16 @@
       '<p class="lfc-disclosure">We’ll use this information to provide your results and may follow up about the issues identified in your assessment. No spam or automatic mailing-list subscription.</p>' +
       submitError +
       '<div class="lfc-nav">' +
-      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="gate-back">Back</button>' +
-      '<button type="submit" class="lfc-btn lfc-btn--primary" id="lfc-submit-btn">' +
-      escapeHtml(gateSubmitLabel()) +
+      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="gate-back"' +
+      (state.submitting ? ' disabled' : '') +
+      '>Back</button>' +
+      '<button type="submit" class="lfc-btn lfc-btn--primary" id="lfc-submit-btn"' +
+      (state.submitting || state.submitted ? ' disabled aria-busy="true"' : '') +
+      '>' +
+      escapeHtml(state.submitting ? 'Preparing Results…' : gateSubmitLabel()) +
       '</button>' +
       '</div>' +
       '</form>'
-    );
-  }
-
-  function renderWaiting() {
-    return (
-      '<div class="lfc-panel lfc-waiting">' +
-      '<h2 class="lfc-panel__title" id="lfc-step-heading" tabindex="-1">Preparing your results</h2>' +
-      '<p class="lfc-panel__copy">Combining your Lead Flow answers with your website check…</p>' +
-      '</div>'
     );
   }
 
@@ -1510,7 +1841,7 @@
       ['Performance', categories.performance],
       ['Accessibility', categories.accessibility],
       ['SEO', categories.seo],
-      ['Best practices', categories.bestPractices],
+      ['Technical best practices', categories.bestPractices],
     ];
     var html = '<ul class="lfc-mini-metrics">';
     rows.forEach(function (row) {
@@ -1524,206 +1855,6 @@
     });
     html += '</ul>';
     return html;
-  }
-
-  function websiteHealthCardHtml(r) {
-    var scan = r.scan;
-    if (r.scanStatus === 'completed' && scan) {
-      return (
-        '<article class="lfc-score-card">' +
-        '<p class="lfc-score-card__label">Website Health</p>' +
-        '<p class="lfc-score-card__source">From automated browser-based website audit</p>' +
-        scoreRingHtml(scan.websiteHealthScore, 'Website Health Score') +
-        '<p class="lfc-score-card__grade">Grade: ' +
-        escapeHtml(scan.grade || '—') +
-        '</p>' +
-        miniMetricsHtml(scan.categories || {}) +
-        '</article>'
-      );
-    }
-
-    var unavailableCopy =
-      r.scanStatus === 'failed'
-        ? 'Website check unavailable. The automated audit could not be completed for this address.'
-        : r.scanStatus === 'timed_out'
-          ? 'Website check unavailable. The audit did not finish in time for this session.'
-          : 'Website check unavailable for this session.';
-
-    return (
-      '<article class="lfc-score-card">' +
-      '<p class="lfc-score-card__label">Website Health</p>' +
-      '<p class="lfc-score-card__source">From automated browser-based website audit</p>' +
-      '<div class="lfc-unavailable">' +
-      '<p>' +
-      escapeHtml(unavailableCopy) +
-      '</p>' +
-      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="retry-scan">Retry Website Check</button>' +
-      '</div>' +
-      '</article>'
-    );
-  }
-
-  function leadFlowCardHtml(r) {
-    var breakdown = r.areas
-      .map(function (a) {
-        var pct = Math.round(a.ratio * 100);
-        return (
-          '<li class="lfc-breakdown__item">' +
-          '<div class="lfc-breakdown__meta">' +
-          '<span class="lfc-breakdown__name">' +
-          escapeHtml(a.name) +
-          '</span>' +
-          '<span class="lfc-breakdown__pts">' +
-          a.points +
-          '/' +
-          a.maxPoints +
-          '</span>' +
-          '</div>' +
-          '<div class="lfc-breakdown__bar" aria-hidden="true"><span style="width:' +
-          pct +
-          '%"></span></div>' +
-          '<p class="lfc-breakdown__answer">' +
-          escapeHtml(a.optionLabel) +
-          '</p>' +
-          '</li>'
-        );
-      })
-      .join('');
-
-    return (
-      '<article class="lfc-score-card">' +
-      '<p class="lfc-score-card__label">Lead Flow</p>' +
-      '<p class="lfc-score-card__source">From your answers</p>' +
-      scoreRingHtml(r.leadFlowScore, 'Lead Flow Score') +
-      '<p class="lfc-score-card__tier">' +
-      escapeHtml(r.tier.title) +
-      '</p>' +
-      '<ol class="lfc-breakdown">' +
-      breakdown +
-      '</ol>' +
-      '</article>'
-    );
-  }
-
-  function renderResults() {
-    var r = state.results;
-    if (!r) return '<p>Unable to load results. Please retake the assessment.</p>';
-
-    var scannedAt = r.scan && r.scan.scannedAt ? formatScannedAt(r.scan.scannedAt) : '';
-    var metaLine =
-      '<p class="lfc-meta-line">Website: ' +
-      escapeHtml(state.websiteUrl) +
-      (scannedAt ? ' · Checked ' + escapeHtml(scannedAt) : '') +
-      '</p>';
-
-    var techItems = r.technicalOpportunities || [];
-    var techHtml = '';
-    if (techItems.length) {
-      techHtml = techItems
-        .map(function (item) {
-          return (
-            '<article class="lfc-tech-item">' +
-            '<p class="lfc-tech-item__cat">' +
-            escapeHtml(item.category) +
-            '</p>' +
-            '<p class="lfc-tech-item__title">' +
-            escapeHtml(item.title) +
-            '</p>' +
-            '<p class="lfc-tech-item__desc">' +
-            escapeHtml(item.description) +
-            '</p>' +
-            '</article>'
-          );
-        })
-        .join('');
-    } else if (r.scanStatus === 'completed') {
-      techHtml =
-        '<p class="lfc-panel__copy">No major technical opportunities stood out in the automated check.</p>';
-    } else {
-      techHtml =
-        '<p class="lfc-panel__copy">Technical opportunities will appear when the automated website check completes successfully.</p>';
-    }
-
-    var findings = r.findings
-      .map(function (f) {
-        return (
-          '<article class="lfc-finding">' +
-          '<h4 class="lfc-finding__area">' +
-          escapeHtml(f.name) +
-          '</h4>' +
-          '<p class="lfc-finding__status">' +
-          escapeHtml(f.status) +
-          '</p>' +
-          '<p class="lfc-finding__why"><strong>Why it matters:</strong> ' +
-          escapeHtml(f.why) +
-          '</p>' +
-          '<p class="lfc-finding__rec"><strong>Recommended improvement:</strong> ' +
-          escapeHtml(f.recommendation) +
-          '</p>' +
-          '</article>'
-        );
-      })
-      .join('');
-
-    var primaryHref = consultationUrl(r.path.id, r.tier.id, 'results-primary');
-    var secondaryHref = consultationUrl(r.path.id, r.tier.id, 'results-secondary');
-    var startProjectHref = consultationUrl(r.path.id, r.tier.id, 'results-start-project');
-
-    return (
-      '<div class="lfc-results" id="lfc-results">' +
-      '<header class="lfc-results__heading">' +
-      '<h2 class="lfc-panel__title" id="lfc-step-heading" tabindex="-1">Your Website &amp; Lead Flow Results</h2>' +
-      metaLine +
-      '</header>' +
-      '<div class="lfc-score-grid">' +
-      websiteHealthCardHtml(r) +
-      leadFlowCardHtml(r) +
-      '</div>' +
-      '<section class="lfc-results__section" aria-labelledby="lfc-tech-heading">' +
-      '<h3 id="lfc-tech-heading">Top Technical Opportunities</h3>' +
-      '<div class="lfc-tech-list">' +
-      techHtml +
-      '</div>' +
-      '<p class="lfc-panel__copy" style="font-size:0.8125rem;margin-top:0.75rem;">' +
-      'Automated website audits measure technical signals in a browser—they do not evaluate business fit, writing quality, design taste, conversion strategy, or complete accessibility on their own.' +
-      '</p>' +
-      '</section>' +
-      '<section class="lfc-results__section" aria-labelledby="lfc-findings-heading">' +
-      '<h3 id="lfc-findings-heading">Top Lead Flow Opportunities</h3>' +
-      '<div class="lfc-findings">' +
-      findings +
-      '</div>' +
-      '</section>' +
-      '<section class="lfc-results__section lfc-recommend" aria-labelledby="lfc-path-heading">' +
-      '<p class="lfc-recommend__label">' +
-      escapeHtml(r.path.label) +
-      '</p>' +
-      '<h3 id="lfc-path-heading">' +
-      escapeHtml(r.path.heading) +
-      '</h3>' +
-      '<p>' +
-      escapeHtml(r.path.copy) +
-      '</p>' +
-      '<div class="lfc-results__actions">' +
-      '<a class="lfc-btn lfc-btn--primary" href="' +
-      escapeHtml(primaryHref) +
-      '" data-lfc-track="recommendation" data-lfc-cta="primary">' +
-      escapeHtml(r.path.cta) +
-      '</a>' +
-      '<a class="lfc-btn lfc-btn--ghost" href="' +
-      escapeHtml(secondaryHref) +
-      '" data-lfc-track="recommendation" data-lfc-cta="secondary">Talk It Through First</a>' +
-      '<a class="lfc-btn lfc-btn--ghost" href="' +
-      escapeHtml(startProjectHref) +
-      '" data-lfc-track="recommendation" data-lfc-cta="start-project">Start a Project</a>' +
-      '</div>' +
-      '</section>' +
-      '<div class="lfc-results__footer">' +
-      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="print">Print or Save Results</button>' +
-      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="restart">Retake the Assessment</button>' +
-      '</div>' +
-      '</div>'
-    );
   }
 
   function focusStepHeading() {
@@ -1761,8 +1892,9 @@
     }
   }
 
-  function render() {
+  function render(opts) {
     if (!root) return;
+    opts = opts || {};
 
     if (state.phase === PHASE.IDLE) {
       root.innerHTML = renderIdle();
@@ -1770,8 +1902,6 @@
       root.innerHTML = renderQuestion();
     } else if (state.phase === PHASE.GATE) {
       root.innerHTML = renderGate();
-    } else if (state.phase === PHASE.WAITING) {
-      root.innerHTML = renderWaiting();
     } else if (state.phase === PHASE.RESULTS) {
       root.innerHTML = renderResults();
     }
@@ -1781,9 +1911,11 @@
     updateScanStatusUI();
     saveSession();
 
-    window.requestAnimationFrame(function () {
-      focusStepHeading();
-    });
+    if (!opts.skipFocus) {
+      window.requestAnimationFrame(function () {
+        focusStepHeading();
+      });
+    }
   }
 
   function bindPanelEvents() {
@@ -1807,6 +1939,26 @@
         e.preventDefault();
         handleGateSubmit(gateForm);
       });
+      /* Keep contact fields in state as the visitor types so Back/forward never clears them */
+      ['firstName', 'email', 'phone', 'businessName'].forEach(function (name) {
+        var field = gateForm.elements[name];
+        if (!field) return;
+        field.addEventListener('input', function () {
+          syncContactFromGateForm(gateForm);
+          saveSession();
+        });
+        field.addEventListener('change', function () {
+          syncContactFromGateForm(gateForm);
+          saveSession();
+        });
+      });
+      var inquirySelect = gateForm.querySelector('#lfc-inquiry-volume');
+      if (inquirySelect) {
+        inquirySelect.addEventListener('change', function () {
+          syncContactFromGateForm(gateForm);
+          saveSession();
+        });
+      }
     }
 
     root.querySelectorAll('[data-lfc-track="recommendation"]').forEach(function (a) {
@@ -1830,6 +1982,8 @@
       return;
     }
     if (action === 'gate-back') {
+      syncContactFromGateForm();
+      saveSession();
       state.phase = PHASE.QUESTIONS;
       state.questionIndex = QUESTIONS.length - 1;
       render();
@@ -1853,6 +2007,7 @@
       state.scan.errorMessage = '';
       state.scan.startedAt = null;
       state.scan.promise = null;
+      syncWebsiteAuditStatus();
       updateScanStatusUI();
       saveSession();
       announce('Enter a new website URL to recheck. Your Lead Flow answers are saved.');
@@ -1899,6 +2054,11 @@
         results: null,
         submitting: false,
         pendingSubmitError: '',
+        leadSubmissionStatus: LEAD_STATUS.IDLE,
+        websiteAuditStatus: AUDIT_STATUS.IDLE,
+        reportEmailStatus: EMAIL_STATUS.IDLE,
+        resultsVisible: false,
+        reportEmailNotice: '',
       };
       clearSession();
       updateScanStatusUI();
@@ -2056,31 +2216,39 @@
     state.gradeUrl = normalized.gradeUrl;
 
     if (honeypot) {
-      state.phase = PHASE.WAITING;
-      render();
-      await waitForScanCompletion(SCAN_WAIT_MS);
+      state.leadSubmissionStatus = LEAD_STATUS.SUCCESS;
+      state.reportEmailStatus = EMAIL_STATUS.IDLE;
+      state.resultsVisible = true;
+      syncWebsiteAuditStatus();
       finishWithResults(buildResults());
       return;
     }
 
-    state.phase = PHASE.WAITING;
+    /* Stay on the contact gate with a temporary label while ONLY the lead save runs.
+       Never wait for website audit or email delivery before revealing Lead Flow results. */
     state.submitting = true;
-    render();
+    state.leadSubmissionStatus = LEAD_STATUS.SUBMITTING;
+    state.reportEmailStatus = EMAIL_STATUS.SENDING;
+    state.resultsVisible = false;
+    state.reportEmailNotice = '';
+    render({ skipFocus: true });
 
-    await waitForScanCompletion(SCAN_WAIT_MS);
-
+    syncWebsiteAuditStatus();
     var results = buildResults();
 
     try {
       var outcome = await submitLead(results);
       if (!outcome || !outcome.ok) {
-        var failMsg = getErrorMessage(
+        var failMsg = sanitizeVisitorError(
           (outcome && outcome.message) ||
             'We could not save your assessment. Check your connection and try again.'
         );
         devLog('[lead-flow-check] submit failed', outcome);
         state.phase = PHASE.GATE;
         state.submitting = false;
+        state.leadSubmissionStatus = LEAD_STATUS.ERROR;
+        state.reportEmailStatus = EMAIL_STATUS.IDLE;
+        state.resultsVisible = false;
         state.pendingSubmitError = failMsg;
         render();
         announce('Submission failed. Please try again.');
@@ -2090,16 +2258,33 @@
       }
 
       state.pendingSubmitError = '';
+      state.leadSubmissionStatus = LEAD_STATUS.SUCCESS;
+      state.resultsVisible = true;
+
+      if (outcome.emailed === false) {
+        state.reportEmailStatus = EMAIL_STATUS.ERROR;
+        state.reportEmailNotice =
+          "Your results are available here, but we couldn't email your copy right now.";
+      } else {
+        state.reportEmailStatus = EMAIL_STATUS.SUCCESS;
+        state.reportEmailNotice = '';
+      }
+
       track('combined_assessment_submitted', {
         score_tier: results.tier.id,
         recommended_path: results.path.id,
         website_scan_status: results.scanStatus,
+        report_email_status: state.reportEmailStatus,
+        website_audit_status: state.websiteAuditStatus,
       });
       finishWithResults(results);
     } catch (err) {
       devLog('[lead-flow-check] submit exception', err);
       state.phase = PHASE.GATE;
       state.submitting = false;
+      state.leadSubmissionStatus = LEAD_STATUS.ERROR;
+      state.reportEmailStatus = EMAIL_STATUS.IDLE;
+      state.resultsVisible = false;
       state.pendingSubmitError =
         'Network error. Check your connection and try again. Your answers are still saved on this device.';
       render();
@@ -2112,20 +2297,38 @@
     state.submitted = true;
     state.submitting = false;
     state.phase = PHASE.RESULTS;
+    state.resultsVisible = true;
+    if (
+      state.leadSubmissionStatus === LEAD_STATUS.IDLE ||
+      state.leadSubmissionStatus === LEAD_STATUS.SUBMITTING
+    ) {
+      state.leadSubmissionStatus = LEAD_STATUS.SUCCESS;
+    }
+    syncWebsiteAuditStatus();
     saveSession();
     track('combined_results_viewed', {
       score_tier: results.tier.id,
       recommended_path: results.path.id,
       website_scan_status: results.scanStatus,
+      website_audit_status: state.websiteAuditStatus,
     });
-    announce(
-      'Your Lead Flow Score is ' +
-        results.leadFlowScore +
-        ' out of 100.' +
-        (results.scanStatus === 'completed'
-          ? ' Website Health Score is ' + results.scan.websiteHealthScore + ' out of 100.'
-          : '')
-    );
+    var announceParts = [
+      'Your Lead Flow Score is ' + results.leadFlowScore + ' out of 100.',
+    ];
+    if (results.scanStatus === 'completed' && results.scan) {
+      announceParts.push(
+        'Website Health Score is ' + results.scan.websiteHealthScore + ' out of 100.'
+      );
+    } else if (
+      state.websiteAuditStatus === AUDIT_STATUS.RUNNING ||
+      results.scanStatus === 'running'
+    ) {
+      announceParts.push('Website technical check is still in progress.');
+    }
+    if (state.reportEmailStatus === EMAIL_STATUS.ERROR && state.reportEmailNotice) {
+      announceParts.push(state.reportEmailNotice);
+    }
+    announce(announceParts.join(' '));
     render();
     scrollToAssessment();
   }
