@@ -486,9 +486,7 @@
     if (state.phase === PHASE.RESULTS) {
       render({ skipFocus: true });
       if (opts && opts.announceSuccess && scanData) {
-        announce(
-          'Website Health Score is ' + scanData.websiteHealthScore + ' out of 100.'
-        );
+        announce('Website Health check complete.');
       } else if (opts && opts.announceFailure) {
         announce(
           "We couldn't complete the automated website check right now. Your Lead Flow results and recommendations are still available."
@@ -1442,16 +1440,616 @@
     }
   }
 
-  function reportEmailNoticeHtml() {
-    if (state.reportEmailStatus !== EMAIL_STATUS.ERROR || !state.reportEmailNotice) {
-      return '';
+  function strongestAreas(areas, count) {
+    var sorted = areas.slice().sort(function (a, b) {
+      if (a.ratio !== b.ratio) return b.ratio - a.ratio;
+      return a.name.localeCompare(b.name);
+    });
+    return sorted.slice(0, count || 3);
+  }
+
+  function normalizeCategoryScore(area) {
+    if (!area || !area.maxPoints) return 0;
+    return Math.max(0, Math.min(100, Math.round((Number(area.points) || 0) / area.maxPoints * 100)));
+  }
+
+  function getCategoryStatusLabel(pct) {
+    if (pct >= 80) return 'Strong';
+    if (pct >= 60) return 'Needs attention';
+    return 'Priority';
+  }
+
+  function getStrongestCategories(areas, count) {
+    return strongestAreas(areas || [], count || 3).filter(function (a) {
+      return normalizeCategoryScore(a) >= 70;
+    });
+  }
+
+  function getPriorityFindings(areas) {
+    return (areas || []).map(findingForArea);
+  }
+
+  function getWebsiteHealthNumber(r) {
+    if (
+      r &&
+      r.scanStatus === 'completed' &&
+      r.scan &&
+      r.scan.websiteHealthScore != null &&
+      !isNaN(Number(r.scan.websiteHealthScore))
+    ) {
+      return Number(r.scan.websiteHealthScore);
     }
+    return null;
+  }
+
+  function getResultsSummary(r) {
+    var lead = Number(r.leadFlowScore) || 0;
+    var health = getWebsiteHealthNumber(r);
+    var weaker =
+      health == null ? 'lead' : health < lead ? 'website' : lead < health ? 'lead' : 'balanced';
+
+    if (health != null && health >= 80 && lead < 60) {
+      return {
+        insight:
+          "Your website isn't the biggest problem. What happens after someone becomes interested is.",
+        copy:
+          "The technical foundation of your website is strong, but your Lead Flow score shows significant friction between interest, inquiry, follow-up, and the next step. I'd focus on the customer journey before rebuilding the website.",
+      };
+    }
+    if (health != null && health < 60 && lead >= 70) {
+      return {
+        insight: 'Your customer process is working better than the website supporting it.',
+        copy:
+          'The operational path after interest looks relatively strong, but the website experience may be creating unnecessary friction before visitors inquire. Improving clarity, speed, and usability can help more of the right people reach that stronger process.',
+      };
+    }
+    if ((health == null || health < 60) && lead < 60) {
+      return {
+        insight: 'There are opportunities on both sides of the customer journey.',
+        copy:
+          weaker === 'website'
+            ? 'Both the website experience and what happens afterward have room to improve. Because the technical score is currently lower, I would tighten the website experience first while planning the operational follow-through.'
+            : 'Both the website experience and what happens afterward have room to improve. Because Lead Flow is currently lower, I would prioritize the path from interest to follow-up while still addressing technical gaps.',
+      };
+    }
+    if (health != null && health >= 80 && lead >= 80) {
+      return {
+        insight: 'You have a strong foundation. The opportunity now is refinement.',
+        copy:
+          'Both your website health and lead-flow process look solid. Targeted optimization—clearer wording, faster follow-up, or a few technical polish items—is more appropriate than a major rebuild.',
+      };
+    }
+
+    if (weaker === 'website') {
+      return {
+        insight: 'The website experience is the weaker link right now.',
+        copy:
+          'Your Lead Flow answers show a usable process, but the technical check suggests the public site may be creating friction before visitors reach it. I would improve the website experience first, then refine what happens after someone inquires.',
+      };
+    }
+    return {
+      insight: 'The customer journey after interest is where I would focus first.',
+      copy:
+        health != null && health >= 70
+          ? 'Your website has a workable technical base. The clearer opportunity is reducing friction in how visitors inquire, schedule, get follow-up, and stay organized afterward.'
+          : 'Several points in the journey still ask visitors to wait, figure out the next step, or rely on manual follow-up. Tightening those handoffs is the most practical place to start.',
+    };
+  }
+
+  function getPrimaryInsight(r) {
+    var weak = r.weakest || [];
+    var names = weak.slice(0, 2).map(function (a) {
+      return a.name;
+    });
+    var health = getWebsiteHealthNumber(r);
+    var lead = Number(r.leadFlowScore) || 0;
+    var heading =
+      health != null && health >= 80 && lead < 60
+        ? "Your website isn't the problem. The handoff after interest is."
+        : names.length
+          ? 'Start with ' + names.join(' and ').toLowerCase() + '.'
+          : 'Focus on the weakest handoff in the customer journey.';
+
+    var copyParts = [];
+    if (health != null && health >= 80) {
+      copyParts.push('Your site has a strong technical foundation');
+    } else if (health != null && health < 60) {
+      copyParts.push('The website experience still has meaningful technical friction');
+    } else {
+      copyParts.push('Once someone decides they are interested');
+    }
+
+    if (names.length) {
+      copyParts.push(
+        (health != null && health >= 80 ? ', but ' : ', and ') +
+          names.join(' and ').toLowerCase() +
+          (names.length === 1 ? ' is' : ' are') +
+          ' creating more friction than they should.'
+      );
+    } else {
+      copyParts.push(', the path forward can become less clear.');
+    }
+
+    var closing =
+      weak[0] && (weak[0].id === 'followUp' || weak[0].id === 'leadOrg' || weak[0].id === 'scheduling')
+        ? 'The first thing I’d fix is the path from inquiry to a clear, organized next step.'
+        : weak[0] && weak[0].id === 'nextStep'
+          ? 'The first thing I’d fix is making one primary next step obvious.'
+          : 'The first thing I’d fix is the weakest step between interest and a booked conversation.';
+
+    return {
+      heading: heading,
+      copy: copyParts.join(''),
+      closing: closing,
+    };
+  }
+
+  function getRecommendedCapabilities(r) {
+    var caps = [];
+    function add(label) {
+      if (caps.indexOf(label) === -1) caps.push(label);
+    }
+    var weakIds = (r.weakest || []).map(function (a) {
+      return a.id;
+    });
+    weakIds.forEach(function (id) {
+      if (id === AREA_IDS.messageClarity || id === AREA_IDS.mobile) add('Clearer website messaging');
+      if (id === AREA_IDS.nextStep || id === AREA_IDS.forms) {
+        add('Clearer inquiry path');
+        add('Conditional intake');
+      }
+      if (id === AREA_IDS.scheduling) add('Scheduling connection');
+      if (id === AREA_IDS.followUp) {
+        add('Immediate confirmations');
+        add('Lead routing');
+      }
+      if (id === AREA_IDS.leadOrg) add('Organized lead tracking');
+    });
+    if (!caps.length && r.path) {
+      if (r.path.id === 'website-experience') {
+        add('Clearer website messaging');
+        add('Clearer inquiry path');
+      } else if (r.path.id === 'customer-journey') {
+        add('Clearer inquiry path');
+        add('Conditional intake');
+        add('Scheduling connection');
+      } else {
+        add('Immediate confirmations');
+        add('Lead routing');
+        add('Organized lead tracking');
+      }
+    }
+    return caps.slice(0, 6);
+  }
+
+  function getRecommendationCopy(r) {
+    var health = getWebsiteHealthNumber(r);
+    var path = r.path || {};
+    if (health != null && health >= 80 && (Number(r.leadFlowScore) || 0) < 70) {
+      return (
+        'Your website already has a strong technical foundation. The larger opportunity is what happens after someone becomes interested. I’d focus first on creating a clearer next step, improving follow-up, and organizing new leads so less depends on manual work.'
+      );
+    }
+    return path.copy || '';
+  }
+
+  function maskEmail(email) {
+    var raw = String(email || '').trim();
+    var at = raw.indexOf('@');
+    if (at < 1) return '';
+    var local = raw.slice(0, at);
+    var domain = raw.slice(at + 1);
+    return local.charAt(0) + '***@' + domain;
+  }
+
+  function translateTechnicalFinding(item) {
+    var title = String((item && item.title) || '');
+    var desc = String((item && item.description) || '');
+    var blob = (title + ' ' + desc).toLowerCase();
+    if (/largest contentful paint|lcp|speed up the main|main visible content/.test(blob)) {
+      return {
+        eyebrow: 'SPEED',
+        headline: 'Your main visible content could load faster.',
+        copy:
+          'The largest content element on the page takes longer than ideal to appear. Improving this can make the site feel faster to visitors.',
+        detail: title || 'Largest Contentful Paint',
+      };
+    }
+    if (/properly size images|image|webp|compress/.test(blob)) {
+      return {
+        eyebrow: 'IMAGE EFFICIENCY',
+        headline: 'Some images could be delivered more efficiently.',
+        copy: 'Resizing or compressing images can reduce how much visitors have to download.',
+        detail: title || 'Image delivery',
+      };
+    }
+    if (/render-blocking|javascript|main-thread|interaction|total blocking/.test(blob)) {
+      return {
+        eyebrow: 'INTERACTION SPEED',
+        headline: 'Some browser work may delay responsiveness.',
+        copy:
+          'Reducing unnecessary JavaScript work can help pages respond more quickly when visitors interact.',
+        detail: title || 'Main-thread work',
+      };
+    }
+    if (/accessibility|contrast|name|aria|label/.test(blob)) {
+      return {
+        eyebrow: 'ACCESSIBILITY',
+        headline: 'Some visitors may hit barriers completing key actions.',
+        copy:
+          desc ||
+          'Improving labels, contrast, or interactive naming can make the page easier for more people to use.',
+        detail: title,
+      };
+    }
+    if (/seo|meta|document title|description/.test(blob)) {
+      return {
+        eyebrow: 'SEARCH FUNDAMENTALS',
+        headline: 'Search engines may be missing helpful page information.',
+        copy:
+          desc ||
+          'Clear titles and metadata help search engines understand and present the page accurately.',
+        detail: title,
+      };
+    }
+    return {
+      eyebrow: String((item && item.category) || 'TECHNICAL').toUpperCase(),
+      headline: title || 'Technical opportunity',
+      copy: desc || 'This technical signal is worth reviewing for visitor impact.',
+      detail: title,
+    };
+  }
+
+  function selectTechnicalFindings(items) {
+    var list = (items || []).slice(0, 8).map(translateTechnicalFinding);
+    var seen = {};
+    var out = [];
+    list.forEach(function (f) {
+      var key = f.eyebrow + '|' + f.headline;
+      if (seen[key]) return;
+      seen[key] = true;
+      out.push(f);
+    });
+    return out;
+  }
+
+  function reportEmailNoticeHtml() {
+    if (state.reportEmailStatus === EMAIL_STATUS.SUCCESS) {
+      var masked = maskEmail(state.contact && state.contact.email);
+      if (!masked) return '';
+      return (
+        '<p class="lfc-email-quiet lfc-email-quiet--ok" role="status">' +
+        '✓ A copy of these results was sent to ' +
+        escapeHtml(masked) +
+        '</p>'
+      );
+    }
+    if (state.reportEmailStatus === EMAIL_STATUS.ERROR) {
+      return (
+        '<p class="lfc-email-quiet" role="status">' +
+        "We couldn't email your copy, but your complete results are available here." +
+        '</p>'
+      );
+    }
+    return '';
+  }
+
+  function scoreRingHtml(score, label, sizeClass) {
+    var r = 54;
+    var c = 2 * Math.PI * r;
+    var safeScore = Math.max(0, Math.min(100, Number(score) || 0));
+    var offset = c - (safeScore / 100) * c;
+    var cls = 'lfc-score' + (sizeClass ? ' ' + sizeClass : '');
     return (
-      '<div class="lfc-email-notice" role="status" aria-live="polite">' +
-      '<p class="lfc-email-notice__text">' +
-      escapeHtml(state.reportEmailNotice) +
-      '</p>' +
+      '<div class="' +
+      cls +
+      '" aria-label="' +
+      escapeHtml(label) +
+      ' ' +
+      safeScore +
+      ' out of 100">' +
+      '<svg class="lfc-score__svg" viewBox="0 0 120 120" aria-hidden="true" focusable="false">' +
+      '<circle class="lfc-score__track" cx="60" cy="60" r="' +
+      r +
+      '" />' +
+      '<circle class="lfc-score__value" cx="60" cy="60" r="' +
+      r +
+      '" stroke-dasharray="' +
+      c +
+      '" stroke-dashoffset="' +
+      offset +
+      '" />' +
+      '</svg>' +
+      '<div class="lfc-score__center">' +
+      '<span class="lfc-score__number">' +
+      safeScore +
+      '</span>' +
+      '<span class="lfc-score__denom">/100</span>' +
+      '</div>' +
       '</div>'
+    );
+  }
+
+  function resultsHeroHtml(r) {
+    var biz = (state.contact && state.contact.businessName) || '';
+    var summary = getResultsSummary(r);
+    var h1 = biz
+      ? escapeHtml(biz) + ', here’s where I’d focus first.'
+      : 'Here’s where I’d focus first.';
+    return (
+      '<header class="lfc-results__hero">' +
+      '<p class="lfc-results__eyebrow">Your Lead Flow Check</p>' +
+      '<h1 class="lfc-results__title" id="lfc-step-heading" tabindex="-1">' +
+      h1 +
+      '</h1>' +
+      '<p class="lfc-results__summary-insight">' +
+      escapeHtml(summary.insight) +
+      '</p>' +
+      '<p class="lfc-results__summary-copy">' +
+      escapeHtml(summary.copy) +
+      '</p>' +
+      (state.websiteUrl
+        ? '<p class="lfc-meta-line">Website: ' + escapeHtml(state.websiteUrl) + '</p>'
+        : '') +
+      '</header>'
+    );
+  }
+
+  function scoreSummaryHtml(r) {
+    var health = getWebsiteHealthNumber(r);
+    var scan = r.scan;
+    var leadCard =
+      '<article class="lfc-scoreboard__card lfc-scoreboard__card--primary">' +
+      '<p class="lfc-scoreboard__kicker">Lead Flow Score</p>' +
+      '<p class="lfc-scoreboard__context">Customer journey</p>' +
+      scoreRingHtml(r.leadFlowScore, 'Lead Flow Score', 'lfc-score--lg') +
+      '<p class="lfc-scoreboard__tier">' +
+      escapeHtml(r.tier.title) +
+      '</p>' +
+      '<p class="lfc-scoreboard__explain">' +
+      escapeHtml(r.tier.copy) +
+      '</p>' +
+      '</article>';
+
+    var healthInner = '';
+    if (health != null && scan) {
+      var cats = scan.categories || {};
+      healthInner =
+        scoreRingHtml(health, 'Website Health Score', 'lfc-score--lg') +
+        '<p class="lfc-scoreboard__tier">Grade ' +
+        escapeHtml(scan.grade || '—') +
+        '</p>' +
+        '<ul class="lfc-scoreboard__cats">' +
+        [
+          ['Performance', cats.performance],
+          ['Accessibility', cats.accessibility],
+          ['SEO', cats.seo],
+          ['Best Practices', cats.bestPractices],
+        ]
+          .map(function (row) {
+            if (row[1] == null) return '';
+            return (
+              '<li><span>' +
+              escapeHtml(row[0]) +
+              '</span><strong>' +
+              escapeHtml(String(row[1])) +
+              '</strong></li>'
+            );
+          })
+          .join('') +
+        '</ul>';
+    } else if (r.scanStatus === 'running' || state.websiteAuditStatus === AUDIT_STATUS.RUNNING) {
+      healthInner =
+        '<p class="lfc-scoreboard__pending">' +
+        '<span class="lfc-audit-progress__spinner" aria-hidden="true"></span>' +
+        'Technical check in progress…' +
+        '</p>' +
+        '<p class="lfc-scoreboard__explain">We’re checking performance, accessibility, SEO, and technical best practices. Your Lead Flow results are ready now.</p>';
+    } else {
+      healthInner =
+        '<p class="lfc-scoreboard__tier">Check unavailable</p>' +
+        '<p class="lfc-scoreboard__explain">We couldn’t complete the automated website check. Your customer-journey recommendations are still valid.</p>' +
+        '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="retry-scan">Retry Website Check</button>';
+    }
+
+    var healthCard =
+      '<article class="lfc-scoreboard__card" id="lfc-website-health-summary">' +
+      '<p class="lfc-scoreboard__kicker">Website Health</p>' +
+      '<p class="lfc-scoreboard__context">Technical foundation</p>' +
+      healthInner +
+      '</article>';
+
+    return '<div class="lfc-scoreboard">' + leadCard + healthCard + '</div>';
+  }
+
+  function biggestOpportunityHtml(r) {
+    var insight = getPrimaryInsight(r);
+    return (
+      '<section class="lfc-insight" aria-labelledby="lfc-insight-heading">' +
+      '<p class="lfc-insight__eyebrow"><i class="bi bi-lightbulb" aria-hidden="true"></i> The biggest opportunity</p>' +
+      '<h2 class="lfc-insight__title" id="lfc-insight-heading">' +
+      escapeHtml(insight.heading) +
+      '</h2>' +
+      '<p class="lfc-insight__copy">' +
+      escapeHtml(insight.copy) +
+      '</p>' +
+      '<p class="lfc-insight__close">' +
+      escapeHtml(insight.closing) +
+      '</p>' +
+      '</section>'
+    );
+  }
+
+  function threePrioritiesHtml(r) {
+    var findings = r.findings && r.findings.length ? r.findings : getPriorityFindings(r.weakest || []);
+    var cards = findings
+      .slice(0, 3)
+      .map(function (f, i) {
+        var num = i + 1 < 10 ? '0' + (i + 1) : String(i + 1);
+        return (
+          '<article class="lfc-priority">' +
+          '<p class="lfc-priority__num">' +
+          num +
+          '</p>' +
+          '<p class="lfc-priority__cat">' +
+          escapeHtml(f.name) +
+          '</p>' +
+          '<h3 class="lfc-priority__title">' +
+          escapeHtml(f.status) +
+          '</h3>' +
+          '<p class="lfc-priority__label">Why it matters</p>' +
+          '<p class="lfc-priority__text">' +
+          escapeHtml(f.why) +
+          '</p>' +
+          '<p class="lfc-priority__label">What I’d change</p>' +
+          '<p class="lfc-priority__text">' +
+          escapeHtml(f.recommendation) +
+          '</p>' +
+          '</article>'
+        );
+      })
+      .join('');
+    return (
+      '<section class="lfc-results__section" aria-labelledby="lfc-priorities-heading">' +
+      '<h2 class="lfc-section-title" id="lfc-priorities-heading">Your three biggest opportunities</h2>' +
+      '<div class="lfc-priority-grid">' +
+      cards +
+      '</div>' +
+      '</section>'
+    );
+  }
+
+  function workingHtml(r) {
+    var strong = getStrongestCategories(r.areas || [], 3);
+    var rows = strong
+      .map(function (a) {
+        var finding = findingForArea(a);
+        return (
+          '<li class="lfc-working__item">' +
+          '<span class="lfc-working__check" aria-hidden="true">✓</span>' +
+          '<div>' +
+          '<p class="lfc-working__name">' +
+          escapeHtml(a.name) +
+          '</p>' +
+          '<p class="lfc-working__text">' +
+          escapeHtml(finding.why) +
+          '</p>' +
+          '</div>' +
+          '</li>'
+        );
+      })
+      .join('');
+
+    var health = getWebsiteHealthNumber(r);
+    if (health != null && health >= 70) {
+      rows +=
+        '<li class="lfc-working__item">' +
+        '<span class="lfc-working__check" aria-hidden="true">✓</span>' +
+        '<div>' +
+        '<p class="lfc-working__name">Website technical foundation</p>' +
+        '<p class="lfc-working__text">Your overall Website Health score is strong.</p>' +
+        '</div>' +
+        '</li>';
+    }
+
+    if (!rows) return '';
+
+    return (
+      '<section class="lfc-results__section lfc-working" aria-labelledby="lfc-working-heading">' +
+      '<h2 class="lfc-section-title" id="lfc-working-heading">What’s already working</h2>' +
+      '<ul class="lfc-working__list">' +
+      rows +
+      '</ul>' +
+      '<p class="lfc-working__note">These are good foundations. The goal isn’t to rebuild everything—it’s to remove friction around what already works.</p>' +
+      '</section>'
+    );
+  }
+
+  function journeyBreakdownHtml(r) {
+    var rows = (r.areas || [])
+      .map(function (a) {
+        var pct = normalizeCategoryScore(a);
+        var status = getCategoryStatusLabel(pct);
+        var statusClass =
+          pct >= 80 ? 'is-strong' : pct >= 60 ? 'is-attention' : 'is-priority';
+        return (
+          '<li class="lfc-journey-row ' +
+          statusClass +
+          '">' +
+          '<div class="lfc-journey-row__top">' +
+          '<span class="lfc-journey-row__name">' +
+          escapeHtml(a.name) +
+          '</span>' +
+          '<span class="lfc-journey-row__meta">' +
+          pct +
+          '% · ' +
+          escapeHtml(status) +
+          '</span>' +
+          '</div>' +
+          '<div class="lfc-journey-row__track" role="img" aria-label="' +
+          escapeHtml(a.name) +
+          ' ' +
+          pct +
+          ' percent, ' +
+          escapeHtml(status) +
+          '">' +
+          '<span class="lfc-journey-row__fill" style="width:' +
+          pct +
+          '%"></span>' +
+          '</div>' +
+          '</li>'
+        );
+      })
+      .join('');
+
+    return (
+      '<section class="lfc-results__section" aria-labelledby="lfc-journey-heading">' +
+      '<h2 class="lfc-section-title" id="lfc-journey-heading">Your customer journey, step by step</h2>' +
+      '<ol class="lfc-journey-meters">' +
+      rows +
+      '</ol>' +
+      '</section>'
+    );
+  }
+
+  function recommendationPanelHtml(r) {
+    var primaryHref = consultationUrl(r.path.id, r.tier.id, 'results-primary');
+    var secondaryHref = consultationUrl(r.path.id, r.tier.id, 'results-secondary');
+    var startProjectHref = consultationUrl(r.path.id, r.tier.id, 'results-start-project');
+    var caps = getRecommendedCapabilities(r)
+      .map(function (c) {
+        return '<li>✓ ' + escapeHtml(c) + '</li>';
+      })
+      .join('');
+
+    return (
+      '<section class="lfc-convert" aria-labelledby="lfc-path-heading">' +
+      '<p class="lfc-convert__eyebrow">Where I’d start</p>' +
+      '<h2 class="lfc-convert__title" id="lfc-path-heading">' +
+      escapeHtml(r.path.heading) +
+      '</h2>' +
+      '<p class="lfc-convert__copy">' +
+      escapeHtml(getRecommendationCopy(r)) +
+      '</p>' +
+      '<p class="lfc-convert__sub">What JL Solutions could fix</p>' +
+      '<ul class="lfc-convert__caps">' +
+      caps +
+      '</ul>' +
+      '<div class="lfc-convert__actions">' +
+      '<a class="lfc-btn lfc-btn--primary lfc-btn--xl" href="' +
+      escapeHtml(primaryHref) +
+      '" data-lfc-track="recommendation" data-lfc-cta="primary">' +
+      escapeHtml(r.path.cta) +
+      '</a>' +
+      '<a class="lfc-btn lfc-btn--ghost-light" href="' +
+      escapeHtml(secondaryHref) +
+      '" data-lfc-track="recommendation" data-lfc-cta="secondary">Talk It Through First</a>' +
+      '</div>' +
+      '<p class="lfc-convert__micro"><a href="' +
+      escapeHtml(startProjectHref) +
+      '" data-lfc-track="recommendation" data-lfc-cta="start-project">Start a Project</a></p>' +
+      '<p class="lfc-convert__note">No giant rebuild required. We can start with the part creating the most friction.</p>' +
+      '</section>'
     );
   }
 
@@ -1463,7 +2061,8 @@
     if (auditStatus === AUDIT_STATUS.RUNNING || scanStatus === 'running') {
       return (
         '<section class="lfc-results__section lfc-website-health" id="lfc-website-health" aria-labelledby="lfc-health-heading" aria-busy="true">' +
-        '<h3 id="lfc-health-heading">Website Health</h3>' +
+        '<h2 class="lfc-section-title" id="lfc-health-heading">Your website’s technical foundation</h2>' +
+        '<p class="lfc-section-intro">The automated check looks at performance, accessibility, search fundamentals, and technical best practices.</p>' +
         '<p class="lfc-website-health__status">' +
         '<span class="lfc-audit-progress" role="status">' +
         '<span class="lfc-audit-progress__spinner" aria-hidden="true"></span>' +
@@ -1476,112 +2075,102 @@
     }
 
     if (auditStatus === AUDIT_STATUS.SUCCESS && scanStatus === 'completed' && scan) {
-      var techItems = r.technicalOpportunities || [];
-      var techHtml = '';
-      if (techItems.length) {
-        techHtml =
-          '<div class="lfc-tech-list">' +
-          techItems
-            .map(function (item) {
+      var cats = scan.categories || {};
+      var tiles = [
+        ['Performance', cats.performance],
+        ['Accessibility', cats.accessibility],
+        ['SEO', cats.seo],
+        ['Best Practices', cats.bestPractices],
+      ]
+        .map(function (row) {
+          if (row[1] == null) return '';
+          return (
+            '<div class="lfc-tech-tile">' +
+            '<p class="lfc-tech-tile__label">' +
+            escapeHtml(row[0]) +
+            '</p>' +
+            '<p class="lfc-tech-tile__value">' +
+            escapeHtml(String(row[1])) +
+            '</p>' +
+            '</div>'
+          );
+        })
+        .join('');
+
+      var allFindings = selectTechnicalFindings(r.technicalOpportunities || []);
+      var top = allFindings.slice(0, 4);
+      var rest = allFindings.slice(4);
+      var findingsHtml = top
+        .map(function (f) {
+          return (
+            '<article class="lfc-tech-card">' +
+            '<p class="lfc-tech-card__eyebrow">' +
+            escapeHtml(f.eyebrow) +
+            '</p>' +
+            '<h3 class="lfc-tech-card__title">' +
+            escapeHtml(f.headline) +
+            '</h3>' +
+            '<p class="lfc-tech-card__copy">' +
+            escapeHtml(f.copy) +
+            '</p>' +
+            '<p class="lfc-tech-card__detail">' +
+            escapeHtml(f.detail) +
+            '</p>' +
+            '</article>'
+          );
+        })
+        .join('');
+
+      var moreHtml = '';
+      if (rest.length) {
+        moreHtml =
+          '<details class="lfc-tech-more">' +
+          '<summary>View all technical details</summary>' +
+          '<div class="lfc-tech-card-grid">' +
+          rest
+            .map(function (f) {
               return (
-                '<article class="lfc-tech-item">' +
-                '<p class="lfc-tech-item__cat">' +
-                escapeHtml(item.category) +
+                '<article class="lfc-tech-card">' +
+                '<p class="lfc-tech-card__eyebrow">' +
+                escapeHtml(f.eyebrow) +
                 '</p>' +
-                '<p class="lfc-tech-item__title">' +
-                escapeHtml(item.title) +
-                '</p>' +
-                '<p class="lfc-tech-item__desc">' +
-                escapeHtml(item.description) +
+                '<h3 class="lfc-tech-card__title">' +
+                escapeHtml(f.headline) +
+                '</h3>' +
+                '<p class="lfc-tech-card__copy">' +
+                escapeHtml(f.copy) +
                 '</p>' +
                 '</article>'
               );
             })
             .join('') +
-          '</div>';
-      } else {
-        techHtml =
-          '<p class="lfc-panel__copy">No major technical opportunities stood out in the automated check.</p>';
+          '</div></details>';
       }
 
       return (
         '<section class="lfc-results__section lfc-website-health" id="lfc-website-health" aria-labelledby="lfc-health-heading">' +
-        '<h3 id="lfc-health-heading">Website Health</h3>' +
-        '<div class="lfc-score-grid lfc-score-grid--single">' +
-        '<article class="lfc-score-card">' +
-        '<p class="lfc-score-card__label">Website Health Score</p>' +
-        '<p class="lfc-score-card__source">From automated browser-based website audit</p>' +
-        scoreRingHtml(scan.websiteHealthScore, 'Website Health Score') +
-        '<p class="lfc-score-card__grade">Grade: ' +
-        escapeHtml(scan.grade || '—') +
-        '</p>' +
-        miniMetricsHtml(scan.categories || {}) +
-        '</article>' +
+        '<h2 class="lfc-section-title" id="lfc-health-heading">Your website’s technical foundation</h2>' +
+        '<p class="lfc-section-intro">The automated check looks at performance, accessibility, search fundamentals, and technical best practices.</p>' +
+        '<div class="lfc-tech-tiles">' +
+        tiles +
         '</div>' +
-        '<h4 class="lfc-website-health__findings-title">Technical opportunities</h4>' +
-        techHtml +
-        '<p class="lfc-panel__copy" style="font-size:0.8125rem;margin-top:0.75rem;">' +
-        'Automated website audits measure technical signals in a browser—they do not evaluate business fit, writing quality, design taste, conversion strategy, or complete accessibility on their own.' +
-        '</p>' +
+        '<h3 class="lfc-subsection-title">Technical opportunities worth reviewing</h3>' +
+        (findingsHtml
+          ? '<div class="lfc-tech-card-grid">' + findingsHtml + '</div>' + moreHtml
+          : '<p class="lfc-panel__copy">No major technical opportunities stood out in the automated check.</p>') +
+        '<p class="lfc-tech-disclaimer">Automated website audits measure technical signals in a browser—they do not evaluate business fit, writing quality, design taste, or conversion strategy on their own.</p>' +
         '</section>'
       );
     }
 
-    /* error / unavailable — non-blocking */
     return (
       '<section class="lfc-results__section lfc-website-health" id="lfc-website-health" aria-labelledby="lfc-health-heading">' +
-      '<h3 id="lfc-health-heading">Website Health</h3>' +
+      '<h2 class="lfc-section-title" id="lfc-health-heading">Your website’s technical foundation</h2>' +
       '<div class="lfc-website-health__notice" role="status">' +
-      '<p>' +
-      "We couldn’t complete the automated website check right now. Your Lead Flow results and recommendations are still available." +
-      '</p>' +
+      '<p>We couldn’t complete the automated website check right now. Your Lead Flow results and recommendations are still available.</p>' +
       '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="retry-scan">Retry Website Check</button>' +
       '</div>' +
       '</section>'
-    );
-  }
-
-  function leadFlowCardHtml(r) {
-    var breakdown = r.areas
-      .map(function (a) {
-        var pct = Math.round(a.ratio * 100);
-        return (
-          '<li class="lfc-breakdown__item">' +
-          '<div class="lfc-breakdown__meta">' +
-          '<span class="lfc-breakdown__name">' +
-          escapeHtml(a.name) +
-          '</span>' +
-          '<span class="lfc-breakdown__pts">' +
-          a.points +
-          '/' +
-          a.maxPoints +
-          '</span>' +
-          '</div>' +
-          '<div class="lfc-breakdown__bar" aria-hidden="true"><span style="width:' +
-          pct +
-          '%"></span></div>' +
-          '<p class="lfc-breakdown__answer">' +
-          escapeHtml(a.optionLabel) +
-          '</p>' +
-          '</li>'
-        );
-      })
-      .join('');
-
-    return (
-      '<article class="lfc-score-card">' +
-      '<p class="lfc-score-card__label">Lead Flow Score</p>' +
-      '<p class="lfc-score-card__source">From your answers</p>' +
-      scoreRingHtml(r.leadFlowScore, 'Lead Flow Score') +
-      '<p class="lfc-score-card__tier">' +
-      escapeHtml(r.tier.title) +
-      ' · ' +
-      escapeHtml(String(r.leadFlowScore)) +
-      '/100</p>' +
-      '<ol class="lfc-breakdown">' +
-      breakdown +
-      '</ol>' +
-      '</article>'
     );
   }
 
@@ -1589,83 +2178,22 @@
     var r = state.results;
     if (!r) return '<p>Unable to load results. Please retake the assessment.</p>';
 
-    var metaLine =
-      '<p class="lfc-meta-line">Website: ' +
-      escapeHtml(state.websiteUrl) +
-      '</p>';
-
-    var findings = r.findings
-      .map(function (f) {
-        return (
-          '<article class="lfc-finding">' +
-          '<h4 class="lfc-finding__area">' +
-          escapeHtml(f.name) +
-          '</h4>' +
-          '<p class="lfc-finding__status">' +
-          escapeHtml(f.status) +
-          '</p>' +
-          '<p class="lfc-finding__why"><strong>Why it matters:</strong> ' +
-          escapeHtml(f.why) +
-          '</p>' +
-          '<p class="lfc-finding__rec"><strong>Recommended improvement:</strong> ' +
-          escapeHtml(f.recommendation) +
-          '</p>' +
-          '</article>'
-        );
-      })
-      .join('');
-
-    var primaryHref = consultationUrl(r.path.id, r.tier.id, 'results-primary');
-    var secondaryHref = consultationUrl(r.path.id, r.tier.id, 'results-secondary');
-    var startProjectHref = consultationUrl(r.path.id, r.tier.id, 'results-start-project');
-
     return (
       '<div class="lfc-results" id="lfc-results">' +
-      '<header class="lfc-results__heading">' +
-      '<h2 class="lfc-panel__title" id="lfc-step-heading" tabindex="-1">Your Lead Flow Check Results</h2>' +
-      metaLine +
-      '</header>' +
-      reportEmailNoticeHtml() +
-      '<section class="lfc-results__section lfc-lead-flow-results" aria-labelledby="lfc-lead-heading">' +
-      '<h3 id="lfc-lead-heading" class="visually-hidden">Lead Flow</h3>' +
-      '<div class="lfc-score-grid lfc-score-grid--single">' +
-      leadFlowCardHtml(r) +
-      '</div>' +
-      '<section class="lfc-results__section" aria-labelledby="lfc-findings-heading">' +
-      '<h3 id="lfc-findings-heading">Priority Lead Flow findings</h3>' +
-      '<div class="lfc-findings">' +
-      findings +
-      '</div>' +
-      '</section>' +
-      '<section class="lfc-results__section lfc-recommend" aria-labelledby="lfc-path-heading">' +
-      '<p class="lfc-recommend__label">' +
-      escapeHtml(r.path.label) +
-      '</p>' +
-      '<h3 id="lfc-path-heading">' +
-      escapeHtml(r.path.heading) +
-      '</h3>' +
-      '<p>' +
-      escapeHtml(r.path.copy) +
-      '</p>' +
-      '<div class="lfc-results__actions">' +
-      '<a class="lfc-btn lfc-btn--primary" href="' +
-      escapeHtml(primaryHref) +
-      '" data-lfc-track="recommendation" data-lfc-cta="primary">' +
-      escapeHtml(r.path.cta) +
-      '</a>' +
-      '<a class="lfc-btn lfc-btn--ghost" href="' +
-      escapeHtml(secondaryHref) +
-      '" data-lfc-track="recommendation" data-lfc-cta="secondary">Talk It Through First</a>' +
-      '<a class="lfc-btn lfc-btn--ghost" href="' +
-      escapeHtml(startProjectHref) +
-      '" data-lfc-track="recommendation" data-lfc-cta="start-project">Start a Project</a>' +
-      '</div>' +
-      '</section>' +
-      '</section>' +
+      resultsHeroHtml(r) +
+      scoreSummaryHtml(r) +
+      biggestOpportunityHtml(r) +
+      threePrioritiesHtml(r) +
+      workingHtml(r) +
+      journeyBreakdownHtml(r) +
+      recommendationPanelHtml(r) +
       websiteHealthSectionHtml(r) +
       '<div class="lfc-results__footer">' +
+      reportEmailNoticeHtml() +
+      '<div class="lfc-results__footer-actions">' +
       '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="print">Print or Save Results</button>' +
-      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="restart">Retake the Assessment</button>' +
+      '<button type="button" class="lfc-btn lfc-btn--ghost" data-lfc-action="restart">Retake Assessment</button>' +
+      '</div>' +
       '</div>' +
       '</div>'
     );
@@ -1803,60 +2331,6 @@
     );
   }
 
-  function scoreRingHtml(score, label) {
-    var r = 54;
-    var c = 2 * Math.PI * r;
-    var safeScore = Math.max(0, Math.min(100, Number(score) || 0));
-    var offset = c - (safeScore / 100) * c;
-    return (
-      '<div class="lfc-score" aria-label="' +
-      escapeHtml(label) +
-      ' ' +
-      safeScore +
-      ' out of 100">' +
-      '<svg class="lfc-score__svg" viewBox="0 0 120 120" aria-hidden="true" focusable="false">' +
-      '<circle class="lfc-score__track" cx="60" cy="60" r="' +
-      r +
-      '" />' +
-      '<circle class="lfc-score__value" cx="60" cy="60" r="' +
-      r +
-      '" stroke-dasharray="' +
-      c +
-      '" stroke-dashoffset="' +
-      offset +
-      '" />' +
-      '</svg>' +
-      '<div class="lfc-score__center">' +
-      '<span class="lfc-score__number">' +
-      safeScore +
-      '</span>' +
-      '<span class="lfc-score__denom">/ 100</span>' +
-      '</div>' +
-      '</div>'
-    );
-  }
-
-  function miniMetricsHtml(categories) {
-    var rows = [
-      ['Performance', categories.performance],
-      ['Accessibility', categories.accessibility],
-      ['SEO', categories.seo],
-      ['Technical best practices', categories.bestPractices],
-    ];
-    var html = '<ul class="lfc-mini-metrics">';
-    rows.forEach(function (row) {
-      if (row[1] == null) return;
-      html +=
-        '<li><span>' +
-        escapeHtml(row[0]) +
-        '</span><span>' +
-        escapeHtml(String(row[1])) +
-        '/100</span></li>';
-    });
-    html += '</ul>';
-    return html;
-  }
-
   function focusStepHeading() {
     var el = document.getElementById('lfc-step-heading');
     if (!el) return;
@@ -1904,6 +2378,11 @@
       root.innerHTML = renderGate();
     } else if (state.phase === PHASE.RESULTS) {
       root.innerHTML = renderResults();
+    }
+
+    var wrap = document.querySelector('.lfc-assessment__wrap');
+    if (wrap) {
+      wrap.classList.toggle('lfc-assessment__wrap--wide', state.phase === PHASE.RESULTS);
     }
 
     bindChoiceSelection(root);
@@ -2264,7 +2743,7 @@
       if (outcome.emailed === false) {
         state.reportEmailStatus = EMAIL_STATUS.ERROR;
         state.reportEmailNotice =
-          "Your results are available here, but we couldn't email your copy right now.";
+          "We couldn't email your copy, but your complete results are available here.";
       } else {
         state.reportEmailStatus = EMAIL_STATUS.SUCCESS;
         state.reportEmailNotice = '';
@@ -2312,13 +2791,9 @@
       website_scan_status: results.scanStatus,
       website_audit_status: state.websiteAuditStatus,
     });
-    var announceParts = [
-      'Your Lead Flow Score is ' + results.leadFlowScore + ' out of 100.',
-    ];
+    var announceParts = ['Your Lead Flow results are ready.'];
     if (results.scanStatus === 'completed' && results.scan) {
-      announceParts.push(
-        'Website Health Score is ' + results.scan.websiteHealthScore + ' out of 100.'
-      );
+      announceParts.push('Website Health Score is ' + results.scan.websiteHealthScore + ' out of 100.');
     } else if (
       state.websiteAuditStatus === AUDIT_STATUS.RUNNING ||
       results.scanStatus === 'running'
