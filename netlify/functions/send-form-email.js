@@ -607,62 +607,197 @@ function buildRoiCalculatorEmail(data) {
   };
 }
 
+/**
+ * Concise owner lead-intelligence email for Lead Flow Check.
+ * Uses submission fields only — does not recompute scoring.
+ */
 function buildLeadFlowCheckEmail(data) {
-  const firstName = data.firstName || data.name || '(not provided)';
-  const email = data.email || '(not provided)';
-  const business = data.businessName || data.company || '(not provided)';
+  const firstName = String(data.firstName || data.name || '').trim() || '(not provided)';
+  const email = String(data.email || '').trim() || '(not provided)';
+  const phone = String(data.phone || '').trim();
+  const businessRaw =
+    String(data.businessName || data.company || '').trim() || '(not provided)';
+  const websiteRaw = String(data.websiteUrl || '').trim();
+  const inquiry = String(data.inquiryVolumeLabel || data.inquiryVolume || '').trim();
   const leadScore =
     data.leadFlowScore != null && String(data.leadFlowScore).trim() !== ''
       ? String(data.leadFlowScore).trim()
       : data.score != null && String(data.score).trim() !== ''
         ? String(data.score).trim()
-        : '?';
+        : '—';
   const health =
     data.websiteHealthScore != null && String(data.websiteHealthScore).trim() !== ''
       ? String(data.websiteHealthScore).trim()
-      : 'n/a';
-  const fields = [
-    ['First name', firstName],
+      : null;
+  const pathHeading =
+    String(data.recommendedPathHeading || data.recommendedPath || '').trim() ||
+    'Improve the customer journey';
+
+  const opportunities = [];
+  for (let i = 1; i <= 3; i++) {
+    const name = String(data['priority' + i + 'Name'] || '').trim();
+    const title = String(data['priority' + i] || '').trim();
+    if (name || title) {
+      opportunities.push(name && title && name !== title ? `${name}: ${title}` : name || title);
+    }
+  }
+  if (!opportunities.length) {
+    String(data.weakestLeadFlowAreas || data.weakestAreas || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .slice(0, 3)
+      .forEach((w) => opportunities.push(w));
+  }
+
+  const leadNum = Number(leadScore);
+  const healthNum = health != null ? Number(health) : NaN;
+  let suggested;
+  if (!isNaN(healthNum) && healthNum >= 80 && !isNaN(leadNum) && leadNum < 70) {
+    suggested =
+      'The website has a strong technical foundation. Focus the conversation on the customer journey, intake, follow-up, scheduling, and workflow rather than recommending a website rebuild.';
+  } else if (!isNaN(healthNum) && healthNum < 60) {
+    suggested =
+      'The website itself may be creating friction before visitors reach the inquiry stage. Start by discussing website experience and then address downstream workflow issues.';
+  } else if (!isNaN(healthNum) && healthNum >= 80 && !isNaN(leadNum) && leadNum >= 80) {
+    suggested =
+      'Both the website and lead flow look relatively strong. Keep the conversation focused on refinement—clearer next steps, faster follow-up, or targeted technical polish—rather than a major rebuild.';
+  } else if (!isNaN(healthNum) && !isNaN(leadNum) && leadNum < healthNum) {
+    suggested =
+      'Lead Flow is currently the weaker side. Guide the conversation toward inquiry path, scheduling, follow-up, and how leads are organized after interest.';
+  } else if (!isNaN(healthNum) && !isNaN(leadNum) && healthNum < leadNum) {
+    suggested =
+      'The website experience is currently the weaker side. Start with clarity, mobile usability, and technical friction, then confirm the downstream follow-up path is solid.';
+  } else {
+    suggested =
+      'Use the recommended path and weakest categories below as the opening frame. Confirm where they feel the most friction between interest and a booked conversation.';
+  }
+
+  let websiteHref = '';
+  if (websiteRaw) {
+    websiteHref = /^https?:\/\//i.test(websiteRaw) ? websiteRaw : 'https://' + websiteRaw.replace(/^\/+/, '');
+  }
+  const replyHref = email && email.indexOf('@') !== -1 ? 'mailto:' + email : '';
+  const healthDisplay = health != null ? `${escapeHtml(health)}/100` : 'n/a';
+  const opportunityRows = opportunities.length
+    ? opportunities
+        .map(
+          (o) =>
+            `<tr><td style="padding:6px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.45;color:#1a2332;">• ${escapeHtml(o)}</td></tr>`
+        )
+        .join('')
+    : `<tr><td style="padding:6px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#5a6577;">No weak categories were supplied with this submission.</td></tr>`;
+
+  const leadRows = [
+    ['Name', firstName],
     ['Email', email],
-    ['Phone', data.phone],
-    ['Business name', business],
-    ['Website URL', data.websiteUrl],
-    ['Inquiry volume / month', data.inquiryVolumeLabel || data.inquiryVolume],
-    ['Website Health Score', health !== 'n/a' ? `${health}/100` : health],
-    ['Website grade', data.websiteGrade],
-    ['Performance', data.performanceScore],
-    ['Accessibility', data.accessibilityScore],
-    ['SEO', data.seoScore],
-    ['Best practices', data.bestPracticesScore],
-    ['Website scan status', data.websiteScanStatus],
-    ['Website scan error', data.websiteScanError],
-    ['Lead Flow Score', `${leadScore}/100`],
-    ['Lead Flow tier', data.leadFlowTier || data.scoreTierTitle || data.scoreTier],
-    ['Recommended path', data.recommendedPathHeading || data.recommendedPath],
-    ['Technical opportunities', data.technicalOpportunityTitles],
-    ['Weakest Lead Flow areas', data.weakestLeadFlowAreas || data.weakestAreas],
-    ['Page URL', data.pageUrl],
-    ['Referrer', data.referrer],
-    ['UTM source', data.utmSource],
-    ['UTM medium', data.utmMedium],
-    ['UTM campaign', data.utmCampaign],
-    ['Submitted at', data.submittedAt],
-  ];
-  const rows = fields
-    .filter(([, v]) => v != null && String(v).trim() !== '')
-    .map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(String(v))}</td></tr>`)
+    phone ? ['Phone', phone] : null,
+    websiteRaw ? ['Website', websiteRaw] : null,
+    inquiry ? ['Approx. inquiries / month', inquiry] : null,
+  ]
+    .filter(Boolean)
+    .map(
+      ([k, v]) =>
+        `<tr>
+          <td style="padding:6px 0;width:160px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5a6577;vertical-align:top;">${escapeHtml(k)}</td>
+          <td style="padding:6px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#1a2332;vertical-align:top;">${escapeHtml(String(v))}</td>
+        </tr>`
+    )
     .join('');
-  const answersBlock =
-    data.answersJson && String(data.answersJson).trim()
-      ? `<h3>Lead Flow answers (JSON)</h3><pre style="white-space:pre-wrap;font-size:12px;">${escapeHtml(String(data.answersJson))}</pre>`
-      : '';
+
+  const ctaReply = replyHref
+    ? `<td style="background:#f5c518;border-radius:4px;">
+         <a href="${escapeHtml(replyHref)}" style="display:inline-block;padding:12px 18px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:#1a2332;text-decoration:none;">Reply to Lead</a>
+       </td>
+       <td width="10"></td>`
+    : '';
+  const ctaSite = websiteHref
+    ? `<td style="background:#1a2332;border-radius:4px;">
+         <a href="${escapeHtml(websiteHref)}" style="display:inline-block;padding:12px 18px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:#ffffff;text-decoration:none;">View Website</a>
+       </td>`
+    : '';
+
+  const debugBits = [];
+  if (data.websiteGrade) debugBits.push(`grade:${data.websiteGrade}`);
+  if (data.websiteScanStatus) debugBits.push(`scan:${data.websiteScanStatus}`);
+  if (data.leadFlowTier || data.scoreTier) debugBits.push(`tier:${data.leadFlowTier || data.scoreTier}`);
+  if (data.recommendedPath) debugBits.push(`pathId:${data.recommendedPath}`);
+  if (data.submittedAt) debugBits.push(`at:${data.submittedAt}`);
+  const debugBlock = debugBits.length
+    ? `<p style="margin:18px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.45;color:#a0a8b5;">Debug · ${escapeHtml(debugBits.join(' · '))}</p>`
+    : '';
+
   return {
-    subject: `New Lead Flow Check: ${business} — Health ${health} / Lead ${leadScore}`,
+    subject: `New Lead Flow Check: ${businessRaw} — ${leadScore}/100`,
     html: `
-      <h2>New Lead Flow Check submission</h2>
-      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;">${rows}</table>
-      ${answersBlock}
-      <p><em>Sent from jlsolutions.io/lead-flow-check</em></p>
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<body style="margin:0;padding:0;background:#f4f6f8;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-collapse:collapse;">
+          <tr>
+            <td style="background:#1a2332;padding:22px 28px;">
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#f5c518;font-weight:700;">New Lead Flow Check</p>
+              <h1 style="margin:10px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:24px;line-height:1.25;color:#ffffff;font-weight:700;">${escapeHtml(businessRaw)}</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:26px 28px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;border-collapse:collapse;">
+                <tr>
+                  <td width="50%" valign="top" style="padding:14px;background:#f7fafb;border:1px solid #e2e8ee;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Lead Flow</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:26px;line-height:1.2;color:#1a2332;font-weight:700;">${escapeHtml(leadScore)}/100</p>
+                  </td>
+                  <td width="12"></td>
+                  <td width="50%" valign="top" style="padding:14px;background:#f7fafb;border:1px solid #e2e8ee;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Website Health</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:26px;line-height:1.2;color:#1a2332;font-weight:700;">${healthDisplay}</p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Recommended</p>
+              <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:1.35;color:#1a2332;font-weight:700;">${escapeHtml(pathHeading)}</p>
+
+              <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Biggest opportunities</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 22px;">
+                ${opportunityRows}
+              </table>
+
+              <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Lead</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 22px;">
+                ${leadRows}
+              </table>
+
+              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Suggested conversation</p>
+              <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#1a2332;">${escapeHtml(suggested)}</p>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0;">
+                <tr>
+                  ${ctaReply}
+                  ${ctaSite}
+                </tr>
+              </table>
+              ${debugBlock}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 28px 22px;border-top:1px solid #e2e8ee;">
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.45;color:#8a93a3;">
+                JL Solutions · Lead Flow Check · <a href="https://www.jlsolutions.io/lead-flow-check/" style="color:#0d7c7c;">jlsolutions.io/lead-flow-check</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
     `,
   };
 }
