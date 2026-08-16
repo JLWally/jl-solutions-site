@@ -4,8 +4,10 @@
  * roi-calculator, ai-intake-demo, onboard-payment, pay-checkout, package-kickoff,
  * getstarted-product-intake, getstarted-custom-quote, lead-flow-check.
  *
- * Set RESEND_API_KEY in Netlify. Use FORM_FROM_EMAIL with a domain verified in Resend
- * (e.g. JL Solutions <notifications@jlsolutions.io>) for production.
+ * Set RESEND_API_KEY in Netlify. Prefer FORM_FROM_EMAIL on a Resend-verified domain
+ * (production Lead Flow customer reports use results@updates.jlsolutions.io).
+ * Root jlsolutions.io is NOT interchangeable with updates.jlsolutions.io — verify the
+ * exact hostname you send from.
  *
  * When SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY are set, also inserts a row into
  * public.consultations so you can review submissions in Supabase (Table Editor).
@@ -665,6 +667,160 @@ function buildLeadFlowCheckEmail(data) {
   };
 }
 
+/** Preferred production sender once updates.jlsolutions.io is verified in Resend. */
+const LEAD_FLOW_RESULTS_FROM = 'JL Solutions <results@updates.jlsolutions.io>';
+
+/**
+ * Polished customer results email for Lead Flow Check (email-safe HTML).
+ * Uses summary fields from the submission payload — does not recompute scoring.
+ */
+function buildLeadFlowCheckCustomerEmail(data) {
+  const firstRaw = String(data.firstName || data.name || 'there').trim().split(/\s+/)[0] || 'there';
+  const first = escapeHtml(firstRaw);
+  const businessRaw = String(data.businessName || data.company || 'your business').trim() || 'your business';
+  const business = escapeHtml(businessRaw);
+  const websiteRaw = String(data.websiteUrl || '').trim();
+  const leadScore =
+    data.leadFlowScore != null && String(data.leadFlowScore).trim() !== ''
+      ? String(data.leadFlowScore).trim()
+      : data.score != null && String(data.score).trim() !== ''
+        ? String(data.score).trim()
+        : '—';
+  const tier =
+    String(data.scoreTierTitle || data.leadFlowTier || data.scoreTier || '')
+      .trim() || 'See your full results for the tier summary.';
+  const health =
+    data.websiteHealthScore != null && String(data.websiteHealthScore).trim() !== ''
+      ? String(data.websiteHealthScore).trim()
+      : null;
+  const grade = String(data.websiteGrade || '').trim();
+  const healthLine = health != null ? `${escapeHtml(health)}/100` : 'Still finishing or unavailable';
+  const gradeLine = grade ? escapeHtml(grade) : health != null ? 'See full results for grade detail' : 'n/a';
+
+  const opportunity =
+    String(
+      data.primaryInsightHeading ||
+        data.resultsSummaryInsight ||
+        data.primaryInsightCopy ||
+        ''
+    ).trim() ||
+    'Focus on the weakest handoff between interest and a clear next step.';
+
+  const priorities = [];
+  for (let i = 1; i <= 3; i++) {
+    const title = String(data['priority' + i] || '').trim();
+    const name = String(data['priority' + i + 'Name'] || '').trim();
+    if (title || name) priorities.push({ name, title: title || name });
+  }
+  if (!priorities.length) {
+    const weak = String(data.weakestLeadFlowAreas || data.weakestAreas || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .slice(0, 3);
+    weak.forEach((w) => priorities.push({ name: w, title: w }));
+  }
+
+  const pathHeading =
+    String(data.recommendedPathHeading || data.recommendedPath || '').trim() ||
+    'Improve the customer journey';
+  const pathCopy =
+    String(data.recommendationCopy || '').trim() ||
+    'I’d start with the highest-friction step in your lead flow, then tighten follow-up so fewer inquiries go cold.';
+
+  const siteUrl = 'https://www.jlsolutions.io/';
+  const talkUrl = 'https://www.jlsolutions.io/book-consultation.html';
+  const priorityRows = priorities
+    .map((p, idx) => {
+      const label = p.name && p.title && p.name !== p.title ? `${p.name}: ${p.title}` : p.title || p.name;
+      return `<tr><td style="padding:8px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.45;color:#1a2332;">${idx + 1}. ${escapeHtml(label)}</td></tr>`;
+    })
+    .join('');
+
+  const websiteContext = websiteRaw
+    ? `<p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5a6577;">Website reviewed: <a href="${escapeHtml(websiteRaw)}" style="color:#0d7c7c;text-decoration:underline;">${escapeHtml(websiteRaw)}</a></p>`
+    : '';
+
+  return {
+    subject: `Your JL Solutions Lead Flow Check Results — ${leadScore}/100`,
+    html: `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<body style="margin:0;padding:0;background:#f4f6f8;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8;padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-collapse:collapse;">
+          <tr>
+            <td style="background:#1a2332;padding:22px 28px;">
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#f5c518;">JL Solutions</p>
+              <h1 style="margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:22px;line-height:1.3;color:#ffffff;font-weight:700;">Your Lead Flow Check</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px;">
+              <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.5;color:#1a2332;">Hi ${first},</p>
+              <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.55;color:#1a2332;">Your results are ready. Here’s the biggest thing I’d focus on first for ${business}.</p>
+              ${websiteContext}
+
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 18px;border-collapse:collapse;">
+                <tr>
+                  <td width="50%" valign="top" style="padding:14px;background:#f7fafb;border:1px solid #e2e8ee;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Lead Flow Score</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:28px;line-height:1.2;color:#1a2332;font-weight:700;">${escapeHtml(leadScore)}/100</p>
+                    <p style="margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.4;color:#5a6577;">${escapeHtml(tier)}</p>
+                  </td>
+                  <td width="12"></td>
+                  <td width="50%" valign="top" style="padding:14px;background:#f7fafb;border:1px solid #e2e8ee;">
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Website Health</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:28px;line-height:1.2;color:#1a2332;font-weight:700;">${healthLine}</p>
+                    <p style="margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.4;color:#5a6577;">${gradeLine}</p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Biggest opportunity</p>
+              <p style="margin:0 0 22px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.5;color:#1a2332;font-weight:700;">${escapeHtml(opportunity)}</p>
+
+              <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Your top 3 priorities</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 22px;">
+                ${priorityRows || '<tr><td style="padding:8px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#1a2332;">See your on-page results for the full priority list.</td></tr>'}
+              </table>
+
+              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#0d7c7c;font-weight:700;">Where I’d start</p>
+              <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:1.35;color:#1a2332;font-weight:700;">${escapeHtml(pathHeading)}</p>
+              <p style="margin:0 0 26px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#1a2332;">${escapeHtml(pathCopy)}</p>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 12px;">
+                <tr>
+                  <td style="background:#f5c518;border-radius:4px;">
+                    <a href="${siteUrl}" style="display:inline-block;padding:14px 22px;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;color:#1a2332;text-decoration:none;">View JL Solutions</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#5a6577;">
+                Prefer to talk it through first? <a href="${talkUrl}" style="color:#0d7c7c;text-decoration:underline;">Talk It Through First</a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 28px 24px;border-top:1px solid #e2e8ee;">
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.45;color:#8a93a3;">
+                JL Solutions · <a href="mailto:info@jlsolutions.io" style="color:#0d7c7c;">info@jlsolutions.io</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+    `,
+  };
+}
+
 function leadFlowCheckPersistMessage(data) {
   const lead =
     data.leadFlowScore != null
@@ -1292,61 +1448,99 @@ exports.handler = async (event) => {
     const RESEND_FALLBACK_FROM = 'JL Solutions <onboarding@resend.dev>';
 
     /**
-     * Send via Resend; if the configured from-domain is unverified, retry once
-     * with Resend's onboarding address so production leads still notify.
+     * Send via Resend and require an explicit { data, error } outcome.
+     * Prefer the verified updates.jlsolutions.io sender, then FORM_FROM_EMAIL.
+     * Onboarding fallback is opt-in (owner notify only) — it cannot deliver to
+     * arbitrary customer inboxes while the Resend account is in testing mode.
      * Returns { ok, id, error, fromUsed }.
      */
-    async function sendResendEmail({ to, subject, html, replyTo, label }) {
-      const attempts = [env.formFromEmail];
+    async function sendResendEmail({
+      to,
+      subject,
+      html,
+      replyTo,
+      label,
+      allowOnboardingFallback = true,
+      preferredFrom,
+      idempotencyKey,
+    }) {
+      const attempts = [];
+      function pushFrom(addr) {
+        const v = String(addr || '').trim();
+        if (!v) return;
+        if (attempts.indexOf(v) === -1) attempts.push(v);
+      }
+      pushFrom(preferredFrom);
+      /* Without an explicit sender, keep the original cascade so owner notify is unchanged. */
+      if (!preferredFrom) pushFrom(env.formFromEmail);
       if (
-        env.formFromEmail &&
-        !/onboarding@resend\.dev/i.test(env.formFromEmail) &&
+        allowOnboardingFallback &&
         attempts.indexOf(RESEND_FALLBACK_FROM) === -1
       ) {
         attempts.push(RESEND_FALLBACK_FROM);
       }
+      if (!attempts.length) attempts.push(RESEND_FALLBACK_FROM);
 
       let lastError = null;
       for (let i = 0; i < attempts.length; i++) {
         const fromUsed = attempts[i];
         try {
-          const out = await resend.emails.send({
-            from: fromUsed,
-            to: Array.isArray(to) ? to : [to],
-            subject,
-            html,
-            replyTo: replyTo || undefined,
-          });
+          const sendOpts = idempotencyKey
+            ? { idempotencyKey: String(idempotencyKey).slice(0, 256) }
+            : undefined;
+          const out = await resend.emails.send(
+            {
+              from: fromUsed,
+              to: Array.isArray(to) ? to : [to],
+              subject,
+              html,
+              replyTo: replyTo || undefined,
+            },
+            sendOpts
+          );
           if (out.error) {
             lastError = out.error;
             const msg = String((out.error && out.error.message) || '');
             const unverified = /domain is not verified/i.test(msg);
+            const testingOnly = /only send testing emails/i.test(msg);
             console.error('[send-form-email] Resend error (' + label + '):', {
               message: out.error.message,
               name: out.error.name,
               fromUsed,
+              fromDomain: (String(fromUsed).match(/@([^>]+)>?/) || [])[1] || '',
             });
-            if (unverified && i < attempts.length - 1) {
+            if ((unverified || testingOnly) && i < attempts.length - 1) {
               console.warn(
-                '[send-form-email] From domain unverified; retrying with Resend onboarding sender for',
+                '[send-form-email] Sender rejected; trying next from address for',
                 label
               );
               continue;
             }
             return { ok: false, id: null, error: out.error, fromUsed };
           }
-          if (fromUsed !== env.formFromEmail) {
+          const id = out.data && out.data.id ? out.data.id : null;
+          if (!id) {
+            lastError = {
+              message: 'Resend returned success without message id',
+              name: 'missing_id',
+            };
+            console.error('[send-form-email] Resend missing id (' + label + '):', {
+              fromUsed,
+            });
+            return { ok: false, id: null, error: lastError, fromUsed };
+          }
+          if (fromUsed === RESEND_FALLBACK_FROM) {
             console.warn(
               '[send-form-email] Sent',
               label,
-              'using fallback from',
+              'using from',
               fromUsed,
-              '(configure a verified FORM_FROM_EMAIL domain in Resend)'
+              '(prefer a verified FORM_FROM_EMAIL / results@updates.jlsolutions.io)'
             );
           }
           return {
             ok: true,
-            id: out.data && out.data.id ? out.data.id : null,
+            id,
             error: null,
             fromUsed,
           };
@@ -1364,7 +1558,7 @@ exports.handler = async (event) => {
           return { ok: false, id: null, error: lastError, fromUsed };
         }
       }
-      return { ok: false, id: null, error: lastError, fromUsed: env.formFromEmail };
+      return { ok: false, id: null, error: lastError, fromUsed: attempts[0] || env.formFromEmail };
     }
 
     let ownerEmailed = false;
@@ -1437,6 +1631,8 @@ exports.handler = async (event) => {
     }
 
     // 2. Customer confirmation / report email — independent of owner notify
+    let customerEmailId = null;
+    let customerEmailError = null;
     const customerEmail = (data.email || '').trim();
     if (customerEmail) {
       try {
@@ -1475,15 +1671,7 @@ exports.handler = async (event) => {
         `,
                   }
                 : formName === 'lead-flow-check'
-                  ? {
-                      subject: 'Your Lead Flow Check results - JL Solutions',
-                      html: `
-          <h2>Hi ${first},</h2>
-          <p>Thanks for completing The Lead Flow Check. Your Lead Flow Score, Website Health Score, and recommendations were shown on the results page. We may follow up about the issues identified in your assessment.</p>
-          <p> - The JL Solutions team</p>
-          <p><em>info@jlsolutions.io</em></p>
-        `,
-                    }
+                  ? buildLeadFlowCheckCustomerEmail(data)
                   : formName === 'ai-intake-demo'
                   ? {
                       subject: 'Thanks for trying our AI intake demo - JL Solutions',
@@ -1525,23 +1713,43 @@ exports.handler = async (event) => {
           <p><em>info@jlsolutions.io</em></p>
         `,
                     };
+      const isLeadFlowCustomer = formName === 'lead-flow-check';
+      const idemRaw =
+        (data.reportEmailIdempotencyKey && String(data.reportEmailIdempotencyKey).trim()) ||
+        (isLeadFlowCustomer
+          ? `lfc-report:${customerEmail.toLowerCase()}:${String(data.submittedAt || consultationId || '').trim()}`
+          : '');
       const custSend = await sendResendEmail({
         to: customerEmail,
         subject: cust.subject,
         html: cust.html,
         replyTo: TO_EMAIL,
-        label: 'customer',
+        label: isLeadFlowCustomer ? 'customer-lfc-report' : 'customer',
+        /* Customer report must use a verified domain — onboarding@resend.dev cannot email third parties. */
+        allowOnboardingFallback: !isLeadFlowCustomer,
+        preferredFrom: isLeadFlowCustomer ? LEAD_FLOW_RESULTS_FROM : undefined,
+        idempotencyKey: idemRaw || undefined,
       });
       if (!custSend.ok) {
+        customerEmailError = custSend.error;
         console.warn('[send-form-email] Customer confirmation failed (lead was saved):', {
           message: custSend.error && custSend.error.message,
           name: custSend.error && custSend.error.name,
+          fromUsed: custSend.fromUsed,
+          fromDomain: (String(custSend.fromUsed || '').match(/@([^>]+)>?/) || [])[1] || '',
         });
       } else {
         reportEmailed = true;
-        console.log('[send-form-email] Customer confirmation sent id=', custSend.id);
+        customerEmailId = custSend.id;
+        console.log(
+          '[send-form-email] Customer confirmation sent id=',
+          custSend.id,
+          'from=',
+          custSend.fromUsed
+        );
       }
       } catch (confirmErr) {
+        customerEmailError = { message: confirmErr && confirmErr.message, name: 'throw' };
         console.warn(
           '[send-form-email] Customer confirmation threw (lead was already saved):',
           confirmErr && confirmErr.message,
@@ -1562,7 +1770,15 @@ exports.handler = async (event) => {
           emailed: !!reportEmailed,
           ownerEmailed: !!ownerEmailed,
           customerEmailed: !!reportEmailed,
+          customerEmailId: customerEmailId || undefined,
           code: ownerEmailed && reportEmailed ? undefined : ownerEmailError ? 'RESEND_ERROR' : reportEmailed ? undefined : 'RESEND_ERROR',
+          emailError:
+            !reportEmailed && customerEmailError
+              ? {
+                  name: customerEmailError.name || 'RESEND_ERROR',
+                  message: String(customerEmailError.message || '').slice(0, 180),
+                }
+              : undefined,
         }),
       };
     }

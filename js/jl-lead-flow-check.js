@@ -359,6 +359,8 @@
     reportEmailStatus: EMAIL_STATUS.IDLE,
     resultsVisible: false,
     reportEmailNotice: '',
+    submissionStamp: '',
+    reportEmailIdempotencyKey: '',
   };
 
   var root;
@@ -681,6 +683,8 @@
         reportEmailStatus: state.reportEmailStatus,
         resultsVisible: state.resultsVisible,
         reportEmailNotice: state.reportEmailNotice || '',
+        submissionStamp: state.submissionStamp || '',
+        reportEmailIdempotencyKey: state.reportEmailIdempotencyKey || '',
       };
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(payload));
     } catch (_) {
@@ -765,6 +769,12 @@
         }
         state.reportEmailNotice =
           typeof data.reportEmailNotice === 'string' ? data.reportEmailNotice : '';
+        if (typeof data.submissionStamp === 'string') {
+          state.submissionStamp = data.submissionStamp;
+        }
+        if (typeof data.reportEmailIdempotencyKey === 'string') {
+          state.reportEmailIdempotencyKey = data.reportEmailIdempotencyKey;
+        }
         syncWebsiteAuditStatus();
       } else if (
         data.phase === PHASE.QUESTIONS ||
@@ -1279,6 +1289,27 @@
       .filter(Boolean)
       .join(', ');
 
+    if (!state.submissionStamp) {
+      state.submissionStamp = new Date().toISOString();
+    }
+    if (!state.reportEmailIdempotencyKey) {
+      state.reportEmailIdempotencyKey =
+        'lfc-report-' +
+        String(state.contact.email || '')
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9@._+-]/g, '') +
+        '-' +
+        state.submissionStamp;
+    }
+
+    var insight = getPrimaryInsight(results);
+    var summary = getResultsSummary(results);
+    var findings =
+      results.findings && results.findings.length
+        ? results.findings
+        : getPriorityFindings(results.weakest || []);
+
     var raw = {
       'form-name': 'lead-flow-check',
       'bot-field': '',
@@ -1304,8 +1335,19 @@
       leadFlowTier: results.tier && results.tier.id ? results.tier.id : '',
       score: results.leadFlowScore,
       scoreTier: results.tier && results.tier.id ? results.tier.id : '',
+      scoreTierTitle: results.tier && results.tier.title ? results.tier.title : '',
       recommendedPath: results.path && results.path.id ? results.path.id : '',
       recommendedPathHeading: results.path && results.path.heading ? results.path.heading : '',
+      recommendationCopy: getRecommendationCopy(results),
+      primaryInsightHeading: insight.heading || '',
+      primaryInsightCopy: [insight.copy, insight.closing].filter(Boolean).join(' '),
+      resultsSummaryInsight: summary.insight || '',
+      priority1Name: findings[0] && findings[0].name ? findings[0].name : '',
+      priority1: findings[0] && findings[0].status ? findings[0].status : '',
+      priority2Name: findings[1] && findings[1].name ? findings[1].name : '',
+      priority2: findings[1] && findings[1].status ? findings[1].status : '',
+      priority3Name: findings[2] && findings[2].name ? findings[2].name : '',
+      priority3: findings[2] && findings[2].status ? findings[2].status : '',
       technicalOpportunityTitles: techTitles,
       weakestLeadFlowAreas: weakNames,
       weakestAreas: weakNames,
@@ -1315,7 +1357,8 @@
       utmSource: utm.utmSource,
       utmMedium: utm.utmMedium,
       utmCampaign: utm.utmCampaign,
-      submittedAt: new Date().toISOString(),
+      submittedAt: state.submissionStamp,
+      reportEmailIdempotencyKey: state.reportEmailIdempotencyKey,
     };
 
     var out = {};
@@ -2538,6 +2581,8 @@
         reportEmailStatus: EMAIL_STATUS.IDLE,
         resultsVisible: false,
         reportEmailNotice: '',
+        submissionStamp: '',
+        reportEmailIdempotencyKey: '',
       };
       clearSession();
       updateScanStatusUI();
